@@ -134,6 +134,7 @@ public class GameOfThronesController extends JogreController {
     						sendProperty(playerChoices.getRelatedTerr().getName(), gameOfThronesComponent.getTerritory(e.getX(),e.getY()).getName());
     						//mise a jour graphic
     						playerChoices.blank();
+    						model.nextPlayer();
     						gameOfThronesComponent.repaint();
     						
     					}else if(model.canPlayThisOrder(gameOfThronesComponent.getTerritory(e.getX(),e.getY()), getSeatNum())){
@@ -148,7 +149,7 @@ public class GameOfThronesController extends JogreController {
     			
     			//Quand un joueur a donnée tous ses ordres (durant la phase1) on les envois et on l'indique au autres
     			if(choice==1){
-    				if(model.getFamily(getSeatNum()).ordersGived){
+    				if(model.getFamily(getSeatNum()).ordersGived){// CETTE LIGNE N4EST PLUS UTILE!!!
     					Family family =model.getFamily(getSeatNum());
     					for(Territory territory : family.getTerritories() )
     					{	
@@ -161,6 +162,7 @@ public class GameOfThronesController extends JogreController {
     			}else if (choice==2){
     				sendProperty("cancelOrder",playerChoices.getRelatedTerr().getName());//on envoi le message
     				playerChoices.getRelatedTerr().rmOrder();// on supprime l'ordre
+    				model.nextPlayer();
     				playerChoices.blank();
     			}
     			gameOfThronesComponent.repaint();//encore utile ? 
@@ -192,10 +194,11 @@ public class GameOfThronesController extends JogreController {
     // Receive
     public void receiveProperty(String key, String territory){
     	if(key.equals("cancelOrder")){
-    		model.getBoardModel().getTerritory(territory).rmOrder();
+    		model.getBoardModel().getTerritory(territory).rmOrder();	
     	}else{
     		model.getBoardModel().getTerritory(key).useOrderOn(model.getBoardModel().getTerritory(territory));
     	}
+    	model.nextPlayer();
     }
     
     //
