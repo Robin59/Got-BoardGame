@@ -111,7 +111,7 @@ public class GameOfThronesModel extends JogreModel {
     
     private boolean checkCurrentPlayerRaid(){
     	for (Territory territory :families[getCurrentPlayer()].getTerritories()){
-    		if (territory.getOrder().getType()==OrderType.RAI){
+    		if (territory.getOrder()!=null && territory.getOrder().getType()==OrderType.RAI){
     			return true;
     		}
     	}
@@ -119,10 +119,10 @@ public class GameOfThronesModel extends JogreModel {
     }
     
     
-    public void nextPlayer(){//ON ENTRE PAS DANS LA METHODE !!!!
+    public void nextPlayer(){
     	currentPlayer = (currentPlayer+1)%numberPlayers;
-       	System.out.println("nextPlayer");
     }
+    
     /** be careful this method return a playerSeat, not is place on the throne track*/ 
     public int getCurrentPlayer(){
     	return throne[currentPlayer];
@@ -133,7 +133,7 @@ public class GameOfThronesModel extends JogreModel {
     }
 
     public boolean canPlayThisOrder(Territory territory, int seatNum) {
-		return ( territory.getFamily()!=null && territory.getFamily().getPlayer()==seatNum && seatNum==getCurrentPlayer() && territory.getOrder().getType().ordinal()==internPhase ) ;
+		return ( territory.getFamily()!=null && territory.getFamily().getPlayer()==seatNum && seatNum==getCurrentPlayer() &&  territory.getOrder()!=null &&territory.getOrder().getType().ordinal()==internPhase ) ;
 	}
 
     

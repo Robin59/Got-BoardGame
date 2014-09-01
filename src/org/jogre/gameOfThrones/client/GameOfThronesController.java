@@ -134,7 +134,7 @@ public class GameOfThronesController extends JogreController {
     						sendProperty(playerChoices.getRelatedTerr().getName(), gameOfThronesComponent.getTerritory(e.getX(),e.getY()).getName());
     						//mise a jour graphic
     						playerChoices.blank();
-    						model.nextPlayer();
+    						model.nextPlayer(); model.checkRaid(); // peut-etre tout mettre en 1
     						gameOfThronesComponent.repaint();
     						
     					}else if(model.canPlayThisOrder(gameOfThronesComponent.getTerritory(e.getX(),e.getY()), getSeatNum())){
@@ -149,7 +149,6 @@ public class GameOfThronesController extends JogreController {
     			
     			//Quand un joueur a donnée tous ses ordres (durant la phase1) on les envois et on l'indique au autres
     			if(choice==1){
-    				if(model.getFamily(getSeatNum()).ordersGived){// CETTE LIGNE N4EST PLUS UTILE!!!
     					Family family =model.getFamily(getSeatNum());
     					for(Territory territory : family.getTerritories() )
     					{	
@@ -157,7 +156,6 @@ public class GameOfThronesController extends JogreController {
     						sendProperty(territory.getName(),order[0],order[1]);
     					}
     				sendProperty ("endProg",getSeatNum());
-    				}
     				model.endProg();//encore utile ? 
     			}else if (choice==2){
     				sendProperty("cancelOrder",playerChoices.getRelatedTerr().getName());//on envoi le message
@@ -198,7 +196,7 @@ public class GameOfThronesController extends JogreController {
     	}else{
     		model.getBoardModel().getTerritory(key).useOrderOn(model.getBoardModel().getTerritory(territory));
     	}
-    	model.nextPlayer();
+    	model.nextPlayer();model.checkRaid(); // fusionner dans check Raid?
     }
     
     //
@@ -223,13 +221,13 @@ public class GameOfThronesController extends JogreController {
 		}
 	}
     
-    //AJOUTER LA RECEPTION DE NEXT PLAYER!!!
-     public void receiveProperty (String key, int family) { 
+    
+     public void receiveProperty (String key, int value) { 
     	 if (key.equals("nextPlayer")){
     		 model.nextPlayer();
     	 }else{
     		 //on indique que le joueur a fini de donner ses ordres
-    		 model.getFamily(family).ordersGived=true;
+    		 model.getFamily(value).ordersGived=true;
     		 // on verifie que si c'etait le dernier
     		 model.endProg();
     		 gameOfThronesComponent.repaint();

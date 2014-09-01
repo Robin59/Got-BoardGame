@@ -104,7 +104,7 @@ public abstract class Territory {
 		if (neighbors.contains(territory)){
 			
 			if(order.getType()==OrderType.RAI){
-				res=(territory.getOrder().getType()!=OrderType.ATT && (order.getStar() || territory.getOrder().getType()!=OrderType.DEF));
+				res=(territory.getOrder()!=null && territory.getOrder().getType()!=OrderType.ATT && (order.getStar() || territory.getOrder().getType()!=OrderType.DEF));
 			}
 		}
 		return res;
