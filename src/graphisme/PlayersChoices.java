@@ -43,7 +43,10 @@ public class PlayersChoices extends JogreComponent {
 	}
 	
 //c'est la methode appelé quand on click gauche dans le playerChoice
-	public void RigthClick(int x, int y, Family family) {
+	//renvoit un int code qui dit au controlleur ce qui s'est passé
+	// 1 : le joueur a fini sa programmation
+	// 2 : le joueur a retirer un ordre
+	public int RigthClick(int x, int y, Family family) {
 		switch (panel) {
 		case 1 :
 			family.giveOrders(relatedTerr,choseOrder(x,y,family));
@@ -57,18 +60,16 @@ public class PlayersChoices extends JogreComponent {
 			if (x>150 && x<200 && y>50 && y<100){
 				family.ordersGived=true; 
 				blank();
+				return 1;
 			}
 			break;
 		case 3 :
 			if (x>150 && x<200 && y>50 && y<100){
-				relatedTerr.rmOrder(); 
-				// on informe le server et on met à jour le board
-				
-				blank();
+				return 2;// on informe le server et on met à jour le board
 			}
 			break;
 		}
-		
+		return 0;
 	}
 	
 	
@@ -151,7 +152,6 @@ public class PlayersChoices extends JogreComponent {
 	public Territory getRelatedTerr() {
 		return relatedTerr;
 	}
-
 	
 }
 

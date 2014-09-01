@@ -119,8 +119,9 @@ public class GameOfThronesModel extends JogreModel {
     }
     
     
-    public void nextPlayer(){
+    public void nextPlayer(){//ON ENTRE PAS DANS LA METHODE !!!!
     	currentPlayer = (currentPlayer+1)%numberPlayers;
+       	System.out.println("nextPlayer");
     }
     /** be careful this method return a playerSeat, not is place on the throne track*/ 
     public int getCurrentPlayer(){
