@@ -129,12 +129,19 @@ public class GameOfThronesController extends JogreController {
     					// on regarde si un ordre est deja selectioné, qu'il peut etre utilisé dans le territoir voulu et qu'on peut l'utiliser
     					if(playerChoices.getRelatedTerr()!=null && playerChoices.getRelatedTerr().canUseOrderOn(gameOfThronesComponent.getTerritory(e.getX(),e.getY()))){
     						//On execute l'ordre
-    						playerChoices.getRelatedTerr().useOrderOn(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
+    						int orderEx =playerChoices.getRelatedTerr().useOrderOn(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
     						// on envoi le territoir qui donne l'ordre et celui qui execute
     						sendProperty(playerChoices.getRelatedTerr().getName(), gameOfThronesComponent.getTerritory(e.getX(),e.getY()).getName());
-    						//mise a jour graphic
-    						playerChoices.blank();
-    						model.nextPlayer(); model.checkRaid(); // peut-etre tout mettre en 1
+    						switch(orderEx){
+    						case 0:
+    							playerChoices.blank();
+    							model.nextPlayer(); model.checkRaid(); // peut-etre tout mettre en 1
+    							break;
+    						case 1:
+    							playerChoices.moveTo(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
+///////////////////////ON INDIQUE QUE L'ON VA FAIRE UN MOVEMENT JUSQU4AU TERRITOIR SELECTIONNE
+//LE PLAYER CHOICE AFFICHE LES TROUPES POUR QU4ON PUISSE LES DEPLACERS
+    						}
     						gameOfThronesComponent.repaint();
     						
     					}else if(model.canPlayThisOrder(gameOfThronesComponent.getTerritory(e.getX(),e.getY()), getSeatNum())){
@@ -193,6 +200,8 @@ public class GameOfThronesController extends JogreController {
     public void receiveProperty(String key, String territory){
     	if(key.equals("cancelOrder")){
     		model.getBoardModel().getTerritory(territory).rmOrder();	
+    	//}else if(key.equals("moveOrder")){
+    		//model.moveOrder(territory);
     	}else{
     		model.getBoardModel().getTerritory(key).useOrderOn(model.getBoardModel().getTerritory(territory));
     	}

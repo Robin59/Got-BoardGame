@@ -13,6 +13,8 @@ public class Water extends Territory {
 		super(name);
 	}
 
-	
+	public boolean canUseOrderOn(Territory territory){
+		return (super.canUseOrderOn(territory) && (territory instanceof Water || order.getType()==OrderType.RAI));
+	}
 
 }

@@ -83,6 +83,7 @@ public class GameOfThronesModel extends JogreModel {
     
     public void nextInternPhase(){
     	internPhase=(internPhase+1)%3;
+    	System.out.println("nextInternPhase");
     }
     public void nextPhase(){
     	phase= (phase+1)%3;
@@ -93,6 +94,10 @@ public class GameOfThronesModel extends JogreModel {
     		 currentPlayer=0;
     		 // on cherche le premier joueur a avoir un ordre de raid
     		 checkRaid();
+    	}
+    	if(phase==0){
+    		turn++;//nouveau tour
+    		//ici on test si on arrive au tour 11 et on fini le jeu dans ce cas
     	}
     }
     
@@ -177,21 +182,10 @@ public class GameOfThronesModel extends JogreModel {
 	}
 
 	
-    
-//sert a la construction du plateau en fonction du nb de joueur
-	private void familiesConstruction(int playerNumber){
-		// On place les starks (changer pour le joueur 3)
-		families[0]=new Family(0);
-		throne[0]=0;
-        boardModel.getTerritory("Winterfell").setTroup(new GroundForce(families[0],boardModel.getTerritory("Winterfell"),1,1,0));
-        boardModel.getTerritory("White Harbor").setTroup(new GroundForce(families[0],boardModel.getTerritory("White Harbor"),1,0,0));
-        boardModel.getTerritory("Shivering Sea").setTroup(new NavalTroup(families[0],boardModel.getTerritory("Shivering Sea"),1));
-        if(playerNumber>1){
-        	families[1]=new Family(1);
-        	throne[1]=1;
-        	boardModel.getTerritory("Karhold").setTroup(new GroundForce(families[1],boardModel.getTerritory("Karhold"),1,0,0));
-        }
-	}
+	/** this method indicate to the model that a move as been selected from the territory*/
+	/*public void moveOrder(String territory) {
+		
+	}*/	
 	
 	
 //deja en place avant 
@@ -236,11 +230,23 @@ public class GameOfThronesModel extends JogreModel {
         return state;
     }
 
-
 	
 
 
 
-
+  //sert a la construction du plateau en fonction du nb de joueur
+  	private void familiesConstruction(int playerNumber){
+  		// On place les starks (changer pour le joueur 3)
+  		families[0]=new Family(0);
+  		throne[0]=0;
+          boardModel.getTerritory("Winterfell").setTroup(new GroundForce(families[0],boardModel.getTerritory("Winterfell"),1,1,0));
+          boardModel.getTerritory("White Harbor").setTroup(new GroundForce(families[0],boardModel.getTerritory("White Harbor"),1,0,0));
+          boardModel.getTerritory("Shivering Sea").setTroup(new NavalTroup(families[0],boardModel.getTerritory("Shivering Sea"),1));
+          if(playerNumber>1){
+          	families[1]=new Family(1);
+          	throne[1]=1;
+          	boardModel.getTerritory("Karhold").setTroup(new GroundForce(families[1],boardModel.getTerritory("Karhold"),1,0,0));
+          }
+  	}
     
 }

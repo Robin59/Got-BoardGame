@@ -102,18 +102,28 @@ public abstract class Territory {
 	public boolean canUseOrderOn(Territory territory){
 		boolean res=false;
 		if (neighbors.contains(territory)){
-			
 			if(order.getType()==OrderType.RAI){
 				res=(territory.getOrder()!=null && territory.getOrder().getType()!=OrderType.ATT && (order.getStar() || territory.getOrder().getType()!=OrderType.DEF));
+			}else{
+				res=true;
 			}
 		}
 		return res;
 	}
-	/***/
-	public void useOrderOn(Territory territory){
+	/** 0 for raid, 1 for move, 2 for combats*/
+	public int useOrderOn(Territory territory){ // int ou void ???
 		if(order.getType()==OrderType.RAI){
 			territory.rmOrder();
 			this.rmOrder();
+			return 0;
+		}else{
+			if(territory.getTroup()==null || territory.getFamily()==owner){
+				return 1;
+			}else{
+				territory.getOrder().attUse=true;
+				return 2;	
+			}
+			
 		}
 		
 	}

@@ -8,10 +8,9 @@ public class Order {
 	
 	/**indicate if the order is a star order or not*/
 	private boolean star;
-	/**indicate the teritory where the order is given, null if none*/
-	//utile ? 
-	/**indicate the family who gaved the order*/
-	private Family family; // utile ?
+	/**indicate the possibility to combat is already use (juste for attaque order)*/
+	public boolean attUse;
+	
 	
 	/***/
 	private int defBonus;
@@ -25,6 +24,7 @@ public class Order {
 		this.othBonus=othBonus;
 		this.type=type;
 		this.star=star;
+		attUse=false;
 	}
 	/**
 	 * 

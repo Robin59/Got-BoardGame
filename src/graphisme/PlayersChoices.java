@@ -19,22 +19,26 @@ public class PlayersChoices extends JogreComponent {
 	private Image[] orders;
 	private Image endTurnImage;
 	private Image dontUseImage;
+	private ImageSelector images;
 	//le label qui affiche les info
 	private JLabel label;
 	// indique dans quel etat est le PlayersChoices, 0 pour rien d'affiché, 1 pour ordres, 2 pour fin de tour Prog
-	// 3 quand un ordre est selectionné (phase de resolution)
+	// 3 quand un ordre est selectionné (phase de resolution), 4 quand on va faire un mouvement et que les troupes sont affichées
 	private int panel;
 	/*the territory related to the current choice, null if none*/
 	Territory relatedTerr;
-	
+	/*the cible territory when the player choice need 2 territory*/ 
+	Territory cibleTerr;
 	
 	public PlayersChoices (JLabel label){
 		this.label=label;
 		panel=0;
 		relatedTerr =null;
+		cibleTerr = null;
 		//on ajoute les images qui seront utitles
 		endTurnImage = GameImages.getImage(6);
 		dontUseImage = GameImages.getImage(7);
+		images= ImageSelector.IMAGESELECTOR;
 		//les ordres de 19 à 30
 		orders = new Image[11];
 		for (int i=0;i<11;i++){
@@ -151,6 +155,15 @@ public class PlayersChoices extends JogreComponent {
 
 	public Territory getRelatedTerr() {
 		return relatedTerr;
+	}
+
+	/***/
+	public void moveTo(Territory territory) {
+		cibleTerr = territory;
+		panel=4;
+		label.setText("wich troops do want to send from "+relatedTerr.getName()+" to "+cibleTerr.getName());
+		getGraphics().drawImage(images.getTroopImage(),150,50, null);
+		//AFFICHER LES TROOPS DISPONIBLES !!!
 	}
 	
 }
