@@ -26,8 +26,7 @@ public class Board {
 	private BoardModel boardModel;
 	private GameOfThronesModel gameModel;
 	/** la premiere coordoné est pour la famille, la seconde pour le type (terrestre ou naval)*/
-	private Image[][] troopsImages;
-	private Image[] ordersImage;
+	private ImageSelector images;
 	//les coordonnée des territoires sont rangée dans une hash table
 	private Map<String,int[]> territoryCoord;
 	
@@ -39,18 +38,8 @@ public class Board {
 		this.boardModel=model.getBoardModel();
 		//construit les coordonées des territoires
 		coordinate();
-		//images des troupes
-		troopsImages= new Image[6][2];
-		for (int i =0; i<2;i++){
-			for(int y=0;y<6;y++){
-				troopsImages[y][i]= GameImages.getImage(i+y*2+30);
-			}
-		}
-		//image ordres
-		ordersImage = new Image[11];
-		for (int i=0;i<11;i++){
-			ordersImage[i]=GameImages.getImage(8+i);
-		}
+		//image ordres et de troupes
+		images=ImageSelector.IMAGESELECTOR;
 		
 	}
 	
@@ -111,21 +100,16 @@ public class Board {
 	 * @param g
 	 */
 	private void showTroops(Territory territory , Graphics g){
-		int fam=territory.getFamily().getPlayer();
-		int typ=0;
 		// recupere les coordonée dans territoryCoord
 		int[] coordinate=territoryCoord.get(territory.getName());
-		if (territory instanceof Water){
-			typ++;
-		}
-		g.drawImage(troopsImages[fam][typ],coordinate[0]+x,coordinate[1]+y, null);
+		g.drawImage(images.getTroopImage(territory.getFamily(), territory),coordinate[0]+x,coordinate[1]+y, null);
 	}
 	/*on affiche tous les ordres pour les troupes*/
 	public void showOrders(Graphics g){
 		for (Territory territory : boardModel.board.values()){
 			if (territory.getOrder()!=null){
 				// on choisit la bonne image
-				Image orderImage= orderImage(territory.getOrder());
+				Image orderImage= images.getSmallOrderImage(territory.getOrder());
 				// recupere les coordonée dans territoryCoord
 				int[] coordinate=territoryCoord.get(territory.getName());
 				g.drawImage(orderImage,coordinate[0]+x-30,coordinate[1]+y, null);
@@ -146,23 +130,4 @@ public class Board {
 		territoryCoord.put("Karhold", karhold);
 	}
 	
-	/*Meme methode que dans le player choice, creer une class pour la getion des image */
-	private Image orderImage(Order order){
-		int res=9;
-		if(order.getType()==OrderType.CON){
-			res=0;
-		}else if (order.getType()==OrderType.DEF){
-			res=2;
-		}else if (order.getType()==OrderType.ATT){
-			if (order.getOthBonus()==0){
-				res=4;
-			}else{res=5;}
-		}else if(order.getType()==OrderType.RAI){
-			res=7;
-		}
-		if(order.getStar()){
-			res++;
-		}
-		return ordersImage[res];
-	}
 }

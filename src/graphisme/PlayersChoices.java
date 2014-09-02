@@ -16,7 +16,7 @@ import org.jogre.gameOfThrones.common.territory.Territory;
 
 public class PlayersChoices extends JogreComponent {
 
-	private Image[] orders;
+	
 	private Image endTurnImage;
 	private Image dontUseImage;
 	private ImageSelector images;
@@ -39,11 +39,6 @@ public class PlayersChoices extends JogreComponent {
 		endTurnImage = GameImages.getImage(6);
 		dontUseImage = GameImages.getImage(7);
 		images= ImageSelector.IMAGESELECTOR;
-		//les ordres de 19 à 30
-		orders = new Image[11];
-		for (int i=0;i<11;i++){
-			orders[i]=GameImages.getImage(19+i);
-		}
 	}
 	
 //c'est la methode appelé quand on click gauche dans le playerChoice
@@ -93,7 +88,7 @@ public class PlayersChoices extends JogreComponent {
 		int y =0;
 		List<Order> orders =family.getOrders();
 		for (Order order : orders){
-			getGraphics().drawImage(orderImage(order), (10+x*80), (10+y*80), null);
+			getGraphics().drawImage(images.getOrderImage(order), (10+x*80), (10+y*80), null);
 			x++;
 			if(x==6){
 				y++;
@@ -101,29 +96,7 @@ public class PlayersChoices extends JogreComponent {
 			}
 		}
 	}
-	/**
-	 * 
-	 * @param order
-	 * @return
-	 */
-	private Image orderImage(Order order){
-		int res=9;
-		if(order.getType()==OrderType.CON){
-			res=0;
-		}else if (order.getType()==OrderType.DEF){
-			res=2;
-		}else if (order.getType()==OrderType.ATT){
-			if (order.getOthBonus()==0){
-				res=4;
-			}else{res=5;}
-		}else if(order.getType()==OrderType.RAI){
-			res=7;
-		}
-		if(order.getStar()){
-			res++;
-		}
-		return orders[res];
-	}
+	
 	
 	public void paintComponent (Graphics g) {
 		super.paintComponent (g);
@@ -157,13 +130,15 @@ public class PlayersChoices extends JogreComponent {
 		return relatedTerr;
 	}
 
-	/***/
+	/**
+	 * Draw the troops that the player can select and initialise everything that can be usefull for */
 	public void moveTo(Territory territory) {
+		getGraphics().clearRect(0, 0, 600, 250);
 		cibleTerr = territory;
 		panel=4;
 		label.setText("wich troops do want to send from "+relatedTerr.getName()+" to "+cibleTerr.getName());
-		getGraphics().drawImage(images.getTroopImage(),150,50, null);
-		//AFFICHER LES TROOPS DISPONIBLES !!!
+		getGraphics().drawImage(images.getTroopImage(territory.getFamily()),150,50, null);
+		// affiche des troupes, le bouton cancel, le bouton validate et le nombre de troupes selectionnés
 	}
 	
 }
