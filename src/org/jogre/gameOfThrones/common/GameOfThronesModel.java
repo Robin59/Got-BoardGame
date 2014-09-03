@@ -19,6 +19,7 @@
  */
 package org.jogre.gameOfThrones.common;
 
+import graphisme.PlayersChoices;
 import nanoxml.XMLElement;
 
 import org.jogre.common.JogreModel;
@@ -61,7 +62,6 @@ public class GameOfThronesModel extends JogreModel {
 	Territory territory1;
 	Territory territory2;
 	
-	
     /**
      * Constructor which creates the model.
      */
@@ -87,6 +87,12 @@ public class GameOfThronesModel extends JogreModel {
     
     public void nextInternPhase(){
     	internPhase=(internPhase+1)%3;
+    	currentPlayer=0;
+    	/*if(internPhase==0){
+    		checkRaid();
+    	}else{
+    		checkAtt();
+    	}*/
     	System.out.println("nextInternPhase");
     }
     public void nextPhase(){
@@ -117,10 +123,28 @@ public class GameOfThronesModel extends JogreModel {
 			 nextInternPhase();
 		 }
     }
+    public void checkAtt(){ // FAIT DOUBLON AVEC CHECK RAID !!!! A MODIFIER
+    	int i =0;
+    	while (!checkCurrentPlayerAtt() && i<=numberPlayers){
+    		i++;
+			 currentPlayer=(currentPlayer+1)%numberPlayers;
+		 }
+		 if (i>numberPlayers){
+			 nextInternPhase();
+		 }
+    }
     
     private boolean checkCurrentPlayerRaid(){
     	for (Territory territory :families[getCurrentPlayer()].getTerritories()){
     		if (territory.getOrder()!=null && territory.getOrder().getType()==OrderType.RAI){
+    			return true;
+    		}
+    	}
+    	return false;
+    }
+    private boolean checkCurrentPlayerAtt(){
+    	for (Territory territory :families[getCurrentPlayer()].getTerritories()){
+    		if (territory.getOrder()!=null && territory.getOrder().getType()==OrderType.ATT){
     			return true;
     		}
     	}
@@ -182,6 +206,16 @@ public class GameOfThronesModel extends JogreModel {
 		mvInittiated=true;
 		territory1=fromTerritory;
 		territory2=toTerritory;
+	}
+	// same as above but in two time
+	public void mvInitiated(Territory fromTerritory){
+		mvInittiated=true;
+		territory1=fromTerritory;
+		System.out.println("mvInitiated");
+	}
+	public void mvInitiated2(Territory toTerritory){
+		territory2=toTerritory;
+		System.out.println("mvInitiated2");
 	}
 	
 	public boolean getMvInitiated(){
@@ -257,14 +291,16 @@ public class GameOfThronesModel extends JogreModel {
   	}
 
 	public void troopSend(int boat, int foot, int knigth, int siege) {
+		System.out.println("troopSend");
 		if(mvInittiated){//on est dans le cas d'un mouvement 
 			territory1.mouveTroops(territory2,boat,foot,knigth, siege );
+			if(territory1.getTroup()==null){// dans le cas où il n'y a plus de troupes on supprime l'ordre
+				territory1.rmOrder();
+				//nextPlayer();
+				//checkAtt();
+			}
 		}
 		
-	}
-
-	public void shipSend() {
-		troopSend(1,0,0,0);
 	}
     
 }

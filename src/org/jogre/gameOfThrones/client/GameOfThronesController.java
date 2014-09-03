@@ -131,16 +131,20 @@ public class GameOfThronesController extends JogreController {
     					if(playerChoices.getRelatedTerr()!=null && playerChoices.getRelatedTerr().canUseOrderOn(gameOfThronesComponent.getTerritory(e.getX(),e.getY()))){
     						//On execute l'ordre
     						int orderEx =playerChoices.getRelatedTerr().useOrderOn(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
-    						// on envoi le territoir qui donne l'ordre et celui qui execute
-    						sendProperty(playerChoices.getRelatedTerr().getName(), gameOfThronesComponent.getTerritory(e.getX(),e.getY()).getName());
     						switch(orderEx){
     						case 0:
+    							// on envoi le territoir qui donne l'ordre et celui qui execute
+        						sendProperty(playerChoices.getRelatedTerr().getName(), gameOfThronesComponent.getTerritory(e.getX(),e.getY()).getName());
+  
     							playerChoices.blank();
     							model.nextPlayer(); model.checkRaid(); // peut-etre tout mettre en 1
     							break;
     						case 1:
     							playerChoices.moveTo(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
-    							model.mvInitiated(playerChoices.getRelatedTerr(),gameOfThronesComponent.getTerritory(e.getX(),e.getY()));// on indique au model qu'un mouvement est commencé on ne peut plus changer d'ordre 
+    							model.mvInitiated(playerChoices.getRelatedTerr(),gameOfThronesComponent.getTerritory(e.getX(),e.getY()));// on indique au model qu'un mouvement est commencé on ne peut plus changer d'ordre
+    							//ICI IL faut indiquer les info aux autres joueurs
+    							sendProperty("mvInitiated", playerChoices.getRelatedTerr().getName());
+    							sendProperty("mvInitiated2", gameOfThronesComponent.getTerritory(e.getX(),e.getY()).getName());
     						}
     						gameOfThronesComponent.repaint();
     						
@@ -173,13 +177,16 @@ public class GameOfThronesController extends JogreController {
     				playerChoices.blank();
     				break;
     			case 3 :
-    				model.shipSend();
+    				model.troopSend(1,0,0,0);
+    				sendProperty("troopSend", 0);playerChoices.checkPlayerChoices();
     				break;
     			case 4 :
     				model.troopSend(0,1,0,0);
+    				sendProperty("troopSend", 1);playerChoices.checkPlayerChoices();
     				break;
     			case 5:
     				model.troopSend(0,0,1,0);
+    				sendProperty("troopSend", 2);playerChoices.checkPlayerChoices();
     				break;
     			}
     			gameOfThronesComponent.repaint();//encore utile ? 
@@ -211,13 +218,17 @@ public class GameOfThronesController extends JogreController {
     // Receive
     public void receiveProperty(String key, String territory){
     	if(key.equals("cancelOrder")){
-    		model.getBoardModel().getTerritory(territory).rmOrder();	
-    	//}else if(key.equals("moveOrder")){
-    		//model.moveOrder(territory);
+    		model.getBoardModel().getTerritory(territory).rmOrder();
+    		model.nextPlayer();model.checkRaid();
+    	}else if(key.equals("mvInitiated")){
+    		model.mvInitiated(model.getBoardModel().getTerritory(territory));
+    	}else if(key.equals("mvInitiated2")){
+    		model.mvInitiated2(model.getBoardModel().getTerritory(territory));
     	}else{
     		model.getBoardModel().getTerritory(key).useOrderOn(model.getBoardModel().getTerritory(territory));
+    		model.nextPlayer();model.checkRaid(); // fusionner dans check Raid?
     	}
-    	model.nextPlayer();model.checkRaid(); // fusionner dans check Raid?
+    	
     }
     
     //
@@ -246,6 +257,10 @@ public class GameOfThronesController extends JogreController {
      public void receiveProperty (String key, int value) { 
     	 if (key.equals("nextPlayer")){
     		 model.nextPlayer();
+    	 }else if(key.equals("troopSend")){
+     		int[]troops= new int[4];
+     		troops[value]=1;
+     		model.troopSend(troops[0],troops[1],troops[2],troops[3]);
     	 }else{
     		 //on indique que le joueur a fini de donner ses ordres
     		 model.getFamily(value).ordersGived=true;

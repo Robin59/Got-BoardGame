@@ -129,7 +129,15 @@ public abstract class Territory {
 		
 	}
 	
-	/***/
+	/**
+	 * Mouve some troops from this territory to the territory given in parameter,
+	 * be carfull there is no verification if the number of troops moved is bigger than the troops present
+	 * @param toTerritory
+	 * @param ship
+	 * @param foot
+	 * @param knight
+	 * @param siege
+	 */
 	public void mouveTroops(Territory toTerritory, int ship, int foot, int knight, int siege){
 		if (toTerritory.getTroup()==null){ //creat a new troop
 			if (ship>0){

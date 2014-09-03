@@ -57,7 +57,7 @@ public class PlayersChoices extends JogreComponent {
 			if(family.allOrdersGived()){
 				endProgramation();
 			}
-		break;
+		return 0;
 		case 2 :// fin de phase de prog
 			if (x>150 && x<200 && y>50 && y<100){
 				family.ordersGived=true; 
@@ -161,6 +161,13 @@ public class PlayersChoices extends JogreComponent {
 			getGraphics().drawImage(troopsImages[1],50,50, null);
 			getGraphics().drawImage(troopsImages[2],150,50, null);
 			getGraphics().drawImage(troopsImages[3],250,50, null);}
+	}
+
+	public void checkPlayerChoices() {
+		if(relatedTerr.getOrder()==null){
+			this.blank();
+		}
+		
 	}
 	
 }
