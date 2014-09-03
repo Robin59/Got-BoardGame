@@ -44,4 +44,17 @@ public class GroundForce extends Troop {
 		int[]res={0,infentrie,knight,machine};
 		return res;
 	}
+
+	@Override
+	public void addToop(int ship, int foot, int knigth, int siege) {
+		infentrie+=foot;
+		this.knight+=knigth;
+		this.machine+=siege;
+	}
+	@Override
+	public void rmToop(int ship, int foot, int knigth, int siege) {
+		infentrie-=foot;
+		this.knight-=knigth;
+		this.machine-=siege;
+	}
 }

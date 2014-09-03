@@ -117,6 +117,7 @@ public class GameOfThronesController extends JogreController {
     				//
     				switch(model.getPhase()){
     				case 1 :
+    					
     					// on selectionne un territoire et on le passe en parametre de canGiveOrder(teritoir, numJoueur)
     					if(model.canGiveOrder(gameOfThronesComponent.getTerritory(e.getX(),e.getY()), getSeatNum())){
     						//on affiche en bas l'ecran d'ordres 
@@ -139,8 +140,7 @@ public class GameOfThronesController extends JogreController {
     							break;
     						case 1:
     							playerChoices.moveTo(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
-///////////////////////ON INDIQUE QUE L'ON VA FAIRE UN MOVEMENT JUSQU4AU TERRITOIR SELECTIONNE
-//LE PLAYER CHOICE AFFICHE LES TROUPES POUR QU4ON PUISSE LES DEPLACERS
+    							model.mvInitiated(playerChoices.getRelatedTerr(),gameOfThronesComponent.getTerritory(e.getX(),e.getY()));// on indique au model qu'un mouvement est commencé on ne peut plus changer d'ordre 
     						}
     						gameOfThronesComponent.repaint();
     						
@@ -155,7 +155,8 @@ public class GameOfThronesController extends JogreController {
     			int choice=playerChoices.RigthClick(e.getX(),e.getY(),model.getFamily(getSeatNum()));
     			
     			//Quand un joueur a donnée tous ses ordres (durant la phase1) on les envois et on l'indique au autres
-    			if(choice==1){
+    			switch (choice){
+    			case 1 :
     					Family family =model.getFamily(getSeatNum());
     					for(Territory territory : family.getTerritories() )
     					{	
@@ -163,12 +164,23 @@ public class GameOfThronesController extends JogreController {
     						sendProperty(territory.getName(),order[0],order[1]);
     					}
     				sendProperty ("endProg",getSeatNum());
-    				model.endProg();//encore utile ? 
-    			}else if (choice==2){
+    				model.endProg();//encore utile ?
+    				break;
+    			case 2 :
     				sendProperty("cancelOrder",playerChoices.getRelatedTerr().getName());//on envoi le message
     				playerChoices.getRelatedTerr().rmOrder();// on supprime l'ordre
     				model.nextPlayer();
     				playerChoices.blank();
+    				break;
+    			case 3 :
+    				model.shipSend();
+    				break;
+    			case 4 :
+    				model.troopSend(0,1,0,0);
+    				break;
+    			case 5:
+    				model.troopSend(0,0,1,0);
+    				break;
     			}
     			gameOfThronesComponent.repaint();//encore utile ? 
     		}

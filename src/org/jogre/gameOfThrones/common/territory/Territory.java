@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.jogre.gameOfThrones.common.Family;
 import org.jogre.gameOfThrones.common.combat.GroundForce;
+import org.jogre.gameOfThrones.common.combat.NavalTroup;
 import org.jogre.gameOfThrones.common.combat.Troop;
 import org.jogre.gameOfThrones.common.orders.Order;
 import org.jogre.gameOfThrones.common.orders.OrderType;
@@ -104,7 +105,7 @@ public abstract class Territory {
 		if (neighbors.contains(territory)){
 			if(order.getType()==OrderType.RAI){
 				res=(territory.getOrder()!=null && territory.getOrder().getType()!=OrderType.ATT && (order.getStar() || territory.getOrder().getType()!=OrderType.DEF));
-			}else{
+			}else{ // A MODIFIER  !!!!!!!!
 				res=true;
 			}
 		}
@@ -126,6 +127,23 @@ public abstract class Territory {
 			
 		}
 		
+	}
+	
+	/***/
+	public void mouveTroops(Territory toTerritory, int ship, int foot, int knight, int siege){
+		if (toTerritory.getTroup()==null){ //creat a new troop
+			if (ship>0){
+				toTerritory.setTroup(new NavalTroup(this.owner, toTerritory,ship));
+			}else{
+				toTerritory.setTroup(new GroundForce(this.owner, toTerritory,foot,knight, siege));
+			}
+		}else{
+			toTerritory.getTroup().addToop(ship, foot, knight, siege);
+		}
+		this.troop.rmToop(ship, foot, knight, siege);
+		if(this.troop.getEffectif()==0){
+			this.troop=null;
+		}
 	}
 }
 	

@@ -56,7 +56,10 @@ public class GameOfThronesModel extends JogreModel {
 	private BoardModel boardModel;
 	//Creation des fammilles
 	private Family[] families;
-	
+	// pour les mouvements
+	private boolean mvInittiated;
+	Territory territory1;
+	Territory territory2;
 	
 	
     /**
@@ -79,6 +82,7 @@ public class GameOfThronesModel extends JogreModel {
         turn=1;
         wildings=2;
         currentPlayer=0;
+        mvInittiated=false;
     }
     
     public void nextInternPhase(){
@@ -126,6 +130,7 @@ public class GameOfThronesModel extends JogreModel {
     
     public void nextPlayer(){
     	currentPlayer = (currentPlayer+1)%numberPlayers;
+    	mvInittiated=false;
     }
     
     /** be careful this method return a playerSeat, not is place on the throne track*/ 
@@ -165,22 +170,24 @@ public class GameOfThronesModel extends JogreModel {
 			nextPhase();
 		}
 	}
-	/*public boolean endProg(){
-		boolean res=true;
-		for(Family family : families){
-			if(!family.ordersGived){
-				res=false;
-			}
-		}
-		return res;
-	}*/
-	
 	
 
 	public int getPhase() {	
 		return phase;
 	}
-
+	
+	/** this method indicate to the model that a move as been selected from the territory*/
+	// il faut empecher de declancher un mouvement une fois qu'il est commencé
+	public void mvInitiated(Territory fromTerritory,Territory toTerritory){
+		mvInittiated=true;
+		territory1=fromTerritory;
+		territory2=toTerritory;
+	}
+	
+	public boolean getMvInitiated(){
+		return mvInittiated;
+	}
+	
 	
 	/** this method indicate to the model that a move as been selected from the territory*/
 	/*public void moveOrder(String territory) {
@@ -248,5 +255,16 @@ public class GameOfThronesModel extends JogreModel {
           	boardModel.getTerritory("Karhold").setTroup(new GroundForce(families[1],boardModel.getTerritory("Karhold"),1,0,0));
           }
   	}
+
+	public void troopSend(int boat, int foot, int knigth, int siege) {
+		if(mvInittiated){//on est dans le cas d'un mouvement 
+			territory1.mouveTroops(territory2,boat,foot,knigth, siege );
+		}
+		
+	}
+
+	public void shipSend() {
+		troopSend(1,0,0,0);
+	}
     
 }

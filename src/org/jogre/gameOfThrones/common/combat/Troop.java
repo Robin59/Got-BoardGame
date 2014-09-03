@@ -6,14 +6,13 @@ import org.jogre.gameOfThrones.common.territory.Territory;
 
 public abstract class Troop {
 	private Family family;
-	private Territory territory;
+	//private Territory territory;
 	private boolean naval;
 	
 	public Troop (Family family, Territory territory){
 		this.family=family;
-		this.territory=territory;
-		//we add the territory to the family
-		family.addTerritory(territory);
+		//this.territory=territory;
+		family.addTerritory(territory);// NON UTILE DEJA AJOUTE DANS LA METHODE setTroop DE TERRITORY 
 		//we add the troup to the territory
 		territory.setTroup(this);
 	}
@@ -24,7 +23,7 @@ public abstract class Troop {
 	
 	/**add the current army to the total army (for battles)*/
 	public abstract void addTroup(int[] troups);
-	/**get the  troopq*/
+	/**get the  troop*/
 	public abstract int[] getTroops();
 	
 	public Family getFamily(){
@@ -35,6 +34,9 @@ public abstract class Troop {
 		// changer les proprietaires de territoire
 		//verifier la ration, fusionner les armées ...
 	}
+	
+	public abstract void addToop(int ship,int foot,int knight,int siege);
+	public abstract void rmToop(int ship,int foot,int knight,int siege);
 	
 	public abstract boolean canMoveTo(Territory territory);
 	

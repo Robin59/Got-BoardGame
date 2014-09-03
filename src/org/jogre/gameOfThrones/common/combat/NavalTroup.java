@@ -39,4 +39,12 @@ public class NavalTroup extends Troop {
 		return res;
 	}
 
+	@Override
+	public void addToop(int ship, int foot, int knigth, int siege) {
+		effectif+=ship;
+		
+	}
+	public void rmToop(int ship,int foot,int knigth,int siege){
+		effectif-=ship;
+	}
 }
