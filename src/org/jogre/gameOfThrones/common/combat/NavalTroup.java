@@ -24,8 +24,8 @@ public class NavalTroup extends Troop {
 	}
 
 	@Override
-	public void addTroup(int[] troups) {
-		troups[0]+=effectif;
+	public void addTroop(int[] troups) {
+		effectif+=troups[0];
 	}
 	
 	@Override

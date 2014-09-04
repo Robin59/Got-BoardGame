@@ -20,12 +20,15 @@ public class PlayersChoices extends JogreComponent {
 	
 	private Image endTurnImage;
 	private Image dontUseImage;
+	private Image attackerImage;
+	private Image defencerImage;
+	private Image noOneImage;
 	private ImageSelector images;
 	//le label qui affiche les info
 	private JLabel label;
 	// indique dans quel etat est le PlayersChoices, 0 pour rien d'affiché, 1 pour ordres, 2 pour fin de tour Prog
 	// 3 quand un ordre est selectionné (phase de resolution), 4 quand on va faire un mouvement naval et que les troupes sont affichées
-	//5 pour terrestre. 6 et 7 pour les combats 
+	//5 pour terrestre. 6 et 7 pour les combats, 8 pour le support
 	private int panel;
 	/*the territory related to the current choice, null if none*/
 	Territory relatedTerr;
@@ -40,6 +43,9 @@ public class PlayersChoices extends JogreComponent {
 		//on ajoute les images qui seront utitles
 		endTurnImage = GameImages.getImage(6);
 		dontUseImage = GameImages.getImage(7);
+		attackerImage= GameImages.getImage(4);
+		defencerImage= GameImages.getImage(5);
+		noOneImage= GameImages.getImage(3);
 		images= ImageSelector.IMAGESELECTOR;
 	}
 	
@@ -102,6 +108,14 @@ public class PlayersChoices extends JogreComponent {
 				return 11;
 			}
 			break;
+		case 8:
+			if (x>100 && x<150 && y>50 && y<100){ 
+				return 12;
+			}else if(x>250 && x<300 && y>50 && y<100){
+				return 13;
+			}else if(x>250 && x<300 && y>175 && y<225){
+				return 14;
+			}
 		}
 		return 0;
 	}
@@ -205,6 +219,17 @@ public class PlayersChoices extends JogreComponent {
 			getGraphics().drawImage(troopsImages[2],150,50, null);
 			getGraphics().drawImage(troopsImages[3],250,50, null);}
 			getGraphics().drawImage(endTurnImage,150,150, null);
+	}
+
+	public void support(Territory territory) {
+		label.setText("who do you want to support ?");
+		panel=8;
+		cibleTerr = territory;
+		getGraphics().clearRect(0, 0, 600, 250);
+		getGraphics().drawImage(attackerImage, 100,50, null);
+		getGraphics().drawImage(defencerImage, 250,50, null);
+		getGraphics().drawImage(noOneImage, 175,150, null);
+		
 	}
 	
 }

@@ -121,7 +121,7 @@ public abstract class Territory {
 			if(territory.getTroup()==null || territory.getFamily()==owner){
 				return 1;
 			}else{
-				territory.getOrder().attUse=true;
+				territory.getOrder().use=true;
 				return 2;	
 			}
 			

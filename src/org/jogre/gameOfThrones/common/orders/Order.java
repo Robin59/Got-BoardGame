@@ -8,8 +8,8 @@ public class Order {
 	
 	/**indicate if the order is a star order or not*/
 	private boolean star;
-	/**indicate the possibility to combat is already use (juste for attaque order)*/
-	public boolean attUse;
+	/**indicate the possibility to combat is already use or the support is use for this battle*/
+	public boolean use;
 	
 	
 	/***/
@@ -24,7 +24,7 @@ public class Order {
 		this.othBonus=othBonus;
 		this.type=type;
 		this.star=star;
-		attUse=false;
+		use=false;
 	}
 	/**
 	 * 
@@ -53,6 +53,9 @@ public class Order {
 		return star;
 	}
 	
+	public boolean getUse(){
+		return use;
+	}
 	public void execute(){ //REFLECHIRE
 		
 	}

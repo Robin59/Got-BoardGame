@@ -31,6 +31,7 @@ import org.jogre.gameOfThrones.common.combat.NavalBattle;
 import org.jogre.gameOfThrones.common.combat.NavalTroup;
 import org.jogre.gameOfThrones.common.orders.OrderType;
 import org.jogre.gameOfThrones.common.territory.BoardModel;
+import org.jogre.gameOfThrones.common.territory.Land;
 import org.jogre.gameOfThrones.common.territory.Territory;
 import org.jogre.gameOfThrones.common.territory.Water;
 
@@ -338,6 +339,15 @@ public class GameOfThronesModel extends JogreModel {
 
 	public Battle getBattle() {
 		return battle;
+	}
+
+	/**when a battle is started ask if this territory can support one of the protagoniste*/
+	public boolean canSupport(Territory territory, int SeatNum) {
+		return territory2.getNeighbors().contains(territory)&& territory.getOrder()!=null && territory.getFamily().getPlayer()==SeatNum && territory.getOrder().getType()==OrderType.SUP && !territory.getOrder().getUse()&& (territory instanceof Water || territory2 instanceof Land);
+	}
+
+	public Territory getTerritory1() {
+		return territory1;
 	}
 
 	

@@ -128,8 +128,12 @@ public class GameOfThronesController extends JogreController {
     					break;
     				case 2:
     					if(model.getBattle()!=null){//On verifie si il y a combat
-    					// on peut clicker pour supporter ou  l'attaquant peut clicker sur le territoir d'attaque
-    						
+    					// on peut clicker pour supporter
+    						if(model.canSupport(gameOfThronesComponent.getTerritory(e.getX(),e.getY()),getSeatNum())){
+    							playerChoices.support(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
+    						}else if(gameOfThronesComponent.getTerritory(e.getX(),e.getY())==model.getTerritory1()){
+    							playerChoices.attackTo(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
+    						}
     						
     						// on regarde si un ordre est deja selectioné, qu'il peut etre utilisé dans le territoir voulu et qu'on peut l'utiliser
     					}else if(playerChoices.getRelatedTerr()!=null && playerChoices.getRelatedTerr().canUseOrderOn(gameOfThronesComponent.getTerritory(e.getX(),e.getY()))){
@@ -223,6 +227,14 @@ public class GameOfThronesController extends JogreController {
     				model.troopSend(0,0,0,1);
     				sendProperty("troopSend", 3);
     				break;
+    			case 12 :
+    				model.getBattle().addAttSupport(playerChoices.getRelatedTerr());
+    				sendProperty("attSupport",playerChoices.getRelatedTerr().getName());
+    				break;
+    			case 13 :
+    				model.getBattle().addDefSupport(playerChoices.getRelatedTerr());
+    				sendProperty("defSupport",playerChoices.getRelatedTerr().getName());
+    				break;
     			}
     			gameOfThronesComponent.repaint();//encore utile ? 
     			//playerChoices.repaint(); // au cas ou (quand on affiche autre chose devant le jeux) bug
@@ -262,6 +274,10 @@ public class GameOfThronesController extends JogreController {
     		model.mvInitiated2(model.getBoardModel().getTerritory(territory));
     	}else if(key.equals("battleInitiated")){
     		model.battleInitiated(model.getBoardModel().getTerritory(territory));
+    	}else if(key.equals("attSupport")){
+    	model.getBattle().addAttSupport(model.getBoardModel().getTerritory(territory));
+    	}else if(key.equals("defSupport")){
+        	model.getBattle().addDefSupport(model.getBoardModel().getTerritory(territory));
     	}else{
     		model.getBoardModel().getTerritory(key).useOrderOn(model.getBoardModel().getTerritory(territory));
     		model.nextPlayer();model.checkRaid(); // fusionner dans check Raid?

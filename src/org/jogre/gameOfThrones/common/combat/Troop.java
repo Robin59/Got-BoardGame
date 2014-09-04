@@ -21,8 +21,8 @@ public abstract class Troop {
 	// effectif pour le ravitaillement
 	public abstract int getEffectif();
 	
-	/**add the current army to the total army (for battles)*/
-	public abstract void addTroup(int[] troups);
+	/**add to this troop some new force*/
+	public abstract void addTroop(int[] troups);
 	/**get the  troop*/
 	public abstract int[] getTroops();
 	

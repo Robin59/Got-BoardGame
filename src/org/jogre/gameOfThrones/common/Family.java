@@ -68,6 +68,9 @@ public class Family {
 		ordersAvailable.add(new Order(false,0,0,OrderType.RAI));
 		ordersAvailable.add(new Order(false,0,0,OrderType.RAI));
 		ordersAvailable.add(new Order(true,0,0,OrderType.RAI));
+		ordersAvailable.add(new Order(false,0,0,OrderType.CON));
+		ordersAvailable.add(new Order(false,0,0,OrderType.CON));
+		ordersAvailable.add(new Order(true,0,0,OrderType.CON));
 	}
 	
 	/*public CombatantCard playCombatantCard(){// peut-etre faire cette methode en 2 temps (pour les cas où un joueur ne peut pas jouer de cartes)

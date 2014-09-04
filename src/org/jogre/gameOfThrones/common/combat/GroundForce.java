@@ -28,10 +28,10 @@ public class GroundForce extends Troop {
 	}
 
 	@Override
-	public void addTroup(int[] troups) {
-		troups[1]+=infentrie;
-		troups[2]+=knight;
-		troups[3]+=machine;
+	public void addTroop(int[] troups) {
+		infentrie+=troups[1];
+		knight+=troups[2];
+		machine+=troups[3];
 	}
 
 	@Override
