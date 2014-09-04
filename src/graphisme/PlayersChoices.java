@@ -25,7 +25,7 @@ public class PlayersChoices extends JogreComponent {
 	private JLabel label;
 	// indique dans quel etat est le PlayersChoices, 0 pour rien d'affiché, 1 pour ordres, 2 pour fin de tour Prog
 	// 3 quand un ordre est selectionné (phase de resolution), 4 quand on va faire un mouvement naval et que les troupes sont affichées
-	//5 pour terrestre
+	//5 pour terrestre. 6 et 7 pour les combats 
 	private int panel;
 	/*the territory related to the current choice, null if none*/
 	Territory relatedTerr;
@@ -70,6 +70,7 @@ public class PlayersChoices extends JogreComponent {
 				return 2;// on informe le server et on met à jour le board
 			}
 			break;
+		//les mouvements
 		case 4 :
 			if (x>150 && x<200 && y>50 && y<100){ // troop navals
 				return 3;
@@ -80,6 +81,25 @@ public class PlayersChoices extends JogreComponent {
 				return 4;
 			}else if(x>150 && x<200 && y>50 && y<100 && relatedTerr.getTroup().getTroops()[2]!=0){
 				return 5;
+			}else if(x>250 && x<300 && y>50 && y<100 && relatedTerr.getTroup().getTroops()[3]!=0){
+				return 6;
+			}
+			break;
+		//les combats
+		case 6 :
+			if (x>150 && x<200 && y>150 && y<200){ 
+				return 7;
+			}
+			break;
+		case 7 :
+			if (x>150 && x<200 && y>150 && y<200){ 
+				return 7;
+			}else if (x>50 && x<100 && y>50 && y<100 && relatedTerr.getTroup().getTroops()[1]!=0){
+				return 9;
+			}else if(x>150 && x<200 && y>50 && y<100 && relatedTerr.getTroup().getTroops()[2]!=0){
+				return 10;
+			}else if(x>250 && x<300 && y>50 && y<100 && relatedTerr.getTroup().getTroops()[3]!=0){
+				return 11;
 			}
 			break;
 		}
@@ -138,6 +158,7 @@ public class PlayersChoices extends JogreComponent {
 		panel=3;
 		label.setText(territory.getName()+" gonna "+territory.getOrder().getType());
 		//On affiche une image qui permet d'annuler l'ordre
+		getGraphics().clearRect(0, 0, 600, 250);
 		getGraphics().drawImage(dontUseImage,150,50, null);
 	}
 
@@ -150,7 +171,6 @@ public class PlayersChoices extends JogreComponent {
 	public void moveTo(Territory territory) {
 		getGraphics().clearRect(0, 0, 600, 250);
 		cibleTerr = territory;
-		
 		label.setText("wich troops do want to send from "+relatedTerr.getName()+" to "+cibleTerr.getName());
 		Image[] troopsImages=images.getTroopImages(relatedTerr.getFamily());
 		if(territory instanceof Water){
@@ -160,7 +180,8 @@ public class PlayersChoices extends JogreComponent {
 			panel=5;
 			getGraphics().drawImage(troopsImages[1],50,50, null);
 			getGraphics().drawImage(troopsImages[2],150,50, null);
-			getGraphics().drawImage(troopsImages[3],250,50, null);}
+			getGraphics().drawImage(troopsImages[3],250,50, null);
+			}
 	}
 
 	public void checkPlayerChoices() {
@@ -168,6 +189,22 @@ public class PlayersChoices extends JogreComponent {
 			this.blank();
 		}
 		
+	}
+
+	public void attackTo(Territory territory) {
+		getGraphics().clearRect(0, 0, 600, 250);
+		cibleTerr = territory;
+		label.setText("wich troops do want to send from "+relatedTerr.getName()+" to attack "+cibleTerr.getName());
+		Image[] troopsImages=images.getTroopImages(relatedTerr.getFamily());
+		if(territory instanceof Water){
+			panel=6;
+			getGraphics().drawImage(troopsImages[0],150,50, null);
+		}else{
+			panel=7;
+			getGraphics().drawImage(troopsImages[1],50,50, null);
+			getGraphics().drawImage(troopsImages[2],150,50, null);
+			getGraphics().drawImage(troopsImages[3],250,50, null);}
+			getGraphics().drawImage(endTurnImage,150,150, null);
 	}
 	
 }

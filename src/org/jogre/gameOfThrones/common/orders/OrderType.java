@@ -1,7 +1,7 @@
 package org.jogre.gameOfThrones.common.orders;
 
 public enum OrderType {
-	RAI("raid"),ATT("attaque"),CON("consolidation"),DEF("defence"),SUP("support");
+	RAI("raid"),ATT("march"),CON("consolidate"),DEF("defence"),SUP("support");
 	
 	private String name;
 	private OrderType(String name){

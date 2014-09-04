@@ -24,11 +24,15 @@ import nanoxml.XMLElement;
 
 import org.jogre.common.JogreModel;
 import org.jogre.common.comm.Comm;
+import org.jogre.gameOfThrones.common.combat.Battle;
+import org.jogre.gameOfThrones.common.combat.GroundBattle;
 import org.jogre.gameOfThrones.common.combat.GroundForce;
+import org.jogre.gameOfThrones.common.combat.NavalBattle;
 import org.jogre.gameOfThrones.common.combat.NavalTroup;
 import org.jogre.gameOfThrones.common.orders.OrderType;
 import org.jogre.gameOfThrones.common.territory.BoardModel;
 import org.jogre.gameOfThrones.common.territory.Territory;
+import org.jogre.gameOfThrones.common.territory.Water;
 
 /**
  * Game model for the gameOfThrones game.
@@ -57,8 +61,10 @@ public class GameOfThronesModel extends JogreModel {
 	private BoardModel boardModel;
 	//Creation des fammilles
 	private Family[] families;
-	// pour les mouvements
-	private boolean mvInittiated;
+	// pour les mouvements et combat
+	private boolean mvInitiated;
+	private boolean combatInitiated;// utile ou faire battle==null ?????
+	private Battle battle;
 	Territory territory1;
 	Territory territory2;
 	
@@ -82,7 +88,9 @@ public class GameOfThronesModel extends JogreModel {
         turn=1;
         wildings=2;
         currentPlayer=0;
-        mvInittiated=false;
+        mvInitiated=false;
+        combatInitiated=false;
+        battle=null;
     }
     
     public void nextInternPhase(){
@@ -154,7 +162,7 @@ public class GameOfThronesModel extends JogreModel {
     
     public void nextPlayer(){
     	currentPlayer = (currentPlayer+1)%numberPlayers;
-    	mvInittiated=false;
+    	mvInitiated=false;
     }
     
     /** be careful this method return a playerSeat, not is place on the throne track*/ 
@@ -169,7 +177,7 @@ public class GameOfThronesModel extends JogreModel {
     public boolean canPlayThisOrder(Territory territory, int seatNum) {
 		return ( territory.getFamily()!=null && territory.getFamily().getPlayer()==seatNum && seatNum==getCurrentPlayer() &&  territory.getOrder()!=null &&territory.getOrder().getType().ordinal()==internPhase ) ;
 	}
-
+    
     
 	public BoardModel getBoardModel() {
 		return boardModel;
@@ -203,13 +211,13 @@ public class GameOfThronesModel extends JogreModel {
 	/** this method indicate to the model that a move as been selected from the territory*/
 	// il faut empecher de declancher un mouvement une fois qu'il est commencé
 	public void mvInitiated(Territory fromTerritory,Territory toTerritory){
-		mvInittiated=true;
+		mvInitiated=true;
 		territory1=fromTerritory;
 		territory2=toTerritory;
 	}
 	// same as above but in two time
 	public void mvInitiated(Territory fromTerritory){
-		mvInittiated=true;
+		mvInitiated=true;
 		territory1=fromTerritory;
 		System.out.println("mvInitiated");
 	}
@@ -219,14 +227,31 @@ public class GameOfThronesModel extends JogreModel {
 	}
 	
 	public boolean getMvInitiated(){
-		return mvInittiated;
+		return mvInitiated;
 	}
 	
+	/***/
+	public void battle(Territory fromTerritory,Territory toTerritory) {
+		combatInitiated=true;
+		territory1=fromTerritory;
+		territory2=toTerritory;
+		if(toTerritory instanceof Water){
+			battle = new NavalBattle(fromTerritory, toTerritory);
+		}else{
+			battle = new GroundBattle(fromTerritory, toTerritory);
+		}
+	}
+	public void battleInitiated(Territory territory) {
+		territory2=territory;
+		if(territory instanceof Water){
+			battle = new NavalBattle(territory1, territory2);
+		}else{
+			battle = new GroundBattle(territory1, territory2);
+		}
+	}
+
 	
-	/** this method indicate to the model that a move as been selected from the territory*/
-	/*public void moveOrder(String territory) {
-		
-	}*/	
+	
 	
 	
 //deja en place avant 
@@ -291,8 +316,11 @@ public class GameOfThronesModel extends JogreModel {
   	}
 
 	public void troopSend(int boat, int foot, int knigth, int siege) {
-		System.out.println("troopSend");
-		if(mvInittiated){//on est dans le cas d'un mouvement 
+		if(battle!=null){
+			
+			battle.addTroop(boat,foot,knigth,siege);
+		}else if(mvInitiated){//on est dans le cas d'un mouvement 
+			System.out.println("troopSend");
 			territory1.mouveTroops(territory2,boat,foot,knigth, siege );
 			if(territory1.getTroup()==null){// dans le cas où il n'y a plus de troupes on supprime l'ordre
 				territory1.rmOrder();
@@ -302,5 +330,17 @@ public class GameOfThronesModel extends JogreModel {
 		}
 		
 	}
+
+	public void startBattle() {
+		battle.startBattle();
+		
+	}
+
+	public Battle getBattle() {
+		return battle;
+	}
+
+	
+	
     
 }

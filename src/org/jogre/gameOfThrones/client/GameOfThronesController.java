@@ -127,8 +127,12 @@ public class GameOfThronesController extends JogreController {
     					}
     					break;
     				case 2:
-    					// on regarde si un ordre est deja selectioné, qu'il peut etre utilisé dans le territoir voulu et qu'on peut l'utiliser
-    					if(playerChoices.getRelatedTerr()!=null && playerChoices.getRelatedTerr().canUseOrderOn(gameOfThronesComponent.getTerritory(e.getX(),e.getY()))){
+    					if(model.getBattle()!=null){//On verifie si il y a combat
+    					// on peut clicker pour supporter ou  l'attaquant peut clicker sur le territoir d'attaque
+    						
+    						
+    						// on regarde si un ordre est deja selectioné, qu'il peut etre utilisé dans le territoir voulu et qu'on peut l'utiliser
+    					}else if(playerChoices.getRelatedTerr()!=null && playerChoices.getRelatedTerr().canUseOrderOn(gameOfThronesComponent.getTerritory(e.getX(),e.getY()))){
     						//On execute l'ordre
     						int orderEx =playerChoices.getRelatedTerr().useOrderOn(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
     						switch(orderEx){
@@ -145,6 +149,14 @@ public class GameOfThronesController extends JogreController {
     							//ICI IL faut indiquer les info aux autres joueurs
     							sendProperty("mvInitiated", playerChoices.getRelatedTerr().getName());
     							sendProperty("mvInitiated2", gameOfThronesComponent.getTerritory(e.getX(),e.getY()).getName());
+    							break;
+    						case 2:
+    							playerChoices.attackTo(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
+    							model.battle(playerChoices.getRelatedTerr(),gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
+    							//ICI IL faut indiquer les info aux autres joueurs
+    							sendProperty("mvInitiated", playerChoices.getRelatedTerr().getName());
+    							sendProperty("battleInitiated", gameOfThronesComponent.getTerritory(e.getX(),e.getY()).getName());
+    							break;
     						}
     						gameOfThronesComponent.repaint();
     						
@@ -188,8 +200,32 @@ public class GameOfThronesController extends JogreController {
     				model.troopSend(0,0,1,0);
     				sendProperty("troopSend", 2);playerChoices.checkPlayerChoices();
     				break;
+    			case 6:
+    				model.troopSend(0,0,0,1);
+    				sendProperty("troopSend", 3);playerChoices.checkPlayerChoices();
+    				break;
+    			case 7:
+    				model.startBattle();
+    				break;
+    			case 8 :
+    				model.troopSend(1,0,0,0);
+    				sendProperty("troopSend", 0);
+    				break;
+    			case 9 :
+    				model.troopSend(0,1,0,0);
+    				sendProperty("troopSend", 1);
+    				break;
+    			case 10:
+    				model.troopSend(0,0,1,0);
+    				sendProperty("troopSend", 2);
+    				break;
+    			case 11:
+    				model.troopSend(0,0,0,1);
+    				sendProperty("troopSend", 3);
+    				break;
     			}
     			gameOfThronesComponent.repaint();//encore utile ? 
+    			//playerChoices.repaint(); // au cas ou (quand on affiche autre chose devant le jeux) bug
     		}
     	}
     }
@@ -224,6 +260,8 @@ public class GameOfThronesController extends JogreController {
     		model.mvInitiated(model.getBoardModel().getTerritory(territory));
     	}else if(key.equals("mvInitiated2")){
     		model.mvInitiated2(model.getBoardModel().getTerritory(territory));
+    	}else if(key.equals("battleInitiated")){
+    		model.battleInitiated(model.getBoardModel().getTerritory(territory));
     	}else{
     		model.getBoardModel().getTerritory(key).useOrderOn(model.getBoardModel().getTerritory(territory));
     		model.nextPlayer();model.checkRaid(); // fusionner dans check Raid?
