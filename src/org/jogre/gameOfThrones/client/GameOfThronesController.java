@@ -231,7 +231,7 @@ public class GameOfThronesController extends JogreController {
     				break;
     			case 12 :
     				model.getBattle().addAttSupport(playerChoices.getRelatedTerr());
-    				//sendProperty("attSupport",playerChoices.getRelatedTerr().getName());
+    				sendProperty("attSupport",playerChoices.getRelatedTerr().getName());
     				//playerChoices.blank();
     				break;
     			case 13 :
@@ -240,13 +240,16 @@ public class GameOfThronesController extends JogreController {
     				//playerChoices.blank();
     				break;
     			case 14 :
-    				//playerChoices.getRelatedTerr().getOrder().use=true;
+    				playerChoices.getRelatedTerr().getOrder().used();// ne verifie pas si il y a des ordres
     				sendProperty("noSupport",playerChoices.getRelatedTerr().getName());
     				//playerChoices.blank();
     				break;
     			}
+    			//le playerChoice verifie si il doit afficher quelque chose de nouveau
+    			playerChoices.check(model.informations(getSeatNum()), model.getFamily(getSeatNum()));
     			gameOfThronesComponent.repaint();//encore utile ? 
     			//playerChoices.repaint(); // au cas ou (quand on affiche autre chose devant le jeux) bug
+    			
     		}
     	}
     }

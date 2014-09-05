@@ -19,7 +19,6 @@
  */
 package org.jogre.gameOfThrones.common;
 
-import graphisme.PlayersChoices;
 import nanoxml.XMLElement;
 
 import org.jogre.common.JogreModel;
@@ -267,7 +266,7 @@ public class GameOfThronesModel extends JogreModel {
     /**
      * Reset the pieces.
      */
-    public void reset () { //depend du nombre de joueur
+    public void reset () {
         // TODO - Fill in
         // inform any graphical observers
         refreshObservers();
@@ -309,7 +308,6 @@ public class GameOfThronesModel extends JogreModel {
 
 	public void troopSend(int boat, int foot, int knigth, int siege) {
 		if(battle!=null){
-			
 			battle.addTroop(boat,foot,knigth,siege);
 		}else if(mvInitiated){//on est dans le cas d'un mouvement 
 			System.out.println("troopSend");
@@ -346,6 +344,17 @@ public class GameOfThronesModel extends JogreModel {
 		if(battle.checkSupport()){
 			battle.startBattle();
 		}
+	}
+
+	/**Give some information about the state of the game (for the playerChoice)
+	 * 
+	 * 1- is for the battle card
+	 */
+	public int informations(int seatNum) {
+		if(battle!=null && battle.playerPartisipate(seatNum)){
+				return battle.getState();
+		}
+		return 0;
 	}
 	
     

@@ -10,6 +10,7 @@ import org.jogre.client.awt.GameImages;
 import org.jogre.client.awt.JogreComponent;
 import org.jogre.client.awt.JogrePanel;
 import org.jogre.gameOfThrones.common.Family;
+import org.jogre.gameOfThrones.common.GameOfThronesModel;
 import org.jogre.gameOfThrones.common.orders.*;
 import org.jogre.gameOfThrones.common.territory.Territory;
 import org.jogre.gameOfThrones.common.territory.Water;
@@ -241,6 +242,14 @@ public class PlayersChoices extends JogreComponent {
 		getGraphics().drawImage(defencerImage, 250,50, null);
 		getGraphics().drawImage(noOneImage, 175,150, null);
 		
+	}
+	
+	// 1 indique cartes
+	public void check(int modelState, Family family){
+		if(modelState==1){
+			System.out.println("SHOW CARDS !!");
+		}
+		 
 	}
 	
 }
