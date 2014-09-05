@@ -25,9 +25,7 @@ import nanoxml.XMLElement;
 import org.jogre.common.JogreModel;
 import org.jogre.common.comm.Comm;
 import org.jogre.gameOfThrones.common.combat.Battle;
-import org.jogre.gameOfThrones.common.combat.GroundBattle;
 import org.jogre.gameOfThrones.common.combat.GroundForce;
-import org.jogre.gameOfThrones.common.combat.NavalBattle;
 import org.jogre.gameOfThrones.common.combat.NavalTroup;
 import org.jogre.gameOfThrones.common.orders.OrderType;
 import org.jogre.gameOfThrones.common.territory.BoardModel;
@@ -236,19 +234,12 @@ public class GameOfThronesModel extends JogreModel {
 		combatInitiated=true;
 		territory1=fromTerritory;
 		territory2=toTerritory;
-		if(toTerritory instanceof Water){
-			battle = new NavalBattle(fromTerritory, toTerritory);
-		}else{
-			battle = new GroundBattle(fromTerritory, toTerritory);
-		}
+		battle = new Battle(fromTerritory, toTerritory);
+		
 	}
 	public void battleInitiated(Territory territory) {
 		territory2=territory;
-		if(territory instanceof Water){
-			battle = new NavalBattle(territory1, territory2);
-		}else{
-			battle = new GroundBattle(territory1, territory2);
-		}
+		battle = new Battle(territory1, territory2);
 	}
 
 	
@@ -332,25 +323,30 @@ public class GameOfThronesModel extends JogreModel {
 		
 	}
 
-	public void startBattle() {
+	/*public void startBattle() {
 		battle.startBattle();
 		
-	}
+	}*/
 
 	public Battle getBattle() {
 		return battle;
 	}
 
 	/**when a battle is started ask if this territory can support one of the protagoniste*/
-	public boolean canSupport(Territory territory, int SeatNum) {
-		return territory2.getNeighbors().contains(territory)&& territory.getOrder()!=null && territory.getFamily().getPlayer()==SeatNum && territory.getOrder().getType()==OrderType.SUP && !territory.getOrder().getUse()&& (territory instanceof Water || territory2 instanceof Land);
+	public boolean canSupport(Territory territory, int SeatNum) {  //!territory.getOrder().getUse() semble pas fonctionner
+		return (territory2.getNeighbors().contains(territory)&& territory.getOrder()!=null && territory.getFamily().getPlayer()==SeatNum && territory.getOrder().getType()==OrderType.SUP && (!territory.getOrder().getUse())&& (territory instanceof Water || territory2 instanceof Land));
 	}
 
 	public Territory getTerritory1() {
 		return territory1;
 	}
 
-	
+	public void attPrepEnd(){
+		territory1.getOrder().used();
+		if(battle.checkSupport()){
+			battle.startBattle();
+		}
+	}
 	
     
 }

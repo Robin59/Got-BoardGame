@@ -9,7 +9,7 @@ public class Order {
 	/**indicate if the order is a star order or not*/
 	private boolean star;
 	/**indicate the possibility to combat is already use or the support is use for this battle*/
-	public boolean use;
+	private boolean use; 
 	
 	
 	/***/
@@ -37,7 +37,7 @@ public class Order {
 	public int[] getOrderInt(){
 		int[] res = new int[2];
 		int type =this.type.ordinal();
-		int bonus= this.othBonus;// juste pour le -1 de l'attaque
+		int bonus= this.othBonus;
 		if(star) bonus=1;
 		res[0]=type;res[1]=bonus;
 		return res;
@@ -45,7 +45,7 @@ public class Order {
 	public OrderType getType(){
 		return type;
 	}
-	public String toString(){// A AMELIORER!!
+	public String toString(){
 		return type.toString()+" "+defBonus+" "+othBonus;
 	}
 	
@@ -54,9 +54,12 @@ public class Order {
 	}
 	
 	public boolean getUse(){
+		System.out.println("check if used");
 		return use;
 	}
-	public void execute(){ //REFLECHIRE
-		
+	
+	public void used() {
+		use=true;
+		System.out.println("now use");
 	}
 }

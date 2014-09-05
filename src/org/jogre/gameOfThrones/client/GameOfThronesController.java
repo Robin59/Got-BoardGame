@@ -209,7 +209,9 @@ public class GameOfThronesController extends JogreController {
     				sendProperty("troopSend", 3);playerChoices.checkPlayerChoices();
     				break;
     			case 7:
-    				model.startBattle();
+    				model.attPrepEnd();
+    				sendProperty("attPreparationEnded", 0);
+    				//playerChoices.blank();
     				break;
     			case 8 :
     				model.troopSend(1,0,0,0);
@@ -229,11 +231,18 @@ public class GameOfThronesController extends JogreController {
     				break;
     			case 12 :
     				model.getBattle().addAttSupport(playerChoices.getRelatedTerr());
-    				sendProperty("attSupport",playerChoices.getRelatedTerr().getName());
+    				//sendProperty("attSupport",playerChoices.getRelatedTerr().getName());
+    				//playerChoices.blank();
     				break;
     			case 13 :
     				model.getBattle().addDefSupport(playerChoices.getRelatedTerr());
     				sendProperty("defSupport",playerChoices.getRelatedTerr().getName());
+    				//playerChoices.blank();
+    				break;
+    			case 14 :
+    				//playerChoices.getRelatedTerr().getOrder().use=true;
+    				sendProperty("noSupport",playerChoices.getRelatedTerr().getName());
+    				//playerChoices.blank();
     				break;
     			}
     			gameOfThronesComponent.repaint();//encore utile ? 
@@ -278,6 +287,10 @@ public class GameOfThronesController extends JogreController {
     	model.getBattle().addAttSupport(model.getBoardModel().getTerritory(territory));
     	}else if(key.equals("defSupport")){
         	model.getBattle().addDefSupport(model.getBoardModel().getTerritory(territory));
+    	}else if(key.equals("noSupport")){
+    		model.getBoardModel().getTerritory(territory).getOrder().used();
+    	}else if(key.equals("attPreparationEnded")){
+    		model.attPrepEnd();
     	}else{
     		model.getBoardModel().getTerritory(key).useOrderOn(model.getBoardModel().getTerritory(territory));
     		model.nextPlayer();model.checkRaid(); // fusionner dans check Raid?

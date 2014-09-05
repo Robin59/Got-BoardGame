@@ -110,8 +110,10 @@ public class PlayersChoices extends JogreComponent {
 			break;
 		case 8:
 			if (x>100 && x<150 && y>50 && y<100){ 
+				blank2();
 				return 12;
 			}else if(x>250 && x<300 && y>50 && y<100){
+				blank2();
 				return 13;
 			}else if(x>250 && x<300 && y>175 && y<225){
 				return 14;
@@ -154,6 +156,14 @@ public class PlayersChoices extends JogreComponent {
 	public void blank() {
 		getGraphics().clearRect(0, 0, 600, 250);
 		relatedTerr=null;//vraiment utile ?
+		cibleTerr=null;
+		panel=0;
+		label.setText("");
+	}
+	
+	public void blank2() {
+		getGraphics().clearRect(0, 0, 600, 250);
+		//relatedTerr=null;//vraiment utile ?
 		panel=0;
 		label.setText("");
 	}
@@ -208,7 +218,8 @@ public class PlayersChoices extends JogreComponent {
 	public void attackTo(Territory territory) {
 		getGraphics().clearRect(0, 0, 600, 250);
 		cibleTerr = territory;
-		label.setText("wich troops do want to send from "+relatedTerr.getName()+" to attack "+cibleTerr.getName());
+		// related territory peut poser problem
+		//label.setText("wich troops do want to send from "+relatedTerr.getName()+" to attack "+cibleTerr.getName());
 		Image[] troopsImages=images.getTroopImages(relatedTerr.getFamily());
 		if(territory instanceof Water){
 			panel=6;
@@ -224,7 +235,7 @@ public class PlayersChoices extends JogreComponent {
 	public void support(Territory territory) {
 		label.setText("who do you want to support ?");
 		panel=8;
-		cibleTerr = territory;
+		relatedTerr = territory;
 		getGraphics().clearRect(0, 0, 600, 250);
 		getGraphics().drawImage(attackerImage, 100,50, null);
 		getGraphics().drawImage(defencerImage, 250,50, null);
