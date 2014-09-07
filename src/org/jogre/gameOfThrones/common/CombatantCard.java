@@ -1,5 +1,7 @@
 package org.jogre.gameOfThrones.common;
 
+import java.awt.Image;
+
 import org.jogre.gameOfThrones.common.combat.CombatResolution;
 
 /**
@@ -26,7 +28,7 @@ public class CombatantCard {
 	 * 4= play after knowing who win
 	 */
 	protected int priority;
-	
+	// 1 est tirion, 2 avant le combat
 	
 	/**
 	 * 
@@ -36,7 +38,7 @@ public class CombatantCard {
 	 * @param tower
 	 */
 	
-	public CombatantCard(String name, int power, int sword,int tower){
+	public CombatantCard(String name ,int power, int sword,int tower){
 		this.name = name;
 		this.power=power;
 		this.sword=sword;

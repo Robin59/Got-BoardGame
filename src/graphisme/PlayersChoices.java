@@ -6,9 +6,11 @@ import java.util.List;
 
 import javax.swing.JLabel;
 
+import org.jogre.client.awt.GameConnectionPanel;
 import org.jogre.client.awt.GameImages;
 import org.jogre.client.awt.JogreComponent;
 import org.jogre.client.awt.JogrePanel;
+import org.jogre.gameOfThrones.common.CombatantCard;
 import org.jogre.gameOfThrones.common.Family;
 import org.jogre.gameOfThrones.common.GameOfThronesModel;
 import org.jogre.gameOfThrones.common.orders.*;
@@ -29,7 +31,7 @@ public class PlayersChoices extends JogreComponent {
 	private JLabel label;
 	// indique dans quel etat est le PlayersChoices, 0 pour rien d'affiché, 1 pour ordres, 2 pour fin de tour Prog
 	// 3 quand un ordre est selectionné (phase de resolution), 4 quand on va faire un mouvement naval et que les troupes sont affichées
-	//5 pour terrestre. 6 et 7 pour les combats, 8 pour le support
+	//5 pour terrestre. 6 et 7 pour les combats, 8 pour le support, 9 pour les cartes
 	private int panel;
 	/*the territory related to the current choice, null if none*/
 	Territory relatedTerr;
@@ -119,6 +121,10 @@ public class PlayersChoices extends JogreComponent {
 			}else if(x>250 && x<300 && y>175 && y<225){
 				return 14;
 			}
+			break;
+		case 9 :
+			System.out.println(choseCard(x, family).getName());
+			break;
 		}
 		return 0;
 	}
@@ -127,9 +133,12 @@ public class PlayersChoices extends JogreComponent {
 	/* panel =1 c'est à dire phase d'ordre*/
 	
 	//Quand on click dans une zone renvoit l'objet en relation
-	public Order choseOrder(int x, int y,Family family){
+	public Order choseOrder(int x, int y,Family family){//attraper les execptions
 		int i=(x-10)/80+(y/80)*6;
 		return family.getOrders().get(i);
+	}
+	public CombatantCard choseCard(int x,Family family){//attraper les execptions
+		return family.getCombatantCards().get((x-10)/150);
 	}
 	
 	public void showOrders(Family family, Territory terr) {//necessite de connaitre les ordres dispo
@@ -245,11 +254,20 @@ public class PlayersChoices extends JogreComponent {
 	}
 	
 	// 1 indique cartes
-	public void check(int modelState, Family family){
+	public boolean check(int modelState, Family family){
 		if(modelState==1){
 			System.out.println("SHOW CARDS !!");
+			getGraphics().clearRect(0, 0, 600, 250);
+			panel=9;
+			int x =0;
+			List<CombatantCard> cards =family.getCombatantCards();
+			for (CombatantCard card : cards){
+				getGraphics().drawImage(images.getCardImage(card.getName()), (10+x*150), (0), null);
+				x++;
+			}
+			return true;
 		}
-		 
+		return false;
 	}
 	
 }

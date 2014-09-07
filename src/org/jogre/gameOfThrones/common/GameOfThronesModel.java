@@ -19,8 +19,11 @@
  */
 package org.jogre.gameOfThrones.common;
 
+import java.awt.Image;
+
 import nanoxml.XMLElement;
 
+import org.jogre.client.awt.GameImages;
 import org.jogre.common.JogreModel;
 import org.jogre.common.comm.Comm;
 import org.jogre.gameOfThrones.common.combat.Battle;
@@ -299,9 +302,14 @@ public class GameOfThronesModel extends JogreModel {
           boardModel.getTerritory("Winterfell").setTroup(new GroundForce(families[0],boardModel.getTerritory("Winterfell"),1,1,0));
           boardModel.getTerritory("White Harbor").setTroup(new GroundForce(families[0],boardModel.getTerritory("White Harbor"),1,0,0));
           boardModel.getTerritory("Shivering Sea").setTroup(new NavalTroup(families[0],boardModel.getTerritory("Shivering Sea"),1));
+          //ajout des cartes 
+          families[0].addCard(new CombatantCard("Mellissandre", 1, 1, 0));
+          families[0].addCard(new CombatantCard("The Hound", 2, 0, 2));
+          families[0].addCard(new CombatantCard("Brienne", 2, 1, 1));
           if(playerNumber>1){
           	families[1]=new Family(1);
           	throne[1]=1;
+          	 families[1].addCard(new CombatantCard("The Hound", 2, 0, 2));
           	boardModel.getTerritory("Karhold").setTroup(new GroundForce(families[1],boardModel.getTerritory("Karhold"),1,0,0));
           }
   	}
@@ -340,8 +348,10 @@ public class GameOfThronesModel extends JogreModel {
 	}
 
 	public void attPrepEnd(){
+		System.out.println("Inside model.attPrepEnd");
 		territory1.getOrder().used();
 		if(battle.checkSupport()){
+			System.out.println("battle check=true");
 			battle.startBattle();
 		}
 	}

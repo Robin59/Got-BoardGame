@@ -103,6 +103,8 @@ public class GameOfThronesController extends JogreController {
 				gameOfThronesComponent.up();
 			}
 			yMouse=e.getY();
+    	}else if(e.getComponent()==playerChoices){
+    		// on translate
     	}
     		
     }
@@ -246,7 +248,9 @@ public class GameOfThronesController extends JogreController {
     				break;
     			}
     			//le playerChoice verifie si il doit afficher quelque chose de nouveau
-    			playerChoices.check(model.informations(getSeatNum()), model.getFamily(getSeatNum()));
+    			if(playerChoices.check(model.informations(getSeatNum()), model.getFamily(getSeatNum()))){
+    				sendProperty("FamilyCards", 0);
+    			}
     			gameOfThronesComponent.repaint();//encore utile ? 
     			//playerChoices.repaint(); // au cas ou (quand on affiche autre chose devant le jeux) bug
     			
@@ -292,8 +296,6 @@ public class GameOfThronesController extends JogreController {
         	model.getBattle().addDefSupport(model.getBoardModel().getTerritory(territory));
     	}else if(key.equals("noSupport")){
     		model.getBoardModel().getTerritory(territory).getOrder().used();
-    	}else if(key.equals("attPreparationEnded")){
-    		model.attPrepEnd();
     	}else{
     		model.getBoardModel().getTerritory(key).useOrderOn(model.getBoardModel().getTerritory(territory));
     		model.nextPlayer();model.checkRaid(); // fusionner dans check Raid?
@@ -331,7 +333,12 @@ public class GameOfThronesController extends JogreController {
      		int[]troops= new int[4];
      		troops[value]=1;
      		model.troopSend(troops[0],troops[1],troops[2],troops[3]);
-    	 }else{
+    	 }else if(key.equals("FamilyCards")){
+    		 playerChoices.check(model.informations(getSeatNum()), model.getFamily(getSeatNum()));
+    	 }else if(key.equals("attPreparationEnded")){
+     		System.out.println("Inside controller send  attPrepEnd");
+     		model.attPrepEnd();
+     	}else{
     		 //on indique que le joueur a fini de donner ses ordres
     		 model.getFamily(value).ordersGived=true;
     		 // on verifie que si c'etait le dernier

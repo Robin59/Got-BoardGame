@@ -45,13 +45,13 @@ public class Family {
 	public Family (int player){
 		combatantsAvailable=new LinkedList<CombatantCard>();
 		territories=new LinkedList<Territory>();
-		combatantsUse=new LinkedList();
+		combatantsUse=new LinkedList<CombatantCard>();
 		this.player=player;
 		ordersGived=false;
 		inflPoint=5;
 		//orders list creation
-		ordersUse= new LinkedList(); // CETTE LISTE EST ELLE UTILE ???
-		ordersAvailable= new LinkedList();
+		ordersUse= new LinkedList<Order>(); // CETTE LISTE EST ELLE UTILE ???
+		ordersAvailable= new LinkedList<Order>();
 		// we add the defence orders
 		ordersAvailable.add(new Order(false,1,0,OrderType.DEF));
 		ordersAvailable.add(new Order(false,1,0,OrderType.DEF));
@@ -99,18 +99,9 @@ public class Family {
 		combatantsUse.add(card);
 		combatantsAvailable.remove(card);
 	}
-	//
-	/*public boolean supportDef (Territory supTer, Territory attTer){
-		//regarder si il ne sont pas attanquant 
-		if(attTer.getFamily()!=this){
-			return player.support(supTer);
-		}else{return false;}
+	public void addCard(CombatantCard card){
+		combatantsAvailable.add(card);
 	}
-	public boolean supportAtt (Territory supTer,Territory defTer){// même que support def
-		if(defTer.getFamily()!=this){
-			return player.support(supTer);
-		}else{return false;}
-	}*/
 	
 	public int getFiedomsTrack(){
 		return fiefdomsTrack;
@@ -164,6 +155,10 @@ public class Family {
 		ordersAvailable.add(order);
 		ordersUse.remove(order);
 		
+	}
+
+	public List<CombatantCard> getCombatantCards() {
+		return combatantsAvailable;
 	}
 	
 	/**this methode give an available order to one teritory with no one*/ 
