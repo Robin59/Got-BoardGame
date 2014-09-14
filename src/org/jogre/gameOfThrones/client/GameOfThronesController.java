@@ -246,10 +246,21 @@ public class GameOfThronesController extends JogreController {
     				sendProperty("noSupport",playerChoices.getRelatedTerr().getName());
     				//playerChoices.blank();
     				break;
+    			case 15 :
+    				if(model.getBattle().getAttFamily().getPlayer()==this.getSeatNum()){
+    					sendProperty("attCardPlayed",playerChoices.getIndexCard());
+    				}else {
+    					sendProperty("defCardPlayed",playerChoices.getIndexCard());
+    				}
     			}
     			//le playerChoice verifie si il doit afficher quelque chose de nouveau
-    			if(playerChoices.check(model.informations(getSeatNum()), model.getFamily(getSeatNum()))){
+    			switch(playerChoices.check(model.informations(getSeatNum()), model.getFamily(getSeatNum()), model.getBattle())){
+    			case 1:
     				sendProperty("FamilyCards", 0);
+    				break;
+    			case 2:
+    				sendProperty("Sword", 0);
+    				break;
     			}
     			gameOfThronesComponent.repaint();//encore utile ? 
     			//playerChoices.repaint(); // au cas ou (quand on affiche autre chose devant le jeux) bug
@@ -334,11 +345,17 @@ public class GameOfThronesController extends JogreController {
      		troops[value]=1;
      		model.troopSend(troops[0],troops[1],troops[2],troops[3]);
     	 }else if(key.equals("FamilyCards")){
-    		 playerChoices.check(model.informations(getSeatNum()), model.getFamily(getSeatNum()));
+    		 playerChoices.check(model.informations(getSeatNum()), model.getFamily(getSeatNum()), model.getBattle());
     	 }else if(key.equals("attPreparationEnded")){
      		System.out.println("Inside controller send  attPrepEnd");
      		model.attPrepEnd();
-     	}else{
+     	}else if(key.equals("attCardPlayed")){
+    		model.getBattle().playCard(model.getBattle().getAttFamily().getCombatantCards().get(value), model.getBattle().getAttFamily());
+    	}else if(key.equals("defCardPlayed")){
+    		model.getBattle().playCard(model.getBattle().getDefFamily().getCombatantCards().get(value), model.getBattle().getDefFamily());
+    	}else if(key.equals("Sword")){
+    		playerChoices.swordPlay(model.getFamily(getSeatNum()));
+    	}else{
     		 //on indique que le joueur a fini de donner ses ordres
     		 model.getFamily(value).ordersGived=true;
     		 // on verifie que si c'etait le dernier

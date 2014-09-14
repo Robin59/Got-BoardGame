@@ -102,8 +102,10 @@ public class Family {
 	public void addCard(CombatantCard card){
 		combatantsAvailable.add(card);
 	}
-	
-	public int getFiedomsTrack(){
+	public void setFiefdomsTrack(int fiefdomsTrack){
+		this.fiefdomsTrack=fiefdomsTrack;
+	}
+	public int getFiefdomsTrack(){
 		return fiefdomsTrack;
 	}
 	public void addTerritory(Territory territory){

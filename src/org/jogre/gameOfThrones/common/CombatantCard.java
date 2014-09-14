@@ -14,6 +14,8 @@ public class CombatantCard {
 	
 	/**The name of the personage that is represented by this card */
 	private String name;
+	/***/
+	//private int index;
 	/** Fighting skill of the card, this is the bonus to the combat force*/
 	private int power;
 	/** The swords represent the bonus to the destructing force */
@@ -38,8 +40,9 @@ public class CombatantCard {
 	 * @param tower
 	 */
 	
-	public CombatantCard(String name ,int power, int sword,int tower){
+	public CombatantCard(String name, /*int index ,*/int power, int sword,int tower){
 		this.name = name;
+		//this.index=index;
 		this.power=power;
 		this.sword=sword;
 		this.tower=tower;
@@ -69,6 +72,8 @@ public class CombatantCard {
 		// nothing here, have to be surcharge 
 	}
 	
-	
+	/*public int getIndex(){
+		return index;
+	}*/
 	
 }
