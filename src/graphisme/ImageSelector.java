@@ -1,0 +1,114 @@
+package graphisme;
+
+import java.awt.Image;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.jogre.client.awt.GameImages;
+import org.jogre.gameOfThrones.common.Family;
+import org.jogre.gameOfThrones.common.orders.Order;
+import org.jogre.gameOfThrones.common.orders.OrderType;
+import org.jogre.gameOfThrones.common.territory.Territory;
+import org.jogre.gameOfThrones.common.territory.Water;
+
+
+
+public class  ImageSelector{
+
+	/** l'unique instance de cette classe*/
+	public final static ImageSelector IMAGESELECTOR=new ImageSelector();
+	
+	/**
+	 * la premiere coordoné est pour la famille, la seconde pour le type (naval ou terrestre)
+	 */
+	private Image[][] troopsImages;
+	private Image[][] troopsSelectImage;
+	private Image[] bigOrdersImages;
+	private Image[] smallOrdersImages;
+	private Map<String,Image> playerCards;
+	
+	
+	private ImageSelector (){
+		//images des troupes
+		troopsImages= new Image[6][2];
+		for (int i =0; i<2;i++){
+			for(int y=0;y<6;y++){
+				troopsImages[y][i]= GameImages.getImage(i+y*2+30);
+			}
+		}
+		//image des troupes mais plus grandes et avec les cavaliers et les tours 
+		troopsSelectImage =new Image[6][4];
+		for (int i =0; i<4;i++){
+			for(int y=0;y<6;y++){
+				troopsSelectImage[y][i]= GameImages.getImage(i+y*4+42);
+			}
+		}
+		//Images des ordres, grand de 19 à 29 et petit de 8 à 18
+		bigOrdersImages = new Image[11];
+		for (int i=0;i<11;i++){
+			bigOrdersImages[i]=GameImages.getImage(19+i);
+		}
+		smallOrdersImages = new Image[11];
+		for (int i=0;i<11;i++){
+			smallOrdersImages[i]=GameImages.getImage(8+i);
+		}
+		// les cartes de famille
+		playerCards = new HashMap<String, Image>();
+		playerCards.put("The Hound", GameImages.getImage(76));
+		playerCards.put("Mellissandre", GameImages.getImage(67));
+		playerCards.put("Brienne", GameImages.getImage(70));
+	}
+	
+	public Image[] getTroopImages(Family family){
+		return troopsSelectImage[family.getPlayer()];
+	}
+	
+	
+	public Image getTroopImage(Family family, Territory territory){
+		int fam=territory.getFamily().getPlayer();
+		int typ=0;
+		if (territory instanceof Water){
+			typ++;
+		}
+		return troopsImages[fam][typ];
+	}
+	
+	
+	/**
+	 * 
+	 * @param order
+	 * @return
+	 */
+	public Image getOrderImage(Order order){
+		return bigOrdersImages[orderImage(order)];
+	}
+	
+	public Image getSmallOrderImage(Order order){
+		return smallOrdersImages[orderImage(order)];
+	}
+	
+	// use by the 2 methods above
+	private int orderImage(Order order){
+		int res=9;
+		if(order.getType()==OrderType.CON){
+			res=0;
+		}else if (order.getType()==OrderType.DEF){
+			res=2;
+		}else if (order.getType()==OrderType.ATT){
+			if (order.getOthBonus()==0){
+				res=4;
+			}else{res=5;}
+		}else if(order.getType()==OrderType.RAI){
+			res=7;
+		}
+		if(order.getStar()){
+			res++;
+		}
+		return res;
+	}
+
+	public Image getCardImage(String name) {
+		return playerCards.get(name);
+	}
+	
+}
