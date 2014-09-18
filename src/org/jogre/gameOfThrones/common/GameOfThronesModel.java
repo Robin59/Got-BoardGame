@@ -97,11 +97,6 @@ public class GameOfThronesModel extends JogreModel {
     public void nextInternPhase(){
     	internPhase=(internPhase+1)%3;
     	currentPlayer=0;
-    	/*if(internPhase==0){
-    		checkRaid();
-    	}else{
-    		checkAtt();
-    	}*/
     	if(internPhase==1){
     		checkAtt();
     	}

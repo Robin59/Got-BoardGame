@@ -40,6 +40,7 @@ public class PlayersChoices extends JogreComponent {
 	Territory cibleTerr;
 	Battle battle;
 	private int indexCard;
+	private Family family;
 	
 	public PlayersChoices (JLabel label){
 		this.label=label;
@@ -153,32 +154,74 @@ public class PlayersChoices extends JogreComponent {
 	
 	public void showOrders(Family family, Territory terr) {//necessite de connaitre les ordres dispo
 		relatedTerr=terr;
+		this.family=family;
 		label.setText("Give order in "+terr.getName());
 		panel=1;
-		int x =0;
-		int y =0;
-		List<Order> orders =family.getOrders();
-		for (Order order : orders){
-			getGraphics().drawImage(images.getOrderImage(order), (10+x*80), (10+y*80), null);
-			x++;
-			if(x==6){
-				y++;
-				x=0;
-			}
-		}
+		this.repaint();
 	}
 	
 	
 	public void paintComponent (Graphics g) { // A MODIFIER POUR AFFICHER LES OBJETS EN PERMANANCE
-		super.paintComponent (g);
-		
+		//super.paintComponent (g);
+		switch(panel){
+		case 0:
+			label.setText("");
+			//g.clearRect(0, 0, 600, 250);
+			break;
+		case 1:
+			int x =0;
+			int y =0;
+			List<Order> orders =family.getOrders();
+			for (Order order : orders){
+				g.drawImage(images.getOrderImage(order), (10+x*80), (10+y*80), null);
+				x++;
+				if(x==6){
+					y++;
+					x=0;
+				}
+			}
+		break;
+		case 2:
+			g.drawImage(endTurnImage,150,50, null);
+			break;
+		case 3:
+			g.drawImage(dontUseImage,150,50, null);
+			break;
+		case 4 :
+			g.drawImage(images.getTroopImages(family)[0],150,50, null);
+		break;
+		case 5 :
+			g.drawImage(images.getTroopImages(family)[1],50,50, null);
+			g.drawImage(images.getTroopImages(family)[2],150,50, null);
+			g.drawImage(images.getTroopImages(family)[3],250,50, null);
+			break;
+		case 6:
+			g.drawImage(images.getTroopImages(family)[0],150,50, null);
+			g.drawImage(endTurnImage,150,150, null);
+			break;
+		case 7 :
+			g.drawImage(images.getTroopImages(family)[1],50,50, null);
+			g.drawImage(images.getTroopImages(family)[2],150,50, null);
+			g.drawImage(images.getTroopImages(family)[3],250,50, null);
+			g.drawImage(endTurnImage,150,150, null);
+			break;
+		case 8:
+			g.clearRect(0, 0, 600, 250);
+			g.drawImage(attackerImage, 100,50, null);
+			g.drawImage(defencerImage, 250,50, null);
+			g.drawImage(noOneImage, 175,150, null);
+		}
 	}
+	
+	
+	
 	public void blank() {
-		getGraphics().clearRect(0, 0, 600, 250);
+		//getGraphics().clearRect(0, 0, 600, 250);
 		relatedTerr=null;//vraiment utile ?
 		cibleTerr=null;
 		panel=0;
 		label.setText("");
+		repaint();
 	}
 	
 	public void blank2() {
@@ -186,6 +229,7 @@ public class PlayersChoices extends JogreComponent {
 		//relatedTerr=null;//vraiment utile ?
 		panel=0;
 		label.setText("");
+		repaint();
 	}
 
 	/**
@@ -194,16 +238,14 @@ public class PlayersChoices extends JogreComponent {
 	public void endProgramation(){
 		label.setText("You have gived all your orders, do you want to end your turn ?");
 		panel=2;
-		getGraphics().drawImage(endTurnImage,150,50, null);
+		repaint();
 	}
 	/*On indique l'ordre qu'on veut utiliser  */
 	public void orderSelected(Territory territory) {
 		relatedTerr=territory;
 		panel=3;
 		label.setText(territory.getName()+" gonna "+territory.getOrder().getType());
-		//On affiche une image qui permet d'annuler l'ordre
-		getGraphics().clearRect(0, 0, 600, 250);
-		getGraphics().drawImage(dontUseImage,150,50, null);
+		repaint();
 	}
 
 	public Territory getRelatedTerr() {
@@ -219,13 +261,10 @@ public class PlayersChoices extends JogreComponent {
 		Image[] troopsImages=images.getTroopImages(relatedTerr.getFamily());
 		if(territory instanceof Water){
 			panel=4;
-			getGraphics().drawImage(troopsImages[0],150,50, null);
 		}else{
 			panel=5;
-			getGraphics().drawImage(troopsImages[1],50,50, null);
-			getGraphics().drawImage(troopsImages[2],150,50, null);
-			getGraphics().drawImage(troopsImages[3],250,50, null);
 			}
+		this.repaint();
 	}
 
 	public void checkPlayerChoices() {
@@ -243,23 +282,25 @@ public class PlayersChoices extends JogreComponent {
 		Image[] troopsImages=images.getTroopImages(relatedTerr.getFamily());
 		if(territory instanceof Water){
 			panel=6;
-			getGraphics().drawImage(troopsImages[0],150,50, null);
+			//getGraphics().drawImage(troopsImages[0],150,50, null);
 		}else{
 			panel=7;
-			getGraphics().drawImage(troopsImages[1],50,50, null);
+			/*getGraphics().drawImage(troopsImages[1],50,50, null);
 			getGraphics().drawImage(troopsImages[2],150,50, null);
-			getGraphics().drawImage(troopsImages[3],250,50, null);}
-			getGraphics().drawImage(endTurnImage,150,150, null);
+			getGraphics().drawImage(troopsImages[3],250,50, null);*/
+			}
+			//getGraphics().drawImage(endTurnImage,150,150, null);
+			this.repaint();
 	}
 
 	public void support(Territory territory) {
 		label.setText("who do you want to support ?");
 		panel=8;
 		relatedTerr = territory;
-		getGraphics().clearRect(0, 0, 600, 250);
+		/*getGraphics().clearRect(0, 0, 600, 250);
 		getGraphics().drawImage(attackerImage, 100,50, null);
 		getGraphics().drawImage(defencerImage, 250,50, null);
-		getGraphics().drawImage(noOneImage, 175,150, null);
+		getGraphics().drawImage(noOneImage, 175,150, null);*/
 		
 	}
 	

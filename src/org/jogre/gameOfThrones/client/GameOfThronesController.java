@@ -366,7 +366,8 @@ public class GameOfThronesController extends JogreController {
     		 model.getFamily(value).ordersGived=true;
     		 // on verifie que si c'etait le dernier
     		 model.endProg();
-    		 gameOfThronesComponent.repaint();
+    		 //gameOfThronesComponent.repaint();
+    		 //playerChoices.repaint();
           }
        }
     
