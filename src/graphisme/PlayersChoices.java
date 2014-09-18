@@ -169,7 +169,7 @@ public class PlayersChoices extends JogreComponent {
 	}
 	
 	
-	public void paintComponent (Graphics g) {
+	public void paintComponent (Graphics g) { // A MODIFIER POUR AFFICHER LES OBJETS EN PERMANANCE
 		super.paintComponent (g);
 		
 	}

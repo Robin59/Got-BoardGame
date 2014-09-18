@@ -102,6 +102,9 @@ public class GameOfThronesModel extends JogreModel {
     	}else{
     		checkAtt();
     	}*/
+    	if(internPhase==1){
+    		checkAtt();
+    	}
     	System.out.println("nextInternPhase");
     }
     public void nextPhase(){
@@ -142,7 +145,7 @@ public class GameOfThronesModel extends JogreModel {
 			 nextInternPhase();
 		 }
     }
-    
+    /*Said if the current player have some raids orders*/
     private boolean checkCurrentPlayerRaid(){
     	for (Territory territory :families[getCurrentPlayer()].getTerritories()){
     		if (territory.getOrder()!=null && territory.getOrder().getType()==OrderType.RAI){
@@ -151,6 +154,7 @@ public class GameOfThronesModel extends JogreModel {
     	}
     	return false;
     }
+    /*Said if the current player have some atts orders*/
     private boolean checkCurrentPlayerAtt(){
     	for (Territory territory :families[getCurrentPlayer()].getTerritories()){
     		if (territory.getOrder()!=null && territory.getOrder().getType()==OrderType.ATT){
