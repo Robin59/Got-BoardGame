@@ -141,13 +141,13 @@ public class PlayersChoices extends JogreComponent {
 		return family.getOrders().get(i);
 	}
 	
-	/*private CombatantCard choseCard(int x,Family family){
-		return family.getCombatantCards().get((x-10)/150);
-	}*/
-	public void choseCard(int x, Family family){//attraper les execptions
+	public void choseCard(int x, Family family){
 		indexCard =(x-10)/150;
-		CombatantCard card =family.getCombatantCards().get(indexCard);
-		battle.playCard(card, family);
+		if (indexCard<family.getCombatantCards().size()){
+			CombatantCard card =family.getCombatantCards().get(indexCard);
+			battle.playCard(card, family);
+			getGraphics().clearRect(0, 0, 600, 250);
+		}
 	}
 	
 	
@@ -265,11 +265,11 @@ public class PlayersChoices extends JogreComponent {
 	
 	// 1 indique cartes
 	public int check(int modelState, Family family, Battle battle){
-		if(modelState==1){//on verifie si on peut afficher les cartes 
+		if(modelState==1 && battle.canPlayCard(family) ){//on verifie si on peut afficher les cartes 
 			System.out.println("SHOW CARDS !!");
 			getGraphics().clearRect(0, 0, 600, 250);
-			panel=9;
 			this.battle=battle;
+			panel=9;
 			int x =0;
 			List<CombatantCard> cards =family.getCombatantCards();
 			for (CombatantCard card : cards){
@@ -280,9 +280,15 @@ public class PlayersChoices extends JogreComponent {
 		}else if(modelState==2){
 			swordPlay(family);
 			return 2;
+		}else if(modelState==3 && family==battle.getDefFamily()){ // le defenceur choisit une zone de retraite
+			
+		}else if(modelState==4){
+			return 4;
 		}
 		return 0;
 	}
+	
+	
 	public int getIndexCard(){
 		return indexCard;
 	}

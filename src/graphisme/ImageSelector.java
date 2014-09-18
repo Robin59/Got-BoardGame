@@ -18,9 +18,7 @@ public class  ImageSelector{
 	/** l'unique instance de cette classe*/
 	public final static ImageSelector IMAGESELECTOR=new ImageSelector();
 	
-	/**
-	 * la premiere coordoné est pour la famille, la seconde pour le type (naval ou terrestre)
-	 */
+	/** la premiere coordoné est pour la famille, la seconde pour le type (naval ou terrestre)*/
 	private Image[][] troopsImages;
 	private Image[][] troopsSelectImage;
 	private Image[] bigOrdersImages;
@@ -54,9 +52,16 @@ public class  ImageSelector{
 		}
 		// les cartes de famille
 		playerCards = new HashMap<String, Image>();
-		playerCards.put("The Hound", GameImages.getImage(76));
+		
 		playerCards.put("Mellissandre", GameImages.getImage(67));
+		playerCards.put("Salladhor", GameImages.getImage(68));
+		playerCards.put("Davos", GameImages.getImage(69));
 		playerCards.put("Brienne", GameImages.getImage(70));
+		playerCards.put("Cersei", GameImages.getImage(73));
+		playerCards.put("Kevan", GameImages.getImage(74));
+		playerCards.put("Tyrion", GameImages.getImage(75));
+		playerCards.put("The Hound", GameImages.getImage(76));
+		playerCards.put("Jaime", GameImages.getImage(77));
 	}
 	
 	public Image[] getTroopImages(Family family){

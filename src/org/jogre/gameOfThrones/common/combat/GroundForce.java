@@ -17,9 +17,13 @@ public class GroundForce extends Troop {
 	}
 
 	@Override
-	public void destruction(int causualties) {
-		// TODO Auto-generated method stub
-
+	public void destruction(int casualties) {
+		if(casualties>infentrie){
+			knight-=(casualties-infentrie);
+			infentrie=0;
+		}else{
+			infentrie-=casualties;
+		}
 	}
 
 	@Override

@@ -23,8 +23,13 @@ public class Battle {
 	private int groundType; // 2 water, 0 land, 1 castle
 	private int def;
 	private int att;
+	private int attSwords;
+	private int attTowers;
+	private int defSwords;
+	private int defTowers;
 	private Family attFamily;
-	private int state; // 0 for the choosing troops, 1 for choosing cards, 2 for sword, 3 for troops destruction and 4 for the retrait
+	private Family defFamily;
+	private int state; // 0 for the choosing troops, 1 for choosing cards, 2 for sword, 3 for the withdrawal, 4 when it's ended
 	CombatantCard attCard;
 	CombatantCard defCard;
 	
@@ -44,10 +49,15 @@ public class Battle {
 		}else{groundType=0;}
 		def=0;
 		att=0;
-		attFamily = attTerritory.getFamily();
+		attFamily=attTerritory.getFamily();
+		defFamily=defTerritory.getFamily();
 		state=0;
 		attCard=null;
 		defCard=null;
+		attSwords=0;
+		attTowers=0;
+		defSwords=0;
+		defTowers=0;
 	}
 
 
@@ -59,7 +69,7 @@ public class Battle {
 		attTroops[3]+=siege;
 	}
 
-	/** brute force without support and Family cards*/
+	/** brute force without Family cards*/
 	public int attPower(){
 		int res=attTerritory.getOrder().getOthBonus();
 		if(groundType==2){
@@ -83,7 +93,7 @@ public class Battle {
 		}
 		for(Territory territory : defSupport){
 			int[] troops =territory.getTroup().getTroops();
-			res+=territory.getOrder().getOthBonus()+troops[0]+troops[1]+troops[2]*2+troops[3]*4*groundType;
+			res+=territory.getOrder().getOthBonus()+troops[0]+troops[1]+troops[2]*2;
 		}
 		return res;
 	}
@@ -95,12 +105,37 @@ public class Battle {
 		System.out.println("def power "+def);
 		state=1;
 	}
+	/**
+	 * 
+	 * @param territory
+	 * @param casualties
+	 * @return false if all the troop is destructed
+	 */
+	private boolean destructTroops(Territory territory, int casualties){
+		territory.getTroup().getTroops()[3]=0;
+		if(casualties>=territory.getTroup().getEffectif()){
+			territory.setTroup(null);
+			return false;
+		}else if (casualties<1){
+			return true;
+		}else{
+			if(groundType==2){
+				territory.mouveTroops(new Water("trash"),casualties,0,0,0);
+			}else{
+				territory.getTroup().destruction(casualties);
+			}
+			return true;
+		}
+	}
 	
-	public void cont(){
-		//choix des cartes
-		//épée
-		if(this.battleResolution()){
-			//on detruit les troups du defenceur, il choisit une retraite
+	public void battleResolution(){
+		if(this.battleWinner()){
+			//on applique les effets des cartes
+			//on detruit les troups du defenceur 
+			if (destructTroops(defTerritory, (attSwords-defTowers))){
+				//il choisit une retraite car il reste des troupes
+				state=3;
+			}
 			//on retire l'ordre
 			defTerritory.rmOrder();
 			// on met les nouvelles troupes sur le territoire
@@ -111,10 +146,25 @@ public class Battle {
 			}
 			System.out.println("victoire");
 		}else{
+			//on applique les effets des cartes
 			//on detruit les troups de l'attaquant
 			System.out.println("defailt");
+			// faire les destructions des troupes ici!!
 			attTroops[3]=0;//destruction of siege tower
-			if(attTroops[0]+attTroops[1]+attTroops[2]!=0){
+			if(defSwords>attTowers){
+				if(groundType==2){
+					attTroops[0]-=(defSwords-attTowers);
+				}else{
+					if(attTroops[1]<(defSwords-attTowers)){
+						attTroops[2]-=(defSwords-attTowers-attTroops[1]);
+						attTroops[1]=0;
+					}else{
+						attTroops[1]-=(defSwords-attTowers);
+					}
+				}
+			}
+			//retraites des troupes
+			if(attTroops[0]+attTroops[1]+attTroops[2]<=0){
 				if(attTerritory.getTroup()!=null){
 					attTerritory.getTroup().addTroop(attTroops);
 				}else if(groundType==2){
@@ -123,12 +173,20 @@ public class Battle {
 					attTerritory.setTroup(new GroundForce(attFamily, attTerritory, attTroops[1],attTroops[2],0));
 				}
 			}
+			state=4;
+			
+			
+			
 		}
 	}
 
 /**return true if the attaquant win, false if it's the defencer*/
-	private boolean battleResolution() {
-		return att>def; // changer pour prendre en compte la piste des fiefs
+	private boolean battleWinner() {
+		if(att==def){
+			return attFamily.getFiefdomsTrack()>defFamily.getFiefdomsTrack();
+		}else{
+			return att>def; 
+		}
 	}
 	
 	public void addAttSupport(Territory territory){
@@ -169,11 +227,21 @@ public class Battle {
 /**
  * Return a boolean saying if a player is participating or not to this battle (support dosen't count)
  * @param seatNum
- * @return true if the player(setNum) is participating 
+ * @return true if the player is participating 
  */
 	public boolean playerPartisipate(int seatNum) {
 		return (attFamily.getPlayer()==seatNum || defTerritory.getFamily().getPlayer()==seatNum);
 	}
+/**
+ * Return a boolean saying if a player is participating or not to this battle (support dosen't count)
+ * @param family
+ * @return true if the player is participating 
+ */
+	public boolean playerPartisipate(Family family) { // NOT USE !!
+		return (attFamily==family || defTerritory.getFamily()==family);
+	}
+	
+	
 /**
  * return the state of the battle	
  * @return 0 for the support, 1 for cards 
@@ -203,15 +271,22 @@ public class Battle {
 				System.out.println("Tyrion has been played");
 				attCard=null;
 			}else{
-				this.state=2;
 				System.out.println("Cartes jouée :");
 				System.out.println("carte att "+attCard.getName());
 				System.out.println("carte def "+defCard.getName());
-				//on applique les effets de carte
-					// la reine des epines 
-					//les autres (vict,
 				//on effectue le calcul la puissance final avant épée
 				this.powerWithoutSword();
+				//on applique les effets de carte
+					//la reines des epines, Faire un etat particulié qui permet de clicker sur la carte pour les cartes 
+					//les autres (vict,etc)
+				befforSwordCardEffect();
+				//on regarde si un des deux joueurs a l'épée
+				if(attFamily.canUseSword()||defFamily.canUseSword()){
+					this.state=2;
+				}else{
+					//on passe directement à la resolution
+					battleResolution();
+				}
 			}
 		}
 	}
@@ -226,6 +301,10 @@ public class Battle {
 	public Family getAttFamily (){
 		return attFamily;
 	}
+	public Family getDefFamily() {
+		return defTerritory.getFamily();
+	}
+	
 	private void powerWithoutSword() {
 		att=this.attPower()+attCard.getPower();
 		def=this.defPower()+defCard.getPower();
@@ -234,8 +313,96 @@ public class Battle {
 	}
 
 
-	public Family getDefFamily() {
-		return defTerritory.getFamily();
+	
+
+
+	public boolean canPlayCard(Family family) {
+		return ((family==attFamily && attCard==null)||(family==defTerritory.getFamily() && defCard==null));
 	}
+	/**
+	 * This method is call when a battle end 
+	 */
+	public void end(){
+		attTerritory.getOrder().used();
+		// on regarde si un joueur n'a plus de cartes, au quel cas on lui rend
+		if (attFamily.getCombatantCards().isEmpty()){
+			attFamily.regainCombatantCards(attCard);
+		}
+		if (defFamily.getCombatantCards().isEmpty()){
+			defFamily.regainCombatantCards(defCard);
+		}
+	}
+	
+	// on bellow is the different card effects 
+	
+	private void befforSwordCardEffect(){
+		if(attCard.getName().equals("Kevan")){
+			kevanEffect();
+		}else if(attCard.getName().equals("Victarion")){
+			victarionEffect();
+		}else if(attCard.getName().equals("Salladhor")|| defCard.getName().equals("Salladhor")){
+			salladhorEffect();
+		}else if(attCard.getName().equals("Davos")|| defCard.getName().equals("Davos")){
+			davosEffect();
+		}
+	}
+	
+	
+	private void kevanEffect(){//if kevan is attacking 
+		att+=attTroops[1];
+		for(Territory territory : attSupport){
+			if(territory.getFamily().getName().equals("Lannister")){
+				att+=territory.getTroup().getTroops()[1];
+			}
+		}
+	}
+	private void victarionEffect(){//if vict is attacking 
+		att+=attTroops[0];
+		for(Territory territory : attSupport){
+			if(territory.getFamily().getName().equals("Greyjoy")){
+				att+=territory.getTroup().getTroops()[0];
+			}
+		}
+	}
+	private void salladhorEffect(){//
+		if((attCard.getName().equals("Salladhor")&& !attSupport.isEmpty())||(defCard.getName().equals("Salladhor")&& !defSupport.isEmpty())){
+			for(Territory territory : defSupport){
+				if(!territory.getFamily().getName().equals("Baratheon")){
+					def-=territory.getTroup().getTroops()[0];
+				}
+			}
+			for(Territory territory : attSupport){
+				if(!territory.getFamily().getName().equals("Baratheon")){
+					att-=territory.getTroup().getTroops()[0];
+				}
+			}
+		}
+	}
+	private void davosEffect(){//don't work with BALON EFFECT !!!
+		if(attCard.getName().equals("Davos")&&davosAttBoolean()){
+			att++;
+			attSwords++;
+		}else if(davosDefBoolean()){
+			def++;
+			defSwords++;
+		}
+	}
+	private boolean davosAttBoolean(){
+		for (CombatantCard card :attFamily.getCombatantCards()){
+			if(card.getName().equals("Stannis")){
+				return false;
+			}
+		}
+		return true;
+	}
+	private boolean davosDefBoolean(){
+		for (CombatantCard card :defFamily.getCombatantCards()){
+			if(card.getName().equals("Stannis")){
+				return false;
+			}
+		}
+		return true;
+	}
+	
 	
 }

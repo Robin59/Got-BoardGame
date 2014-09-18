@@ -1,6 +1,5 @@
 package org.jogre.gameOfThrones.common;
 
-import java.awt.Image;
 
 import org.jogre.gameOfThrones.common.combat.CombatResolution;
 
@@ -10,7 +9,6 @@ import org.jogre.gameOfThrones.common.combat.CombatResolution;
  *
  */
 public class CombatantCard {
-	//family (vraiment necessaire de mettre un pointeur ?)
 	
 	/**The name of the personage that is represented by this card */
 	private String name;
@@ -28,9 +26,11 @@ public class CombatantCard {
 	 * 1= play before everything
 	 * 3= play after calculate brute force
 	 * 4= play after knowing who win
-	 */
+	 
 	protected int priority;
 	// 1 est tirion, 2 avant le combat
+	*/
+	
 	
 	/**
 	 * 
@@ -42,16 +42,13 @@ public class CombatantCard {
 	
 	public CombatantCard(String name, /*int index ,*/int power, int sword,int tower){
 		this.name = name;
-		//this.index=index;
 		this.power=power;
 		this.sword=sword;
 		this.tower=tower;
-		priority=5; // you have to change this value for card with special effect
+		//priority=5; // you have to change this value for card with special effect
 	}
 	
-	//special effect (brise toutes les regles du jeu, doivent donc etre en dessous
-	//creer une classe special pour ça (ou une classe regle))
-	//BRISE TOUTE LES REGLES OU SEULEMENT CELLES DES COMBATS ?
+	
 	public String getName(){
 		return name;
 	}
@@ -64,13 +61,13 @@ public class CombatantCard {
 	public int getTower(){
 		return tower;
 	}
-	public int getPriority(){
+	/*public int getPriority(){
 		return priority;
-	}
+	}*/
 	
-	public void effect(CombatResolution combat){
+	/*public void effect(CombatResolution combat){
 		// nothing here, have to be surcharge 
-	}
+	}*/
 	
 	/*public int getIndex(){
 		return index;

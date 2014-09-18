@@ -261,6 +261,10 @@ public class GameOfThronesController extends JogreController {
     			case 2:
     				sendProperty("Sword", 0);
     				break;
+    			case 4:
+    				sendProperty("BattleEnd", 0);
+    				model.battleEnd();
+    				break;
     			}
     			gameOfThronesComponent.repaint();//encore utile ? 
     			//playerChoices.repaint(); // au cas ou (quand on affiche autre chose devant le jeux) bug
@@ -355,6 +359,8 @@ public class GameOfThronesController extends JogreController {
     		model.getBattle().playCard(model.getBattle().getDefFamily().getCombatantCards().get(value), model.getBattle().getDefFamily());
     	}else if(key.equals("Sword")){
     		playerChoices.swordPlay(model.getFamily(getSeatNum()));
+    	}else if(key.equals("BattleEnd") && model.getBattle()!=null){ // Seconde condition importante ?
+			model.battleEnd();
     	}else{
     		 //on indique que le joueur a fini de donner ses ordres
     		 model.getFamily(value).ordersGived=true;

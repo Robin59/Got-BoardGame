@@ -16,8 +16,8 @@ public abstract class Troop {
 		//we add the troup to the territory
 		territory.setTroup(this);
 	}
-	//detruit un nb de troup egal aux pertes, on est sur que les pertes sont inferieur aux effectifs
-	public abstract void destruction (int causualties);
+	/***/
+	public abstract void destruction (int casualties);
 	// effectif pour le ravitaillement
 	public abstract int getEffectif();
 	

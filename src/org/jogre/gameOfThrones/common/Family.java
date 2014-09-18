@@ -36,6 +36,7 @@ public class Family {
 	private List<Order> ordersUse;
 	//position sur les pistes 
 	protected int fiefdomsTrack;
+	private boolean swordUsed;
 	
 	
 	/**
@@ -49,6 +50,7 @@ public class Family {
 		this.player=player;
 		ordersGived=false;
 		inflPoint=5;
+		swordUsed=false;
 		//orders list creation
 		ordersUse= new LinkedList<Order>(); // CETTE LISTE EST ELLE UTILE ???
 		ordersAvailable= new LinkedList<Order>();
@@ -158,9 +160,30 @@ public class Family {
 		ordersUse.remove(order);
 		
 	}
+	
+	/**
+	 * return all cards in the combatantsAvailable list except the one gived in parameter
+	 * @param card
+	 */
+	public void regainCombatantCards(CombatantCard card){
+		this.regainCombatantCards();
+		this.removeCard(card);
+	}
+	
+	/** return all cards in the combatantsAvailable list*/
+	public void regainCombatantCards(){
+		for(CombatantCard card :combatantsUse){
+			combatantsAvailable.add(card);
+		}
+		combatantsUse=new LinkedList<CombatantCard>();
+	}
 
 	public List<CombatantCard> getCombatantCards() {
 		return combatantsAvailable;
+	}
+
+	public boolean canUseSword() {
+		return fiefdomsTrack==1 && !swordUsed;
 	}
 	
 	/**this methode give an available order to one teritory with no one*/ 
