@@ -49,7 +49,6 @@ public class GameOfThronesTableFrame extends JogreTableFrame {
     
     private JLabel infoLabel; // affiches les informations volantes
     private JLabel infoPlayerC; // information en rapport avec le PlayerChoice
-    //private GotPlayerComponent playerComponent; // A CHANGER
     private PlayersChoices playerChoices;
     
     /**

@@ -183,7 +183,7 @@ public class Battle {
 /**return true if the attaquant win, false if it's the defencer*/
 	private boolean battleWinner() {
 		if(att==def){
-			return attFamily.getFiefdomsTrack()>defFamily.getFiefdomsTrack();
+			return attFamily.getFiefdomsTrack()<defFamily.getFiefdomsTrack();
 		}else{
 			return att>def; 
 		}
@@ -290,7 +290,24 @@ public class Battle {
 			}
 		}
 	}
-
+	public void useSword(){
+		if(attFamily.canUseSword()){
+			att++;
+			attFamily.swordUse();
+		}else{
+			def++;
+			defFamily.swordUse();
+		}
+		System.out.println("attack power "+att);
+		System.out.println("def power "+def);
+		battleResolution();
+		
+	}
+	public void dontUseSword(){
+		System.out.println("attack power "+att);
+		System.out.println("def power "+def);
+		battleResolution();
+	}
 	/*public CombatantCard getAttCard(){
 		return attCard;
 	}

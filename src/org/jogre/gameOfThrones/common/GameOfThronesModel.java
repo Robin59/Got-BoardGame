@@ -298,7 +298,7 @@ public class GameOfThronesModel extends JogreModel {
   		// On place les starks (changer pour le joueur 3)
   		families[0]=new Family(0);
   		throne[0]=0;
-  		families[0].setFiefdomsTrack(2);
+  		families[0].setFiefdomsTrack(1);
           boardModel.getTerritory("Winterfell").setTroup(new GroundForce(families[0],boardModel.getTerritory("Winterfell"),1,1,0));
           boardModel.getTerritory("White Harbor").setTroup(new GroundForce(families[0],boardModel.getTerritory("White Harbor"),1,0,0));
           boardModel.getTerritory("Shivering Sea").setTroup(new NavalTroup(families[0],boardModel.getTerritory("Shivering Sea"),1));

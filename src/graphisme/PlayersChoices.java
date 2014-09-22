@@ -41,6 +41,8 @@ public class PlayersChoices extends JogreComponent {
 	Battle battle;
 	private int indexCard;
 	private Family family;
+	private Image swordImage;
+	private Image swordFlipImage;
 	
 	public PlayersChoices (JLabel label){
 		this.label=label;
@@ -55,6 +57,8 @@ public class PlayersChoices extends JogreComponent {
 		defencerImage= GameImages.getImage(5);
 		noOneImage= GameImages.getImage(3);
 		images= ImageSelector.IMAGESELECTOR;
+		swordImage =GameImages.getImage(108);
+		swordFlipImage =GameImages.getImage(109);
 	}
 	
 //c'est la methode appelé quand on click gauche dans le playerChoice
@@ -130,6 +134,17 @@ public class PlayersChoices extends JogreComponent {
 		case 9 :
 			choseCard(x, family);
 			return 15;
+		case 10 :
+			if (x>50 && x<140){
+				panel=0;
+				this.repaint();
+				return 16;
+			}else if(x>200 && x<300){
+				panel=0;
+				this.repaint();
+				return 17;
+			}
+			break;
 		}
 		return 0;
 	}
@@ -147,7 +162,8 @@ public class PlayersChoices extends JogreComponent {
 		if (indexCard<family.getCombatantCards().size()){
 			CombatantCard card =family.getCombatantCards().get(indexCard);
 			battle.playCard(card, family);
-			getGraphics().clearRect(0, 0, 600, 250);
+			panel=0;
+			this.repaint();
 		}
 	}
 	
@@ -161,12 +177,11 @@ public class PlayersChoices extends JogreComponent {
 	}
 	
 	
-	public void paintComponent (Graphics g) { // A MODIFIER POUR AFFICHER LES OBJETS EN PERMANANCE
+	public void paintComponent (Graphics g) { 
 		//super.paintComponent (g);
 		switch(panel){
 		case 0:
 			label.setText("");
-			//g.clearRect(0, 0, 600, 250);
 			break;
 		case 1:
 			int x =0;
@@ -210,13 +225,25 @@ public class PlayersChoices extends JogreComponent {
 			g.drawImage(attackerImage, 100,50, null);
 			g.drawImage(defencerImage, 250,50, null);
 			g.drawImage(noOneImage, 175,150, null);
+			break;
+		case 9:
+			int z =0;
+			List<CombatantCard> cards =family.getCombatantCards();
+			for (CombatantCard card : cards){
+				g.drawImage(images.getCardImage(card.getName()), (10+z*150), (0), null);
+				z++;
+			}
+			break;
+		case 10:
+			g.drawImage(swordImage, 50, 5, null);
+			g.drawImage(swordFlipImage, 200, 5, null);
+			break;
 		}
 	}
 	
 	
 	
 	public void blank() {
-		//getGraphics().clearRect(0, 0, 600, 250);
 		relatedTerr=null;//vraiment utile ?
 		cibleTerr=null;
 		panel=0;
@@ -258,7 +285,7 @@ public class PlayersChoices extends JogreComponent {
 		getGraphics().clearRect(0, 0, 600, 250);
 		cibleTerr = territory;
 		label.setText("wich troops do want to send from "+relatedTerr.getName()+" to "+cibleTerr.getName());
-		Image[] troopsImages=images.getTroopImages(relatedTerr.getFamily());
+		//Image[] troopsImages=images.getTroopImages(relatedTerr.getFamily());
 		if(territory instanceof Water){
 			panel=4;
 		}else{
@@ -279,7 +306,7 @@ public class PlayersChoices extends JogreComponent {
 		cibleTerr = territory;
 		// related territory peut poser problem
 		//label.setText("wich troops do want to send from "+relatedTerr.getName()+" to attack "+cibleTerr.getName());
-		Image[] troopsImages=images.getTroopImages(relatedTerr.getFamily());
+		//Image[] troopsImages=images.getTroopImages(relatedTerr.getFamily());
 		if(territory instanceof Water){
 			panel=6;
 			//getGraphics().drawImage(troopsImages[0],150,50, null);
@@ -304,19 +331,19 @@ public class PlayersChoices extends JogreComponent {
 		
 	}
 	
-	// 1 indique cartes
+	// 1 indique cartes, 2 pour jouer l'épée, 3 retraite, 4 fin de combat
 	public int check(int modelState, Family family, Battle battle){
 		if(modelState==1 && battle.canPlayCard(family) ){//on verifie si on peut afficher les cartes 
 			System.out.println("SHOW CARDS !!");
 			getGraphics().clearRect(0, 0, 600, 250);
 			this.battle=battle;
 			panel=9;
-			int x =0;
-			List<CombatantCard> cards =family.getCombatantCards();
+			repaint();
+			/*List<CombatantCard> cards =family.getCombatantCards();
 			for (CombatantCard card : cards){
 				getGraphics().drawImage(images.getCardImage(card.getName()), (10+x*150), (0), null);
 				x++;
-			}
+			}*/
 			return 1;
 		}else if(modelState==2){
 			swordPlay(family);
@@ -336,8 +363,10 @@ public class PlayersChoices extends JogreComponent {
 	
 	public void swordPlay(Family family){
 		System.out.println(" ON joue l'épée");
-		if(family.getFiefdomsTrack()==1){
+		if(family.canUseSword()){
 			System.out.println(" vous pouvez jouer l'épée");
+			panel=10;
+			repaint();
 		}else{
 			System.out.println(" vous ne pouvez pas jouer l'épée");
 		}

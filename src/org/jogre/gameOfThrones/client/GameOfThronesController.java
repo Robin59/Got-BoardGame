@@ -111,7 +111,7 @@ public class GameOfThronesController extends JogreController {
     
     public void mouseClicked(MouseEvent e){
     	
-    	if (e.getButton()==MouseEvent.BUTTON1 && isGamePlaying()){ // Il vaudrait mieux modifier la classe JogreComponant pour ajouter une methode aClikerSurCeComponant(intx,inty)
+    	if (e.getButton()==MouseEvent.BUTTON1 && isGamePlaying()){
     		//on regarde sur quoi on a clicke
     		if(e.getComponent()==gameOfThronesComponent){
     			//on regarde si on click bien sur un territoir
@@ -252,6 +252,15 @@ public class GameOfThronesController extends JogreController {
     				}else {
     					sendProperty("defCardPlayed",playerChoices.getIndexCard());
     				}
+    				break;
+    			case 16 : 
+    				model.getBattle().useSword();
+    				sendProperty("swordPlay", 0);
+    				break;
+    			case 17 :
+    				model.getBattle().dontUseSword();
+    				sendProperty("dontUwordPlay", 0);
+    				break;
     			}
     			//le playerChoice verifie si il doit afficher quelque chose de nouveau
     			switch(playerChoices.check(model.informations(getSeatNum()), model.getFamily(getSeatNum()), model.getBattle())){
@@ -361,13 +370,17 @@ public class GameOfThronesController extends JogreController {
     		playerChoices.swordPlay(model.getFamily(getSeatNum()));
     	}else if(key.equals("BattleEnd") && model.getBattle()!=null){ // Seconde condition importante ?
 			model.battleEnd();
+    	}else if (key.equals("useSword")){
+    		model.getBattle().useSword();
+    	}else if (key.equals("dontUseSword")){
+    		model.getBattle().dontUseSword();
     	}else{
-    		 //on indique que le joueur a fini de donner ses ordres
-    		 model.getFamily(value).ordersGived=true;
-    		 // on verifie que si c'etait le dernier
-    		 model.endProg();
-    		 //gameOfThronesComponent.repaint();
-    		 //playerChoices.repaint();
+    		//on indique que le joueur a fini de donner ses ordres
+    		model.getFamily(value).ordersGived=true;
+    		// on verifie que si c'etait le dernier
+    		model.endProg();
+    		//gameOfThronesComponent.repaint();
+    		//playerChoices.repaint();
           }
        }
     

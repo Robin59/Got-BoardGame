@@ -105,7 +105,7 @@ public abstract class Territory {
 		if (neighbors.contains(territory)){
 			if(order.getType()==OrderType.RAI){
 				res=(territory.getOrder()!=null && territory.getOrder().getType()!=OrderType.ATT && (order.getStar() || territory.getOrder().getType()!=OrderType.DEF));
-			}else{ // A MODIFIER  !!!!!!!! pour le cas ou on a deja attaqué
+			}else if (!order.getUse()||territory.getTroup()==null || territory.getFamily()==owner){ // attack or move cases
 				res=true;
 			}
 		}

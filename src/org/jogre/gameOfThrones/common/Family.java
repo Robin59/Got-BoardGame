@@ -185,6 +185,9 @@ public class Family {
 	public boolean canUseSword() {
 		return fiefdomsTrack==1 && !swordUsed;
 	}
+	public void swordUse(){
+		swordUsed=true;
+	}
 	
 	/**this methode give an available order to one teritory with no one*/ 
 	/*public void giveOrder (Territory territory){//peut-etre mettre en privé

@@ -60,6 +60,5 @@ public class Order {
 	
 	public void used() {
 		use=true;
-		System.out.println("now use");
 	}
 }
