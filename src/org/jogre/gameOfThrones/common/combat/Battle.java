@@ -6,7 +6,6 @@ import java.util.List;
 import org.jogre.gameOfThrones.common.CombatantCard;
 import org.jogre.gameOfThrones.common.Family;
 import org.jogre.gameOfThrones.common.orders.OrderType;
-import org.jogre.gameOfThrones.common.territory.Land;
 import org.jogre.gameOfThrones.common.territory.Territory;
 import org.jogre.gameOfThrones.common.territory.Water;
 
@@ -19,7 +18,6 @@ public class Battle {
 	private List<Territory> defSupport;
 	//private int[] attSupport;
 	//private int[] defSupport;
-	CombatResolution resolution;
 	private int groundType; // 2 water, 0 land, 1 castle
 	private int def;
 	private int att;
@@ -135,6 +133,7 @@ public class Battle {
 			//on detruit les troups du defenceur 
 			if (destructTroops(defTerritory, (attSwords-defTowers)) && defTerritory.canWithdraw()){
 				//il choisit une retraite car il reste des troupes
+				System.out.println("retraite");
 				state=3;
 			}else{
 				state=4;//all defenciv force have been killed, no withdraw 
@@ -167,7 +166,7 @@ public class Battle {
 				}
 			}
 			//retraites des troupes
-			if(attTroops[0]+attTroops[1]+attTroops[2]<=0){
+			if(attTroops[0]+attTroops[1]+attTroops[2]>=0){
 				if(attTerritory.getTroup()!=null){
 					attTerritory.getTroup().addTroop(attTroops);
 				}else if(groundType==2){
@@ -176,6 +175,7 @@ public class Battle {
 					attTerritory.setTroup(new GroundForce(attFamily, attTerritory, attTroops[1],attTroops[2],0));
 				}
 			}
+			System.out.println("befor state 4");
 			state=4;	
 		}
 	}
@@ -277,6 +277,10 @@ public class Battle {
 				//on effectue le calcul la puissance final avant épée
 				this.powerWithoutSword();
 				//on applique les effets de carte
+				attSwords=attCard.getSword();
+				defSwords=defCard.getSword();
+				attTowers=attCard.getTower();
+				defTowers=defCard.getTower();
 					//la reines des epines, Faire un etat particulié qui permet de clicker sur la carte pour les cartes 
 					//les autres (vict,etc)
 				befforSwordCardEffect();
@@ -290,6 +294,8 @@ public class Battle {
 			}
 		}
 	}
+	/**
+	 */
 	public void useSword(){
 		if(attFamily.canUseSword()){
 			att++;
@@ -298,12 +304,14 @@ public class Battle {
 			def++;
 			defFamily.swordUse();
 		}
+		System.out.println("sword use");
 		System.out.println("attack power "+att);
 		System.out.println("def power "+def);
 		battleResolution();
 		
 	}
 	public void dontUseSword(){
+		System.out.println("sword don't use");
 		System.out.println("attack power "+att);
 		System.out.println("def power "+def);
 		battleResolution();
@@ -342,8 +350,14 @@ public class Battle {
 	 * @param territory
 	 */
 	public void withdraw (Territory territory){
+		defTerritory.mouveTroops(territory);
+		state=4;
+		System.out.println("retraite");
+		// on met les nouvelles troupes sur le territoire
 		if(groundType==2){
-			defTerritory.mouveTroops(territory);
+			defTerritory.setTroup(new NavalTroup(attFamily,defTerritory, attTroops[0]));
+		}else{
+			defTerritory.setTroup(new GroundForce(attFamily,defTerritory, attTroops[1],attTroops[2],attTroops[3]));
 		}
 	}
 	/**

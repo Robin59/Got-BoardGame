@@ -99,6 +99,8 @@ public class GameOfThronesModel extends JogreModel {
     	currentPlayer=0;
     	if(internPhase==1){
     		checkAtt();
+    	}else if (internPhase==2){
+    		System.out.println("Consolidation !");
     	}
     	System.out.println("nextInternPhase");
     }
@@ -390,7 +392,7 @@ public class GameOfThronesModel extends JogreModel {
 	 * @return
 	*/
 	public boolean canWithdraw(Territory territory, int seatNum) {
-		return territory2.canWithdraw(territory);
+		return territory2.getFamily().getPlayer()==seatNum && territory2.canWithdraw(territory);
 	}
 	
     

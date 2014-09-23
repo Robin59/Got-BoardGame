@@ -136,11 +136,11 @@ public class PlayersChoices extends JogreComponent {
 			return 15;
 		case 10 :
 			if (x>50 && x<140){
-				panel=0;
+				blank2();
 				this.repaint();
 				return 16;
 			}else if(x>200 && x<300){
-				panel=0;
+				blank2();
 				this.repaint();
 				return 17;
 			}
@@ -348,8 +348,9 @@ public class PlayersChoices extends JogreComponent {
 		}else if(modelState==2){
 			swordPlay(family);
 			return 2;
-		}else if(modelState==3 && family==battle.getDefFamily()){ // le defenceur choisit une zone de retraite
-			
+		}else if(modelState==3 && family==battle.getDefFamily()){	
+			label.setText("Choose a place to withdraw");
+			return 3;
 		}else if(modelState==4){
 			return 4;
 		}
@@ -369,8 +370,14 @@ public class PlayersChoices extends JogreComponent {
 			repaint();
 		}else{
 			System.out.println(" vous ne pouvez pas jouer l'épée");
+			panel=0;
+			repaint();
 		}
 	}
+	
+	/*public void withdraw(String family){
+		if(family.equals(battle.getDefFamily().getName())) label.setText("Choose a place to withdraw");
+	}*/
 }
 
 

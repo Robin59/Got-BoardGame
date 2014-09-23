@@ -119,7 +119,6 @@ public class GameOfThronesController extends JogreController {
     				//
     				switch(model.getPhase()){
     				case 1 :
-    					
     					// on selectionne un territoire et on le passe en parametre de canGiveOrder(teritoir, numJoueur)
     					if(model.canGiveOrder(gameOfThronesComponent.getTerritory(e.getX(),e.getY()), getSeatNum())){
     						//on affiche en bas l'ecran d'ordres 
@@ -130,11 +129,15 @@ public class GameOfThronesController extends JogreController {
     					break;
     				case 2:
     					if(model.getBattle()!=null){//On verifie si il y a combat
-    					// on peut clicker pour supporter
+    					
     						//en cas de retraite !!
     						if(model.getBattle().getState()==3 && model.canWithdraw(gameOfThronesComponent.getTerritory(e.getX(),e.getY()),getSeatNum())){
+    							//System.out.println("can withdraw here");
     							model.getBattle().withdraw(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
-    						}else if(model.canSupport(gameOfThronesComponent.getTerritory(e.getX(),e.getY()),getSeatNum())){
+    							model.battleEnd();
+    							sendProperty("withdraw", gameOfThronesComponent.getTerritory(e.getX(),e.getY()).getName());
+    						}// on peut clicker pour supporter
+    						else if(model.canSupport(gameOfThronesComponent.getTerritory(e.getX(),e.getY()),getSeatNum())){
     							playerChoices.support(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
     						}else if(gameOfThronesComponent.getTerritory(e.getX(),e.getY())==model.getTerritory1()){
     							playerChoices.attackTo(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
@@ -272,9 +275,13 @@ public class GameOfThronesController extends JogreController {
     			case 2:
     				sendProperty("Sword", 0);
     				break;
+    			case 3:
+    				System.out.println("controller : cheked state 3");
+    				
+    				break;
     			case 4:
-    				//sendProperty("BattleEnd", 0);// VRAIMENT Necessaire ?!!
     				model.battleEnd();
+    				sendProperty("BattleEnd", 0);// VRAIMENT Necessaire ?!!
     				break;
     			}
     			gameOfThronesComponent.repaint();//encore utile ? 
@@ -322,6 +329,9 @@ public class GameOfThronesController extends JogreController {
         	model.getBattle().addDefSupport(model.getBoardModel().getTerritory(territory));
     	}else if(key.equals("noSupport")){
     		model.getBoardModel().getTerritory(territory).getOrder().used();
+    	}else if(key.equals("withdraw")){
+    		model.getBattle().withdraw(model.getBoardModel().getTerritory(territory));
+			model.battleEnd();
     	}else{
     		model.getBoardModel().getTerritory(key).useOrderOn(model.getBoardModel().getTerritory(territory));
     		model.nextPlayer();//model.checkRaid(); // fusionner dans check Raid?
