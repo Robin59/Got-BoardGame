@@ -136,8 +136,11 @@ public class GameOfThronesController extends JogreController {
     						}else if(gameOfThronesComponent.getTerritory(e.getX(),e.getY())==model.getTerritory1()){
     							playerChoices.attackTo(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
     						}
-    						
-    						// on regarde si un ordre est deja selectioné, qu'il peut etre utilisé dans le territoir voulu et qu'on peut l'utiliser
+    						//en cas de retraite !!
+    						if(model.getBattle().getState()==3 && model.canWithdraw(gameOfThronesComponent.getTerritory(e.getX(),e.getY()),getSeatNum())){
+    							model.getBattle().withdraw(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
+    						}
+    					// on regarde si un ordre est deja selectioné, qu'il peut etre utilisé dans le territoir voulu et qu'on peut l'utiliser
     					}else if(playerChoices.getRelatedTerr()!=null && playerChoices.getRelatedTerr().canUseOrderOn(gameOfThronesComponent.getTerritory(e.getX(),e.getY()))){
     						//On execute l'ordre
     						int orderEx =playerChoices.getRelatedTerr().useOrderOn(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
@@ -145,9 +148,8 @@ public class GameOfThronesController extends JogreController {
     						case 0:
     							// on envoi le territoir qui donne l'ordre et celui qui execute
         						sendProperty(playerChoices.getRelatedTerr().getName(), gameOfThronesComponent.getTerritory(e.getX(),e.getY()).getName());
-  
     							playerChoices.blank();
-    							model.nextPlayer(); model.checkRaid(); // peut-etre tout mettre en 1
+    							model.nextPlayer(); //model.checkRaid(); // peut-etre tout mettre en 1
     							break;
     						case 1:
     							playerChoices.moveTo(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
@@ -255,11 +257,11 @@ public class GameOfThronesController extends JogreController {
     				break;
     			case 16 : 
     				model.getBattle().useSword();
-    				sendProperty("swordPlay", 0);
+    				sendProperty("useSword", 0);
     				break;
     			case 17 :
     				model.getBattle().dontUseSword();
-    				sendProperty("dontUwordPlay", 0);
+    				sendProperty("dontUseSword", 0);
     				break;
     			}
     			//le playerChoice verifie si il doit afficher quelque chose de nouveau
@@ -271,7 +273,7 @@ public class GameOfThronesController extends JogreController {
     				sendProperty("Sword", 0);
     				break;
     			case 4:
-    				sendProperty("BattleEnd", 0);
+    				//sendProperty("BattleEnd", 0);// VRAIMENT Necessaire ?!!
     				model.battleEnd();
     				break;
     			}
@@ -307,7 +309,7 @@ public class GameOfThronesController extends JogreController {
     public void receiveProperty(String key, String territory){
     	if(key.equals("cancelOrder")){
     		model.getBoardModel().getTerritory(territory).rmOrder();
-    		model.nextPlayer();model.checkRaid();
+    		model.nextPlayer();//model.checkRaid();
     	}else if(key.equals("mvInitiated")){
     		model.mvInitiated(model.getBoardModel().getTerritory(territory));
     	}else if(key.equals("mvInitiated2")){
@@ -322,7 +324,7 @@ public class GameOfThronesController extends JogreController {
     		model.getBoardModel().getTerritory(territory).getOrder().used();
     	}else{
     		model.getBoardModel().getTerritory(key).useOrderOn(model.getBoardModel().getTerritory(territory));
-    		model.nextPlayer();model.checkRaid(); // fusionner dans check Raid?
+    		model.nextPlayer();//model.checkRaid(); // fusionner dans check Raid?
     	}
     	
     }

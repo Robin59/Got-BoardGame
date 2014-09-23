@@ -120,7 +120,7 @@ public class GameOfThronesModel extends JogreModel {
     
   //FONCTION QUI VERIFIE  VERIFIE SI IL Y A DES RAIDS PARMI TOUS JOUEURS
     // et on cherche le joueur qui a un ordre de raid suivant. Si il n'y en a pas, on passe à la phase interne suivante
-    public void checkRaid(){
+    private void checkRaid(){
     	int i =0;
     	while (!checkCurrentPlayerRaid() && i<=numberPlayers){
     		i++;
@@ -163,6 +163,11 @@ public class GameOfThronesModel extends JogreModel {
     public void nextPlayer(){
     	currentPlayer = (currentPlayer+1)%numberPlayers;
     	mvInitiated=false;
+    	if(internPhase==0){
+    		checkRaid();
+    	}else{
+    		checkAtt();
+    	}
     }
     
     /** be careful this method return a playerSeat, not is place on the throne track*/ 
@@ -377,6 +382,15 @@ public class GameOfThronesModel extends JogreModel {
 				return battle.getState();
 		}
 		return 0;
+	}
+	/**
+	 * When there is a battle and the defencer lose, said if he can withdraw to the given territory
+	 * @param territory
+	 * @param seatNum
+	 * @return
+	*/
+	public boolean canWithdraw(Territory territory, int seatNum) {
+		return territory2.canWithdraw(territory);
 	}
 	
     

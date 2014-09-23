@@ -132,18 +132,20 @@ public class Battle {
 		if(this.battleWinner()){
 			//on applique les effets des cartes
 			//on detruit les troups du defenceur 
-			if (destructTroops(defTerritory, (attSwords-defTowers))){
+			if (destructTroops(defTerritory, (attSwords-defTowers)) && defTerritory.canWithdraw()){
 				//il choisit une retraite car il reste des troupes
 				state=3;
+			}else{
+				state=4;//all defenciv force have been killed, no withdraw 
+				// on met les nouvelles troupes sur le territoire
+				if(groundType==2){
+					defTerritory.setTroup(new NavalTroup(attFamily,defTerritory, attTroops[0]));
+				}else{
+					defTerritory.setTroup(new GroundForce(attFamily,defTerritory, attTroops[1],attTroops[2],attTroops[3]));
+				}
 			}
 			//on retire l'ordre
 			defTerritory.rmOrder();
-			// on met les nouvelles troupes sur le territoire
-			if(groundType==2){
-				defTerritory.setTroup(new NavalTroup(attFamily,defTerritory, attTroops[0]));
-			}else{
-				defTerritory.setTroup(new GroundForce(attFamily,defTerritory, attTroops[1],attTroops[2],attTroops[3]));
-			}
 			System.out.println("victoire");
 		}else{
 			//on applique les effets des cartes
@@ -173,10 +175,7 @@ public class Battle {
 					attTerritory.setTroup(new GroundForce(attFamily, attTerritory, attTroops[1],attTroops[2],0));
 				}
 			}
-			state=4;
-			
-			
-			
+			state=4;	
 		}
 	}
 
@@ -336,6 +335,16 @@ public class Battle {
 	public boolean canPlayCard(Family family) {
 		return ((family==attFamily && attCard==null)||(family==defTerritory.getFamily() && defCard==null));
 	}
+	
+	/**
+	 * This method is call when the defencer lose and must withdraw
+	 * @param territory
+	 */
+	public void withdraw (Territory territory){
+		if(groundType==2){
+			defTerritory.mouveTroops(territory);
+		}
+	}
 	/**
 	 * This method is call when a battle end 
 	 */
@@ -365,7 +374,7 @@ public class Battle {
 	}
 	
 	
-	private void kevanEffect(){//if kevan is attacking 
+	private void kevanEffect(){
 		att+=attTroops[1];
 		for(Territory territory : attSupport){
 			if(territory.getFamily().getName().equals("Lannister")){
@@ -373,7 +382,7 @@ public class Battle {
 			}
 		}
 	}
-	private void victarionEffect(){//if vict is attacking 
+	private void victarionEffect(){
 		att+=attTroops[0];
 		for(Territory territory : attSupport){
 			if(territory.getFamily().getName().equals("Greyjoy")){

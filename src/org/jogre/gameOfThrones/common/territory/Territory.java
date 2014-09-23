@@ -127,7 +127,13 @@ public abstract class Territory {
 		}
 		
 	}
-	
+	/**
+	 * move all troops from this territory to the territory given in parameter
+	 * @param toTerritory
+	 */
+	public void mouveTroops(Territory toTerritory){
+		this.mouveTroops(toTerritory,troop.getTroops()[0],troop.getTroops()[1],troop.getTroops()[2],troop.getTroops()[3]);
+	}
 	/**
 	 * Mouve some troops from this territory to the territory given in parameter,
 	 * be carfull there is no verification if the number of troops moved is bigger than the troops present
@@ -152,5 +158,24 @@ public abstract class Territory {
 			this.troop=null;
 		}
 	}
+	
+	/**
+	 * When there is a battle and the defencer lose, said if there is a territory to withdraw
+	 * @return
+	 */
+	public boolean canWithdraw(){
+		for(Territory territory :neighbors){
+			if(this.canWithdraw(territory))return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * When there is a battle and the defencer lose, said if he can withdraw to the given territory
+	 * @param territory
+	 * @param seatNum
+	 * @return
+	 */
+	public abstract boolean canWithdraw(Territory territory);
 }
 	

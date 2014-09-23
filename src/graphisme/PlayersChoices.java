@@ -168,7 +168,7 @@ public class PlayersChoices extends JogreComponent {
 	}
 	
 	
-	public void showOrders(Family family, Territory terr) {//necessite de connaitre les ordres dispo
+	public void showOrders(Family family, Territory terr) {
 		relatedTerr=terr;
 		this.family=family;
 		label.setText("Give order in "+terr.getName());

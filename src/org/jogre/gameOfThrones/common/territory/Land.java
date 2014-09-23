@@ -18,4 +18,9 @@ public class Land extends Territory {
 	public boolean canUseOrderOn(Territory territory){
 		return (super.canUseOrderOn(territory) && territory instanceof Land);
 	}
+
+	@Override
+	public boolean canWithdraw(Territory territory) {
+		return territory instanceof Land && territory.getFamily()!=null && territory.getFamily()==this.getFamily();
+	}
 }

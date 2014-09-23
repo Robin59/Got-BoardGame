@@ -4,10 +4,9 @@ import org.jogre.gameOfThrones.common.Family;
 
 
 
-public class Port extends Territory {
+public class Port extends Water {
 	public Port(String name) {
 		super(name);
-		// TODO Auto-generated constructor stub
 	}
 
 
