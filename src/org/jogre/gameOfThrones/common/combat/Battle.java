@@ -85,7 +85,8 @@ public class Battle {
 	}
 	
 	public int defPower(){
-		int res=defTerritory.getOrder().getDefBonus();
+		int res =0;
+		if (defTerritory.getOrder()!=null) res=defTerritory.getOrder().getDefBonus();
 		if(groundType==2){
 			res+= defTerritory.getTroup().getEffectif();
 		}else{

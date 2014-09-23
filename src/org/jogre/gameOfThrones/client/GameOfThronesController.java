@@ -131,15 +131,15 @@ public class GameOfThronesController extends JogreController {
     				case 2:
     					if(model.getBattle()!=null){//On verifie si il y a combat
     					// on peut clicker pour supporter
-    						if(model.canSupport(gameOfThronesComponent.getTerritory(e.getX(),e.getY()),getSeatNum())){
+    						//en cas de retraite !!
+    						if(model.getBattle().getState()==3 && model.canWithdraw(gameOfThronesComponent.getTerritory(e.getX(),e.getY()),getSeatNum())){
+    							model.getBattle().withdraw(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
+    						}else if(model.canSupport(gameOfThronesComponent.getTerritory(e.getX(),e.getY()),getSeatNum())){
     							playerChoices.support(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
     						}else if(gameOfThronesComponent.getTerritory(e.getX(),e.getY())==model.getTerritory1()){
     							playerChoices.attackTo(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
     						}
-    						//en cas de retraite !!
-    						if(model.getBattle().getState()==3 && model.canWithdraw(gameOfThronesComponent.getTerritory(e.getX(),e.getY()),getSeatNum())){
-    							model.getBattle().withdraw(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
-    						}
+    						
     					// on regarde si un ordre est deja selectioné, qu'il peut etre utilisé dans le territoir voulu et qu'on peut l'utiliser
     					}else if(playerChoices.getRelatedTerr()!=null && playerChoices.getRelatedTerr().canUseOrderOn(gameOfThronesComponent.getTerritory(e.getX(),e.getY()))){
     						//On execute l'ordre
