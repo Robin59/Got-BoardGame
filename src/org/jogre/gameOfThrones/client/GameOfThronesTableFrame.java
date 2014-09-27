@@ -19,6 +19,8 @@
  */
 package org.jogre.gameOfThrones.client;
 
+import java.awt.TextArea;
+
 import javax.swing.JLabel;
 
 import graphisme.PlayersChoices;
@@ -67,7 +69,8 @@ public class GameOfThronesTableFrame extends JogreTableFrame {
         playerChoices = new PlayersChoices(infoPlayerC);
         // Initialise MVC classes
         int nbPlayers=table.getNumOfPlayers();
-        this.gameOfThronesModel = new GameOfThronesModel (nbPlayers);
+        JLabel textLabel = new JLabel();
+        this.gameOfThronesModel = new GameOfThronesModel (nbPlayers, textLabel);
         this.gameOfThronesComponent = new GameOfThronesComponent (gameOfThronesModel);
         this.gameOfThronesController = new GameOfThronesController (gameOfThronesModel, gameOfThronesComponent, infoLabel, playerChoices);
     
@@ -84,16 +87,17 @@ public class GameOfThronesTableFrame extends JogreTableFrame {
         setupMVC (gameOfThronesModel, gameOfThronesComponent, gameOfThronesController);
 
       //panel pour la partie droite du jeu
-        double [][] leftBoardSizes = {{600}, {150,10,50,10,50,250}};
+        double [][] leftBoardSizes = {{560}, {150,10,30,20,10,50,250}};
         // les pistes et autres info
         JogrePanel leftPanel = new JogrePanel (leftBoardSizes);
         leftPanel.add(new PlayersInfo(gameOfThronesModel), "0,0");
-        leftPanel.add(infoLabel, "0,2");
-        leftPanel.add( infoPlayerC ,"0,4");
-        leftPanel.add(playerChoices,"0,5");
+        leftPanel.add(textLabel,"0,2");
+        leftPanel.add(infoLabel, "0,3");
+        leftPanel.add( infoPlayerC ,"0,5");
+        leftPanel.add(playerChoices,"0,6");
         // Create game panel and add main view to it
         double pref = TableLayout.PREFERRED;// pas utilisé (mais utile)
-        double [][] sizes = {{800,10,600}, {500}};
+        double [][] sizes = {{800,5,560}, {500}};
         JogrePanel mainPanel = new JogrePanel (sizes);
         mainPanel.add (gameOfThronesComponent, "0,0");
         mainPanel.add(leftPanel,"2,0");

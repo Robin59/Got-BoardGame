@@ -21,6 +21,8 @@ package org.jogre.gameOfThrones.common;
 
 import java.awt.Image;
 
+import javax.swing.JLabel;
+
 import nanoxml.XMLElement;
 
 import org.jogre.client.awt.GameImages;
@@ -68,12 +70,14 @@ public class GameOfThronesModel extends JogreModel {
 	private Battle battle;
 	Territory territory1;
 	Territory territory2;
+	JLabel jLabel;
 	
     /**
      * Constructor which creates the model.
      */
-    public GameOfThronesModel (int numberPlayers) {
+    public GameOfThronesModel (int numberPlayers, JLabel jLabel) {
         super (GAME_TYPE_TURN_BASED);
+        this.jLabel=jLabel;
         // contruit les éléments générale du jeu
         this.numberPlayers=numberPlayers;
         throne= new int[numberPlayers];
@@ -92,11 +96,14 @@ public class GameOfThronesModel extends JogreModel {
         mvInitiated=false;
         combatInitiated=false;
         battle=null;
+        updateLabel();
     }
-    
+
+
     public void nextInternPhase(){
     	internPhase=(internPhase+1)%3;
     	currentPlayer=0;
+    	
     	if(internPhase==1){
     		checkOrder();
     	}else if (internPhase==2){
@@ -112,7 +119,12 @@ public class GameOfThronesModel extends JogreModel {
     		}
     		//on verifie si il y a des ordres d'influ étoile
     		checkOrder();
+    		updateLabel();
     	}
+    	if (internPhase==0){
+    		nextPhase();
+    	}
+    	//checkOrder();
     	System.out.println("nextInternPhase");
     }
     public void nextPhase(){
@@ -127,23 +139,12 @@ public class GameOfThronesModel extends JogreModel {
     	}
     	if(phase==0){
     		turn++;//nouveau tour
-    		System.out.println("nextTurn");
+    		updateLabel();
     		//ici on test si on arrive au tour 11 et on fini le jeu dans ce cas
     	}
     }
     
-  //FONCTION QUI VERIFIE  VERIFIE SI IL Y A DES RAIDS PARMI TOUS JOUEURS
-    // et on cherche le joueur qui a un ordre de raid suivant. Si il n'y en a pas, on passe à la phase interne suivante
-    /*private void checkRaid(){
-    	int i =0;
-    	while (!checkCurrentPlayerRaid() && i<=numberPlayers){
-    		i++;
-			 currentPlayer=(currentPlayer+1)%numberPlayers;
-		 }
-		 if (i>numberPlayers){
-			 nextInternPhase();
-		 }
-    }*/
+  
     private void checkOrder(){
     	int i =0;
     	while (!checkCurrentPlayerOrder() && i<=numberPlayers){
@@ -154,25 +155,7 @@ public class GameOfThronesModel extends JogreModel {
 			 nextInternPhase();
 		 }
     }
-    /*public void checkAtt(){ // FAIT DOUBLON AVEC CHECK RAID !!!! A MODIFIER
-    	int i =0;
-    	while (!checkCurrentPlayerAtt() && i<=numberPlayers){
-    		i++;
-			 currentPlayer=(currentPlayer+1)%numberPlayers;
-		 }
-		 if (i>numberPlayers){
-			 nextInternPhase();
-		 }
-    }*/
-    /*Said if the current player have some raids orders*/
-    /*private boolean checkCurrentPlayerRaid(){
-    	for (Territory territory :families[getCurrentPlayer()].getTerritories()){
-    		if (territory.getOrder()!=null && territory.getOrder().getType()==OrderType.RAI){
-    			return true;
-    		}
-    	}
-    	return false;
-    }*/
+   
     private boolean checkCurrentPlayerOrder(){
     	for (Territory territory :families[getCurrentPlayer()].getTerritories()){
     		if (territory.getOrder()!=null && territory.getOrder().getType().ordinal()==internPhase){
@@ -182,40 +165,27 @@ public class GameOfThronesModel extends JogreModel {
     	return false;
     }
     
-    /*Said if the current player have some atts orders*/
-    /*private boolean checkCurrentPlayerAtt(){
-    	for (Territory territory :families[getCurrentPlayer()].getTerritories()){
-    		if (territory.getOrder()!=null && territory.getOrder().getType()==OrderType.ATT){
-    			return true;
-    		}
-    	}
-    	return false;
-    }*/
     
     /**Check if there is some consolidation's orders, if not go to the next turn*/
     //FAIRE EN 2 FOIS ?
-    public void checkCons(){
+   /* public void checkCons(){
     	boolean flag = false;
     	for(Family family : families){
 			for (Territory territory : family.getTerritories()){
-				if(territory.getOrder()!=null /*&& !territory.getOrder().getStar()*/ && territory.getOrder().getType()==OrderType.CON){
-					flag=true;
+				if(territory.getOrder()!=null /*&& !territory.getOrder().getStar()*/ //&& territory.getOrder().getType()==OrderType.CON){
+				/*	flag=true;
 				}
 			}
     	}
     	if(!flag){
     		nextPhase();
     	}
-    }
+    }*/
     
     public void nextPlayer(){
     	currentPlayer = (currentPlayer+1)%numberPlayers;
     	mvInitiated=false;
-    	if(internPhase==0){
-    		checkOrder();
-    	}else{
-    		checkOrder();
-    	}
+    	checkOrder();
     }
     
     /** be careful this method return a playerSeat, not is place on the throne track*/ 
@@ -300,7 +270,7 @@ public class GameOfThronesModel extends JogreModel {
 	
 	
 	
-//deja en place avant 
+
     /**
      * Method which reads in XMLElement and sets the state of the models fields.
      * This method is necessary for other users to join a game and have the
@@ -435,5 +405,14 @@ public class GameOfThronesModel extends JogreModel {
 		return territory2.getFamily().getPlayer()==seatNum && territory2.canWithdraw(territory);
 	}
 	
+	
+	private void updateLabel(){
+		String text= new String("<html>Turn: "+turn+"        Wildings: "+wildings+"<br>Infulence ");
+		for(Family family : families){
+			text+=" "+family.getName()+" "+family.getInflu();
+		}
+		text+="<html>";
+		jLabel.setText(text);
+	}
     
 }

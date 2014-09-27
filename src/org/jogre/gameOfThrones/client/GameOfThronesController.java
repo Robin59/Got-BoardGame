@@ -47,7 +47,6 @@ import org.jogre.common.comm.CommNextPlayer;
  */
 public class GameOfThronesController extends JogreController {
 
-	// Indique un click droit et une volonté de translation
 	//private boolean translate;
 	// utiliser pour sauver les coordonées de la souris quand necessaire
 	private int xMouse;
@@ -373,7 +372,7 @@ public class GameOfThronesController extends JogreController {
     	}else if(key.equals("consolidation")){
     		Territory terr =model.getBoardModel().getTerritory(territory);
     		terr.getFamily().gainInflu(terr.consolidation());
-    		terr.rmOrder();
+    		terr.rmOrder();playerChoices.blank();
     		nextPlayer();
     	}else if (key.equals("recruitFoot")){
     		model.getBoardModel().getTerritory(territory).recruit(1);

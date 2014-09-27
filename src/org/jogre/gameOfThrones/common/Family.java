@@ -130,7 +130,9 @@ public class Family {
 	public void gainInflu(int influ){
 		inflPoint+=influ;
 	}
-	
+	public int getInflu(){
+		return inflPoint;
+	}
 	public List<Order> getOrders(){
 		return ordersAvailable;
 	}

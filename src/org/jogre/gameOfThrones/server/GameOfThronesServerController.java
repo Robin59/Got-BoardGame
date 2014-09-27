@@ -19,6 +19,8 @@
  */
 package org.jogre.gameOfThrones.server;
 
+import javax.swing.JLabel;
+
 import nanoxml.XMLElement;
 
 import org.jogre.gameOfThrones.common.GameOfThronesModel;
@@ -53,7 +55,7 @@ public class GameOfThronesServerController extends ServerController {
      */
     public void startGame (int tableNum) {
     	int nbPlayers=getTable(tableNum).getNumOfPlayers();
-        setModel (tableNum, new GameOfThronesModel (nbPlayers));
+        setModel (tableNum, new GameOfThronesModel (nbPlayers, new JLabel("")));
     }
 
     /**
