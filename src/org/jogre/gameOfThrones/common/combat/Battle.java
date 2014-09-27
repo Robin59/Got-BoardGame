@@ -16,8 +16,6 @@ public class Battle {
 	private int[] attTroops;
 	private List<Territory> attSupport;
 	private List<Territory> defSupport;
-	//private int[] attSupport;
-	//private int[] defSupport;
 	private int groundType; // 2 water, 0 land, 1 castle
 	private int def;
 	private int att;
@@ -38,8 +36,6 @@ public class Battle {
 		attTroops= new int[4];
 		attSupport= new LinkedList<Territory>();
 		defSupport= new LinkedList<Territory>();
-		/*attSupport= new int[4];
-		defSupport= new int[4];*/
 		if(defTerritory instanceof Water){
 			groundType=2;
 		}else if(defTerritory.getCastle()>0){
@@ -143,6 +139,7 @@ public class Battle {
 				}else{
 					defTerritory.setTroup(new GroundForce(attFamily,defTerritory, attTroops[1],attTroops[2],attTroops[3]));
 				}
+				
 			}
 			//on retire l'ordre
 			defTerritory.rmOrder();

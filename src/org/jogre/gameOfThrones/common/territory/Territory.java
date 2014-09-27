@@ -16,7 +16,7 @@ public abstract class Territory {
 	private String name;
 	/**the owner of the territory, null if none*/
 	private Family owner;  // utile dans le cas ou on a pas de troupes
-	private Troop troop;
+	protected Troop troop;
 	/** the order given in this territory*/
 	protected Order order;
 	/** to know wich territory you can access from this territory*/
@@ -177,5 +177,12 @@ public abstract class Territory {
 	 * @return
 	 */
 	public abstract boolean canWithdraw(Territory territory);
+	public abstract int consolidation();
+	public abstract int getRecruit();
+	/**
+	 * Recruit a new troop in this territory, if there was no troops before create a new one, else add the recruit to the old troop
+	 * @param troopIndex : 0 represent a boat, 1 a footman, 2 a knight, 3 a siege tower
+	 */
+	public abstract void recruit(int troopIndex);
 }
 	

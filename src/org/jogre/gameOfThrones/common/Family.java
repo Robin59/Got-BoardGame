@@ -127,6 +127,10 @@ public class Family {
 		return player;
 	}
 	
+	public void gainInflu(int influ){
+		inflPoint+=influ;
+	}
+	
 	public List<Order> getOrders(){
 		return ordersAvailable;
 	}

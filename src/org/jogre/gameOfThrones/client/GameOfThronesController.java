@@ -33,6 +33,7 @@ import org.jogre.gameOfThrones.common.GameOfThronesModel;
 import org.jogre.gameOfThrones.common.orders.Order;
 import org.jogre.gameOfThrones.common.orders.OrderType;
 import org.jogre.gameOfThrones.common.territory.BoardModel;
+import org.jogre.gameOfThrones.common.territory.Land;
 import org.jogre.gameOfThrones.common.territory.Territory;
 import org.jogre.client.JogreController;
 import org.jogre.common.PlayerList;
@@ -135,6 +136,7 @@ public class GameOfThronesController extends JogreController {
     							//System.out.println("can withdraw here");
     							model.getBattle().withdraw(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
     							model.battleEnd();
+    							gameOfThronesComponent.repaint();
     							sendProperty("withdraw", gameOfThronesComponent.getTerritory(e.getX(),e.getY()).getName());
     						}// on peut clicker pour supporter
     						else if(model.canSupport(gameOfThronesComponent.getTerritory(e.getX(),e.getY()),getSeatNum())){
@@ -266,6 +268,42 @@ public class GameOfThronesController extends JogreController {
     				model.getBattle().dontUseSword();
     				sendProperty("dontUseSword", 0);
     				break;
+    			case 18 :
+    				sendProperty("consolidation", playerChoices.getRelatedTerr().getName());
+    				model.getFamily(getSeatNum()).gainInflu(playerChoices.getRelatedTerr().consolidation());
+    				playerChoices.getRelatedTerr().rmOrder();
+    				nextPlayer();
+    				break;
+    			case 19 :
+    				System.out.println("recruit ship");
+    				break;
+    			case 20 :
+    				playerChoices.getRelatedTerr().recruit(1);
+    				((Land)playerChoices.getRelatedTerr()).haveRecruit(1);
+    				sendProperty("recruitFoot", playerChoices.getRelatedTerr().getName());
+    				if(playerChoices.getRelatedTerr().getOrder()==null){
+    					nextPlayer();
+    					sendProperty("nextPlayer", 0);
+    				}
+    				break;
+    			case 21 :
+    				playerChoices.getRelatedTerr().recruit(2);
+    				((Land)playerChoices.getRelatedTerr()).haveRecruit(2);
+    				sendProperty("recruitKnight", playerChoices.getRelatedTerr().getName());
+    				if(playerChoices.getRelatedTerr().getOrder()==null){
+    					nextPlayer();
+    					sendProperty("nextPlayer", 0);
+    				}
+    				break;
+    			case 22 :
+    				playerChoices.getRelatedTerr().recruit(3);
+    				((Land)playerChoices.getRelatedTerr()).haveRecruit(2);
+    				sendProperty("recruitTower", playerChoices.getRelatedTerr().getName());
+    				if(playerChoices.getRelatedTerr().getOrder()==null){
+    					nextPlayer();
+    					sendProperty("nextPlayer", 0);
+    				}
+    				break;
     			}
     			//le playerChoice verifie si il doit afficher quelque chose de nouveau
     			switch(playerChoices.check(model.informations(getSeatNum()), model.getFamily(getSeatNum()), model.getBattle())){
@@ -277,7 +315,6 @@ public class GameOfThronesController extends JogreController {
     				break;
     			case 3:
     				System.out.println("controller : cheked state 3");
-    				
     				break;
     			case 4:
     				model.battleEnd();
@@ -285,7 +322,7 @@ public class GameOfThronesController extends JogreController {
     				break;
     			}
     			gameOfThronesComponent.repaint();//encore utile ? 
-    			//playerChoices.repaint(); // au cas ou (quand on affiche autre chose devant le jeux) bug
+    			playerChoices.repaint(); // au cas ou (quand on affiche autre chose devant le jeux)
     			
     		}
     	}
@@ -332,6 +369,18 @@ public class GameOfThronesController extends JogreController {
     	}else if(key.equals("withdraw")){
     		model.getBattle().withdraw(model.getBoardModel().getTerritory(territory));
 			model.battleEnd();
+			gameOfThronesComponent.repaint();
+    	}else if(key.equals("consolidation")){
+    		Territory terr =model.getBoardModel().getTerritory(territory);
+    		terr.getFamily().gainInflu(terr.consolidation());
+    		terr.rmOrder();
+    		nextPlayer();
+    	}else if (key.equals("recruitFoot")){
+    		model.getBoardModel().getTerritory(territory).recruit(1);
+    	}else if (key.equals("recruitKnight")){
+    		model.getBoardModel().getTerritory(territory).recruit(2);
+    	}else if (key.equals("recruitTower")){
+    		model.getBoardModel().getTerritory(territory).recruit(3);
     	}else{
     		model.getBoardModel().getTerritory(key).useOrderOn(model.getBoardModel().getTerritory(territory));
     		model.nextPlayer();//model.checkRaid(); // fusionner dans check Raid?
