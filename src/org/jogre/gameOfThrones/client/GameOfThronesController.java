@@ -271,7 +271,15 @@ public class GameOfThronesController extends JogreController {
     				sendProperty("consolidation", playerChoices.getRelatedTerr().getName());
     				model.getFamily(getSeatNum()).gainInflu(playerChoices.getRelatedTerr().consolidation());
     				playerChoices.getRelatedTerr().rmOrder();
-    				nextPlayer();
+    				model.nextPlayer();
+    				//sendProperty("nextPlayer", 0);
+    				if(model.checkNewTurn()){
+    					// A CHANGER DE PLACE §§§
+    					// NE S'ENCLENCHE PAS QUAND IL N'Y A PAS D'ORDRE DE CONSOLIDATION
+    					String card = model.choseCard();
+    					playerChoices.westerosCard(card);
+    					sendProperty("WesterosCard",card);
+    				}
     				break;
     			case 19 :
     				System.out.println("recruit ship");
@@ -281,8 +289,13 @@ public class GameOfThronesController extends JogreController {
     				((Land)playerChoices.getRelatedTerr()).haveRecruit(1);
     				sendProperty("recruitFoot", playerChoices.getRelatedTerr().getName());
     				if(playerChoices.getRelatedTerr().getOrder()==null){
-    					nextPlayer();
-    					sendProperty("nextPlayer", 0);
+    					model.nextPlayer();
+    					//sendProperty("nextPlayer", 0);
+    					if(model.checkNewTurn()){
+    						String card = model.choseCard();
+        					playerChoices.westerosCard(card);
+        					sendProperty("WesterosCard",card);
+        				}
     				}
     				break;
     			case 21 :
@@ -290,8 +303,13 @@ public class GameOfThronesController extends JogreController {
     				((Land)playerChoices.getRelatedTerr()).haveRecruit(2);
     				sendProperty("recruitKnight", playerChoices.getRelatedTerr().getName());
     				if(playerChoices.getRelatedTerr().getOrder()==null){
-    					nextPlayer();
-    					sendProperty("nextPlayer", 0);
+    					model.nextPlayer();
+    					//sendProperty("nextPlayer", 0);
+    					if(model.checkNewTurn()){
+    						String card = model.choseCard();
+        					playerChoices.westerosCard(card);
+        					sendProperty("WesterosCard",card);
+        				}
     				}
     				break;
     			case 22 :
@@ -299,8 +317,13 @@ public class GameOfThronesController extends JogreController {
     				((Land)playerChoices.getRelatedTerr()).haveRecruit(2);
     				sendProperty("recruitTower", playerChoices.getRelatedTerr().getName());
     				if(playerChoices.getRelatedTerr().getOrder()==null){
-    					nextPlayer();
-    					sendProperty("nextPlayer", 0);
+    					model.nextPlayer();
+    					//sendProperty("nextPlayer", 0);
+    					if(model.checkNewTurn()){
+    						String card = model.choseCard();
+        					playerChoices.westerosCard(card);
+        					sendProperty("WesterosCard",card);
+        				}
     				}
     				break;
     			}
@@ -349,10 +372,10 @@ public class GameOfThronesController extends JogreController {
 
 
     // Receive
-    public void receiveProperty(String key, String territory){
+    public void receiveProperty(String key, String territory){ // changer par Value
     	if(key.equals("cancelOrder")){
     		model.getBoardModel().getTerritory(territory).rmOrder();
-    		model.nextPlayer();//model.checkRaid();
+    		model.nextPlayer();
     	}else if(key.equals("mvInitiated")){
     		model.mvInitiated(model.getBoardModel().getTerritory(territory));
     	}else if(key.equals("mvInitiated2")){
@@ -373,16 +396,19 @@ public class GameOfThronesController extends JogreController {
     		Territory terr =model.getBoardModel().getTerritory(territory);
     		terr.getFamily().gainInflu(terr.consolidation());
     		terr.rmOrder();playerChoices.blank();
-    		nextPlayer();
+    		model.nextPlayer();
     	}else if (key.equals("recruitFoot")){
     		model.getBoardModel().getTerritory(territory).recruit(1);
     	}else if (key.equals("recruitKnight")){
     		model.getBoardModel().getTerritory(territory).recruit(2);
     	}else if (key.equals("recruitTower")){
     		model.getBoardModel().getTerritory(territory).recruit(3);
+    	}else if (key.equals("westerosCard")){
+    		playerChoices.westerosCard(territory);
+    		model.removeCard(territory);
     	}else{
     		model.getBoardModel().getTerritory(key).useOrderOn(model.getBoardModel().getTerritory(territory));
-    		model.nextPlayer();//model.checkRaid(); // fusionner dans check Raid?
+    		model.nextPlayer();
     	}
     	
     }

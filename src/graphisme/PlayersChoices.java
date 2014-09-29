@@ -45,6 +45,7 @@ public class PlayersChoices extends JogreComponent {
 	private Image swordFlipImage;
 	private Image recruitImage;
 	private Image consoImage;
+	private String westerosCard;
 	
 	public PlayersChoices (JLabel label){
 		this.label=label;
@@ -245,6 +246,9 @@ public class PlayersChoices extends JogreComponent {
 		case 12:
 			drawRecruit(g);
 			break;
+		case 13:
+			g.drawImage(images.getWestCardImage(westerosCard), 50,10, null);
+			break;
 		}
 	}
 	
@@ -414,6 +418,13 @@ public class PlayersChoices extends JogreComponent {
 			panel=0;
 			repaint();
 		}
+	}
+
+	public void westerosCard(String card) {
+		panel=13;
+		westerosCard=card;
+		repaint();
+		
 	}
 	
 	/*public void withdraw(String family){

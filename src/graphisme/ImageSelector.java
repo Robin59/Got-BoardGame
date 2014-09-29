@@ -24,7 +24,7 @@ public class  ImageSelector{
 	private Image[] bigOrdersImages;
 	private Image[] smallOrdersImages;
 	private Map<String,Image> playerCards;
-	
+	private Map<String,Image> westerosCards;
 	
 	private ImageSelector (){
 		//images des troupes
@@ -62,6 +62,14 @@ public class  ImageSelector{
 		playerCards.put("Tyrion", GameImages.getImage(75));
 		playerCards.put("The Hound", GameImages.getImage(76));
 		playerCards.put("Jaime", GameImages.getImage(77));
+		
+		//westeros Cards
+		westerosCards= new HashMap<String, Image>();
+		westerosCards.put("Winter", GameImages.getImage(111));
+		westerosCards.put("Summer", GameImages.getImage(112));
+		westerosCards.put("Mustering", GameImages.getImage(113));
+		westerosCards.put("Supply", GameImages.getImage(114));
+		westerosCards.put("GameOfThrones", GameImages.getImage(115));
 	}
 	
 	public Image[] getTroopImages(Family family){
@@ -114,6 +122,10 @@ public class  ImageSelector{
 
 	public Image getCardImage(String name) {
 		return playerCards.get(name);
+	}
+
+	public Image getWestCardImage(String westerosCard) {
+		return westerosCards.get(westerosCard);
 	}
 	
 }

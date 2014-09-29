@@ -60,7 +60,8 @@ public class GameOfThronesModel extends JogreModel {
 	//determine la phase de jeu (0: phase Westeros, 1= programation, 2: execution)
 	private int phase;
 	private int internPhase; // determine la phase dans la execution (0: raid, 1: mouvement, 2:consolidation) 
-	//
+	private int westerosPhase;
+	
 	private BoardModel boardModel;
 	//Creation des fammilles
 	private Family[] families;
@@ -68,9 +69,10 @@ public class GameOfThronesModel extends JogreModel {
 	private boolean mvInitiated;
 	private boolean combatInitiated;// utile ou faire battle==null ?????
 	private Battle battle;
-	Territory territory1;
-	Territory territory2;
-	JLabel jLabel;
+	private Territory territory1;
+	private Territory territory2;
+	private JLabel jLabel;
+	private Deck deck1;
 	
     /**
      * Constructor which creates the model.
@@ -96,6 +98,7 @@ public class GameOfThronesModel extends JogreModel {
         mvInitiated=false;
         combatInitiated=false;
         battle=null;
+        deck1=new Deck(1);
         updateLabel();
     }
 
@@ -139,8 +142,10 @@ public class GameOfThronesModel extends JogreModel {
     	}
     	if(phase==0){
     		turn++;//nouveau tour
+    		westerosPhase=0;
     		updateLabel();
     		//ici on test si on arrive au tour 11 et on fini le jeu dans ce cas
+    		//sinon, on retire tous les ordres des territoires et on les redonnes aux joueurs
     	}
     }
     
@@ -413,6 +418,33 @@ public class GameOfThronesModel extends JogreModel {
 		}
 		text+="<html>";
 		jLabel.setText(text);
+	}
+
+
+	public boolean checkNewTurn() {
+		return phase==0;	
+	}
+
+
+	public String choseCard() {
+		
+		switch (westerosPhase){
+		case 1:
+			westerosPhase++;
+			return deck1.nextCard();
+		default :
+			return deck1.nextCard();
+		}
+	}
+
+
+	public void removeCard(String card) {
+		switch (westerosPhase){
+		case 1:
+			westerosPhase++;
+			deck1.cardPlayed(card);
+			break;
+		}
 	}
     
 }
