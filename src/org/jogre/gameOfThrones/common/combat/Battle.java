@@ -135,9 +135,9 @@ public class Battle {
 				state=4;//all defenciv force have been killed, no withdraw 
 				// on met les nouvelles troupes sur le territoire
 				if(groundType==2){
-					defTerritory.setTroup(new NavalTroup(attFamily,defTerritory, attTroops[0]));
+					defTerritory.setTroup(new NavalTroup(attFamily, attTroops[0]));
 				}else{
-					defTerritory.setTroup(new GroundForce(attFamily,defTerritory, attTroops[1],attTroops[2],attTroops[3]));
+					defTerritory.setTroup(new GroundForce(attFamily, attTroops[1],attTroops[2],attTroops[3]));
 				}
 				
 			}
@@ -167,9 +167,9 @@ public class Battle {
 				if(attTerritory.getTroup()!=null){
 					attTerritory.getTroup().addTroop(attTroops);
 				}else if(groundType==2){
-					attTerritory.setTroup(new NavalTroup(attFamily, attTerritory, attTroops[0]));
+					attTerritory.setTroup(new NavalTroup(attFamily, attTroops[0]));
 				}else{
-					attTerritory.setTroup(new GroundForce(attFamily, attTerritory, attTroops[1],attTroops[2],0));
+					attTerritory.setTroup(new GroundForce(attFamily, attTroops[1],attTroops[2],0));
 				}
 			}
 			System.out.println("befor state 4");
@@ -352,9 +352,9 @@ public class Battle {
 		System.out.println("retraite");
 		// on met les nouvelles troupes sur le territoire
 		if(groundType==2){
-			defTerritory.setTroup(new NavalTroup(attFamily,defTerritory, attTroops[0]));
+			defTerritory.setTroup(new NavalTroup(attFamily, attTroops[0]));
 		}else{
-			defTerritory.setTroup(new GroundForce(attFamily,defTerritory, attTroops[1],attTroops[2],attTroops[3]));
+			defTerritory.setTroup(new GroundForce(attFamily, attTroops[1],attTroops[2],attTroops[3]));
 		}
 	}
 	/**

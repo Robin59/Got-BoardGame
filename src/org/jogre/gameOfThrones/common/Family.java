@@ -17,9 +17,9 @@ public class Family {
 	// the player of the family (0 baratheon, 1 lannister, etc)
 	private int player;
 	public boolean ordersGived;
-	// current value of the ravitallement 
-	private int ravitaillement; // influence the max troop
-	
+	// current value of the supply 
+	private int supply; // influence the max troop
+	private boolean carteVu;
 	// influence points 
 	private int inflPoint;
 	
@@ -193,6 +193,24 @@ public class Family {
 	}
 	public void swordUse(){
 		swordUsed=true;
+	}
+
+	public void setSupply(int supply) {
+		this.supply=supply;
+	}
+	public int getSupply(){
+		return supply;
+	}
+
+	public void carteNonVu(){
+		carteVu=false;
+	}
+	public void carteVu() {
+		carteVu=true;
+	}
+	
+	public boolean carteDejaVu(){
+		return carteVu;
 	}
 	
 	/**this methode give an available order to one teritory with no one*/ 

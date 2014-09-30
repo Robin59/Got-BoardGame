@@ -9,8 +9,8 @@ public class GroundForce extends Troop {
 	private int knight;
 	private int machine;
 	
-	public GroundForce(Family family, Territory territory,int infenterie, int knight, int machine) {
-		super(family, territory);
+	public GroundForce(Family family, int infenterie, int knight, int machine) {
+		super(family);
 		this.infentrie=infenterie;
 		this.knight=knight;
 		this.machine=machine;

@@ -169,6 +169,8 @@ public class PlayersChoices extends JogreComponent {
 			}else if (x>350 && x<400){
 				return 22;
 			}
+		case 13:
+			return 23;
 		}
 		return 0;
 	}

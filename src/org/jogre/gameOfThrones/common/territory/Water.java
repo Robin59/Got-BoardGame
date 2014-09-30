@@ -35,7 +35,7 @@ public class Water extends Territory {
 	@Override
 	public void recruit(int troopIndex) {
 		if(troop==null){
-			troop= new NavalTroup(getFamily(), this, 1);
+			troop= new NavalTroup(getFamily(), 1);
 		}else{
 			this.troop.addToop(1, 0,0,0);
 		}

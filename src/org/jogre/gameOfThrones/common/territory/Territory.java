@@ -146,9 +146,9 @@ public abstract class Territory {
 	public void mouveTroops(Territory toTerritory, int ship, int foot, int knight, int siege){
 		if (toTerritory.getTroup()==null){ //creat a new troop
 			if (ship>0){
-				toTerritory.setTroup(new NavalTroup(this.owner, toTerritory,ship));
+				toTerritory.setTroup(new NavalTroup(this.owner,ship));
 			}else{
-				toTerritory.setTroup(new GroundForce(this.owner, toTerritory,foot,knight, siege));
+				toTerritory.setTroup(new GroundForce(this.owner,foot,knight, siege));
 			}
 		}else{
 			toTerritory.getTroup().addToop(ship, foot, knight, siege);
@@ -184,5 +184,8 @@ public abstract class Territory {
 	 * @param troopIndex : 0 represent a boat, 1 a footman, 2 a knight, 3 a siege tower
 	 */
 	public abstract void recruit(int troopIndex);
+	public int getSupply(){
+		return 0;
+	}
 }
 	

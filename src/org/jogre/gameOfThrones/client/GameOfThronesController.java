@@ -326,6 +326,26 @@ public class GameOfThronesController extends JogreController {
         				}
     				}
     				break;
+    			case 23 : 
+    				//exectue
+    				if(model.getCurrentCard().equals("Supply")){
+    					model.supplyUpdate();
+    					model.getFamily(getSeatNum()).carteVu();
+    					playerChoices.blank();
+    				}else if (model.getCurrentCard().equals("Mustering")){
+    					System.out.println("Recrutement");
+    				}else{
+    					model.getFamily(getSeatNum()).carteVu();
+    					playerChoices.blank();
+    				}
+    					//else if (model.getCurrentCard().equals("Winter")&& )// le mettre dans la verification
+    				//verifie si tout le monde a executé
+    				if(model.westerosCardcheck()){
+    					if (model.getCurrentCard().equals("Winter")){
+    						System.out.println("Winter");
+    					}
+    				}
+    				break;
     			}
     			//le playerChoice verifie si il doit afficher quelque chose de nouveau
     			switch(playerChoices.check(model.informations(getSeatNum()), model.getFamily(getSeatNum()), model.getBattle())){
@@ -403,7 +423,7 @@ public class GameOfThronesController extends JogreController {
     		model.getBoardModel().getTerritory(territory).recruit(2);
     	}else if (key.equals("recruitTower")){
     		model.getBoardModel().getTerritory(territory).recruit(3);
-    	}else if (key.equals("westerosCard")){
+    	}else if (key.equals("WesterosCard")){
     		playerChoices.westerosCard(territory);
     		model.removeCard(territory);
     	}else{

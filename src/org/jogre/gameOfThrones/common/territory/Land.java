@@ -47,7 +47,7 @@ public class Land extends Territory {
 	@Override
 	public void recruit(int troopIndex) {
 		if(troop==null){
-			troop= new GroundForce(getFamily(), this,0,0,0);
+			troop= new GroundForce(getFamily(),0,0,0);
 		}
 		switch(troopIndex){
 		case 1:
@@ -60,5 +60,9 @@ public class Land extends Territory {
 			this.troop.addToop(0,0,0,1);
 			break;
 		}
+	}
+	
+	public int getSupply(){
+		return supply;
 	}
 }

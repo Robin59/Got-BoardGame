@@ -9,12 +9,12 @@ public abstract class Troop {
 	//private Territory territory;
 	private boolean naval;
 	
-	public Troop (Family family, Territory territory){
+	public Troop (Family family ){
 		this.family=family;
 		//this.territory=territory;
-		family.addTerritory(territory);// NON UTILE DEJA AJOUTE DANS LA METHODE setTroop DE TERRITORY 
+		//family.addTerritory(territory);// NON UTILE DEJA AJOUTE DANS LA METHODE setTroop DE TERRITORY 
 		//we add the troup to the territory
-		territory.setTroup(this);
+		//territory.setTroup(this);
 	}
 	/***/
 	public abstract void destruction (int casualties);

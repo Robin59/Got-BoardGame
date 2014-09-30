@@ -9,8 +9,8 @@ public class NavalTroup extends Troop {
 	
 	private int effectif;
 	
-	public NavalTroup(Family family, Territory territory, int effectif) {
-		super(family, territory);
+	public NavalTroup(Family family, int effectif) {
+		super(family/*, territory*/);
 		this.effectif=effectif;
 	}
 

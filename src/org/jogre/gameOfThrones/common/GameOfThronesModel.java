@@ -51,7 +51,7 @@ public class GameOfThronesModel extends JogreModel {
 	private int currentPlayer; 
 	private int turn;
 	private int wildings;
-	private int[] supply; // tableau de la taille du nombre de joueur, le joueur 1 correspon a supply[1] et la valeur à son ravitaillement
+	//private int[] supply; // tableau de la taille du nombre de joueur, le joueur 1 correspon a supply[1] et la valeur à son ravitaillement
 	private int[] victory; // fonctione comme les supply
 	// influence pist, ex: thrones(0)=2 means that the third player is first in throne track 
 	private int[] throne;
@@ -73,6 +73,7 @@ public class GameOfThronesModel extends JogreModel {
 	private Territory territory2;
 	private JLabel jLabel;
 	private Deck deck1;
+	private String currentCard;
 	
     /**
      * Constructor which creates the model.
@@ -143,6 +144,7 @@ public class GameOfThronesModel extends JogreModel {
     	if(phase==0){
     		turn++;//nouveau tour
     		westerosPhase=0;
+    		this.westerosCardNotSeen();
     		updateLabel();
     		//ici on test si on arrive au tour 11 et on fini le jeu dans ce cas
     		//sinon, on retire tous les ordres des territoires et on les redonnes aux joueurs
@@ -150,7 +152,10 @@ public class GameOfThronesModel extends JogreModel {
     }
     
   
-    private void checkOrder(){
+   
+
+
+	private void checkOrder(){
     	int i =0;
     	while (!checkCurrentPlayerOrder() && i<=numberPlayers){
     		i++;
@@ -327,9 +332,9 @@ public class GameOfThronesModel extends JogreModel {
   		families[0]=new Family(0);
   		throne[0]=0;
   		families[0].setFiefdomsTrack(1);
-          boardModel.getTerritory("Winterfell").setTroup(new GroundForce(families[0],boardModel.getTerritory("Winterfell"),1,1,0));
-          boardModel.getTerritory("White Harbor").setTroup(new GroundForce(families[0],boardModel.getTerritory("White Harbor"),1,0,0));
-          boardModel.getTerritory("Shivering Sea").setTroup(new NavalTroup(families[0],boardModel.getTerritory("Shivering Sea"),1));
+          boardModel.getTerritory("Winterfell").setTroup(new GroundForce(families[0],1,1,0));
+          boardModel.getTerritory("White Harbor").setTroup(new GroundForce(families[0],1,0,0));
+          boardModel.getTerritory("Shivering Sea").setTroup(new NavalTroup(families[0],1));
           //ajout des cartes 
           families[0].addCard(new CombatantCard("Mellissandre",1, 1, 0));
           families[0].addCard(new CombatantCard("Salladhor",1, 0, 0));
@@ -343,8 +348,9 @@ public class GameOfThronesModel extends JogreModel {
           	families[1].addCard(new CombatantCard("Kevan",1, 0, 0));
           	families[1].addCard(new CombatantCard("The Hound",2, 0, 2));
           	families[1].addCard(new CombatantCard("Jaime",2, 1, 0));
-          	boardModel.getTerritory("Karhold").setTroup(new GroundForce(families[1],boardModel.getTerritory("Karhold"),1,0,0));
+          	boardModel.getTerritory("Karhold").setTroup(new GroundForce(families[1],1,0,0));
           }
+          this.supplyUpdate();
   	}
 
 	public void troopSend(int boat, int foot, int knigth, int siege) {
@@ -412,9 +418,9 @@ public class GameOfThronesModel extends JogreModel {
 	
 	
 	private void updateLabel(){
-		String text= new String("<html>Turn: "+turn+"        Wildings: "+wildings+"<br>Infulence ");
+		String text= new String("<html>Turn: "+turn+"        Wildings: "+wildings+"<br> ");
 		for(Family family : families){
-			text+=" "+family.getName()+" "+family.getInflu();
+			text+=" "+family.getName()+" Infulence : "+family.getInflu()+" Supply : "+family.getSupply();
 		}
 		text+="<html>";
 		jLabel.setText(text);
@@ -429,9 +435,10 @@ public class GameOfThronesModel extends JogreModel {
 	public String choseCard() {
 		
 		switch (westerosPhase){
-		case 1:
+		case 0:
 			westerosPhase++;
-			return deck1.nextCard();
+			currentCard= deck1.nextCard();
+			return currentCard;
 		default :
 			return deck1.nextCard();
 		}
@@ -440,11 +447,44 @@ public class GameOfThronesModel extends JogreModel {
 
 	public void removeCard(String card) {
 		switch (westerosPhase){
-		case 1:
+		case 0:
 			westerosPhase++;
+			currentCard=card;
 			deck1.cardPlayed(card);
 			break;
 		}
 	}
-    
+
+
+	public String getCurrentCard(){
+		return currentCard;
+	}
+
+
+	public void supplyUpdate() {
+		for (Family  family : families){
+			int supply=0;
+			for(Territory territory :family.getTerritories()){
+				System.out.println(supply);
+				System.out.println(territory.getName()+" give "+territory.getSupply());
+				supply+=territory.getSupply();
+			}
+			family.setSupply(supply);
+		}
+	}
+
+	 private void westerosCardNotSeen() {
+		 for(Family family : families){
+			family.carteNonVu(); 
+		 }
+		}
+
+	public boolean westerosCardcheck() {
+		for(Family family : families){
+			if(!family.carteDejaVu()){
+				return false;
+			}
+		}
+		return true;
+	}
 }
