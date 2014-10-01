@@ -410,13 +410,10 @@ public class PlayersChoices extends JogreComponent {
 	}
 	
 	public void swordPlay(Family family){
-		System.out.println(" ON joue l'épée");
 		if(family.canUseSword()){
-			System.out.println(" vous pouvez jouer l'épée");
 			panel=10;
 			repaint();
 		}else{
-			System.out.println(" vous ne pouvez pas jouer l'épée");
 			panel=0;
 			repaint();
 		}

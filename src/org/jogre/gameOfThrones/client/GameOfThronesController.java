@@ -27,6 +27,7 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JLabel;
 
+import org.jogre.gameOfThrones.common.Deck;
 import org.jogre.gameOfThrones.common.Family;
 import org.jogre.gameOfThrones.common.GameOfThronesModel;
 import org.jogre.gameOfThrones.common.orders.Order;
@@ -349,10 +350,10 @@ public class GameOfThronesController extends JogreController {
     						model.nextPhase();
     						sendProperty("nextPhase", 0);
     					}else if (model.getCurrentCard().equals("Winter")){
-    						System.out.println("Winter");
+    						model.westerosCardWinter();
     						String card = model.choseCard();
         					playerChoices.westerosCard(card);
-        					sendProperty("WesterosCard",card);
+        					sendProperty("Winter",card);
     					}else{
     						System.out.println("new phase");
     						String card = model.choseCard();
@@ -407,42 +408,46 @@ public class GameOfThronesController extends JogreController {
 
 
     // Receive
-    public void receiveProperty(String key, String territory){ // changer par Value
+    public void receiveProperty(String key, String value){ // changer par Value
     	if(key.equals("cancelOrder")){
-    		model.getBoardModel().getTerritory(territory).rmOrder();
+    		model.getBoardModel().getTerritory(value).rmOrder();
     		model.nextPlayer();
     	}else if(key.equals("mvInitiated")){
-    		model.mvInitiated(model.getBoardModel().getTerritory(territory));
+    		model.mvInitiated(model.getBoardModel().getTerritory(value));
     	}else if(key.equals("mvInitiated2")){
-    		model.mvInitiated2(model.getBoardModel().getTerritory(territory));
+    		model.mvInitiated2(model.getBoardModel().getTerritory(value));
     	}else if(key.equals("battleInitiated")){
-    		model.battleInitiated(model.getBoardModel().getTerritory(territory));
+    		model.battleInitiated(model.getBoardModel().getTerritory(value));
     	}else if(key.equals("attSupport")){
-    	model.getBattle().addAttSupport(model.getBoardModel().getTerritory(territory));
+    	model.getBattle().addAttSupport(model.getBoardModel().getTerritory(value));
     	}else if(key.equals("defSupport")){
-        	model.getBattle().addDefSupport(model.getBoardModel().getTerritory(territory));
+        	model.getBattle().addDefSupport(model.getBoardModel().getTerritory(value));
     	}else if(key.equals("noSupport")){
-    		model.getBoardModel().getTerritory(territory).getOrder().used();
+    		model.getBoardModel().getTerritory(value).getOrder().used();
     	}else if(key.equals("withdraw")){
-    		model.getBattle().withdraw(model.getBoardModel().getTerritory(territory));
+    		model.getBattle().withdraw(model.getBoardModel().getTerritory(value));
 			model.battleEnd();
 			gameOfThronesComponent.repaint();
     	}else if(key.equals("consolidation")){
-    		Territory terr =model.getBoardModel().getTerritory(territory);
+    		Territory terr =model.getBoardModel().getTerritory(value);
     		terr.getFamily().gainInflu(terr.consolidation()); model.updateLabel();
     		terr.rmOrder();playerChoices.blank();
     		model.nextPlayer();
     	}else if (key.equals("recruitFoot")){
-    		model.getBoardModel().getTerritory(territory).recruit(1);
+    		model.getBoardModel().getTerritory(value).recruit(1);
     	}else if (key.equals("recruitKnight")){
-    		model.getBoardModel().getTerritory(territory).recruit(2);
+    		model.getBoardModel().getTerritory(value).recruit(2);
     	}else if (key.equals("recruitTower")){
-    		model.getBoardModel().getTerritory(territory).recruit(3);
+    		model.getBoardModel().getTerritory(value).recruit(3);
     	}else if (key.equals("WesterosCard")){
-    		playerChoices.westerosCard(territory);
-    		model.removeCard(territory);
+    		playerChoices.westerosCard(value);
+    		model.removeCard(value);
+    	}else if (key.equals("Winter")){
+    		model.westerosCardWinter();
+    		playerChoices.westerosCard(value);
+    		model.removeCard(value);
     	}else{
-    		model.getBoardModel().getTerritory(key).useOrderOn(model.getBoardModel().getTerritory(territory));
+    		model.getBoardModel().getTerritory(key).useOrderOn(model.getBoardModel().getTerritory(value));
     		model.nextPlayer();
     	}
     	

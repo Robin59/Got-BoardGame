@@ -510,4 +510,17 @@ public class GameOfThronesModel extends JogreModel {
 		}
 		return true;
 	}
+
+
+	public void westerosCardWinter() {
+		westerosPhase--;
+		switch (westerosPhase){
+		case 0:
+			deck1=new Deck(1);
+			break;
+		case 1:
+			deck2=new Deck(2);
+			break;
+		}
+	}
 }
