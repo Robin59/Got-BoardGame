@@ -52,10 +52,7 @@ public class Board {
 				showTroops(territory, g);
 			}//maintenant on test si il y a un pion influence
 		}
-		//on verifie si c'est la phase 2, dans ce cas on affiche les ordres
-		if(gameModel.getPhase()==2){
 			this.showOrders(g);
-		}
 	}
 	
 	public void down(){

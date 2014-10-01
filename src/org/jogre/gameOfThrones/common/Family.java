@@ -263,5 +263,41 @@ public class Family {
 		ordersAvailable.add(new Order(false,0,0,OrderType.CON));
 		ordersAvailable.add(new Order(true,0,0,OrderType.CON));
 	}
+
+
+	public void removeRaidOrder() {
+		ordersAvailable= new LinkedList<Order>();
+		// we add the defence orders
+		ordersAvailable.add(new Order(false,1,0,OrderType.DEF));
+		ordersAvailable.add(new Order(false,1,0,OrderType.DEF));
+		ordersAvailable.add(new Order(true,2,0,OrderType.DEF));
+		//support orders
+		ordersAvailable.add(new Order(false,0,0,OrderType.SUP));
+		ordersAvailable.add(new Order(false,0,0,OrderType.SUP));
+		ordersAvailable.add(new Order(true,0,1,OrderType.SUP));
+		ordersAvailable.add(new Order(false,0,0,OrderType.ATT));
+		ordersAvailable.add(new Order(false,0,-1,OrderType.ATT));
+		ordersAvailable.add(new Order(true,0,1,OrderType.ATT));
+		ordersAvailable.add(new Order(false,0,0,OrderType.CON));
+		ordersAvailable.add(new Order(false,0,0,OrderType.CON));
+		ordersAvailable.add(new Order(true,0,0,OrderType.CON));
+	}
+
+
+	public void removeDefenceOrder() {
+		ordersAvailable= new LinkedList<Order>();
+		ordersAvailable.add(new Order(false,0,0,OrderType.SUP));
+		ordersAvailable.add(new Order(false,0,0,OrderType.SUP));
+		ordersAvailable.add(new Order(true,0,1,OrderType.SUP));
+		ordersAvailable.add(new Order(false,0,0,OrderType.ATT));
+		ordersAvailable.add(new Order(false,0,-1,OrderType.ATT));
+		ordersAvailable.add(new Order(true,0,1,OrderType.ATT));
+		ordersAvailable.add(new Order(false,0,0,OrderType.RAI));
+		ordersAvailable.add(new Order(false,0,0,OrderType.RAI));
+		ordersAvailable.add(new Order(true,0,0,OrderType.RAI));
+		ordersAvailable.add(new Order(false,0,0,OrderType.CON));
+		ordersAvailable.add(new Order(false,0,0,OrderType.CON));
+		ordersAvailable.add(new Order(true,0,0,OrderType.CON));
+	}
 	
 }

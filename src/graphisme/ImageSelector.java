@@ -75,6 +75,8 @@ public class  ImageSelector{
 		westerosCards.put("Wildings", GameImages.getImage(120));
 		westerosCards.put("FeastForCrows", GameImages.getImage(121));
 		westerosCards.put("RainsOfAutumn", GameImages.getImage(122));
+		westerosCards.put("SeaOfStorms", GameImages.getImage(123));
+		westerosCards.put("StromOfSwords", GameImages.getImage(124));
 	}
 	
 	public Image[] getTroopImages(Family family){

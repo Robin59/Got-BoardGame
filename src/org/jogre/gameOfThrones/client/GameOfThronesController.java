@@ -327,8 +327,9 @@ public class GameOfThronesController extends JogreController {
     				}
     				break;
     			case 23 : 
-    				//exectue
-    				if(model.getCurrentCard().equals("Supply")){
+    				if(model.getCurrentCard().equals("Summer")){
+    					model.widingsGrow();
+    				}else if(model.getCurrentCard().equals("Supply")){
     					model.supplyUpdate();
     				}else if (model.getCurrentCard().equals("Mustering")){
     					System.out.println("Mustering not implented yet");
@@ -338,6 +339,10 @@ public class GameOfThronesController extends JogreController {
     					model.westerosCardFeastForCrows();
     				}else if(model.getCurrentCard().equals("RainsOfAutumn")){
     					model.westerosCardRainsOfAutumn();
+    				}else if(model.getCurrentCard().equals("SeaOfStorms")){
+    					model.westerosCardSeaOfStorms();
+    				}else if(model.getCurrentCard().equals("StromOfSwords")){
+    					model.westerosCardStormOfSwords();
     				}
     				model.getFamily(getSeatNum()).carteVu();
 					sendProperty("cardSaw", getSeatNum());
