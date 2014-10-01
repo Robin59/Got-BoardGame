@@ -152,6 +152,9 @@ public class GameOfThronesModel extends JogreModel {
     		updateLabel();
     		//ici on test si on arrive au tour 11 et on fini le jeu dans ce cas
     		//sinon, on retire tous les ordres des territoires et on les redonnes aux joueurs
+    		for (Family family : families){
+    			family.ordersBack();
+    		}
     	}
     }
     
@@ -533,5 +536,17 @@ public class GameOfThronesModel extends JogreModel {
 				family.gainInflu(territory.westerosCardGameOfThrones());
 			}
 		}
+		updateLabel();
+	}
+	
+	/**this method apply the Westeros card "feast for crows",
+	 * remove the consolidate orders, the wildings force grow
+	 */
+	public void westerosCardFeastForCrows(){
+		for(Family family: families){
+			family.removeConsOrder();
+		}
+		wildings+=2;
+		updateLabel();
 	}
 }

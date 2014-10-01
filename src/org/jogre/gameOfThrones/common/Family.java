@@ -19,7 +19,7 @@ public class Family {
 	public boolean ordersGived;
 	// current value of the supply 
 	private int supply; // influence the max troop
-	private boolean carteVu;
+	private boolean cardSaw;
 	// influence points 
 	private int inflPoint;
 	
@@ -28,8 +28,6 @@ public class Family {
 	private List<CombatantCard> combatantsUse;
 	//territory under control (quelle structure de donnée)
 	private List<Territory> territories;
-	
-	//troupes (on a dejà les territoires)
 	
 	//orders 
 	private List<Order> ordersAvailable;
@@ -75,23 +73,7 @@ public class Family {
 		ordersAvailable.add(new Order(true,0,0,OrderType.CON));
 	}
 	
-	/*public CombatantCard playCombatantCard(){// peut-etre faire cette methode en 2 temps (pour les cas où un joueur ne peut pas jouer de cartes)
-		CombatantCard chosenCard;
-		//selectionne une carte prise dans les cartes non utilisée (selection donnée en parametre ?)
-		chosenCard=this.player.choseCombatant(combatantsAvailable);
-		// retire la carte des cartes dispo
-		combatantsAvailable.remove(chosenCard);
-		// verifie qu'il y a des cartes dispo 
-		if(combatantsAvailable.isEmpty()){ 
-			//place les cartes use dans dispo
-			combatantsAvailable=combatantsUse;
-			combatantsUse=new LinkedList();  // à tester !!!
-		}
-		//place la carte dans la liste utilisé
-		combatantsUse.add(chosenCard);
-		// la renvoi en valeur
-		return chosenCard;
-	}*/
+	
 	//
 	public void regainCard(CombatantCard card){
 		combatantsUse.remove(card);
@@ -203,21 +185,62 @@ public class Family {
 	}
 
 	public void carteNonVu(){
-		carteVu=false;
+		cardSaw=false;
 	}
 	public void carteVu() {
-		carteVu=true;
+		cardSaw=true;
 	}
 	
 	public boolean carteDejaVu(){
-		return carteVu;
+		return cardSaw;
 	}
 	
-	/**this methode give an available order to one teritory with no one*/ 
-	/*public void giveOrder (Territory territory){//peut-etre mettre en privé
-		Order chosenOrder=this.player.choseOrder(territory, ordersAvailable);
-		territory.setOrder(chosenOrder);
-		ordersUse.add(chosenOrder);
-		ordersAvailable.remove(chosenOrder);
-	}*/
+	/**remove the consolidation's orders from the ordersAivalable list*/
+	public void removeConsOrder(){
+		ordersAvailable= new LinkedList<Order>();
+		// we add the defence orders
+		ordersAvailable.add(new Order(false,1,0,OrderType.DEF));
+		ordersAvailable.add(new Order(false,1,0,OrderType.DEF));
+		ordersAvailable.add(new Order(true,2,0,OrderType.DEF));
+		//support orders
+		ordersAvailable.add(new Order(false,0,0,OrderType.SUP));
+		ordersAvailable.add(new Order(false,0,0,OrderType.SUP));
+		ordersAvailable.add(new Order(true,0,1,OrderType.SUP));
+		//attaque orders
+		ordersAvailable.add(new Order(false,0,0,OrderType.ATT));
+		ordersAvailable.add(new Order(false,0,-1,OrderType.ATT));
+		ordersAvailable.add(new Order(true,0,1,OrderType.ATT));
+		//raid et consolidation
+		ordersAvailable.add(new Order(false,0,0,OrderType.RAI));
+		ordersAvailable.add(new Order(false,0,0,OrderType.RAI));
+		ordersAvailable.add(new Order(true,0,0,OrderType.RAI));
+	}
+	
+	/**this method remove all orders from the territories and give them back to the player */
+	public void ordersBack(){
+		for(Territory territory : territories){
+			territory.rmOrder();
+		}
+		ordersAvailable= new LinkedList<Order>();
+		// we add the defence orders
+		ordersAvailable.add(new Order(false,1,0,OrderType.DEF));
+		ordersAvailable.add(new Order(false,1,0,OrderType.DEF));
+		ordersAvailable.add(new Order(true,2,0,OrderType.DEF));
+		//support orders
+		ordersAvailable.add(new Order(false,0,0,OrderType.SUP));
+		ordersAvailable.add(new Order(false,0,0,OrderType.SUP));
+		ordersAvailable.add(new Order(true,0,1,OrderType.SUP));
+		//attaque orders
+		ordersAvailable.add(new Order(false,0,0,OrderType.ATT));
+		ordersAvailable.add(new Order(false,0,-1,OrderType.ATT));
+		ordersAvailable.add(new Order(true,0,1,OrderType.ATT));
+		//raid et consolidation
+		ordersAvailable.add(new Order(false,0,0,OrderType.RAI));
+		ordersAvailable.add(new Order(false,0,0,OrderType.RAI));
+		ordersAvailable.add(new Order(true,0,0,OrderType.RAI));
+		ordersAvailable.add(new Order(false,0,0,OrderType.CON));
+		ordersAvailable.add(new Order(false,0,0,OrderType.CON));
+		ordersAvailable.add(new Order(true,0,0,OrderType.CON));
+	}
+	
 }

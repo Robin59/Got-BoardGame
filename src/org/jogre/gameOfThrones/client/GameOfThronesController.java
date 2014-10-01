@@ -334,6 +334,8 @@ public class GameOfThronesController extends JogreController {
     					System.out.println("Mustering not implented yet");
     				}else if(model.getCurrentCard().equals("GameOfThrones")){
     					model.westerosCardGameOfThrones();
+    				}else if(model.getCurrentCard().equals("FeastForCrows")){
+    					model.westerosCardFeastForCrows();
     				}
     				model.getFamily(getSeatNum()).carteVu();
 					sendProperty("cardSaw", getSeatNum());
