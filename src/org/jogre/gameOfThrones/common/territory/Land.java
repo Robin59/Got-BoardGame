@@ -65,4 +65,8 @@ public class Land extends Territory {
 	public int getSupply(){
 		return supply;
 	}
+	
+	public int westerosCardGameOfThrones() {
+		return influ;
+	}
 }

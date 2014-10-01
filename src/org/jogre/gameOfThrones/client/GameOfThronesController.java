@@ -330,19 +330,14 @@ public class GameOfThronesController extends JogreController {
     				//exectue
     				if(model.getCurrentCard().equals("Supply")){
     					model.supplyUpdate();
-    					model.getFamily(getSeatNum()).carteVu();
-    					sendProperty("cardSaw", getSeatNum());
-    					playerChoices.blank();
     				}else if (model.getCurrentCard().equals("Mustering")){
     					System.out.println("Mustering not implented yet");
-    					model.getFamily(getSeatNum()).carteVu();
-    					sendProperty("cardSaw", getSeatNum());
-    					playerChoices.blank();
-    				}else{
-    					model.getFamily(getSeatNum()).carteVu();
-    					sendProperty("cardSaw", getSeatNum());
-    					playerChoices.blank();
+    				}else if(model.getCurrentCard().equals("GameOfThrones")){
+    					model.westerosCardGameOfThrones();
     				}
+    				model.getFamily(getSeatNum()).carteVu();
+					sendProperty("cardSaw", getSeatNum());
+					playerChoices.blank();
     					//else if (model.getCurrentCard().equals("Winter")&& )// le mettre dans la verification
     				//verifie si tout le monde a executé
     				if(model.westerosCardcheck()){

@@ -511,7 +511,8 @@ public class GameOfThronesModel extends JogreModel {
 		return true;
 	}
 
-
+/**this method apply the Westeros card "winter is comming", 
+ * so the westeros phase stay at the same level and the deck is shuffle*/
 	public void westerosCardWinter() {
 		westerosPhase--;
 		switch (westerosPhase){
@@ -521,6 +522,16 @@ public class GameOfThronesModel extends JogreModel {
 		case 1:
 			deck2=new Deck(2);
 			break;
+		}
+	}
+	/**this method apply the Westeros card "game of thrones",
+	 * each players gain influence points for this territories with crown 
+	 * */
+	public void westerosCardGameOfThrones(){ // commerce from port rules not implented
+		for(Family family: families){
+			for(Territory territory : family.getTerritories()){
+				family.gainInflu(territory.westerosCardGameOfThrones());
+			}
 		}
 	}
 }

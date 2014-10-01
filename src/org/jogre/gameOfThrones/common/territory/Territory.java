@@ -187,5 +187,8 @@ public abstract class Territory {
 	public int getSupply(){
 		return 0;
 	}
+	public int westerosCardGameOfThrones() {
+		return 0;
+	}
 }
 	
