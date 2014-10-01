@@ -73,6 +73,8 @@ public class GameOfThronesModel extends JogreModel {
 	private Territory territory2;
 	private JLabel jLabel;
 	private Deck deck1;
+	private Deck deck2;
+	private Deck deck3;
 	private String currentCard;
 	
     /**
@@ -100,6 +102,8 @@ public class GameOfThronesModel extends JogreModel {
         combatInitiated=false;
         battle=null;
         deck1=new Deck(1);
+        deck2=new Deck(2);
+        deck3=new Deck(3);
         updateLabel();
     }
 
@@ -144,7 +148,7 @@ public class GameOfThronesModel extends JogreModel {
     	if(phase==0){
     		turn++;//nouveau tour
     		westerosPhase=0;
-    		this.westerosCardNotSeen();
+    		this.westerosCardNotSaw();
     		updateLabel();
     		//ici on test si on arrive au tour 11 et on fini le jeu dans ce cas
     		//sinon, on retire tous les ordres des territoires et on les redonnes aux joueurs
@@ -416,8 +420,11 @@ public class GameOfThronesModel extends JogreModel {
 		return territory2.getFamily().getPlayer()==seatNum && territory2.canWithdraw(territory);
 	}
 	
-	
-	private void updateLabel(){
+	/*Pour le Label ajouter :
+	 * - le nom de la famille dont c'est le tour
+	 * - le nom de la phase (westeros,programation,execution)  
+	 */
+	public void updateLabel(){
 		String text= new String("<html>Turn: "+turn+"        Wildings: "+wildings+"<br> ");
 		for(Family family : families){
 			text+=" "+family.getName()+" Infulence : "+family.getInflu()+" Supply : "+family.getSupply();
@@ -433,26 +440,39 @@ public class GameOfThronesModel extends JogreModel {
 
 
 	public String choseCard() {
-		
+		westerosCardNotSaw();
 		switch (westerosPhase){
 		case 0:
-			westerosPhase++;
 			currentCard= deck1.nextCard();
-			return currentCard;
+			break;
+		case 1:
+			currentCard= deck2.nextCard();
+			break;
 		default :
-			return deck1.nextCard();
+			System.out.println("chosecard default");
+			currentCard= deck3.nextCard();
+			break;
 		}
+		westerosPhase++;
+		return currentCard;
 	}
 
 
 	public void removeCard(String card) {
+		westerosCardNotSaw();
 		switch (westerosPhase){
 		case 0:
-			westerosPhase++;
-			currentCard=card;
 			deck1.cardPlayed(card);
 			break;
+		case 1:
+			deck2.cardPlayed(card);
+			break;
+		case 2 :
+			deck3.cardPlayed(card);
+			break;
 		}
+		westerosPhase++;
+		currentCard=card;
 	}
 
 
@@ -460,20 +480,23 @@ public class GameOfThronesModel extends JogreModel {
 		return currentCard;
 	}
 
+	public int getWesterosPhase(){
+		return westerosPhase;
+	}
 
 	public void supplyUpdate() {
 		for (Family  family : families){
 			int supply=0;
 			for(Territory territory :family.getTerritories()){
-				System.out.println(supply);
-				System.out.println(territory.getName()+" give "+territory.getSupply());
+				/*System.out.println(supply);
+				System.out.println(territory.getName()+" give "+territory.getSupply());*/
 				supply+=territory.getSupply();
 			}
 			family.setSupply(supply);
 		}
 	}
 
-	 private void westerosCardNotSeen() {
+	 private void westerosCardNotSaw() {
 		 for(Family family : families){
 			family.carteNonVu(); 
 		 }

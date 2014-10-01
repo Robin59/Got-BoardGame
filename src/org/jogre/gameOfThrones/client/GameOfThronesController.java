@@ -23,7 +23,6 @@ import nanoxml.XMLElement;
 
 import graphisme.PlayersChoices;
 
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JLabel;
@@ -37,7 +36,7 @@ import org.jogre.gameOfThrones.common.territory.Land;
 import org.jogre.gameOfThrones.common.territory.Territory;
 import org.jogre.client.JogreController;
 import org.jogre.common.PlayerList;
-import org.jogre.common.comm.CommNextPlayer;
+
 
 /**
  * Controller for the gameOfThrones game.
@@ -129,7 +128,6 @@ public class GameOfThronesController extends JogreController {
     					break;
     				case 2:
     					if(model.getBattle()!=null){//On verifie si il y a combat
-    					
     						//en cas de retraite !!
     						if(model.getBattle().getState()==3 && model.canWithdraw(gameOfThronesComponent.getTerritory(e.getX(),e.getY()),getSeatNum())){
     							//System.out.println("can withdraw here");
@@ -270,6 +268,7 @@ public class GameOfThronesController extends JogreController {
     			case 18 :
     				sendProperty("consolidation", playerChoices.getRelatedTerr().getName());
     				model.getFamily(getSeatNum()).gainInflu(playerChoices.getRelatedTerr().consolidation());
+    				model.updateLabel();
     				playerChoices.getRelatedTerr().rmOrder();
     				model.nextPlayer();
     				//sendProperty("nextPlayer", 0);
@@ -331,18 +330,34 @@ public class GameOfThronesController extends JogreController {
     				if(model.getCurrentCard().equals("Supply")){
     					model.supplyUpdate();
     					model.getFamily(getSeatNum()).carteVu();
+    					sendProperty("cardSaw", getSeatNum());
     					playerChoices.blank();
     				}else if (model.getCurrentCard().equals("Mustering")){
-    					System.out.println("Recrutement");
+    					System.out.println("Mustering not implented yet");
+    					model.getFamily(getSeatNum()).carteVu();
+    					sendProperty("cardSaw", getSeatNum());
+    					playerChoices.blank();
     				}else{
     					model.getFamily(getSeatNum()).carteVu();
+    					sendProperty("cardSaw", getSeatNum());
     					playerChoices.blank();
     				}
     					//else if (model.getCurrentCard().equals("Winter")&& )// le mettre dans la verification
     				//verifie si tout le monde a executé
     				if(model.westerosCardcheck()){
-    					if (model.getCurrentCard().equals("Winter")){
+    					if(model.getWesterosPhase()==3){
+    						model.nextPhase();
+    						sendProperty("nextPhase", 0);
+    					}else if (model.getCurrentCard().equals("Winter")){
     						System.out.println("Winter");
+    						String card = model.choseCard();
+        					playerChoices.westerosCard(card);
+        					sendProperty("WesterosCard",card);
+    					}else{
+    						System.out.println("new phase");
+    						String card = model.choseCard();
+        					playerChoices.westerosCard(card);
+        					sendProperty("WesterosCard",card);
     					}
     				}
     				break;
@@ -414,7 +429,7 @@ public class GameOfThronesController extends JogreController {
 			gameOfThronesComponent.repaint();
     	}else if(key.equals("consolidation")){
     		Territory terr =model.getBoardModel().getTerritory(territory);
-    		terr.getFamily().gainInflu(terr.consolidation());
+    		terr.getFamily().gainInflu(terr.consolidation()); model.updateLabel();
     		terr.rmOrder();playerChoices.blank();
     		model.nextPlayer();
     	}else if (key.equals("recruitFoot")){
@@ -459,6 +474,8 @@ public class GameOfThronesController extends JogreController {
      public void receiveProperty (String key, int value) { 
     	 if (key.equals("nextPlayer")){
     		 model.nextPlayer();
+    	 }else if (key.equals("nextPhase")){
+    		 model.nextPhase();
     	 }else if(key.equals("troopSend")){
      		int[]troops= new int[4];
      		troops[value]=1;
@@ -480,6 +497,8 @@ public class GameOfThronesController extends JogreController {
     		model.getBattle().useSword();
     	}else if (key.equals("dontUseSword")){
     		model.getBattle().dontUseSword();
+    	}else if (key.equals("cardSaw")){
+    		model.getFamily(value).carteVu();
     	}else{
     		//on indique que le joueur a fini de donner ses ordres
     		model.getFamily(value).ordersGived=true;
