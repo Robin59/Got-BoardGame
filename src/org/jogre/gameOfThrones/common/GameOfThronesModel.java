@@ -549,4 +549,14 @@ public class GameOfThronesModel extends JogreModel {
 		wildings+=2;
 		updateLabel();
 	}
+	/**this method apply the Westeros card "feast for crows",
+	 * remove the consolidate orders, the wildings force grow
+	 */
+	public void westerosCardRainsOfAutumn(){
+		for(Family family: families){
+			family.removeMarchPOrder();
+		}
+		wildings+=2;
+		updateLabel();
+	}
 }

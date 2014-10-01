@@ -215,7 +215,28 @@ public class Family {
 		ordersAvailable.add(new Order(false,0,0,OrderType.RAI));
 		ordersAvailable.add(new Order(true,0,0,OrderType.RAI));
 	}
-	
+	/**this method remove the march +1 order*/
+	public void removeMarchPOrder(){
+		ordersAvailable= new LinkedList<Order>();
+		// we add the defence orders
+		ordersAvailable.add(new Order(false,1,0,OrderType.DEF));
+		ordersAvailable.add(new Order(false,1,0,OrderType.DEF));
+		ordersAvailable.add(new Order(true,2,0,OrderType.DEF));
+		//support orders
+		ordersAvailable.add(new Order(false,0,0,OrderType.SUP));
+		ordersAvailable.add(new Order(false,0,0,OrderType.SUP));
+		ordersAvailable.add(new Order(true,0,1,OrderType.SUP));
+		//attaque orders
+		ordersAvailable.add(new Order(false,0,0,OrderType.ATT));
+		ordersAvailable.add(new Order(false,0,-1,OrderType.ATT));
+		//raid et consolidation
+		ordersAvailable.add(new Order(false,0,0,OrderType.RAI));
+		ordersAvailable.add(new Order(false,0,0,OrderType.RAI));
+		ordersAvailable.add(new Order(true,0,0,OrderType.RAI));
+		ordersAvailable.add(new Order(false,0,0,OrderType.CON));
+		ordersAvailable.add(new Order(false,0,0,OrderType.CON));
+		ordersAvailable.add(new Order(true,0,0,OrderType.CON));
+	}
 	/**this method remove all orders from the territories and give them back to the player */
 	public void ordersBack(){
 		for(Territory territory : territories){

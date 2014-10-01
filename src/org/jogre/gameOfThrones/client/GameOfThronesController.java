@@ -336,6 +336,8 @@ public class GameOfThronesController extends JogreController {
     					model.westerosCardGameOfThrones();
     				}else if(model.getCurrentCard().equals("FeastForCrows")){
     					model.westerosCardFeastForCrows();
+    				}else if(model.getCurrentCard().equals("RainsOfAutumn")){
+    					model.westerosCardRainsOfAutumn();
     				}
     				model.getFamily(getSeatNum()).carteVu();
 					sendProperty("cardSaw", getSeatNum());
