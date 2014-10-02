@@ -367,7 +367,7 @@ public class GameOfThronesModel extends JogreModel {
 			territory1.mouveTroops(territory2,boat,foot,knigth, siege );
 			if(territory1.getTroup()==null){// dans le cas où il n'y a plus de troupes on supprime l'ordre
 				territory1.rmOrder();
-				//nextPlayer();
+				nextPlayer();
 			}
 		}
 		
