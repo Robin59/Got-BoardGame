@@ -125,11 +125,10 @@ public class GameOfThronesModel extends JogreModel {
     				}
     			}
     		}
+    		updateLabel();
     		//on verifie si il y a des ordres d'influ étoile
     		checkOrder();
-    		updateLabel();
-    	}
-    	if (internPhase==0){
+    	}else if (internPhase==0){
     		nextPhase();
     	}
     	//checkOrder();
@@ -517,7 +516,7 @@ public class GameOfThronesModel extends JogreModel {
 /**this method apply the Westeros card "winter is comming", 
  * so the westeros phase stay at the same level and the deck is shuffle*/
 	public void westerosCardWinter() {
-		westerosPhase--;
+		westerosPhase-=1;
 		switch (westerosPhase){
 		case 0:
 			deck1=new Deck(1);

@@ -249,7 +249,7 @@ public class PlayersChoices extends JogreComponent {
 			drawRecruit(g);
 			break;
 		case 13:
-			g.drawImage(images.getWestCardImage(westerosCard), 50,10, null);
+			g.drawImage(images.getWestCardImage(westerosCard), 50,0, null);
 			break;
 		}
 	}

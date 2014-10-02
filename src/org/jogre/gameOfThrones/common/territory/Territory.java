@@ -27,7 +27,7 @@ public abstract class Territory {
 	
 	public Territory(String name){
 		this.name=name;
-		neighbors=new ArrayList();
+		neighbors=new ArrayList<Territory>();
 		castle=0;
 	}
 	/**This initialisation isn't in the constructor because we need to construct Territory before adding them*/
@@ -80,16 +80,11 @@ public abstract class Territory {
 	public String toString(){
 		String res ="This is "+name;
 		if(troop!=null){
-			String sep= System.getProperty("line.separator");// retour à la ligne
-			res+= " "+sep+" ";
 			int[] troops = troop.getTroops();
 			if(troop instanceof GroundForce){
 				res+="there is "+troops[1]+" footman, "+troops[2]+" knigth, "+troops[3]+" siege tower";
 			}else{
 				res+="there is "+troops[0]+" ship";
-			}
-			if (order!=null){ // empecher tout le monde voir les ordres
-				res+=" your order is : "+order;
 			}
 		}
 		return res;

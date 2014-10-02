@@ -264,7 +264,7 @@ public class Family {
 		ordersAvailable.add(new Order(true,0,0,OrderType.CON));
 	}
 
-
+	/**this method remove the raid orders*/
 	public void removeRaidOrder() {
 		ordersAvailable= new LinkedList<Order>();
 		// we add the defence orders
@@ -283,7 +283,7 @@ public class Family {
 		ordersAvailable.add(new Order(true,0,0,OrderType.CON));
 	}
 
-
+	/**this method remove the defense orders*/
 	public void removeDefenceOrder() {
 		ordersAvailable= new LinkedList<Order>();
 		ordersAvailable.add(new Order(false,0,0,OrderType.SUP));

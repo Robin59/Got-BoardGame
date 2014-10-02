@@ -177,6 +177,11 @@ public class GameOfThronesController extends JogreController {
     					break;
     				}
     			}
+    			if(model.checkNewTurn() && model.getWesterosPhase()==0){
+					String card = model.choseCard();
+					playerChoices.westerosCard(card);
+					sendProperty("WesterosCard",card);
+				}
     		}else if (e.getComponent()==playerChoices){
     			// quand on click sur le playerChoice on reccupère un message de ce qui s'est passe 
     			int choice=playerChoices.RigthClick(e.getX(),e.getY(),model.getFamily(getSeatNum()));
@@ -273,13 +278,6 @@ public class GameOfThronesController extends JogreController {
     				playerChoices.getRelatedTerr().rmOrder();
     				model.nextPlayer();
     				//sendProperty("nextPlayer", 0);
-    				if(model.checkNewTurn()){
-    					// A CHANGER DE PLACE §§§
-    					// NE S'ENCLENCHE PAS QUAND IL N'Y A PAS D'ORDRE DE CONSOLIDATION
-    					String card = model.choseCard();
-    					playerChoices.westerosCard(card);
-    					sendProperty("WesterosCard",card);
-    				}
     				break;
     			case 19 :
     				System.out.println("recruit ship");
@@ -291,11 +289,6 @@ public class GameOfThronesController extends JogreController {
     				if(playerChoices.getRelatedTerr().getOrder()==null){
     					model.nextPlayer();
     					//sendProperty("nextPlayer", 0);
-    					if(model.checkNewTurn()){
-    						String card = model.choseCard();
-        					playerChoices.westerosCard(card);
-        					sendProperty("WesterosCard",card);
-        				}
     				}
     				break;
     			case 21 :
@@ -305,11 +298,6 @@ public class GameOfThronesController extends JogreController {
     				if(playerChoices.getRelatedTerr().getOrder()==null){
     					model.nextPlayer();
     					//sendProperty("nextPlayer", 0);
-    					if(model.checkNewTurn()){
-    						String card = model.choseCard();
-        					playerChoices.westerosCard(card);
-        					sendProperty("WesterosCard",card);
-        				}
     				}
     				break;
     			case 22 :
@@ -319,11 +307,6 @@ public class GameOfThronesController extends JogreController {
     				if(playerChoices.getRelatedTerr().getOrder()==null){
     					model.nextPlayer();
     					//sendProperty("nextPlayer", 0);
-    					if(model.checkNewTurn()){
-    						String card = model.choseCard();
-        					playerChoices.westerosCard(card);
-        					sendProperty("WesterosCard",card);
-        				}
     				}
     				break;
     			case 23 : 
@@ -343,6 +326,8 @@ public class GameOfThronesController extends JogreController {
     					model.westerosCardSeaOfStorms();
     				}else if(model.getCurrentCard().equals("StromOfSwords")){
     					model.westerosCardStormOfSwords();
+    				}else if(model.getCurrentCard().equals("ClashOfKings")){
+    					System.out.println("Mustering not implented yet");
     				}
     				model.getFamily(getSeatNum()).carteVu();
 					sendProperty("cardSaw", getSeatNum());
@@ -367,6 +352,11 @@ public class GameOfThronesController extends JogreController {
     				}
     				break;
     			}
+    			if(model.checkNewTurn() && model.getWesterosPhase()==0){
+					String card = model.choseCard();
+					playerChoices.westerosCard(card);
+					sendProperty("WesterosCard",card);
+				}
     			//le playerChoice verifie si il doit afficher quelque chose de nouveau
     			switch(playerChoices.check(model.informations(getSeatNum()), model.getFamily(getSeatNum()), model.getBattle())){
     			case 1:
