@@ -58,7 +58,7 @@ public class BoardModel {
 		WidowWatch.addTerritory(WhiteHarbor);
 		WidowWatch.addTerritory(NarrowSea);
 		WidowWatch.addTerritory(ShiveringSea);
-		//ShiveringSea
+		
 		
 		//le nord ajout
 		board.put("Winterfell", Winterfell);
@@ -67,9 +67,9 @@ public class BoardModel {
 		board.put("Shivering Sea", ShiveringSea);
 		board.put("Narrow Sea", NarrowSea);
 		board.put("Bay Of Ice", BayOfIce);
-		board.put("Stony Shore", StonyShore);
+		board.put("The Stony Shore", StonyShore);
 		board.put("White Harbor", WhiteHarbor);
-		board.put("Widow Watch", WidowWatch);
+		board.put("Widow's Watch", WidowWatch);
 	}
 
 

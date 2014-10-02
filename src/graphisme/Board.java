@@ -86,8 +86,13 @@ public class Board {
 			return  boardModel.getTerritory("White Harbor");
 		}else if (xMouse>619 && xMouse<781 && yMouse-y>269 && yMouse-y<315){
 			return  boardModel.getTerritory("Shivering Sea");
-		}
-		else{return null;}
+		}else if (xMouse>529 && xMouse<613 && yMouse-y>336 && yMouse-y<363){
+			return  boardModel.getTerritory("Widow's Watch");	
+		}else if(xMouse>127 && xMouse<243 && yMouse-y>284 && yMouse-y<319){
+			return  boardModel.getTerritory("The Stony Shore");
+		}else if(xMouse>645 && xMouse<777 && yMouse-y>430 && yMouse-y<479){
+			return  boardModel.getTerritory("Narrow Sea");
+		}else{return null;}
 	}
 	
 	/**
@@ -120,11 +125,18 @@ public class Board {
 		int[] karhold ={623,136};
 		int[] whiteHarbor = {460,340};
 		int[] shiveringSea ={674,320};
+		int[] widowsWatch ={554,369};
+		int[] stonyShore ={222,343};
+		int[] narrowSea ={692,485};
+		//bay of ice
 		
 		territoryCoord.put("Winterfell", winterfell);
 		territoryCoord.put("White Harbor", whiteHarbor);
 		territoryCoord.put("Shivering Sea", shiveringSea);
 		territoryCoord.put("Karhold", karhold);
+		territoryCoord.put("Widow's Watch",widowsWatch);
+		territoryCoord.put("The Stony Shore",stonyShore);
+		territoryCoord.put("Narrow Sea", narrowSea);
 	}
 	
 }
