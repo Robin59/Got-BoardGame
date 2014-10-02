@@ -155,6 +155,7 @@ public class GameOfThronesModel extends JogreModel {
     			family.ordersBack();
     		}
     	}
+    	updateLabel();
     }
     
   
@@ -202,6 +203,7 @@ public class GameOfThronesModel extends JogreModel {
     	currentPlayer = (currentPlayer+1)%numberPlayers;
     	mvInitiated=false;
     	checkOrder();
+    	updateLabel();
     }
     
     /** be careful this method return a playerSeat, not is place on the throne track*/ 
@@ -430,6 +432,17 @@ public class GameOfThronesModel extends JogreModel {
 		String text= new String("<html>Turn: "+turn+"        Wildings: "+wildings+"<br> ");
 		for(Family family : families){
 			text+=" "+family.getName()+" Infulence : "+family.getInflu()+" Supply : "+family.getSupply();
+		}
+		switch(phase){
+		case 0:
+			text+="<br>Westeros phase";
+			break;
+		case 1:
+			text+="<br>Programation's phase";
+			break;
+		case 2:
+			text+="<br>Exection's phase  :  "+families[currentPlayer].getName()+"'s turn";
+			break;
 		}
 		text+="<html>";
 		jLabel.setText(text);

@@ -129,7 +129,7 @@ public class Board {
 		int[] stonyShore ={222,343};
 		int[] narrowSea ={692,485};
 		//bay of ice
-		
+		//castel blask
 		territoryCoord.put("Winterfell", winterfell);
 		territoryCoord.put("White Harbor", whiteHarbor);
 		territoryCoord.put("Shivering Sea", shiveringSea);
