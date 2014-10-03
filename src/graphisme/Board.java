@@ -128,8 +128,9 @@ public class Board {
 		int[] widowsWatch ={554,369};
 		int[] stonyShore ={222,343};
 		int[] narrowSea ={692,485};
+		int[] castelBlack={460,45};
 		//bay of ice
-		//castel blask
+		
 		territoryCoord.put("Winterfell", winterfell);
 		territoryCoord.put("White Harbor", whiteHarbor);
 		territoryCoord.put("Shivering Sea", shiveringSea);
@@ -137,6 +138,7 @@ public class Board {
 		territoryCoord.put("Widow's Watch",widowsWatch);
 		territoryCoord.put("The Stony Shore",stonyShore);
 		territoryCoord.put("Narrow Sea", narrowSea);
+		territoryCoord.put("Castle Black", castelBlack);
 	}
 	
 }

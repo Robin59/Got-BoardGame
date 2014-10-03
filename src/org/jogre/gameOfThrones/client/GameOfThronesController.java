@@ -309,6 +309,11 @@ public class GameOfThronesController extends JogreController {
     					//sendProperty("nextPlayer", 0);
     				}
     				break;
+    			case 24 :
+    				model.getFamily(getSeatNum()).setBid(playerChoices.getBid());
+    				sendProperty("bidSet", getSeatNum(),playerChoices.getBid());
+    				playerChoices.blank();
+    				break;
     			case 23 : 
     				if(model.getCurrentCard().equals("Summer")){
     					model.widingsGrow();
@@ -326,25 +331,26 @@ public class GameOfThronesController extends JogreController {
     					model.westerosCardSeaOfStorms();
     				}else if(model.getCurrentCard().equals("StromOfSwords")){
     					model.westerosCardStormOfSwords();
-    				}else if(model.getCurrentCard().equals("ClashOfKings")){
-    					System.out.println("Mustering not implented yet");
     				}
     				model.getFamily(getSeatNum()).carteVu();
 					sendProperty("cardSaw", getSeatNum());
 					playerChoices.blank();
-    					//else if (model.getCurrentCard().equals("Winter")&& )// le mettre dans la verification
     				//verifie si tout le monde a executé
     				if(model.westerosCardcheck()){
     					if(model.getWesterosPhase()==3){
     						model.nextPhase();
     						sendProperty("nextPhase", 0);
-    					}else if (model.getCurrentCard().equals("Winter")){
+    					}else if(model.getCurrentCard().equals("ClashOfKings")){
+        					model.westerosCardClashOfKings();
+        					playerChoices.bidding();
+        					sendProperty("ClashOfKings", 0);
+        				}else if (model.getCurrentCard().equals("Winter")){
     						model.westerosCardWinter();
     						String card = model.choseCard();
         					playerChoices.westerosCard(card);
         					sendProperty("Winter",card);
     					}else{
-    						System.out.println("new phase");
+    						//System.out.println("new phase");
     						String card = model.choseCard();
         					playerChoices.westerosCard(card);
         					sendProperty("WesterosCard",card);
@@ -356,23 +362,34 @@ public class GameOfThronesController extends JogreController {
 					String card = model.choseCard();
 					playerChoices.westerosCard(card);
 					sendProperty("WesterosCard",card);
+				}else if(model.allBidsDone()){
+					//System.out.println("all bid dones");
+					sendProperty("bid done",0);
+					if(model.biddingResolution()){
+						playerChoices.bidding();
+					}else{
+						String card = model.choseCard();
+						playerChoices.westerosCard(card);
+						sendProperty("WesterosCard",card);
+					}
+				}else{
+					//le playerChoice verifie si il doit afficher quelque chose de nouveau
+					switch(playerChoices.check(model.informations(getSeatNum()), model.getFamily(getSeatNum()), model.getBattle())){
+    				case 1:
+    					sendProperty("FamilyCards", 0);
+    					break;
+    				case 2:
+    					sendProperty("Sword", 0);
+    					break;
+    				case 3: // NE SERT A RIEN !!!!!
+    					System.out.println("controller : cheked state 3");
+    					break;
+    				case 4:
+    					model.battleEnd();
+    					sendProperty("BattleEnd", 0);// VRAIMENT Necessaire ?!!
+    					break;
+					}
 				}
-    			//le playerChoice verifie si il doit afficher quelque chose de nouveau
-    			switch(playerChoices.check(model.informations(getSeatNum()), model.getFamily(getSeatNum()), model.getBattle())){
-    			case 1:
-    				sendProperty("FamilyCards", 0);
-    				break;
-    			case 2:
-    				sendProperty("Sword", 0);
-    				break;
-    			case 3:
-    				System.out.println("controller : cheked state 3");
-    				break;
-    			case 4:
-    				model.battleEnd();
-    				sendProperty("BattleEnd", 0);// VRAIMENT Necessaire ?!!
-    				break;
-    			}
     			gameOfThronesComponent.repaint();//encore utile ? 
     			playerChoices.repaint(); // au cas ou (quand on affiche autre chose devant le jeux)
     			
@@ -448,25 +465,29 @@ public class GameOfThronesController extends JogreController {
     }
     
     //
-    public void receiveProperty(String territory, int type, int bonus) {// peut-etre mettre cette methode dans Order
-    	boolean star = (bonus==1);
-    	switch (type) {
-		case 0:
-			model.getBoardModel().getTerritory(territory).setOrder(new Order(star, 0, 0, OrderType.RAI));
-			break;
-		case 4:
-			model.getBoardModel().getTerritory(territory).setOrder(new Order(star, 0, bonus, OrderType.SUP));
-			break;
-		case 1:
-			model.getBoardModel().getTerritory(territory).setOrder(new Order(star, 0, bonus, OrderType.ATT));
-			break;
-		case 2:
-			model.getBoardModel().getTerritory(territory).setOrder(new Order(star, 0, 0, OrderType.CON));
-			break;
-		default:
-			model.getBoardModel().getTerritory(territory).setOrder(new Order(star, bonus+1, 0, OrderType.DEF));
-			break;
-		}
+    public void receiveProperty(String key, int type, int bonus) {// peut-etre mettre cette methode dans Order
+    	if(key.equals("bidSet")){
+    		model.getFamily(type).setBid(bonus);
+    	}else{
+    		boolean star = (bonus==1);
+    		switch (type) {
+    		case 0:
+    			model.getBoardModel().getTerritory(key).setOrder(new Order(star, 0, 0, OrderType.RAI));
+    			break;
+			case 4:
+				model.getBoardModel().getTerritory(key).setOrder(new Order(star, 0, bonus, OrderType.SUP));
+				break;
+			case 1:
+				model.getBoardModel().getTerritory(key).setOrder(new Order(star, 0, bonus, OrderType.ATT));
+				break;
+			case 2:
+				model.getBoardModel().getTerritory(key).setOrder(new Order(star, 0, 0, OrderType.CON));
+				break;
+			default:
+				model.getBoardModel().getTerritory(key).setOrder(new Order(star, bonus+1, 0, OrderType.DEF));
+				break;
+			}
+    	}
 	}
     
     
@@ -498,7 +519,14 @@ public class GameOfThronesController extends JogreController {
     		model.getBattle().dontUseSword();
     	}else if (key.equals("cardSaw")){
     		model.getFamily(value).carteVu();
-    	}else{
+    	}else if(key.equals("ClashOfKings")){
+    		model.westerosCardClashOfKings();
+			playerChoices.bidding();
+    	}else if(key.equals("bid done")){
+    		if(model.biddingResolution()){
+				playerChoices.bidding();
+			}
+		}else{
     		//on indique que le joueur a fini de donner ses ordres
     		model.getFamily(value).ordersGived=true;
     		// on verifie que si c'etait le dernier

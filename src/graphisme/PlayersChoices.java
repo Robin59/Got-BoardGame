@@ -45,7 +45,10 @@ public class PlayersChoices extends JogreComponent {
 	private Image swordFlipImage;
 	private Image recruitImage;
 	private Image consoImage;
+	private Image leftArrowImage;
+	private Image rigthArrowImage;
 	private String westerosCard;
+	private int powerBid;
 	
 	public PlayersChoices (JLabel label){
 		this.label=label;
@@ -58,6 +61,8 @@ public class PlayersChoices extends JogreComponent {
 		dontUseImage = GameImages.getImage(7);
 		attackerImage= GameImages.getImage(4);
 		defencerImage= GameImages.getImage(5);
+		leftArrowImage=GameImages.getImage(134);
+		rigthArrowImage=GameImages.getImage(135);		
 		noOneImage= GameImages.getImage(3);
 		images= ImageSelector.IMAGESELECTOR;
 		swordImage =GameImages.getImage(108);
@@ -171,6 +176,16 @@ public class PlayersChoices extends JogreComponent {
 			}
 		case 13:
 			return 23;
+		case 14 :
+			if(x>100&&x<150 && powerBid>0){
+				powerBid--;
+				label.setText("Power Bid : "+powerBid);
+			}else if(x>400&&x<450 && powerBid<family.getInflu()){
+				powerBid++;
+				label.setText("Power Bid : "+powerBid);
+			}else if(x>240 && x<300){
+				return 24; // end of the biddings
+			}
 		}
 		return 0;
 	}
@@ -250,6 +265,11 @@ public class PlayersChoices extends JogreComponent {
 			break;
 		case 13:
 			g.drawImage(images.getWestCardImage(westerosCard), 50,0, null);
+			break;
+		case 14 : 
+			g.drawImage(leftArrowImage,100,100,null);
+			g.drawImage(rigthArrowImage,400,100,null);
+			g.drawImage(images.getPowerImage(family),240,100, null);
 			break;
 		}
 	}
@@ -425,7 +445,16 @@ public class PlayersChoices extends JogreComponent {
 		repaint();
 		
 	}
+
+	public void bidding() {
+		powerBid=0;
+		label.setText("Power Bid : "+powerBid);
+		panel=14;	
+	}
 	
+	public int getBid(){
+		return powerBid;
+	}
 	/*public void withdraw(String family){
 		if(family.equals(battle.getDefFamily().getName())) label.setText("Choose a place to withdraw");
 	}*/

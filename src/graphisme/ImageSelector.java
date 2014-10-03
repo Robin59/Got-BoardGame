@@ -23,6 +23,7 @@ public class  ImageSelector{
 	private Image[][] troopsSelectImage;
 	private Image[] bigOrdersImages;
 	private Image[] smallOrdersImages;
+	private Image[] powerImages;
 	private Map<String,Image> playerCards;
 	private Map<String,Image> westerosCards;
 	
@@ -49,6 +50,10 @@ public class  ImageSelector{
 		smallOrdersImages = new Image[11];
 		for (int i=0;i<11;i++){
 			smallOrdersImages[i]=GameImages.getImage(8+i);
+		}
+		powerImages = new Image[6];
+		for (int i=0;i<6;i++){
+			powerImages[i]=GameImages.getImage(128+i);
 		}
 		// les cartes de famille
 		playerCards = new HashMap<String, Image>();
@@ -105,6 +110,9 @@ public class  ImageSelector{
 	
 	public Image getSmallOrderImage(Order order){
 		return smallOrdersImages[orderImage(order)];
+	}
+	public Image getPowerImage(Family family){
+		return powerImages[family.getPlayer()];
 	}
 	
 	// use by the 2 methods above

@@ -87,11 +87,11 @@ public class GameOfThronesTableFrame extends JogreTableFrame {
         setupMVC (gameOfThronesModel, gameOfThronesComponent, gameOfThronesController);
 
       //panel pour la partie droite du jeu
-        double [][] leftBoardSizes = {{560}, {150,5,50,15,10,30,260}};
+        double [][] leftBoardSizes = {{560}, {1,150,2,15,10,30,260}};
         // les pistes et autres info
         JogrePanel leftPanel = new JogrePanel (leftBoardSizes);
-        leftPanel.add(new PlayersInfo(gameOfThronesModel), "0,0");
-        leftPanel.add(textLabel,"0,2");
+        //leftPanel.add(new PlayersInfo(gameOfThronesModel), "0,0");
+        leftPanel.add(textLabel,"0,1");
         leftPanel.add(infoLabel, "0,3");
         leftPanel.add( infoPlayerC ,"0,5");
         leftPanel.add(playerChoices,"0,6");

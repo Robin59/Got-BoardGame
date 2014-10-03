@@ -60,14 +60,15 @@ public class GameOfThronesModel extends JogreModel {
 	//determine la phase de jeu (0: phase Westeros, 1= programation, 2: execution)
 	private int phase;
 	private int internPhase; // determine la phase dans la execution (0: raid, 1: mouvement, 2:consolidation) 
-	private int westerosPhase;
-	
+	private int westerosPhase; 
+	private int biddingPhase;// O for the throne bidding, 1 for the fiefdoms, 2 for the court 
 	private BoardModel boardModel;
 	//Creation des fammilles
 	private Family[] families;
 	// pour les mouvements et combat
 	private boolean mvInitiated;
 	private boolean combatInitiated;// utile ou faire battle==null ?????
+	//private boolean clashOfKings;
 	private Battle battle;
 	private Territory territory1;
 	private Territory territory2;
@@ -95,6 +96,7 @@ public class GameOfThronesModel extends JogreModel {
         // le jeu commence à la phase programation
         phase=1;
         internPhase=0;
+        biddingPhase=3;
         turn=1;
         wildings=2;
         currentPlayer=0;
@@ -126,13 +128,11 @@ public class GameOfThronesModel extends JogreModel {
     			}
     		}
     		updateLabel();
-    		//on verifie si il y a des ordres d'influ étoile
     		checkOrder();
     	}else if (internPhase==0){
     		nextPhase();
     	}
-    	//checkOrder();
-    	System.out.println("nextInternPhase");
+    	//System.out.println("nextInternPhase");
     }
     public void nextPhase(){
     	phase= (phase+1)%3;
@@ -339,19 +339,24 @@ public class GameOfThronesModel extends JogreModel {
   		// On place les starks (changer pour le joueur 3)
   		families[0]=new Family(0);
   		throne[0]=0;
+  		fiefdoms[0]=0;
+  		court[0]=0;
   		families[0].setFiefdomsTrack(1);
-          boardModel.getTerritory("Winterfell").setTroup(new GroundForce(families[0],1,1,0));
-          boardModel.getTerritory("White Harbor").setTroup(new GroundForce(families[0],1,0,0));
-          boardModel.getTerritory("Shivering Sea").setTroup(new NavalTroup(families[0],1));
-          //ajout des cartes 
-          families[0].addCard(new CombatantCard("Mellissandre",1, 1, 0));
-          families[0].addCard(new CombatantCard("Salladhor",1, 0, 0));
-          families[0].addCard(new CombatantCard("Davos",2, 0, 0));
-          families[0].addCard(new CombatantCard("Brienne",2, 1, 1));
-          if(playerNumber>1){
-          	families[1]=new Family(1);
+        boardModel.getTerritory("Winterfell").setTroup(new GroundForce(families[0],1,1,0));
+        boardModel.getTerritory("White Harbor").setTroup(new GroundForce(families[0],1,0,0));
+        boardModel.getTerritory("Shivering Sea").setTroup(new NavalTroup(families[0],1));
+        //ajout des cartes 
+        families[0].addCard(new CombatantCard("Mellissandre",1, 1, 0));
+        families[0].addCard(new CombatantCard("Salladhor",1, 0, 0));
+        families[0].addCard(new CombatantCard("Davos",2, 0, 0));
+        families[0].addCard(new CombatantCard("Brienne",2, 1, 1));
+        if(playerNumber>1){
+        	court[1]=0;
+        	families[1]=new Family(1);
           	throne[1]=1;
-          	families[1].setFiefdomsTrack(3);
+          	fiefdoms[1]=1;
+      		court[0]=1;
+          	families[1].setFiefdomsTrack(2);
         	families[1].addCard(new CombatantCard("Tyrion",1, 0, 0));
           	families[1].addCard(new CombatantCard("Kevan",1, 0, 0));
           	families[1].addCard(new CombatantCard("The Hound",2, 0, 2));
@@ -424,26 +429,38 @@ public class GameOfThronesModel extends JogreModel {
 		return territory2.getFamily().getPlayer()==seatNum && territory2.canWithdraw(territory);
 	}
 	
-	/*Pour le Label ajouter :
-	 * - le nom de la famille dont c'est le tour
-	 * - le nom de la phase (westeros,programation,execution)  
+	/*Pour le Label ajouter :  
+	 * - le nombre de chateau
 	 */
 	public void updateLabel(){
-		String text= new String("<html>Turn: "+turn+"        Wildings: "+wildings+"<br> ");
-		for(Family family : families){
-			text+=" "+family.getName()+" Infulence : "+family.getInflu()+" Supply : "+family.getSupply();
-		}
+		String text= new String("<html>Turn: "+turn+"        Wildings: "+wildings+" ");
 		switch(phase){
 		case 0:
-			text+="<br>Westeros phase";
+			text+=" Westeros phase";
 			break;
 		case 1:
-			text+="<br>Programation's phase";
+			text+=" Programation's phase";
 			break;
 		case 2:
-			text+="<br>Exection's phase  :  "+families[currentPlayer].getName()+"'s turn";
+			text+=" Exection's phase  :  "+families[currentPlayer].getName()+"'s turn";
 			break;
 		}
+		text+="<br>Throne track : ";
+		for(int i :throne){
+			text+=getFamily(i).getName()+" ";
+		}text+="<br>Fiefdoms track : ";
+		for(int i :fiefdoms){
+			text+=getFamily(i).getName()+" ";
+		}
+		text+="<br>Court track : ";
+		for(int i :court){
+			text+=getFamily(i).getName()+" ";
+		}
+		text+="<br>";
+		for(Family family : families){
+			text+="<br>"+family.getName()+" Infulence : "+family.getInflu()+" Supply : "+family.getSupply();
+		}
+		
 		text+="<html>";
 		jLabel.setText(text);
 	}
@@ -509,6 +526,7 @@ public class GameOfThronesModel extends JogreModel {
 			}
 			family.setSupply(supply);
 		}
+		updateLabel();
 	}
 
 	 private void westerosCardNotSaw() {
@@ -592,5 +610,68 @@ public class GameOfThronesModel extends JogreModel {
 		wildings+=2;
 		updateLabel();
 		//tester si on arrive à 12
+	}
+
+
+	public void westerosCardClashOfKings() {
+		biddingPhase=0;	
+		for(Family family: families){
+			family.setBid(-1);
+		}
+	}
+	
+	/***/
+	public boolean biddingResolution(){
+		Family[] track=biddingSort();
+		int[] temp;
+		switch (biddingPhase){
+		case 0:
+			temp=throne;
+			break;
+		case 1:
+			temp=fiefdoms;
+			break;
+		default :
+			temp=court;
+			break;
+		}
+		for(int i=0; i<numberPlayers; i++){
+			temp[i]=track[i].getPlayer();
+			track[i].resetBid();
+		}
+		biddingPhase++;
+		updateLabel();
+		return biddingPhase<3;
+	}
+	
+	/**sort the families in fonction of there bids*/
+	private Family[] biddingSort(){ // refaire
+		Family[] track = new Family[numberPlayers];
+		for(int i=0; i<numberPlayers;i++){
+			track[i]=getFamily(i);
+		}
+		for (int i=0;i<numberPlayers;i++){
+			int z=i;
+			for(int y=i;y<numberPlayers;y++){
+				if(track[z].getBid()<track[y].getBid()){
+					z=y;
+				}
+			}	
+			Family family = track[z];
+			track[z]=track[i];
+			track[i]=family;
+		}
+		return track;
+	}
+	public boolean allBidsDone(){
+		if(biddingPhase>2){
+			return false;
+		}
+		for(Family family: families){
+			if(family.getBid()==-1){
+				return false;
+			}
+		}
+		return true;
 	}
 }

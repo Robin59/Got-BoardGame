@@ -22,6 +22,7 @@ public class Family {
 	private boolean cardSaw;
 	// influence points 
 	private int inflPoint;
+	private int bid;
 	
 	//combatant card  (2 listes cartes utilisées et non utilisées)
 	protected List<CombatantCard> combatantsAvailable;
@@ -111,6 +112,16 @@ public class Family {
 	
 	public void gainInflu(int influ){
 		inflPoint+=influ;
+	}
+	public void setBid(int bid){
+		this.bid=bid;
+	}
+	public int getBid(){
+		return bid;
+	}
+	public void resetBid(){
+		inflPoint-=bid;
+		bid=-1;
 	}
 	public int getInflu(){
 		return inflPoint;
