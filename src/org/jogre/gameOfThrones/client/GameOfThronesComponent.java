@@ -47,9 +47,7 @@ public class GameOfThronesComponent extends JogreComponent {
         super ();
        // curMousePoint =-1; 
         board =new Board(model);
-        this.model = model;         // link to model
-        
-        
+        this.model = model;         // link to model  
     }
 
     // Update the graphics depending on the model
@@ -67,7 +65,10 @@ public class GameOfThronesComponent extends JogreComponent {
     	board.down();
     	repaint();
     }
-    
+    /**Set the player who view this component*/
+    public void setPlayer(int player){
+    	board.setPlayer(player);
+    }
     /*public Board getBoard(){
     	return board;
     }*/

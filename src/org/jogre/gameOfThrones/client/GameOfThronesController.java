@@ -69,6 +69,7 @@ public class GameOfThronesController extends JogreController {
         super (gameOfThronesModel, gameOfThronesComponent);
         this.model     = gameOfThronesModel;
         this.gameOfThronesComponent = gameOfThronesComponent;
+     
         
         this.playerChoices=playerChoices;
         this.infoLabel=infoLabel;
@@ -82,6 +83,7 @@ public class GameOfThronesController extends JogreController {
      */
     public void start () {
         model.reset ();
+        this.gameOfThronesComponent.setPlayer(getSeatNum());
     }
     
 //Controle avec la SOURIS

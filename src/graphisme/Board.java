@@ -23,6 +23,7 @@ public class Board {
 	private Image board;
 	private int x; // les coordonnée où est affichée la carte 
 	private int y;
+	private int player;
 	private BoardModel boardModel;
 	private GameOfThronesModel gameModel;
 	/** la premiere coordoné est pour la famille, la seconde pour le type (terrestre ou naval)*/
@@ -66,11 +67,10 @@ public class Board {
 		}
 	}
 	
-	//fonction qui renvoit les infos d'une region
-	/*public String getTeritoryInfo(int xMouse, int yMouse){
-		return getTerritory(xMouse,yMouse).toString();
-	}*/
-	
+	/**Set the player who view this board*/
+	public void setPlayer(int player){
+		this.player=player;
+	}
 	
 	// fonction qui renvoit une region en fonction des coordoné de la souri
 	public Territory getTeritory(int xMouse, int yMouse){
@@ -109,12 +109,14 @@ public class Board {
 	/*on affiche tous les ordres pour les troupes*/
 	public void showOrders(Graphics g){
 		for (Territory territory : boardModel.board.values()){
-			if (territory.getOrder()!=null){
-				// on choisit la bonne image
-				Image orderImage= images.getSmallOrderImage(territory.getOrder());
-				// recupere les coordonée dans territoryCoord
-				int[] coordinate=territoryCoord.get(territory.getName());
-				g.drawImage(orderImage,coordinate[0]+x-30,coordinate[1]+y, null);
+			if (territory.getOrder()!=null ){
+				if(territory.getFamily().getPlayer()==player || gameModel.getPhase()==2){
+					// on choisit la bonne image
+					Image orderImage= images.getSmallOrderImage(territory.getOrder());
+					// 	recupere les coordonée dans territoryCoord
+					int[] coordinate=territoryCoord.get(territory.getName());
+					g.drawImage(orderImage,coordinate[0]+x-30,coordinate[1]+y, null);
+				}
 			}
 		}
 	}
