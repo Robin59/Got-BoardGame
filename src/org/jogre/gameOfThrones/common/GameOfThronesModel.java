@@ -143,8 +143,7 @@ public class GameOfThronesModel extends JogreModel {
     		 currentPlayer=0;
     		 // on cherche le premier joueur a avoir un ordre de raid
     		 checkOrder();
-    	}
-    	if(phase==0){
+    	}else if(phase==0){
     		turn++;//nouveau tour
     		westerosPhase=0;
     		this.westerosCardNotSaw();
@@ -152,6 +151,7 @@ public class GameOfThronesModel extends JogreModel {
     		//ici on test si on arrive au tour 11 et on fini le jeu dans ce cas
     		//sinon, on retire tous les ordres des territoires et on les redonnes aux joueurs
     		for (Family family : families){
+    			
     			family.ordersBack();
     		}
     	}

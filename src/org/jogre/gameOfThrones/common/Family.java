@@ -250,6 +250,7 @@ public class Family {
 	}
 	/**this method remove all orders from the territories and give them back to the player */
 	public void ordersBack(){
+		ordersGived=false;
 		for(Territory territory : territories){
 			territory.rmOrder();
 		}
