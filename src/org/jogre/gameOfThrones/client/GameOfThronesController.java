@@ -122,7 +122,7 @@ public class GameOfThronesController extends JogreController {
     				switch(model.getPhase()){
     				case 0 : 
     					if(model.canRecruit(gameOfThronesComponent.getTerritory(e.getX(),e.getY()), getSeatNum())){
-    						System.out.println("Can recruit");
+    						//System.out.println("Can recruit");
     						playerChoices.recruit(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
     					}
     					break;
@@ -150,7 +150,6 @@ public class GameOfThronesController extends JogreController {
     						}else if(gameOfThronesComponent.getTerritory(e.getX(),e.getY())==model.getTerritory1()){
     							playerChoices.attackTo(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
     						}
-    						
     					// on regarde si un ordre est deja selectioné, qu'il peut etre utilisé dans le territoir voulu et qu'on peut l'utiliser
     					}else if(playerChoices.getRelatedTerr()!=null && playerChoices.getRelatedTerr().canUseOrderOn(gameOfThronesComponent.getTerritory(e.getX(),e.getY()))){
     						//On execute l'ordre
@@ -218,6 +217,7 @@ public class GameOfThronesController extends JogreController {
     					sendProperty("cancelOrder",playerChoices.getRelatedTerr().getName());
     					playerChoices.getRelatedTerr().rmOrder();
     					model.nextPlayer();
+    					playerChoices.blank();
     				}
     				break;
     			case 3 :
@@ -299,19 +299,22 @@ public class GameOfThronesController extends JogreController {
     				System.out.println("recruit ship");
     				break;
     			case 20 :
-    				playerChoices.getRelatedTerr().recruit(1);
-    				//((Land)playerChoices.getRelatedTerr()).haveRecruit(1);
-    				sendProperty("recruitFoot", playerChoices.getRelatedTerr().getName());
-    				if(model.getMusteringPhase() && model.allRecruitementDone()){
-    					String card = model.choseCard();
-    					playerChoices.westerosCard(card);
-    					sendProperty("WesterosCard",card);
-    				}else if(!model.getMusteringPhase() && playerChoices.getRelatedTerr().getOrder()==null ){
-    					model.nextPlayer();
-    					//sendProperty("nextPlayer", 0);
+    				if(model.checkSupplyLimits(getSeatNum(), playerChoices.getRelatedTerr())){
+    					playerChoices.getRelatedTerr().recruit(1);
+    					//((Land)playerChoices.getRelatedTerr()).haveRecruit(1);
+    					sendProperty("recruitFoot", playerChoices.getRelatedTerr().getName());
+    					if(model.getMusteringPhase() && model.allRecruitementDone()){
+    						String card = model.choseCard();
+    						playerChoices.westerosCard(card);
+    						sendProperty("WesterosCard",card);
+    					}else if(!model.getMusteringPhase() && playerChoices.getRelatedTerr().getOrder()==null ){
+    						model.nextPlayer();
+    						//sendProperty("nextPlayer", 0);
+    					}
     				}
     				break;
     			case 21 :
+    				if(model.checkSupplyLimits(getSeatNum(), playerChoices.getRelatedTerr())){
     				playerChoices.getRelatedTerr().recruit(2);
     				//((Land)playerChoices.getRelatedTerr()).haveRecruit(2);
     				sendProperty("recruitKnight", playerChoices.getRelatedTerr().getName());
@@ -322,9 +325,10 @@ public class GameOfThronesController extends JogreController {
     				}else if(!model.getMusteringPhase() && playerChoices.getRelatedTerr().getOrder()==null){
     					model.nextPlayer();
     					//sendProperty("nextPlayer", 0);
-    				}
+    				}}
     				break;
     			case 22 :
+    				if(model.checkSupplyLimits(getSeatNum(), playerChoices.getRelatedTerr())){
     				playerChoices.getRelatedTerr().recruit(3);
     				//((Land)playerChoices.getRelatedTerr()).haveRecruit(2);
     				sendProperty("recruitTower", playerChoices.getRelatedTerr().getName());
@@ -335,7 +339,7 @@ public class GameOfThronesController extends JogreController {
     				}else if(!model.getMusteringPhase() && playerChoices.getRelatedTerr().getOrder()==null){
     					model.nextPlayer();
     					//sendProperty("nextPlayer", 0);
-    				}
+    				}}
     				break;
     			case 24 :
     				model.getFamily(getSeatNum()).setBid(playerChoices.getBid());

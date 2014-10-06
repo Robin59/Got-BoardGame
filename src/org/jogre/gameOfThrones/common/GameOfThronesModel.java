@@ -78,7 +78,7 @@ public class GameOfThronesModel extends JogreModel {
 	private Deck deck2;
 	private Deck deck3;
 	private String currentCard;
-	
+	private int[][] supplyLimites= {{2,2,0,0,0},{3,2,0,0,0},{3,2,2,0,0},{3,2,2,2,0},{3,3,2,2,0},{4,3,2,2,0},{4,3,2,2,2}};
     /**
      * Constructor which creates the model.
      */
@@ -702,8 +702,63 @@ public class GameOfThronesModel extends JogreModel {
 				}
 			}
 		}
-		System.out.println("ALL RECRUITMENT DONE");
 		musteringPhase=false;
+		return true;
+	}
+	
+	/**said if a family can recruit a new troop in this territory*/
+	public boolean checkSupplyLimits(int player, Territory territory){
+		return checkSupplyLimits(getFamily(player), territory);
+	}
+	/**said if a family can recruit a new troop in this territory*/
+	public boolean checkSupplyLimits(Family family, Territory territory){
+		if(territory.getTroup()==null){
+			return true;
+		}
+		int[] supply = new int[5];
+		for(int i=0;i<5;i++){
+			supply[i]=supplyLimites[family.getSupply()][i];
+		}
+		for(Territory otherTerritory : family.getTerritories()){
+			if(otherTerritory!=territory && otherTerritory.getTroup()!=null && otherTerritory.getTroup().getEffectif()>1){
+				int i=4;
+				while(i>=0 && otherTerritory.getTroup().getEffectif()>supply[i]){
+					i--;
+				}
+				if(i==-1){ //Normalement inutile si tout le reste est bien programmé
+					return false;
+				}
+				supply[i]=0;
+			}
+		}
+		for(int sup: supply){
+			if(sup>territory.getTroup().getEffectif()){
+				return true;
+			}
+		}
+		return false;
+		}
+	
+	/**check if a family don't execed its supply limit
+	 * @return true if the family don't execed the supply limit, else return false
+	 * */
+	public boolean checkSupplyLimits(Family family){
+		int[] supply = new int[5];
+		for(int i=0;i<5;i++){
+			supply[i]=supplyLimites[family.getSupply()][i];
+		}
+		for(Territory territory : family.getTerritories()){
+			if(territory.getTroup()!=null && territory.getTroup().getEffectif()>1){
+				int i=4;
+				while(i>=0 && territory.getTroup().getEffectif()>supply[i]){
+					i--;
+				}
+				if(i==-1){
+					return false;//territory.getTroup().getEffectif()<=supply[0];
+				}
+				supply[i]=0;
+			}
+		}
 		return true;
 	}
 }

@@ -95,7 +95,6 @@ public class PlayersChoices extends JogreComponent {
 			break;
 		case 3 :
 			if (x>150 && x<200 && y>50 && y<100){
-				blank();
 				return 2;
 			}
 			break;

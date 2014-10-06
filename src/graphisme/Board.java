@@ -97,7 +97,7 @@ public class Board {
 	
 	/**
 	 * Affiche les troupes d'un territoir,
-	 * on a verifier qu'il y avait bien des troupes sur le territoir
+	 * on a verifié qu'il y avait bien des troupes sur le territoir
 	 * @param territory
 	 * @param g
 	 */
