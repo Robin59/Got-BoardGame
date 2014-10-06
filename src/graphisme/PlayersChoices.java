@@ -95,7 +95,8 @@ public class PlayersChoices extends JogreComponent {
 			break;
 		case 3 :
 			if (x>150 && x<200 && y>50 && y<100){
-				return 2;// on informe le server et on met à jour le board
+				blank();
+				return 2;
 			}
 			break;
 		//les mouvements
@@ -157,7 +158,7 @@ public class PlayersChoices extends JogreComponent {
 			break;
 		case 11 : 
 			if(x>50 && x<130){
-				this.recruit();
+				this.recruit(relatedTerr);
 			}else if(x>350 && x<430){
 				blank2();
 				this.repaint();
@@ -167,12 +168,14 @@ public class PlayersChoices extends JogreComponent {
 		case 12 :
 			if(x>50&&x<100){
 				return 19;
-			}else if (x>150 && x<200){
+			}else if (y<170 && x>150 && x<200){
 				return 20;
-			}else if (x>250 && x<300){
+			}else if (y<170 && x>250 && x<300){
 				return 21;
-			}else if (x>350 && x<400){
+			}else if (y<170 && x>350 && x<400){
 				return 22;
+			}else if(y>190 && x>200 && x<270){
+				return 2;
 			}
 		case 13:
 			return 23;
@@ -262,6 +265,7 @@ public class PlayersChoices extends JogreComponent {
 			break;
 		case 12:
 			drawRecruit(g);
+			g.drawImage(dontUseImage, 200,190,null);
 			break;
 		case 13:
 			g.drawImage(images.getWestCardImage(westerosCard), 50,0, null);
@@ -285,11 +289,10 @@ public class PlayersChoices extends JogreComponent {
 		}
 	}
 	
-	//Quand on click dans une zone renvoit l'objet en relation
-		public Order choseOrder(int x, int y,Family family){//attraper les execptions
-			int i=(x-10)/80+(y/80)*6;
-			return family.getOrders().get(i);
-		}
+	public Order choseOrder(int x, int y,Family family){//attraper les execptions
+		int i=(x-10)/80+(y/80)*6;
+		return family.getOrders().get(i);
+	}
 		
 		public void choseCard(int x, Family family){
 			indexCard =(x-10)/150;
@@ -311,10 +314,12 @@ public class PlayersChoices extends JogreComponent {
 		}
 	
 	
-		private void recruit(){
-			panel=12;
-			repaint();
-		}
+	public void recruit(Territory territory){
+		relatedTerr=territory;
+		territory.resetRecruit();
+		panel=12;
+		repaint();
+	}
 		
 	public void blank() {
 		relatedTerr=null;//vraiment utile ?

@@ -68,6 +68,7 @@ public class GameOfThronesModel extends JogreModel {
 	// pour les mouvements et combat
 	private boolean mvInitiated;
 	private boolean combatInitiated;// utile ou faire battle==null ?????
+	private boolean musteringPhase;
 	//private boolean clashOfKings;
 	private Battle battle;
 	private Territory territory1;
@@ -102,6 +103,7 @@ public class GameOfThronesModel extends JogreModel {
         currentPlayer=0;
         mvInitiated=false;
         combatInitiated=false;
+        musteringPhase=false;
         battle=null;
         deck1=new Deck(1);
         deck2=new Deck(2);
@@ -672,6 +674,36 @@ public class GameOfThronesModel extends JogreModel {
 				return false;
 			}
 		}
+		return true;
+	}
+
+	/** initialize the mustering phase*/
+	public void mustering() {
+		musteringPhase=true;
+		//return the recruits available to the initial state
+		for(Family family: families){
+			for(Territory territory : family.getTerritories()){
+				territory.resetRecruit();
+			}
+		}
+	}
+	public boolean canRecruit(Territory territory, int player){
+		return musteringPhase && (territory.getFamily()!=null) && (territory.getFamily().getPlayer()==player)&& territory.getRecruit()>0;
+	}
+
+	public boolean getMusteringPhase(){
+		return musteringPhase;
+	}
+	public boolean allRecruitementDone() {
+		for(Family family: families){
+			for(Territory territory : family.getTerritories()){
+				if(territory.getRecruit()!=0){
+					return false;
+				}
+			}
+		}
+		System.out.println("ALL RECRUITMENT DONE");
+		musteringPhase=false;
 		return true;
 	}
 }

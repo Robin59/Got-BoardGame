@@ -120,6 +120,12 @@ public class GameOfThronesController extends JogreController {
     			if (gameOfThronesComponent.getTerritory(e.getX(),e.getY())!=null){
     				//
     				switch(model.getPhase()){
+    				case 0 : 
+    					if(model.canRecruit(gameOfThronesComponent.getTerritory(e.getX(),e.getY()), getSeatNum())){
+    						System.out.println("Can recruit");
+    						playerChoices.recruit(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
+    					}
+    					break;
     				case 1 :
     					// on selectionne un territoire et on le passe en parametre de canGiveOrder(teritoir, numJoueur)
     					if(model.canGiveOrder(gameOfThronesComponent.getTerritory(e.getX(),e.getY()), getSeatNum())){
@@ -198,13 +204,21 @@ public class GameOfThronesController extends JogreController {
     						sendProperty(territory.getName(),order[0],order[1]);
     					}
     				sendProperty ("endProg",getSeatNum());
-    				model.endProg();//encore utile ?
+    				model.endProg();
     				break;
-    			case 2 :
-    				sendProperty("cancelOrder",playerChoices.getRelatedTerr().getName());//on envoi le message
-    				playerChoices.getRelatedTerr().rmOrder();// on supprime l'ordre
-    				model.nextPlayer();
-    				playerChoices.blank();
+    			case 2 : 
+    				if(model.getPhase()==0){// on teste si on est pas dans la phase westeros, donc recrutement
+    					playerChoices.getRelatedTerr().recruitmentDone();
+    					if(model.allRecruitementDone()){//on teste si tous les recrutement sont bon 
+    						String card = model.choseCard();
+        					playerChoices.westerosCard(card);
+        					sendProperty("WesterosCard",card);
+    					}
+    				}else{
+    					sendProperty("cancelOrder",playerChoices.getRelatedTerr().getName());
+    					playerChoices.getRelatedTerr().rmOrder();
+    					model.nextPlayer();
+    				}
     				break;
     			case 3 :
     				model.troopSend(1,0,0,0);
@@ -286,27 +300,39 @@ public class GameOfThronesController extends JogreController {
     				break;
     			case 20 :
     				playerChoices.getRelatedTerr().recruit(1);
-    				((Land)playerChoices.getRelatedTerr()).haveRecruit(1);
+    				//((Land)playerChoices.getRelatedTerr()).haveRecruit(1);
     				sendProperty("recruitFoot", playerChoices.getRelatedTerr().getName());
-    				if(playerChoices.getRelatedTerr().getOrder()==null){
+    				if(model.getMusteringPhase() && model.allRecruitementDone()){
+    					String card = model.choseCard();
+    					playerChoices.westerosCard(card);
+    					sendProperty("WesterosCard",card);
+    				}else if(!model.getMusteringPhase() && playerChoices.getRelatedTerr().getOrder()==null ){
     					model.nextPlayer();
     					//sendProperty("nextPlayer", 0);
     				}
     				break;
     			case 21 :
     				playerChoices.getRelatedTerr().recruit(2);
-    				((Land)playerChoices.getRelatedTerr()).haveRecruit(2);
+    				//((Land)playerChoices.getRelatedTerr()).haveRecruit(2);
     				sendProperty("recruitKnight", playerChoices.getRelatedTerr().getName());
-    				if(playerChoices.getRelatedTerr().getOrder()==null){
+    				if(model.getMusteringPhase() && model.allRecruitementDone()){
+    					String card = model.choseCard();
+    					playerChoices.westerosCard(card);
+    					sendProperty("WesterosCard",card);
+    				}else if(!model.getMusteringPhase() && playerChoices.getRelatedTerr().getOrder()==null){
     					model.nextPlayer();
     					//sendProperty("nextPlayer", 0);
     				}
     				break;
     			case 22 :
     				playerChoices.getRelatedTerr().recruit(3);
-    				((Land)playerChoices.getRelatedTerr()).haveRecruit(2);
+    				//((Land)playerChoices.getRelatedTerr()).haveRecruit(2);
     				sendProperty("recruitTower", playerChoices.getRelatedTerr().getName());
-    				if(playerChoices.getRelatedTerr().getOrder()==null){
+    				if(model.getMusteringPhase() && model.allRecruitementDone()){
+    					String card = model.choseCard();
+    					playerChoices.westerosCard(card);
+    					sendProperty("WesterosCard",card);
+    				}else if(!model.getMusteringPhase() && playerChoices.getRelatedTerr().getOrder()==null){
     					model.nextPlayer();
     					//sendProperty("nextPlayer", 0);
     				}
@@ -321,8 +347,6 @@ public class GameOfThronesController extends JogreController {
     					model.widingsGrow();
     				}else if(model.getCurrentCard().equals("Supply")){
     					model.supplyUpdate();
-    				}else if (model.getCurrentCard().equals("Mustering")){
-    					System.out.println("Mustering not implented yet");
     				}else if(model.getCurrentCard().equals("GameOfThrones")){
     					model.westerosCardGameOfThrones();
     				}else if(model.getCurrentCard().equals("FeastForCrows")){
@@ -346,6 +370,9 @@ public class GameOfThronesController extends JogreController {
         					model.westerosCardClashOfKings();
         					playerChoices.bidding();
         					sendProperty("ClashOfKings", 0);
+        				}else if (model.getCurrentCard().equals("Mustering")){
+        					model.mustering();
+        					sendProperty("Mustering", 0);
         				}else if (model.getCurrentCard().equals("Winter")){
     						model.westerosCardWinter();
     						String card = model.choseCard();
@@ -360,11 +387,13 @@ public class GameOfThronesController extends JogreController {
     				}
     				break;
     			}
-    			if(model.checkNewTurn() && model.getWesterosPhase()==0){
+    			if(model.getMusteringPhase()){
+    				//we do nothing
+    			}else if(model.checkNewTurn() && model.getWesterosPhase()==0){
 					String card = model.choseCard();
 					playerChoices.westerosCard(card);
 					sendProperty("WesterosCard",card);
-				}else if(model.allBidsDone()){
+				}else if( model.allBidsDone()){
 					//System.out.println("all bid dones");
 					sendProperty("bid done",0);
 					if(model.biddingResolution()){

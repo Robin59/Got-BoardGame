@@ -166,14 +166,21 @@ public abstract class Territory {
 	}
 	
 	/**
-	 * When there is a battle and the defencer lose, said if he can withdraw to the given territory
+	 * When there is a battle and the defender lose, said if he can withdraw to the given territory
 	 * @param territory
 	 * @param seatNum
 	 * @return
 	 */
 	public abstract boolean canWithdraw(Territory territory);
 	public abstract int consolidation();
+	/**
+	 * 
+	 * @return how many troops this territory can still recruit
+	 */
 	public abstract int getRecruit();
+	/**return the recruits available to the initial state*/
+	public void resetRecruit(){};
+	public void recruitmentDone(){};
 	/**
 	 * Recruit a new troop in this territory, if there was no troops before create a new one, else add the recruit to the old troop
 	 * @param troopIndex : 0 represent a boat, 1 a footman, 2 a knight, 3 a siege tower
@@ -182,6 +189,10 @@ public abstract class Territory {
 	public int getSupply(){
 		return 0;
 	}
+	/**
+	 * 
+	 * @return the influence point gived by this territory with the westeros card Game of Thrones 
+	 */
 	public int westerosCardGameOfThrones() {
 		return 0;
 	}

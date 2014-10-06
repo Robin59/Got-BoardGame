@@ -34,16 +34,18 @@ public class Land extends Territory {
 	public int consolidation() {
 		return 1+influ;
 	}
-	
+	public void resetRecruit(){
+		recruit=castle;
+	}
+	public void recruitmentDone(){
+		recruit=0;
+	};
 	public int getRecruit(){
 		return recruit;
 	}
-	public void haveRecruit(int recruitUsed){
-		recruit-=recruitUsed;
-		if(recruit<1){
-			this.rmOrder();
-		}
-	}
+	/*public void haveRecruit(int recruitUsed){
+		
+	}*/
 	@Override
 	public void recruit(int troopIndex) {
 		if(troop==null){
@@ -52,13 +54,19 @@ public class Land extends Territory {
 		switch(troopIndex){
 		case 1:
 			this.troop.addToop(0,1,0,0);
+			recruit-=1;
 			break;
 		case 2:
 			this.troop.addToop(0,0,1,0);
+			recruit-=2;
 			break;
 		case 3:
 			this.troop.addToop(0,0,0,1);
+			recruit-=2;
 			break;
+		}
+		if(recruit<1 && order!=null){
+			this.rmOrder();
 		}
 	}
 	
