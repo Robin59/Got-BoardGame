@@ -196,5 +196,12 @@ public abstract class Territory {
 	public int westerosCardGameOfThrones() {
 		return 0;
 	}
+	
+	/**Remove the family owner of this land,
+	 * be careful, this method may bug if there is there is no previous owner */
+	public void removeOwner(){
+		this.owner.removeTerritory(this);
+		this.owner=null;
+	}
 }
 	

@@ -376,6 +376,7 @@ public class GameOfThronesModel extends JogreModel {
 			territory1.mouveTroops(territory2,boat,foot,knigth, siege );
 			if(territory1.getTroup()==null){// dans le cas où il n'y a plus de troupes on supprime l'ordre
 				territory1.rmOrder();
+				territory1.removeOwner();
 				nextPlayer();
 			}
 		}
@@ -435,7 +436,7 @@ public class GameOfThronesModel extends JogreModel {
 	 * - le nombre de chateau
 	 */
 	public void updateLabel(){
-		String text= new String("<html>Turn: "+turn+"        Wildings: "+wildings+" ");
+		String text= new String("<html>Turn: "+turn+"        Wildings: "+wildings+"  ");
 		switch(phase){
 		case 0:
 			text+=" Westeros phase";
