@@ -461,7 +461,7 @@ public class GameOfThronesModel extends JogreModel {
 		}
 		text+="<br>";
 		for(Family family : families){
-			text+="<br>"+family.getName()+" Infulence : "+family.getInflu()+" Supply : "+family.getSupply();
+			text+="<br>"+family.getName()+" Infulence : "+family.getInflu()+", Supply : "+family.getSupply()+", forteress : "+howManyCastle(family);
 		}
 		
 		text+="<html>";
@@ -836,7 +836,20 @@ public class GameOfThronesModel extends JogreModel {
 		}
 	}
 
-
+	/**
+	 * This method tell how many catle(fort and stronghold) have a family
+	 * @param family
+	 * @return the number of castle
+	 */
+	private int howManyCastle(Family family){
+		int res=0;
+		for(Territory territory : family.getTerritories()){
+			if(territory.getCastle()>0){
+				res++;
+			}
+		}
+		return res;
+	}
 	
 
 
