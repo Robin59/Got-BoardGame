@@ -311,5 +311,23 @@ public class Family {
 		ordersAvailable.add(new Order(false,0,0,OrderType.CON));
 		ordersAvailable.add(new Order(true,0,0,OrderType.CON));
 	}
+
+	/**this method remove the supports orders*/
+	public void removeSupportOrder() {
+		ordersAvailable= new LinkedList<Order>();
+		ordersAvailable.add(new Order(false,1,0,OrderType.DEF));
+		ordersAvailable.add(new Order(false,1,0,OrderType.DEF));
+		ordersAvailable.add(new Order(true,2,0,OrderType.DEF));
+		ordersAvailable.add(new Order(false,0,0,OrderType.ATT));
+		ordersAvailable.add(new Order(false,0,-1,OrderType.ATT));
+		ordersAvailable.add(new Order(true,0,1,OrderType.ATT));
+		ordersAvailable.add(new Order(false,0,0,OrderType.RAI));
+		ordersAvailable.add(new Order(false,0,0,OrderType.RAI));
+		ordersAvailable.add(new Order(true,0,0,OrderType.RAI));
+		ordersAvailable.add(new Order(false,0,0,OrderType.CON));
+		ordersAvailable.add(new Order(false,0,0,OrderType.CON));
+		ordersAvailable.add(new Order(true,0,0,OrderType.CON));
+		
+	}
 	
 }

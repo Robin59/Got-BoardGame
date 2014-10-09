@@ -530,6 +530,9 @@ public class GameOfThronesModel extends JogreModel {
 			family.setSupply(supply);
 		}
 		updateLabel();
+		if(!this.checkSupplyLimits()){
+			System.out.println("Some families exceeds their supply limits, they have to delete troops. Not yet implemented");
+		}
 	}
 
 	 private void westerosCardNotSaw() {
@@ -607,7 +610,13 @@ public class GameOfThronesModel extends JogreModel {
 		widingsGrow();
 		
 	}
-
+	public void westerosCardWebOfLies() {
+		for(Family family: families){
+			family.removeSupportOrder();
+		}
+		widingsGrow();
+		
+	}
 
 	public void widingsGrow() {
 		wildings+=2;
@@ -762,4 +771,73 @@ public class GameOfThronesModel extends JogreModel {
 		}
 		return true;
 	}
+	/**check if no family  execed its supply limit
+	 * @return true if all the families dosen't execed the supply limit, else return false
+	 * */
+	public boolean checkSupplyLimits(){
+		for(Family family : families){
+			if(!checkSupplyLimits(family)){
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	/**Said if a player is abilited to choose for the westeros card*/
+	public boolean canChose(int player) {
+		switch(westerosPhase){
+			case 1 :
+				return haveThrone(player);
+			case 2 :
+				return haveRaven(player);
+			default :
+				return player==fiefdoms[0];	
+		}
+	}
+	/**Said if a player have the throne*/
+	private boolean haveThrone(int player) {
+		return throne[0]==player;
+	}
+	
+	/**Said if a player have the raven*/
+	private boolean haveRaven(int player) {
+		return court[0]==player;
+	}
+
+	/**
+	 * Do the westeros card effect choose by the appropriate player (for cards like dark Wings dark words, put to the sword or throne of blades)  
+	 * @param b true if the player choose the choice A, false if he choose B 
+	 */
+	public void westerosCardChoice(boolean choice) {
+		switch(westerosPhase){
+		case 1:
+			if(choice){
+				supplyUpdate();
+			}else{
+				mustering();
+			}
+			widingsGrow();
+			break;
+		case 2:
+			if(choice){
+				westerosCardClashOfKings();
+			}else{
+				westerosCardGameOfThrones();
+			}
+			widingsGrow();
+			break;
+		case 3:
+			if(choice){
+				westerosCardStormOfSwords();
+			}else{
+				westerosCardRainsOfAutumn();
+			}
+			break;
+		}
+	}
+
+
+	
+
+
 }

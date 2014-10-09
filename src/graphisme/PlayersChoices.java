@@ -48,6 +48,7 @@ public class PlayersChoices extends JogreComponent {
 	private Image leftArrowImage;
 	private Image rigthArrowImage;
 	private String westerosCard;
+	private Image[] letters;
 	private int powerBid;
 	
 	public PlayersChoices (JLabel label){
@@ -69,6 +70,10 @@ public class PlayersChoices extends JogreComponent {
 		swordFlipImage =GameImages.getImage(109);
 		recruitImage= GameImages.getImage(110);
 		consoImage= GameImages.getImage(3);
+		letters=new Image[3];
+		letters[0]=GameImages.getImage(136);
+		letters[1]=GameImages.getImage(137);
+		letters[2]=GameImages.getImage(138);
 	}
 	
 //c'est la methode appelé quand on click gauche dans le playerChoice
@@ -176,6 +181,7 @@ public class PlayersChoices extends JogreComponent {
 			}else if(y>190 && x>200 && x<270){
 				return 2;
 			}
+			break;
 		case 13:
 			return 23;
 		case 14 :
@@ -187,7 +193,19 @@ public class PlayersChoices extends JogreComponent {
 				label.setText("Power Bid : "+powerBid);
 			}else if(x>240 && x<300){
 				return 24; // end of the biddings
+			}break;
+		case 15:
+			if(x>100 && x<170){
+				blank();
+				return 25;
+			}else if(x>190 && x<260){
+				blank();
+				return 26;
+			}else if(x>280 && x<350){
+				blank();
+				return 27;
 			}
+			break;
 		}
 		return 0;
 	}
@@ -273,6 +291,11 @@ public class PlayersChoices extends JogreComponent {
 			g.drawImage(leftArrowImage,100,100,null);
 			g.drawImage(rigthArrowImage,400,100,null);
 			g.drawImage(images.getPowerImage(family),240,100, null);
+			break;
+		case 15:
+			g.drawImage(letters[0],100,100,null);
+			g.drawImage(letters[1],190,100,null);
+			g.drawImage(letters[2],280,100,null);
 			break;
 		}
 	}
@@ -458,6 +481,11 @@ public class PlayersChoices extends JogreComponent {
 	
 	public int getBid(){
 		return powerBid;
+	}
+	/**Happend when a player have to make a ternair choice because of a westeros card (like dark Wings dark words, put to the sword or throne of blades)*/
+	public void westerosCardChoice(){
+		panel=15;
+		repaint();
 	}
 	/*public void withdraw(String family){
 		if(family.equals(battle.getDefFamily().getName())) label.setText("Choose a place to withdraw");

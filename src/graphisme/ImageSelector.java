@@ -77,11 +77,16 @@ public class  ImageSelector{
 		westerosCards.put("ThroneOfBlades", GameImages.getImage(115));
 		westerosCards.put("GameOfThrones", GameImages.getImage(116));
 		westerosCards.put("ClashOfKings", GameImages.getImage(117));
+		westerosCards.put("DarkWingsDarkWords", GameImages.getImage(118));
+		westerosCards.put("WebOfLies", GameImages.getImage(119));
 		westerosCards.put("Wildings", GameImages.getImage(120));
 		westerosCards.put("FeastForCrows", GameImages.getImage(121));
 		westerosCards.put("RainsOfAutumn", GameImages.getImage(122));
 		westerosCards.put("SeaOfStorms", GameImages.getImage(123));
 		westerosCards.put("StromOfSwords", GameImages.getImage(124));
+		westerosCards.put("PutToTheSword", GameImages.getImage(125));
+		
+		
 	}
 	
 	public Image[] getTroopImages(Family family){
