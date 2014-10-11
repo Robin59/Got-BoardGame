@@ -23,6 +23,7 @@ import javax.swing.JLabel;
 
 import nanoxml.XMLElement;
 
+import org.jogre.common.IGameOver;
 import org.jogre.gameOfThrones.common.GameOfThronesModel;
 import org.jogre.server.ServerConnectionThread;
 import org.jogre.server.ServerController;
@@ -64,10 +65,20 @@ public class GameOfThronesServerController extends ServerController {
      *
      * @see org.jogre.server.ServerController#gameOver(int)
      */
+
     public void gameOver (ServerConnectionThread conn, int tableNum, int resultType) {
-        // TODO - Fill in
-        //gameOver (conn, tableNum, conn.getUsername(), resultType);
+        GameOfThronesModel model = ((GameOfThronesModel)getModel(tableNum));
+        int player = getSeatNum(conn.getUsername(), tableNum);
+
+        // Status is either -1, DRAW or WIN
+        int status = -1;
+        if (model.isGameWon(player))
+            status = IGameOver.WIN;
+        // Create game over object if a win or draw
+        if (status != -1) {
+            // Update the server data
+            gameOver (conn, tableNum, conn.getUsername(), status);
+        }
     }
-    
    
 }

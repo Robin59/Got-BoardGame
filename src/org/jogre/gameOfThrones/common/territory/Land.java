@@ -12,7 +12,13 @@ public class Land extends Territory {
 	private int recruit;
 	
 	private boolean inf;//quand on met un pion d'influence (boolean ne permet pas de connaitre le proprio du pion...)
-	
+	/**
+	 * 
+	 * @param name
+	 * @param influ
+	 * @param supply
+	 * @param castle
+	 */
 	public Land(String name,int influ, int supply, int castle){
 		super(name);
 		this.influ=influ;

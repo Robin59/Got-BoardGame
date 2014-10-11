@@ -37,6 +37,7 @@ import org.jogre.gameOfThrones.common.territory.Land;
 import org.jogre.gameOfThrones.common.territory.Territory;
 import org.jogre.client.JogreController;
 import org.jogre.common.PlayerList;
+import org.jogre.common.comm.CommGameOver;
 
 
 /**
@@ -646,5 +647,20 @@ public class GameOfThronesController extends JogreController {
 	/** tell the client if this is the player's turn*/
     public boolean isThisPlayersTurn (){
     	return getSeatNum()==model.getCurrentPlayer();
+    }
+    
+ // Check to see if the game is over or not.
+    private void checkGameOver () {
+
+        // Status is either -1, DRAW or WIN
+        int status = -1;
+        if (model.isGameWon (getSeatNum()))
+            status = CommGameOver.WIN;
+
+        // Create game over object if a win or draw
+        if (status != -1 && conn != null) {
+            CommGameOver gameOver = new CommGameOver (status);
+            conn.send (gameOver);
+        }
     }
 }

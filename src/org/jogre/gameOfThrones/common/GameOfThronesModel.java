@@ -851,6 +851,9 @@ public class GameOfThronesModel extends JogreModel {
 		return res;
 	}
 	
-
+	// return true if the game is won by this player
+	public boolean isGameWon (int player) {
+		return howManyCastle(getFamily(player))>6;
+	}
 
 }
