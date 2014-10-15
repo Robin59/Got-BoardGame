@@ -27,6 +27,7 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JLabel;
 
+import org.jogre.gameOfThrones.common.Bidding;
 import org.jogre.gameOfThrones.common.Deck;
 import org.jogre.gameOfThrones.common.Family;
 import org.jogre.gameOfThrones.common.GameOfThronesModel;
@@ -123,7 +124,7 @@ public class GameOfThronesController extends JogreController {
     				switch(model.getPhase()){
     				case 0 : 
     					if(model.canRecruit(gameOfThronesComponent.getTerritory(e.getX(),e.getY()), getSeatNum())){
-    						//System.out.println("Can recruit");
+    						System.out.println("Can recruit");
     						playerChoices.recruit(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
     					}
     					break;
@@ -341,11 +342,6 @@ public class GameOfThronesController extends JogreController {
     					//sendProperty("nextPlayer", 0);
     				}}
     				break;
-    			case 24 :
-    				model.getFamily(getSeatNum()).setBid(playerChoices.getBid());
-    				sendProperty("bidSet", getSeatNum(),playerChoices.getBid());
-    				playerChoices.blank();
-    				break;
     			case 23 : 
     				if(model.getCurrentCard().equals("Summer")){
     					model.widingsGrow();
@@ -396,8 +392,13 @@ public class GameOfThronesController extends JogreController {
         					sendProperty("WesterosCard",card);
     					}
     				}
-    				break;
-    				case 25 :
+    			break;
+    			case 24 :
+    				model.getFamily(getSeatNum()).setBid(playerChoices.getBid());
+    				sendProperty("bidSet", getSeatNum(),playerChoices.getBid());
+    				playerChoices.blank();
+    			break;
+    			case 25 :
     					model.westerosCardChoice(true);
     					sendProperty("westerosCardChoiceSelected", 1);
     					if(model.getWesterosPhase()==3){
@@ -412,7 +413,7 @@ public class GameOfThronesController extends JogreController {
         					sendProperty("WesterosCard",card);
     					}
     					break;
-    				case 26 :
+    			case 26 :
     					sendProperty("westerosCardChoiceSelected", 0);
     					model.westerosCardChoice(false);
     					if(model.getWesterosPhase()==3){
@@ -423,8 +424,8 @@ public class GameOfThronesController extends JogreController {
         					playerChoices.westerosCard(card);
         					sendProperty("WesterosCard",card);
     					}
-    					break;
-    				case 27 :
+    				break;
+    			case 27 :
     					if(model.getWesterosPhase()==3){
     						model.nextPhase();
     						sendProperty("nextPhase", 0);
@@ -433,7 +434,21 @@ public class GameOfThronesController extends JogreController {
         					playerChoices.westerosCard(card);
         					sendProperty("WesterosCard",card);
     					}
-    					break;
+    				break;
+    			case 28 :
+    				//on envoi l'ordre des joueurs
+    				for(Family fam : model.getBidding().getTrack()){
+    					sendProperty("bid track", fam.getPlayer());
+    				}
+    				sendProperty("bid resolution", 0);
+    				if( model.biddingResolution()<3){
+						playerChoices.bidding();
+					}else{
+						String card = model.choseCard();
+						playerChoices.westerosCard(card);
+						sendProperty("WesterosCard",card);
+					}
+    				break;
     			}
     			if(model.getMusteringPhase()){
     				//we do nothing
@@ -441,15 +456,18 @@ public class GameOfThronesController extends JogreController {
 					String card = model.choseCard();
 					playerChoices.westerosCard(card);
 					sendProperty("WesterosCard",card);
-				}else if( model.allBidsDone()){
-					//System.out.println("all bid dones");
-					sendProperty("bid done",0);
-					if(model.biddingResolution()){
-						playerChoices.bidding();
-					}else{
-						String card = model.choseCard();
-						playerChoices.westerosCard(card);
-						sendProperty("WesterosCard",card);
+				}else if(model.getBidding()!=null && playerChoices.getPanel()!=16 && model.getBidding().allBidsDone()){
+					sendProperty("bid done",0);	
+					if(model.biddingSort() ){//egality and player can chose
+						if( model.biddingResolution()<3){
+							playerChoices.bidding();
+						}else {
+							String card = model.choseCard();
+							playerChoices.westerosCard(card);
+							sendProperty("WesterosCard",card);
+						}
+					}else if( model.haveThrone(getSeatNum())){
+						playerChoices.biddingEgality(model.getBidding());
 					}
 				}else{
 					//le playerChoice verifie si il doit afficher quelque chose de nouveau
@@ -602,9 +620,23 @@ public class GameOfThronesController extends JogreController {
     		model.westerosCardClashOfKings();
 			playerChoices.bidding();
     	}else if(key.equals("bid done")){
-    		if(model.biddingResolution()){
-				playerChoices.bidding();
+    		if(model.biddingSort() ){//egality and player can chose
+				if( model.biddingResolution()<3){
+					playerChoices.bidding();
+				}/*else {
+					String card = model.choseCard();
+					playerChoices.westerosCard(card);
+					sendProperty("WesterosCard",card);
+				}*/
+			}else if( model.haveThrone(getSeatNum())){
+				playerChoices.biddingEgality(model.getBidding());
 			}
+		}else if(key.equals("bid track")){
+			model.getBidding().nextFamily(value);
+		}else if(key.equals("bid resolution")){
+				if( model.biddingResolution()<3){
+					playerChoices.bidding();
+				}
 		}else if (key.equals("WesterosCardChoice") && model.canChose(getSeatNum())){
 			playerChoices.westerosCardChoice();
 		}else if (key.equals("westerosCardChoiceSelected")){
@@ -619,22 +651,6 @@ public class GameOfThronesController extends JogreController {
           }
        }
     
-    /**
-     * Implementation of the mouse released interface.
-     *
-     * @see java.awt.event.MouseListener#mouseReleased(java.awt.event.MouseEvent)
-     */
-    /*public void mouseReleased (MouseEvent e) {
-        if (isGamePlaying() && isThisPlayersTurn ()) {
-            // get mouse co-ordinates
-            int mouseX = e.getX();
-            int mouseY = e.getY();
-            
-            // if game still in progress then continue on...
-           // nextPlayer ();
-        }
-    }
-    */
     
     
     /**

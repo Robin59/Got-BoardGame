@@ -78,6 +78,7 @@ public class GameOfThronesModel extends JogreModel {
 	private Deck deck2;
 	private Deck deck3;
 	private String currentCard;
+	private Bidding bidding;
 	private int[][] supplyLimites= {{2,2,0,0,0},{3,2,0,0,0},{3,2,2,0,0},{3,2,2,2,0},{3,3,2,2,0},{4,3,2,2,0},{4,3,2,2,2}};
     /**
      * Constructor which creates the model.
@@ -624,24 +625,29 @@ public class GameOfThronesModel extends JogreModel {
 		//tester si on arrive à 12
 	}
 
-
+	/***/
 	public void westerosCardClashOfKings() {
 		biddingPhase=0;	
 		for(Family family: families){
 			family.setBid(-1);
 		}
+		bidding=new Bidding(families);
 	}
-	
-	/***/
-	public boolean biddingResolution(){
-		Family[] track=biddingSort();
+	/**
+	 * Be carreful this method have sides effects
+	 * @return A CHANGER !!!
+	 */
+	public int biddingResolution(){
+		Family[] track=bidding.getTrack();
 		int[] temp;
 		switch (biddingPhase){
 		case 0:
 			temp=throne;
+			bidding=new Bidding(families);
 			break;
 		case 1:
 			temp=fiefdoms;
+			bidding=new Bidding(families);
 			break;
 		default :
 			temp=court;
@@ -653,39 +659,25 @@ public class GameOfThronesModel extends JogreModel {
 		}
 		biddingPhase++;
 		updateLabel();
-		return biddingPhase<3;
+		return biddingPhase;
+		
+	}
+	/**
+	 * Sort the biddings and said if there is some equality
+	 * @return true if the bidding is resolve (no equality)
+	 */
+	 public boolean biddingSort(){
+		 return bidding.biddingResolution();
+	 }
+	/**
+	 * 
+	 * @return
+	 */
+	public Bidding getBidding(){
+		return bidding;
 	}
 	
-	/**sort the families in fonction of there bids*/
-	private Family[] biddingSort(){ // refaire
-		Family[] track = new Family[numberPlayers];
-		for(int i=0; i<numberPlayers;i++){
-			track[i]=getFamily(i);
-		}
-		for (int i=0;i<numberPlayers;i++){
-			int z=i;
-			for(int y=i;y<numberPlayers;y++){
-				if(track[z].getBid()<track[y].getBid()){
-					z=y;
-				}
-			}	
-			Family family = track[z];
-			track[z]=track[i];
-			track[i]=family;
-		}
-		return track;
-	}
-	public boolean allBidsDone(){
-		if(biddingPhase>2){
-			return false;
-		}
-		for(Family family: families){
-			if(family.getBid()==-1){
-				return false;
-			}
-		}
-		return true;
-	}
+	
 
 	/** initialize the mustering phase*/
 	public void mustering() {
@@ -795,7 +787,7 @@ public class GameOfThronesModel extends JogreModel {
 		}
 	}
 	/**Said if a player have the throne*/
-	private boolean haveThrone(int player) {
+	public boolean haveThrone(int player) {
 		return throne[0]==player;
 	}
 	

@@ -10,6 +10,7 @@ import org.jogre.client.awt.GameConnectionPanel;
 import org.jogre.client.awt.GameImages;
 import org.jogre.client.awt.JogreComponent;
 import org.jogre.client.awt.JogrePanel;
+import org.jogre.gameOfThrones.common.Bidding;
 import org.jogre.gameOfThrones.common.CombatantCard;
 import org.jogre.gameOfThrones.common.Family;
 import org.jogre.gameOfThrones.common.GameOfThronesModel;
@@ -49,7 +50,11 @@ public class PlayersChoices extends JogreComponent {
 	private Image rigthArrowImage;
 	private String westerosCard;
 	private Image[] letters;
+	private Image selectionBid;
+	/*use for the equality case, value = -1 if no bid selected otherwise it's the position of the bid who is selected*/
+	private int selectedBid;
 	private int powerBid;
+	private Bidding bidding;
 	
 	public PlayersChoices (JLabel label){
 		this.label=label;
@@ -57,7 +62,9 @@ public class PlayersChoices extends JogreComponent {
 		relatedTerr =null;
 		cibleTerr = null;
 		battle = null;
+		selectedBid=-1;
 		//on ajoute les images qui seront utitles
+		selectionBid= GameImages.getImage(127);
 		endTurnImage = GameImages.getImage(6);
 		dontUseImage = GameImages.getImage(7);
 		attackerImage= GameImages.getImage(4);
@@ -90,7 +97,7 @@ public class PlayersChoices extends JogreComponent {
 			if(family.allOrdersGived()){
 				endProgramation();
 			}
-		return 0;
+		break;
 		case 2 :// fin de phase de prog
 			if (x>150 && x<200 && y>50 && y<100){
 				family.ordersGived=true; 
@@ -205,7 +212,15 @@ public class PlayersChoices extends JogreComponent {
 				blank();
 				return 27;
 			}
-			break;
+		break;
+		case 16:
+			if(x>170 && x<230 && y>180){
+				selectedBid=-1;
+				return 28;
+			}else if (y<180){
+				changeTrack(x);
+			}
+		break;
 		}
 		return 0;
 	}
@@ -297,6 +312,9 @@ public class PlayersChoices extends JogreComponent {
 			g.drawImage(letters[1],190,100,null);
 			g.drawImage(letters[2],280,100,null);
 			break;
+		case 16:
+			drawBiddingTable(g);
+			break;
 		}
 	}
 	
@@ -310,7 +328,20 @@ public class PlayersChoices extends JogreComponent {
 			}
 		}
 	}
-	
+	/***/
+	private void drawBiddingTable(Graphics g){
+		int i = 10;
+		for(Family family : bidding.getTrack()){
+			g.drawImage(images.getPowerImage(family),i,100,null);
+			g.drawImage(images.getNumber(family.getBid()),i+5,110,null);
+			i+=70;
+		}
+		if (selectedBid!=-1){
+			g.drawImage(selectionBid,selectedBid*70+10,100,null);
+		}
+		g.drawImage(dontUseImage, 175,180, null);
+		repaint();
+	}
 	public Order choseOrder(int x, int y,Family family){//attraper les execptions
 		int i=(x-10)/80+(y/80)*6;
 		return family.getOrders().get(i);
@@ -325,7 +356,6 @@ public class PlayersChoices extends JogreComponent {
 				this.repaint();
 			}
 		}
-		
 		
 		public void showOrders(Family family, Territory terr) {
 			relatedTerr=terr;
@@ -487,9 +517,31 @@ public class PlayersChoices extends JogreComponent {
 		panel=15;
 		repaint();
 	}
-	/*public void withdraw(String family){
-		if(family.equals(battle.getDefFamily().getName())) label.setText("Choose a place to withdraw");
-	}*/
+	
+	public int getPanel(){
+		return panel;
+	}
+
+	/**/
+	public void biddingEgality(Bidding bidding){
+		panel=16;
+		this.bidding=bidding;
+	}
+	/*All the mechanics to change the position on the track */
+	private void changeTrack(int x){
+		int tempBid=(x-10)/70;
+		System.out.println("Dans ChangeTrack : temp ="+tempBid);
+		if(selectedBid==tempBid){//cancel the selected bid
+			selectedBid=-1;
+		}else if(selectedBid==-1 && tempBid<bidding.getTrack().length){ //select a family
+			selectedBid=tempBid;
+		}else if(tempBid<bidding.getTrack().length && bidding.getTrack()[tempBid].getBid()==bidding.getTrack()[selectedBid].getBid()){//chage the order
+			bidding.interchange(selectedBid, tempBid);
+			selectedBid=-1;
+		}
+		repaint();
+	}
+	
 }
 
 
