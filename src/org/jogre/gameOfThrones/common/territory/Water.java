@@ -40,4 +40,9 @@ public class Water extends Territory {
 			this.troop.addToop(1, 0,0,0);
 		}
 	}
+
+	@Override
+	protected boolean canGoTo(Territory territory) {
+		return territory instanceof Water && this.neighbors.contains(territory);
+	}
 }

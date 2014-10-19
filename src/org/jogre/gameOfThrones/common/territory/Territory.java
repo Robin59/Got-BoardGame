@@ -89,7 +89,7 @@ public abstract class Territory {
 		}
 		return res;
 	}
-	/*remove an order to this territory  and give it back to is owner*/
+	/**remove an order to this territory  and give it back to is owner*/
 	public void rmOrder() {
 		owner.regainOrder(order);
 		order=null;
@@ -97,15 +97,17 @@ public abstract class Territory {
 	/***/
 	public boolean canUseOrderOn(Territory territory){
 		boolean res=false;
-		if (neighbors.contains(territory)){
 			if(order.getType()==OrderType.RAI){
-				res=(territory.getOrder()!=null && territory.getOrder().getType()!=OrderType.ATT && (order.getStar() || territory.getOrder().getType()!=OrderType.DEF));
-			}else if (!order.getUse()||territory.getTroup()==null || territory.getFamily()==owner){ // attack or move cases
+				res=(neighbors.contains(territory) && territory.getOrder()!=null && territory.getOrder().getType()!=OrderType.ATT && (order.getStar() || territory.getOrder().getType()!=OrderType.DEF));
+			}else if ((!order.getUse()||territory.getTroup()==null || territory.getFamily()==owner) && (canGoTo(territory))){ // attack or move cases 
 				res=true;
 			}
-		}
 		return res;
 	}
+	
+	/** Said if a troop can go to a territory, independent to the given order*/
+	protected abstract boolean canGoTo(Territory territory);
+	
 	/** 0 for raid, 1 for move, 2 for combats*/
 	public int useOrderOn(Territory territory){ // int ou void ???
 		if(order.getType()==OrderType.RAI){
@@ -202,6 +204,23 @@ public abstract class Territory {
 	public void removeOwner(){
 		this.owner.removeTerritory(this);
 		this.owner=null;
+	}
+	
+	/*A recursive method that said if a troop can go to a land directly or by boat bridge */
+	protected Boolean navalTransport(Territory territory, List<Territory> alredyCheck){
+		alredyCheck.add(this);
+		if(neighbors.contains(territory)){
+			return true;
+		}else{
+			for(Territory terr : neighbors){
+				if(terr instanceof Water && terr.owner==this.owner && !alredyCheck.contains(terr)){
+					if(terr.navalTransport(territory, alredyCheck)){
+						return true;
+					}
+				}
+			}
+			return false;
+		}
 	}
 }
 	

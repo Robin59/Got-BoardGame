@@ -1,5 +1,8 @@
 package org.jogre.gameOfThrones.common.territory;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.jogre.gameOfThrones.common.combat.GroundForce;
 import org.jogre.gameOfThrones.common.combat.NavalTroup;
 
@@ -83,4 +86,15 @@ public class Land extends Territory {
 	public int westerosCardGameOfThrones() {
 		return influ;
 	}
+
+	@Override
+	protected boolean canGoTo(Territory territory) {
+		return territory instanceof Land && (navalTransport(territory));
+	}
+	
+	protected Boolean navalTransport(Territory territory){
+		List<Territory> alredyCheck = new LinkedList<Territory>();
+		return navalTransport(territory, alredyCheck); 
+	}
+	
 }
