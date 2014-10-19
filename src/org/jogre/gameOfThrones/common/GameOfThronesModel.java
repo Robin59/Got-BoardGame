@@ -77,6 +77,7 @@ public class GameOfThronesModel extends JogreModel {
 	private Deck deck1;
 	private Deck deck2;
 	private Deck deck3;
+	private Deck wildDeck;
 	private String currentCard;
 	private Bidding bidding;
 	private int[][] supplyLimites= {{2,2,0,0,0},{3,2,0,0,0},{3,2,2,0,0},{3,2,2,2,0},{3,3,2,2,0},{4,3,2,2,0},{4,3,2,2,2}};
@@ -109,6 +110,7 @@ public class GameOfThronesModel extends JogreModel {
         deck1=new Deck(1);
         deck2=new Deck(2);
         deck3=new Deck(3);
+        wildDeck=new Deck(0);
         updateLabel();
     }
 
@@ -186,21 +188,7 @@ public class GameOfThronesModel extends JogreModel {
     }
     
     
-    /**Check if there is some consolidation's orders, if not go to the next turn*/
-    //FAIRE EN 2 FOIS ?
-   /* public void checkCons(){
-    	boolean flag = false;
-    	for(Family family : families){
-			for (Territory territory : family.getTerritories()){
-				if(territory.getOrder()!=null /*&& !territory.getOrder().getStar()*/ //&& territory.getOrder().getType()==OrderType.CON){
-				/*	flag=true;
-				}
-			}
-    	}
-    	if(!flag){
-    		nextPhase();
-    	}
-    }*/
+    
     
     public void nextPlayer(){
     	currentPlayer = (currentPlayer+1)%numberPlayers;
@@ -474,7 +462,12 @@ public class GameOfThronesModel extends JogreModel {
 		return phase==0;	
 	}
 
-
+	public String choseWildingCard(){
+		westerosCardNotSaw();
+		currentCard=wildDeck.nextCard();
+		return currentCard;
+	}
+	
 	public String choseCard() {
 		westerosCardNotSaw();
 		switch (westerosPhase){
@@ -511,6 +504,11 @@ public class GameOfThronesModel extends JogreModel {
 		currentCard=card;
 	}
 
+	public void removeWildingCard(String card) {
+		westerosCardNotSaw();
+		wildDeck.cardPlayed(card);
+		currentCard=card;
+	}
 
 	public String getCurrentCard(){
 		return currentCard;
@@ -618,13 +616,24 @@ public class GameOfThronesModel extends JogreModel {
 		widingsGrow();
 		
 	}
-
+	public int getWildings(){
+		return wildings;
+	}
+	/**Set the wildings threat but never under 0*/
+	public void setWildings(int wildings){
+		if(wildings<0){
+			this.wildings=0;
+		}else{
+			this.wildings=wildings;
+		}
+	}
+	
 	public void widingsGrow() {
 		wildings+=2;
 		updateLabel();
 		//tester si on arrive à 12
 	}
-
+	
 	/***/
 	public void westerosCardClashOfKings() {
 		biddingPhase=0;	
@@ -633,6 +642,14 @@ public class GameOfThronesModel extends JogreModel {
 		}
 		bidding=new Bidding(families);
 	}
+	/**This method is called when there is a wildings attack*/
+	public void wildingsAttack() {
+		for(Family family: families){
+			family.setBid(-1);
+		}
+		bidding=new BiddingAgainstWild(families, wildings);
+	}
+	
 	/**
 	 * Be carreful this method have sides effects
 	 * @return A CHANGER !!!
@@ -676,7 +693,9 @@ public class GameOfThronesModel extends JogreModel {
 	public Bidding getBidding(){
 		return bidding;
 	}
-	
+	/*public void removeBidding(){
+		this.bidding=null;
+	}*/
 	
 
 	/** initialize the mustering phase*/
@@ -847,5 +866,13 @@ public class GameOfThronesModel extends JogreModel {
 	public boolean isGameWon (int player) {
 		return howManyCastle(getFamily(player))>6;
 	}
+
+
+	
+
+	
+
+
+	
 
 }

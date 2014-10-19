@@ -49,6 +49,7 @@ public class PlayersChoices extends JogreComponent {
 	private Image leftArrowImage;
 	private Image rigthArrowImage;
 	private String westerosCard;
+	private String wilidingsCard;
 	private Image[] letters;
 	private Image selectionBid;
 	/*use for the equality case, value = -1 if no bid selected otherwise it's the position of the bid who is selected*/
@@ -221,6 +222,8 @@ public class PlayersChoices extends JogreComponent {
 				changeTrack(x);
 			}
 		break;
+		case 17:
+			return 29;
 		}
 		return 0;
 	}
@@ -315,6 +318,9 @@ public class PlayersChoices extends JogreComponent {
 		case 16:
 			drawBiddingTable(g);
 			break;
+		case 17:
+			g.drawImage(images.getWildingCardImage(wilidingsCard),100,0,null);
+			break;
 		}
 	}
 	
@@ -333,6 +339,7 @@ public class PlayersChoices extends JogreComponent {
 		int i = 10;
 		for(Family family : bidding.getTrack()){
 			g.drawImage(images.getPowerImage(family),i,100,null);
+			//System.out.println(family.getBid());
 			g.drawImage(images.getNumber(family.getBid()),i+5,110,null);
 			i+=70;
 		}
@@ -376,6 +383,8 @@ public class PlayersChoices extends JogreComponent {
 	public void blank() {
 		relatedTerr=null;//vraiment utile ?
 		cibleTerr=null;
+		//westerosCard=null;
+		wilidingsCard=null;
 		panel=0;
 		label.setText("");
 		repaint();
@@ -495,7 +504,14 @@ public class PlayersChoices extends JogreComponent {
 			repaint();
 		}
 	}
-
+	
+	
+	public void wilidingsCard(String card) {
+		panel=17;
+		wilidingsCard=card;
+		repaint();
+	}
+	
 	public void westerosCard(String card) {
 		panel=13;
 		westerosCard=card;
@@ -516,6 +532,10 @@ public class PlayersChoices extends JogreComponent {
 	public void westerosCardChoice(){
 		panel=15;
 		repaint();
+	}
+	
+	public String getWildingsCard(){
+		return wilidingsCard;
 	}
 	
 	public int getPanel(){

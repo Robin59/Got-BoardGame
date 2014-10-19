@@ -1,7 +1,7 @@
 package org.jogre.gameOfThrones.common;
 
 public class Bidding {
-	private Family[] families;
+	protected Family[] families;
 	private int numberPlayers;
 	private Family[] track;
 	/*only use for the sending property, indicate which case of the track we need to change*/

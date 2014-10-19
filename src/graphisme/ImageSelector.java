@@ -27,6 +27,7 @@ public class  ImageSelector{
 	private Image[] numberImages;
 	private Map<String,Image> playerCards;
 	private Map<String,Image> westerosCards;
+	private Map<String,Image> wildingsCards;
 	
 	private ImageSelector (){
 		//images des troupes
@@ -56,7 +57,7 @@ public class  ImageSelector{
 		for (int i=0;i<6;i++){
 			powerImages[i]=GameImages.getImage(128+i);
 		}
-		numberImages = new Image[5];
+		numberImages = new Image[6];
 		for (int i=0;i<5;i++){
 			numberImages[i]=GameImages.getImage(139+i);
 		}
@@ -91,6 +92,10 @@ public class  ImageSelector{
 		westerosCards.put("StromOfSwords", GameImages.getImage(124));
 		westerosCards.put("PutToTheSword", GameImages.getImage(125));
 		
+		//Wildings Cards
+		wildingsCards= new HashMap<String, Image>();
+		wildingsCards.put("SilenceAtTheWall", GameImages.getImage(160));
+		wildingsCards.put("SkinchangerScout", GameImages.getImage(161));
 		
 	}
 	
@@ -154,6 +159,10 @@ public class  ImageSelector{
 	}
 	
 	public Image getNumber(int i){
-		return numberImages[i-1];
+		return numberImages[i];
+	}
+
+	public Image getWildingCardImage(String wildingsCard) {
+		return wildingsCards.get(wildingsCard);
 	}
 }

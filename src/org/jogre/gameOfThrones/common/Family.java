@@ -110,6 +110,7 @@ public class Family {
 		return player;
 	}
 	
+	/**This method add influence to the current influence points*/
 	public void gainInflu(int influ){
 		inflPoint+=influ;
 	}
