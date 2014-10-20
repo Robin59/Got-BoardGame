@@ -327,34 +327,50 @@ public class GameOfThronesModel extends JogreModel {
 
   //sert a la construction du plateau en fonction du nb de joueur
   	private void familiesConstruction(int playerNumber){
-  		// On place les starks (changer pour le joueur 3)
+  		//House Baratheon
   		families[0]=new Family(0);
   		throne[0]=0;
-  		fiefdoms[0]=0;
-  		court[0]=0;
-  		families[0].setFiefdomsTrack(1);
-        boardModel.getTerritory("Winterfell").setTroup(new GroundForce(families[0],1,1,0));
-        boardModel.getTerritory("White Harbor").setTroup(new GroundForce(families[0],1,0,0));
-        boardModel.getTerritory("Shivering Sea").setTroup(new NavalTroup(families[0],1));
-        //ajout des cartes 
-        families[0].addCard(new CombatantCard("Mellissandre",1, 1, 0));
+  		fiefdoms[1]=0;
+  		court[2]=0;
+  		families[0].setFiefdomsTrack(2);
+  		boardModel.getTerritory("Dragonstone").setTroup(new GroundForce(families[0],1,1,0));
+  		boardModel.getTerritory("Kingswood").setTroup(new GroundForce(families[0],1,0,0));
+  		boardModel.getTerritory("Shipbreaker Bay").setTroup(new NavalTroup(families[0],2));
+  		//Baratheon's cards
+  		families[0].addCard(new CombatantCard("Mellissandre",1, 1, 0));
         families[0].addCard(new CombatantCard("Salladhor",1, 0, 0));
         families[0].addCard(new CombatantCard("Davos",2, 0, 0));
         families[0].addCard(new CombatantCard("Brienne",2, 1, 1));
-        if(playerNumber>1){
-        	court[1]=0;
-        	families[1]=new Family(1);
-          	throne[1]=1;
-          	fiefdoms[1]=1;
-      		court[0]=1;
-          	families[1].setFiefdomsTrack(2);
-        	families[1].addCard(new CombatantCard("Tyrion",1, 0, 0));
-          	families[1].addCard(new CombatantCard("Kevan",1, 0, 0));
-          	families[1].addCard(new CombatantCard("The Hound",2, 0, 2));
-          	families[1].addCard(new CombatantCard("Jaime",2, 1, 0));
-          	boardModel.getTerritory("Karhold").setTroup(new GroundForce(families[1],1,0,0));
-          }
-          this.supplyUpdate();
+  		// House Starks 
+  		families[2]=new Family(2);
+  		throne[2]=2;
+  		fiefdoms[0]=2;
+  		court[1]=2;
+  		families[2].setFiefdomsTrack(1);
+        boardModel.getTerritory("Winterfell").setTroup(new GroundForce(families[2],1,1,0));
+        boardModel.getTerritory("White Harbor").setTroup(new GroundForce(families[2],1,0,0));
+        boardModel.getTerritory("Shivering Sea").setTroup(new NavalTroup(families[2],1));
+        // Stark's cards
+        families[2].addCard(new CombatantCard("Robb",3, 0, 0));
+        //Lannister
+       	families[1]=new Family(1);
+       	court[0]=1;
+        throne[1]=1;
+      	fiefdoms[2]=1;
+   		families[1].setFiefdomsTrack(3);
+   		boardModel.getTerritory("Lannisport").setTroup(new GroundForce(families[1],1,1,0));
+   		boardModel.getTerritory("Stoney Sept").setTroup(new GroundForce(families[1],1,0,0));
+   		boardModel.getTerritory("The Golden Sound").setTroup(new NavalTroup(families[1],1));
+   		// Lannister's cards
+   		families[1].addCard(new CombatantCard("Tyrion",1, 0, 0));
+   		families[1].addCard(new CombatantCard("Kevan",1, 0, 0));
+   		families[1].addCard(new CombatantCard("The Hound",2, 0, 2));
+   		families[1].addCard(new CombatantCard("Jaime",2, 1, 0));
+        
+   		if(numberPlayers>3){
+   			//House Greyjoy
+   		}
+        this.supplyUpdate();
   	}
 
 	public void troopSend(int boat, int foot, int knigth, int siege) {

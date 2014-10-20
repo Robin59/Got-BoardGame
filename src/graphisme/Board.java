@@ -276,14 +276,14 @@ public class Board {
 		territoryCoord.put("Highgarden", highgarden);
 		territoryCoord.put("Storm's End", stormeEnd);
 		territoryCoord.put("The Reach", reach);
-		territoryCoord.put("Shipbreaker", shipbreaker);
+		territoryCoord.put("Shipbreaker Bay", shipbreaker);
 		territoryCoord.put("Kingswood", kingsWood);
 		territoryCoord.put("King's Landing", kingsLanding);
 		territoryCoord.put("Blackwater Bay", blackwaterBay);
 		territoryCoord.put("Blackwater", blackwater);
 		territoryCoord.put("Searoad Marches", searoad);
 		territoryCoord.put("Crackclaw Point", crackClaw);
-		territoryCoord.put("Stoney Spet", stoneySept);
+		territoryCoord.put("Stoney Sept", stoneySept);
 		territoryCoord.put("Harrenhal", harrenhale);
 		territoryCoord.put("Dragonstone", dragonShore);
 		territoryCoord.put("The Golden Sound", goldenSound);
