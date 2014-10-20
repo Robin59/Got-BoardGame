@@ -117,9 +117,63 @@ public class Board {
 		}else if(xMouse>274 && xMouse<371 && yMouse-y>740 && yMouse-y<757){
 			return  boardModel.getTerritory("Riverrun");
 		}else if(xMouse>152 && xMouse<265 && yMouse-y>765 && yMouse-y<790){
-				return  boardModel.getTerritory("Lannisport");
+			return  boardModel.getTerritory("Lannisport");
 		}else if(xMouse>28 && xMouse<95 && yMouse-y>868 && yMouse-y<914){
 			return  boardModel.getTerritory("The Golden Sound");
+		}else if(xMouse>699 && xMouse<795 && yMouse-y>800 && yMouse-y<821){
+			return  boardModel.getTerritory("Dragonstone");
+		}else if(xMouse>381 && xMouse<468 && yMouse-y>803 && yMouse-y<824){
+			return  boardModel.getTerritory("Harrenhal");
+		}else if(xMouse>269 && xMouse<379 && yMouse-y>834 && yMouse-y<857){
+			return  boardModel.getTerritory("Stoney Sept");
+		}else if(xMouse>479 && xMouse<557 && yMouse-y>849 && yMouse-y<883){
+			return  boardModel.getTerritory("Crackclaw Point");
+		}else if(xMouse>163 && xMouse<233 && yMouse-y>921 && yMouse-y<954){
+			return  boardModel.getTerritory("Searoad Marches");
+		}else if(xMouse>296 && xMouse<414 && yMouse-y>942 && yMouse-y<966){
+			return  boardModel.getTerritory("Blackwater");
+		}else if(xMouse>568 && xMouse<627 && yMouse-y>898 && yMouse-y<933){
+			return  boardModel.getTerritory("Blackwater Bay");
+		}else if(xMouse>566 && xMouse<656 && yMouse-y>998 && yMouse-y<1018){
+			return  boardModel.getTerritory("Kingswood");
+		}else if(xMouse>676 && xMouse<755 && yMouse-y>997 && yMouse-y<1040){
+			return  boardModel.getTerritory("Shipbreaker Bay");
+		}else if(xMouse>328 && xMouse<447 && yMouse-y>1066 && yMouse-y<1090){
+			return  boardModel.getTerritory("The Reach");
+		}else if(xMouse>539 && xMouse<639 && yMouse-y>1139 && yMouse-y<1157){
+			return  boardModel.getTerritory("Storm's End");
+		}else if(xMouse>101 && xMouse<223 && yMouse-y>1045 && yMouse-y<1068){
+			return  boardModel.getTerritory("Highgarden");
+		}else if(xMouse>469 && xMouse<584 && yMouse-y>954 && yMouse-y<980){
+			return  boardModel.getTerritory("King's Landing");
+		}else if(xMouse>142 && xMouse<224 && yMouse-y>1183 && yMouse-y<1204){
+			return  boardModel.getTerritory("Oldtown");
+		}else if(xMouse>276 && xMouse<404 && yMouse-y>1126 && yMouse-y<1148){
+			return  boardModel.getTerritory("Dornish Marches");
+		}else if(xMouse>493 && xMouse<621 && yMouse-y>1212 && yMouse-y<1237){
+			return  boardModel.getTerritory("Sea of Dorne");
+		}else if(xMouse>435 && xMouse<521 && yMouse-y>1126 && yMouse-y<1163){
+			return  boardModel.getTerritory("The Boneway");
+		}else if(xMouse>561 && xMouse<661 && yMouse-y>1271 && yMouse-y<1299){
+			return  boardModel.getTerritory("Sunspear");
+		}else if(xMouse>54 && xMouse<126 && yMouse-y>1297 && yMouse-y<1339){
+			return  boardModel.getTerritory("Redwyne Straights");
+		}else if(xMouse>54 && xMouse<108 && yMouse-y>1354 && yMouse-y<1395){
+			return  boardModel.getTerritory("The Arbor");
+		}else if(xMouse>199 && xMouse<294 && yMouse-y>1247 && yMouse-y<1267){
+			return  boardModel.getTerritory("Three Towers");
+		}else if(xMouse>280 && xMouse<378 && yMouse-y>1189 && yMouse-y<1207){
+			return  boardModel.getTerritory("Prince's Pass");
+		}else if(xMouse>276 && xMouse<354 && yMouse-y>1351 && yMouse-y<1372){
+			return  boardModel.getTerritory("Starfall");
+		}else if(xMouse>354 && xMouse<431 && yMouse-y>1276 && yMouse-y<1296){
+			return  boardModel.getTerritory("Yronwood");
+		}else if(xMouse>471 && xMouse<571 && yMouse-y>1324 && yMouse-y<1345){
+			return  boardModel.getTerritory("Salt Shore");
+		}else if(xMouse>137 && xMouse<366 && yMouse-y>1433 && yMouse-y<1457){
+			return  boardModel.getTerritory("West Summer Sea");
+		}else if(xMouse>484 && xMouse<696 && yMouse-y>1433 && yMouse-y<1457){
+			return  boardModel.getTerritory("East Summer Sea");
 		}else{return null;}
 	}
 	
@@ -171,12 +225,67 @@ public class Board {
 		int[] seaguard={300,638};
 		int[] twins={398,629};
 		int[] fingers={539,592};
-		int[] mountainsMoon={462,491};
+		int[] mountainsMoon={462,687};
 		int[] eyrie={578,713};
 		int[] riverrun={351,726};
 		int[] lannisport={209,834};
 		int[] goldenSound={78,838};
+		int[] dragonShore={745,829};
+		int[] harrenhale={431,829};
+		int[] stoneySept={313,860};
+		int[] crackClaw={524,826};
+		int[] searoad={194,956};
+		int[] blackwater={355,970};
+		int[] blackwaterBay={605,874};
+		int[] kingsWood={547,1025};
+		int[] shipbreaker={728,1050};
+		int[] reach={384,1042};
+		int[] stormeEnd={557,1104};
+		int[] highgarden={214,1077};
+		int[] kingsLanding={509,983};
+		int[] oldtown={173,1206};
+		int[] dornishMarches={299,1150};
+		int[] seaOfDorne={529,1238};
 		
+		int[] boneway={415,1169};
+		int[] sunspear={618,1297};
+		int[] redwyne={62,1248};
+		int[] arbor={69,1400};
+		int[] threeTowers={236,1272};
+		int[] princePass={320,1212};
+		int[] starfall={320,1328};
+		int[] yronwood={457,1279};
+		int[] saltShore={448,1341};
+		int[] westSummerSea={46,1066};
+		int[] eastSummerSea={706,1388};
+		
+		territoryCoord.put("The Boneway", boneway);
+		territoryCoord.put("Sunspear", sunspear);
+		territoryCoord.put("Redwyne Straights", redwyne);
+		territoryCoord.put("The Arbor", arbor);
+		territoryCoord.put("Starfall", starfall);
+		territoryCoord.put("Three Towers", threeTowers);
+		territoryCoord.put("Prince's Pass", princePass);
+		territoryCoord.put("Yronwood", yronwood);
+		territoryCoord.put("West Summer Sea", westSummerSea);
+		territoryCoord.put("East Summer Sea", eastSummerSea);
+		territoryCoord.put("Salt Shore", saltShore);
+		territoryCoord.put("Sea of Dorne", seaOfDorne);
+		territoryCoord.put("Dornish Marches", dornishMarches);
+		territoryCoord.put("Oldtown", oldtown);
+		territoryCoord.put("Highgarden", highgarden);
+		territoryCoord.put("Storm's End", stormeEnd);
+		territoryCoord.put("The Reach", reach);
+		territoryCoord.put("Shipbreaker", shipbreaker);
+		territoryCoord.put("Kingswood", kingsWood);
+		territoryCoord.put("King's Landing", kingsLanding);
+		territoryCoord.put("Blackwater Bay", blackwaterBay);
+		territoryCoord.put("Blackwater", blackwater);
+		territoryCoord.put("Searoad Marches", searoad);
+		territoryCoord.put("Crackclaw Point", crackClaw);
+		territoryCoord.put("Stoney Spet", stoneySept);
+		territoryCoord.put("Harrenhal", harrenhale);
+		territoryCoord.put("Dragonstone", dragonShore);
 		territoryCoord.put("The Golden Sound", goldenSound);
 		territoryCoord.put("Lannisport", lannisport);
 		territoryCoord.put("Riverrun", riverrun);
