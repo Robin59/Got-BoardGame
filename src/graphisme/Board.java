@@ -179,7 +179,7 @@ public class Board {
 		}else if(xMouse>469 && xMouse<512 && yMouse-y>445 && yMouse-y<495){
 			return  boardModel.getTerritory("White Harbor's Port");
 		}else if(xMouse>166 && xMouse<213 && yMouse-y>607 && yMouse-y<652){
-			return  boardModel.getTerritory("Pike's Port");
+			return  boardModel.getTerritory("Pyke's Port");
 		}else if(xMouse>724 && xMouse<770 && yMouse-y>903 && yMouse-y<945){
 			return  boardModel.getTerritory("Dragonstone's Port");
 		}else if(xMouse>134 && xMouse<174 && yMouse-y>807 && yMouse-y<849){
@@ -276,7 +276,7 @@ public class Board {
 		//ports
 		int[] winterfellPort={221,168};
 		int[] whitHarborPort={480,463};
-		int[] pykePort={190,620};
+		int[] pykePort={185,617};
 		int[] dragonstonePort={746,918};
 		int[] stormEndPort={629,1105};
 		int[] lannisportPort={154,822};

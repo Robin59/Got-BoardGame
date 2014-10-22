@@ -68,7 +68,7 @@ public class BoardModel {
 		//ports
 		Territory winterfellPort= new Port("Winterfell's Port");
 		Territory whiteHarborPort= new Port("White Harbor's Port");
-		Territory pikePort= new Port("Pike's Port");
+		Territory pikePort= new Port("Pyke's Port");
 		Territory dragonstonePort= new Port("Dragonstone's Port");
 		
 		Territory lannisportPort= new Port("Lannisport's Port");
@@ -403,7 +403,7 @@ public class BoardModel {
 		board.put("West Summer Sea", WestSummerSea);
 		board.put("Winterfell's Port", winterfellPort);
 		board.put("White Harbor's Port", whiteHarborPort);
-		board.put("Pike's Port", pikePort);
+		board.put("Pyke's Port", pikePort);
 		board.put("Dragonstone's Port", dragonstonePort);
 		board.put("Storm's End's Port", StormsEnd);
 		board.put("Oldtown's Port", oldtownPort);

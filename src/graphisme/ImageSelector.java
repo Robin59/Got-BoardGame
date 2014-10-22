@@ -73,6 +73,25 @@ public class  ImageSelector{
 		playerCards.put("Tyrion", GameImages.getImage(75));
 		playerCards.put("The Hound", GameImages.getImage(76));
 		playerCards.put("Jaime", GameImages.getImage(77));
+		playerCards.put("Gregor", GameImages.getImage(78));
+		playerCards.put("Tywin", GameImages.getImage(79));
+		//stark
+		playerCards.put("Catelyn", GameImages.getImage(80));
+		playerCards.put("BlackFish", GameImages.getImage(81));
+		playerCards.put("Rodrick", GameImages.getImage(82));
+		playerCards.put("Roose", GameImages.getImage(83));
+		playerCards.put("GreatJon", GameImages.getImage(84));
+		playerCards.put("Robb", GameImages.getImage(85));
+		playerCards.put("Eddard", GameImages.getImage(86));
+		//greyjoy
+		playerCards.put("Aeron", GameImages.getImage(87));
+		playerCards.put("Asha", GameImages.getImage(88));
+		playerCards.put("Dagmar", GameImages.getImage(89));
+		playerCards.put("Balon", GameImages.getImage(90));
+		playerCards.put("Theon", GameImages.getImage(91));
+		playerCards.put("Victarion", GameImages.getImage(92));
+		playerCards.put("Euron", GameImages.getImage(93));
+		
 		
 		//westeros Cards
 		westerosCards= new HashMap<String, Image>();

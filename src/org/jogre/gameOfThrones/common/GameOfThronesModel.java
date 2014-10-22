@@ -351,7 +351,13 @@ public class GameOfThronesModel extends JogreModel {
         boardModel.getTerritory("White Harbor").setTroup(new GroundForce(families[2],1,0,0));
         boardModel.getTerritory("Shivering Sea").setTroup(new NavalTroup(families[2],1));
         // Stark's cards
+        families[2].addCard(new CombatantCard("Catelyn",0, 0, 0));
+        families[2].addCard(new CombatantCard("BlackFish",1, 0, 0));
+        families[2].addCard(new CombatantCard("Rodrick",1, 0, 2));
+        families[2].addCard(new CombatantCard("Bolton",2, 0, 0));
+        families[2].addCard(new CombatantCard("GreatJon",2, 1, 0));
         families[2].addCard(new CombatantCard("Robb",3, 0, 0));
+        families[2].addCard(new CombatantCard("Eddard",4, 2, 0));
         //Lannister
        	families[1]=new Family(1);
        	court[0]=1;
@@ -362,13 +368,41 @@ public class GameOfThronesModel extends JogreModel {
    		boardModel.getTerritory("Stoney Sept").setTroup(new GroundForce(families[1],1,0,0));
    		boardModel.getTerritory("The Golden Sound").setTroup(new NavalTroup(families[1],1));
    		// Lannister's cards
+   		families[1].addCard(new CombatantCard("Cersei",0, 0, 0));
    		families[1].addCard(new CombatantCard("Tyrion",1, 0, 0));
    		families[1].addCard(new CombatantCard("Kevan",1, 0, 0));
    		families[1].addCard(new CombatantCard("The Hound",2, 0, 2));
    		families[1].addCard(new CombatantCard("Jaime",2, 1, 0));
+   		families[1].addCard(new CombatantCard("Gregor",3, 3, 0));
+   		families[1].addCard(new CombatantCard("Tywin",4, 0, 0));
         
    		if(numberPlayers>3){
    			//House Greyjoy
+   			families[3]=new Family(3);
+   	       	court[3]=3;
+   	        throne[3]=3;
+   	      	fiefdoms[0]=3;
+   	   		families[3].setFiefdomsTrack(1);
+   	   		boardModel.getTerritory("Pike").setTroup(new GroundForce(families[3],1,1,0));
+   	   		boardModel.getTerritory("GreyWater Watch").setTroup(new GroundForce(families[3],1,0,0));
+   	   		boardModel.getTerritory("Pyke's Port").setTroup(new NavalTroup(families[3], 1));
+   	   		boardModel.getTerritory("Ironman's Bay").setTroup(new NavalTroup(families[3], 1));
+   	   		//Greyjoy cards
+   	   		families[3].addCard(new CombatantCard("Aeron",0,0,0));
+   	   		families[3].addCard(new CombatantCard("Asha",1,0,0));
+   	   		families[3].addCard(new CombatantCard("Dagmar",1,1,1));
+   	   		families[3].addCard(new CombatantCard("Theon",2,0,0));
+   	   		families[3].addCard(new CombatantCard("Baelon",2,0,0));
+   	   		families[3].addCard(new CombatantCard("Victarion",3,0,0));
+   	   		families[3].addCard(new CombatantCard("Euron",4,1,0));
+   	   		
+   	   		// tracks actualisation
+   	   		fiefdoms[1]=2;
+	   		families[2].setFiefdomsTrack(2);
+	   		fiefdoms[2]=0;
+	   		families[0].setFiefdomsTrack(3);
+	   		fiefdoms[3]=1;
+	   		families[1].setFiefdomsTrack(4);
    		}
         this.supplyUpdate();
   	}
