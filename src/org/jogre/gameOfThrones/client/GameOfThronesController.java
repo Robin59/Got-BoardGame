@@ -174,9 +174,11 @@ public class GameOfThronesController extends JogreController {
     						case 2:
     							playerChoices.attackTo(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
     							model.battle(playerChoices.getRelatedTerr(),gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
-    							//ICI IL faut indiquer les info aux autres joueurs
     							sendProperty("mvInitiated", playerChoices.getRelatedTerr().getName());
     							sendProperty("battleInitiated", gameOfThronesComponent.getTerritory(e.getX(),e.getY()).getName());
+    							break;
+    						case 3://on a clicke sur le territoire de départ, on revient sur la croix
+    							playerChoices.orderSelected(playerChoices.getRelatedTerr());
     							break;
     						}
     						gameOfThronesComponent.repaint();

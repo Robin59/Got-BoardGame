@@ -98,23 +98,29 @@ public abstract class Territory {
 		owner.regainOrder(order);
 		order=null;
 	}
-	/***/
-	public boolean canUseOrderOn(Territory territory){
-		boolean res=false;
-			if(order.getType()==OrderType.RAI){
-				res=(neighbors.contains(territory) && territory.getOrder()!=null && territory.getOrder().getType()!=OrderType.ATT && (order.getStar() || territory.getOrder().getType()!=OrderType.DEF));
-			}else if ((((!order.getUse()||territory.getTroup()==null) && !(territory instanceof Port)) || territory.getFamily()==owner) && (canGoTo(territory))){ // attack or move cases 
-				res=true;
-			}
-		return res;
-	}
 	
+	/**
+	 * During the execution's phase, when an order(raid or march) is already selected(from this territory), say if it can be use on the given territory
+	 * @param territory
+	 * @return true if the order from this territory can be to given territory
+	 */
+	public boolean canUseOrderOn(Territory territory){
+		if(territory==this){
+			return true;
+		}else if(order.getType()==OrderType.RAI){
+			return (neighbors.contains(territory) && territory.getOrder()!=null && territory.getOrder().getType()!=OrderType.ATT && (order.getStar() || territory.getOrder().getType()!=OrderType.DEF));
+		}else{
+			return((((!order.getUse()||territory.getTroup()==null) && !(territory instanceof Port)) || territory.getFamily()==owner) && (canGoTo(territory))); // attack or move cases 
+		}
+	}
 	/** Said if a troop can go to a territory, independent to the given order*/
 	protected abstract boolean canGoTo(Territory territory);
 	
 	/** 0 for raid, 1 for move, 2 for combats*/
 	public int useOrderOn(Territory territory){ // int ou void ???
-		if(order.getType()==OrderType.RAI){
+		if(this==territory){
+			return 3;
+		}else if(order.getType()==OrderType.RAI){
 			territory.rmOrder();
 			this.rmOrder();
 			return 0;
