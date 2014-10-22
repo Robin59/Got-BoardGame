@@ -50,7 +50,7 @@ import org.jogre.common.comm.CommGameOver;
  */
 public class GameOfThronesController extends JogreController {
 
-	//private boolean translate;
+	
 	// utiliser pour sauver les coordonées de la souris quand necessaire
 	private int xMouse;
 	private int yMouse;
@@ -199,15 +199,15 @@ public class GameOfThronesController extends JogreController {
     			//Quand un joueur a donnée tous ses ordres (durant la phase1) on les envois et on l'indique au autres
     			switch (choice){
     			case 1 :
-    					Family family =model.getFamily(getSeatNum());
-    					for(Territory territory : family.getTerritories() )
-    					{	
-    						int[] order =territory.getOrder().getOrderInt();
-    						sendProperty(territory.getName(),order[0],order[1]);
-    					}
-    				sendProperty ("endProg",getSeatNum());
-    				model.endProg();
-    				break;
+    				Family family =model.getFamily(getSeatNum());
+    				for(Territory territory : family.getTerritories() )
+    				{	
+    					int[] order =territory.getOrder().getOrderInt();
+    					sendProperty(territory.getName(),order[0],order[1]);
+   					}
+   					sendProperty ("endProg",getSeatNum());
+   					model.endProg();
+   				break;
     			case 2 : 
     				if(model.getPhase()==0){// on teste si on est pas dans la phase westeros, donc recrutement
     					playerChoices.getRelatedTerr().recruitmentDone();

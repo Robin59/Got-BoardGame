@@ -156,7 +156,6 @@ public class GameOfThronesModel extends JogreModel {
     		//ici on test si on arrive au tour 11 et on fini le jeu dans ce cas
     		//sinon, on retire tous les ordres des territoires et on les redonnes aux joueurs
     		for (Family family : families){
-    			
     			family.ordersBack();
     		}
     	}
@@ -177,7 +176,10 @@ public class GameOfThronesModel extends JogreModel {
 			 nextInternPhase();
 		 }
     }
-   
+   /**
+    * check if the current player can play an order during this part of the execution's phase
+    * @return true if the current player can play an order during this part of the execution's phase
+    */
     private boolean checkCurrentPlayerOrder(){
     	for (Territory territory :families[getCurrentPlayer()].getTerritories()){
     		if (territory.getOrder()!=null && territory.getOrder().getType().ordinal()==internPhase){
@@ -202,8 +204,8 @@ public class GameOfThronesModel extends JogreModel {
     	return throne[currentPlayer];
     }
     
-    public boolean canGiveOrder(Territory territory, int player){ // a modifier pour verifier les troupes et non juste l'appartenance
-    	return phase==1 && (territory.getFamily()!=null) && (territory.getFamily().getPlayer()==player);
+    public boolean canGiveOrder(Territory territory, int player){
+    	return phase==1 && (territory.getFamily()!=null) && territory.getTroup()!=null &&territory.getFamily().getPlayer()==player;
     }
 
     public boolean canPlayThisOrder(Territory territory, int seatNum) {

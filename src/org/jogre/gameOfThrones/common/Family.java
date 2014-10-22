@@ -282,10 +282,10 @@ public class Family {
 	}
 	/**this method remove all orders from the territories and give them back to the player */
 	public void ordersBack(){
-		ordersGived=false;
 		for(Territory territory : territories){
 			territory.rmOrder();
 		}
+		ordersGived=false;
 		ordersAvailable= new LinkedList<Order>();
 		// we add the defence orders
 		ordersAvailable.add(new Order(false,1,0,OrderType.DEF));
