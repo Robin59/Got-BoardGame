@@ -64,6 +64,10 @@ public abstract class Territory {
 		//we remove the territory to the old owner if the troups is not its
 		if(troop!=null && (newTroup==null || newTroup.getFamily()!=troop.getFamily())){
 			troop.getFamily().removeTerritory(this);
+			// if this is a land with a port we change the owner of the troops in the port 
+			if(this instanceof Land && this.havePort()){
+				this.getPort().changeOwner(newTroup.getFamily());
+			}
 		}
 		this.troop=newTroup;
 		if(newTroup!=null){
@@ -99,7 +103,7 @@ public abstract class Territory {
 		boolean res=false;
 			if(order.getType()==OrderType.RAI){
 				res=(neighbors.contains(territory) && territory.getOrder()!=null && territory.getOrder().getType()!=OrderType.ATT && (order.getStar() || territory.getOrder().getType()!=OrderType.DEF));
-			}else if ((!order.getUse()||territory.getTroup()==null || territory.getFamily()==owner) && (canGoTo(territory))){ // attack or move cases 
+			}else if ((((!order.getUse()||territory.getTroup()==null) && !(territory instanceof Port)) || territory.getFamily()==owner) && (canGoTo(territory))){ // attack or move cases 
 				res=true;
 			}
 		return res;
@@ -199,6 +203,30 @@ public abstract class Territory {
 		return 0;
 	}
 	
+	/**
+	 * Said if this territory have a port for neighbors
+	 * @return true if this territory have a port for neighbors
+	 */
+	public boolean havePort(){
+		for(Territory territory : neighbors){
+			if(territory instanceof Port){
+				return true;
+			}
+		}
+		return false;
+	}
+	/**
+	 * Search for a port neighbors to this territory
+	 * @return null if no port is found
+	 */
+	public Port getPort(){
+		for(Territory territory : neighbors){
+			if(territory instanceof Port){
+				return (Port) territory;
+			}
+		}	
+		return null;
+	}
 	/**Remove the family owner of this land,
 	 * be careful, this method may bug if there is there is no previous owner */
 	public void removeOwner(){

@@ -65,6 +65,16 @@ public class BoardModel {
 		Territory SaltShore= new Land("Salt Shore",0,1,0);
 		Territory WestSummerSea= new Water("West Summer Sea");
 		Territory EastSummerSea= new Water("East Summer Sea");
+		//ports
+		Territory winterfellPort= new Port("Winterfell's Port");
+		Territory whiteHarborPort= new Port("White Harbor's Port");
+		Territory pikePort= new Port("Pike's Port");
+		Territory dragonstonePort= new Port("Dragonstone's Port");
+		
+		Territory lannisportPort= new Port("Lannisport's Port");
+		Territory sunspearPort= new Port("Sunspear's Port");
+		Territory stormEndPort= new Port("Storm's End's Port");
+		Territory oldtownPort= new Port("Oldtown's Port");
 		
 		//here we add neighborhoods
 		//(tout faire en double, ex : Karhold.addTerritory(Winterfell); Winterfell.addTerritory(Karhold); )
@@ -318,6 +328,25 @@ public class BoardModel {
 		WidowWatch.addTerritory(WhiteHarbor);
 		WidowWatch.addTerritory(NarrowSea);
 		WidowWatch.addTerritory(ShiveringSea);
+		//ports
+		winterfellPort.addTerritory(Winterfell);
+		winterfellPort.addTerritory(BayOfIce);
+		whiteHarborPort.addTerritory(WhiteHarbor);
+		whiteHarborPort.addTerritory(NarrowSea);
+		pikePort.addTerritory(Pike);
+		pikePort.addTerritory(IronmanBay);
+		dragonstonePort.addTerritory(Dragonstone);
+		dragonstonePort.addTerritory(Shipbreaker);
+		lannisportPort.addTerritory(Lannisport);
+		lannisportPort.addTerritory(GoldenSound);
+		stormEndPort.addTerritory(StormsEnd);
+		stormEndPort.addTerritory(Shipbreaker);
+		sunspearPort.addTerritory(Sunspear);
+		sunspearPort.addTerritory(EastSummerSea);
+		oldtownPort.addTerritory(Oldtown);
+		oldtownPort.addTerritory(RedwyneStraights);
+		
+		
 		
 		
 		// the territory are had to the map
@@ -372,6 +401,14 @@ public class BoardModel {
 		board.put("Salt Shore", SaltShore);
 		board.put("East Summer Sea", EastSummerSea);
 		board.put("West Summer Sea", WestSummerSea);
+		board.put("Winterfell's Port", winterfellPort);
+		board.put("White Harbor's Port", whiteHarborPort);
+		board.put("Pike's Port", pikePort);
+		board.put("Dragonstone's Port", dragonstonePort);
+		board.put("Storm's End's Port", StormsEnd);
+		board.put("Oldtown's Port", oldtownPort);
+		board.put("Lannisport's Port", lannisportPort);
+		board.put("Sunspear's Port", sunspearPort);
 		
 		
 	}

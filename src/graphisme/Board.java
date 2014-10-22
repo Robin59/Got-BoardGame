@@ -174,6 +174,22 @@ public class Board {
 			return  boardModel.getTerritory("West Summer Sea");
 		}else if(xMouse>484 && xMouse<696 && yMouse-y>1433 && yMouse-y<1457){
 			return  boardModel.getTerritory("East Summer Sea");
+		}else if(xMouse>199 && xMouse<240 && yMouse-y>145 && yMouse-y<195){// now the ports
+			return  boardModel.getTerritory("Winterfell's Port");
+		}else if(xMouse>469 && xMouse<512 && yMouse-y>445 && yMouse-y<495){
+			return  boardModel.getTerritory("White Harbor's Port");
+		}else if(xMouse>166 && xMouse<213 && yMouse-y>607 && yMouse-y<652){
+			return  boardModel.getTerritory("Pike's Port");
+		}else if(xMouse>724 && xMouse<770 && yMouse-y>903 && yMouse-y<945){
+			return  boardModel.getTerritory("Dragonstone's Port");
+		}else if(xMouse>134 && xMouse<174 && yMouse-y>807 && yMouse-y<849){
+			return  boardModel.getTerritory("Lannisport's Port");
+		}else if(xMouse>611 && xMouse<650 && yMouse-y>1095 && yMouse-y<1127){
+			return  boardModel.getTerritory("Storm's End's Port");
+		}else if(xMouse>85 && xMouse<125 && yMouse-y>1168 && yMouse-y<1205){
+			return  boardModel.getTerritory("Oldtown's Port");
+		}else if(xMouse>704 && xMouse<740 && yMouse-y>1298 && yMouse-y<1336){
+			return  boardModel.getTerritory("Sunspear's Port");
 		}else{return null;}
 	}
 	
@@ -246,7 +262,6 @@ public class Board {
 		int[] oldtown={173,1206};
 		int[] dornishMarches={299,1150};
 		int[] seaOfDorne={529,1238};
-		
 		int[] boneway={415,1169};
 		int[] sunspear={618,1297};
 		int[] redwyne={62,1248};
@@ -258,6 +273,15 @@ public class Board {
 		int[] saltShore={448,1341};
 		int[] westSummerSea={46,1066};
 		int[] eastSummerSea={706,1388};
+		//ports
+		int[] winterfellPort={221,168};
+		int[] whitHarborPort={480,463};
+		int[] pykePort={190,620};
+		int[] dragonstonePort={746,918};
+		int[] stormEndPort={629,1105};
+		int[] lannisportPort={154,822};
+		int[] oldtownPort={104,1179};
+		int[] sunspearport={715,1309};
 		
 		territoryCoord.put("The Boneway", boneway);
 		territoryCoord.put("Sunspear", sunspear);
@@ -308,6 +332,14 @@ public class Board {
 		territoryCoord.put("Flint's Finger", flintFiger);
 		territoryCoord.put("Sunset Sea", sunsetSea);
 		territoryCoord.put("Ironman's Bay", ironManBay);
+		territoryCoord.put("Winterfell's Port", winterfellPort);
+		territoryCoord.put("White Harbor's Port", whitHarborPort);
+		territoryCoord.put("Pyke's Port", pykePort);
+		territoryCoord.put("Dragonstone's Port", dragonstonePort);
+		territoryCoord.put("Lannisport's Port", lannisportPort);
+		territoryCoord.put("Storm's End's Port", stormEndPort);
+		territoryCoord.put("Oldtown's Port", oldtownPort);
+		territoryCoord.put("Sunspear's Port", sunspearport);
 		
 	
 	}

@@ -207,6 +207,37 @@ public class Family {
 		return cardSaw;
 	}
 	
+	/**said if this family can recruit a new troop in this territory*/
+	public boolean checkSupplyLimits(Territory territory){
+		int[][] supplyLimites= {{2,2,0,0,0},{3,2,0,0,0},{3,2,2,0,0},{3,2,2,2,0},{3,3,2,2,0},{4,3,2,2,0},{4,3,2,2,2}};
+		if(territory.getTroup()==null){
+			return true;
+		}
+		int[] supply = new int[5];
+		for(int i=0;i<5;i++){
+			supply[i]=supplyLimites[this.getSupply()][i];
+		}
+		for(Territory otherTerritory : this.getTerritories()){
+			if(otherTerritory!=territory && otherTerritory.getTroup()!=null && otherTerritory.getTroup().getEffectif()>1){
+				int i=4;
+				while(i>=0 && otherTerritory.getTroup().getEffectif()>supply[i]){
+					i--;
+				}
+				if(i==-1){ //Normalement inutile si tout le reste est bien programmé
+					return false;
+				}
+				supply[i]=0;
+			}
+		}
+		for(int sup: supply){
+			if(sup>territory.getTroup().getEffectif()){
+				return true;
+			}
+		}
+		return false;
+		}
+	
+	
 	/**remove the consolidation's orders from the ordersAivalable list*/
 	public void removeConsOrder(){
 		ordersAvailable= new LinkedList<Order>();
