@@ -40,7 +40,10 @@ public class PlayersChoices extends JogreComponent {
 	/*the cible territory when the player choice need 2 territory*/ 
 	Territory cibleTerr;
 	Battle battle;
-	private int indexCard;
+	/*The index of the selected house card. -1 if none*/
+	private int selectedHouseCard;
+	/*Said the index of the first house card show on the left during the battle*/
+	private int indexHouseCard;
 	private Family family;
 	private Image swordImage;
 	private Image swordFlipImage;
@@ -56,6 +59,8 @@ public class PlayersChoices extends JogreComponent {
 	private int selectedBid;
 	private int powerBid;
 	private Bidding bidding;
+	
+	
 	
 	public PlayersChoices (JLabel label){
 		this.label=label;
@@ -155,8 +160,17 @@ public class PlayersChoices extends JogreComponent {
 			}
 			break;
 		case 9 :
-			choseCard(x, family);
-			return 15;
+			if(x<60 && indexHouseCard>0){
+				indexHouseCard--;
+				repaint();
+			}else if(x>510 && indexHouseCard<family.getCombatantCards().size()-1){
+				indexHouseCard++;
+				repaint();
+			}else if (x>60 && x<510){
+				choseCard(x, family);
+				return 15;
+			}
+			break;
 		case 10 :
 			if (x>50 && x<140){
 				blank2();
@@ -283,12 +297,8 @@ public class PlayersChoices extends JogreComponent {
 			g.drawImage(noOneImage, 175,150, null);
 			break;
 		case 9:
-			int z =0;
-			List<CombatantCard> cards =family.getCombatantCards();
-			for (CombatantCard card : cards){
-				g.drawImage(images.getCardImage(card.getName()), (10+z*150), (0), null);
-				z++;
-			}
+			g.clearRect(0, 0, 600, 250);
+			drawHouseCards(g);
 			break;
 		case 10:
 			g.drawImage(swordImage, 50, 5, null);
@@ -324,17 +334,35 @@ public class PlayersChoices extends JogreComponent {
 		}
 	}
 	
+	/**Draw the correct troop regarding the possibility and the family*/
 	private void drawRecruit(Graphics g){
 		if(relatedTerr.getRecruit()>0){
 			g.drawImage(images.getTroopImages(family)[0],50,100,null);
 			g.drawImage(images.getTroopImages(family)[1],150,100,null);
-			if(relatedTerr.getRecruit()>1){
+			if(relatedTerr.getRecruit()>1){// A CHANGER !!!
 				g.drawImage(images.getTroopImages(family)[2],250,100,null);
 				g.drawImage(images.getTroopImages(family)[3],350,100,null);
 			}
 		}
 	}
-	/***/
+	/**
+	 * Draw the house cards of the player, plus two arrow to navigate between them
+	 * @param g
+	 */
+	private void drawHouseCards(Graphics g){
+		g.drawImage(leftArrowImage, 1,100, null);
+		g.drawImage(rigthArrowImage, 510,100, null);
+		int i=0;
+		List<CombatantCard> cards =family.getCombatantCards();
+		for (CombatantCard card : cards){
+			if(i>=indexHouseCard && i<=indexHouseCard+2){
+				g.drawImage(images.getCardImage(card.getName()), (60+(i-indexHouseCard)*150),0, null);
+			}
+			i++;
+		}
+	}
+	
+	/**Draw for the player with the throne, the different bid if there is an equality*/
 	private void drawBiddingTable(Graphics g){
 		int i = 10;
 		for(Family family : bidding.getTrack()){
@@ -349,20 +377,29 @@ public class PlayersChoices extends JogreComponent {
 		g.drawImage(dontUseImage, 175,180, null);
 		repaint();
 	}
+	
+	
+	
+	
 	public Order choseOrder(int x, int y,Family family){//attraper les execptions
 		int i=(x-10)/80+(y/80)*6;
 		return family.getOrders().get(i);
 	}
-		
-		public void choseCard(int x, Family family){
-			indexCard =(x-10)/150;
-			if (indexCard<family.getCombatantCards().size()){
-				CombatantCard card =family.getCombatantCards().get(indexCard);
-				battle.playCard(card, family);
-				panel=0;
-				this.repaint();
-			}
+	
+	/**
+	 * 
+	 * @param x
+	 * @param family
+	 */
+	public void choseCard(int x, Family family){
+		if (((x-60)/150)+indexHouseCard<family.getCombatantCards().size()){
+			selectedHouseCard =((x-60)/150)+indexHouseCard;
+			CombatantCard card =family.getCombatantCards().get(selectedHouseCard);
+			battle.playCard(card, family);
+			panel=0;
+			this.repaint();
 		}
+	}
 		
 		public void showOrders(Family family, Territory terr) {
 			relatedTerr=terr;
@@ -385,13 +422,14 @@ public class PlayersChoices extends JogreComponent {
 		cibleTerr=null;
 		//westerosCard=null;
 		wilidingsCard=null;
+		indexHouseCard=0;
 		panel=0;
 		label.setText("");
 		repaint();
 	}
 	
 	public void blank2() {
-		getGraphics().clearRect(0, 0, 600, 250);
+		//getGraphics().clearRect(0, 0, 600, 250);
 		//relatedTerr=null;//vraiment utile ?
 		panel=0;
 		label.setText("");
@@ -467,16 +505,8 @@ public class PlayersChoices extends JogreComponent {
 	// 1 indique cartes, 2 pour jouer l'épée, 3 retraite, 4 fin de combat
 	public int check(int modelState, Family family, Battle battle){
 		if(modelState==1 && battle.canPlayCard(family) ){//on verifie si on peut afficher les cartes 
-			System.out.println("SHOW CARDS !!");
-			getGraphics().clearRect(0, 0, 600, 250);
-			this.battle=battle;
-			panel=9;
-			repaint();
-			/*List<CombatantCard> cards =family.getCombatantCards();
-			for (CombatantCard card : cards){
-				getGraphics().drawImage(images.getCardImage(card.getName()), (10+x*150), (0), null);
-				x++;
-			}*/
+			//getGraphics().clearRect(0, 0, 600, 250);
+			showHouseCards(battle);
 			return 1;
 		}else if(modelState==2){
 			swordPlay(family);
@@ -489,10 +519,23 @@ public class PlayersChoices extends JogreComponent {
 		}
 		return 0;
 	}
+	/**
+	 * This method set all the parameters to show the house Cards
+	 * @param battle
+	 */
+	public void showHouseCards(Battle battle){
+		this.battle=battle;
+		selectedHouseCard=-1;
+		panel=9;
+		repaint();
+	}
 	
-	
+	/**
+	 * 
+	 * @return
+	 */
 	public int getIndexCard(){
-		return indexCard;
+		return selectedHouseCard;
 	}
 	
 	public void swordPlay(Family family){

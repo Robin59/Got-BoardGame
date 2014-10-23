@@ -32,6 +32,7 @@ import org.jogre.gameOfThrones.common.BiddingAgainstWild;
 import org.jogre.gameOfThrones.common.Deck;
 import org.jogre.gameOfThrones.common.Family;
 import org.jogre.gameOfThrones.common.GameOfThronesModel;
+import org.jogre.gameOfThrones.common.combat.Battle;
 import org.jogre.gameOfThrones.common.orders.Order;
 import org.jogre.gameOfThrones.common.orders.OrderType;
 import org.jogre.gameOfThrones.common.territory.BoardModel;
@@ -278,9 +279,9 @@ public class GameOfThronesController extends JogreController {
     				//playerChoices.blank();
     				break;
     			case 15 :
-    				if(model.getBattle().getAttFamily().getPlayer()==this.getSeatNum()){
+    				if(model.getBattle().getAttFamily().getPlayer()==this.getSeatNum() && playerChoices.getIndexCard()!=-1){
     					sendProperty("attCardPlayed",playerChoices.getIndexCard());
-    				}else {
+    				}else if (playerChoices.getIndexCard()!=-1){
     					sendProperty("defCardPlayed",playerChoices.getIndexCard());
     				}
     				break;
