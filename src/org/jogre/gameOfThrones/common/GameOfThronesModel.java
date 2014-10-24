@@ -154,15 +154,16 @@ public class GameOfThronesModel extends JogreModel {
     		 // on cherche le premier joueur a avoir un ordre de raid
     		 checkOrder();
     	}else if(phase==0){
+    		//on retire tous les ordres des territoires et on les redonnes aux joueurs
+    		for (Family family : families){
+    			family.ordersBack();
+    		}
     		turn++;//nouveau tour
     		westerosPhase=0;
     		this.westerosCardNotSaw();
     		updateLabel();
     		//ici on test si on arrive au tour 11 et on fini le jeu dans ce cas
-    		//sinon, on retire tous les ordres des territoires et on les redonnes aux joueurs
-    		for (Family family : families){
-    			family.ordersBack();
-    		}
+    		
     	}
     	updateLabel();
     }
@@ -763,13 +764,10 @@ public class GameOfThronesModel extends JogreModel {
 	public Bidding getBidding(){
 		return bidding;
 	}
-	/*public void removeBidding(){
-		this.bidding=null;
-	}*/
 	
 
 	/** initialize the mustering phase*/
-	public void mustering() {
+	public void westerosCardMustering() {
 		musteringPhase=true;
 		//return the recruits available to the initial state
 		for(Family family: families){
@@ -778,6 +776,13 @@ public class GameOfThronesModel extends JogreModel {
 			}
 		}
 	}
+	
+	/**
+	 * Said if the given player can recruit in the given territory during the mestering phase
+	 * @param territory the territory where the player want to recruit
+	 * @param player the player who want to recruit
+	 * @return true if the player can recruit in this territory
+	 */
 	public boolean canRecruit(Territory territory, int player){
 		return musteringPhase && (territory.getFamily()!=null) && (territory.getFamily().getPlayer()==player)&& territory.getRecruit()>0;
 	}
@@ -785,6 +790,12 @@ public class GameOfThronesModel extends JogreModel {
 	public boolean getMusteringPhase(){
 		return musteringPhase;
 	}
+	
+	/**
+	 * During a Westeros mustering phase, said if all the families have done theirs musterings,
+	 * also change this model by setting the boolean musteringPhase to false if all the musterings are done
+	 * @return false if there is one (or more) territory who havn't make its mustering
+	 */
 	public boolean allRecruitementDone() {
 		for(Family family: families){
 			for(Territory territory : family.getTerritories()){
@@ -895,7 +906,7 @@ public class GameOfThronesModel extends JogreModel {
 			if(choice){
 				supplyUpdate();
 			}else{
-				mustering();
+				westerosCardMustering();
 			}
 			widingsGrow();
 			break;

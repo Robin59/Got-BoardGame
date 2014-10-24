@@ -185,6 +185,7 @@ public class PlayersChoices extends JogreComponent {
 			break;
 		case 11 : 
 			if(x>50 && x<130){
+				relatedTerr.resetRecruit();
 				this.recruit(relatedTerr);
 			}else if(x>350 && x<430){
 				blank2();
@@ -410,10 +411,12 @@ public class PlayersChoices extends JogreComponent {
 			this.repaint();
 		}
 	
-	
+	/**
+	 * Show the recruit panel when a player click on a territory where he can recruit
+	 * @param territory where we can recruit 
+	 */
 	public void recruit(Territory territory){
 		relatedTerr=territory;
-		territory.resetRecruit();
 		panel=12;
 		repaint();
 	}
@@ -586,7 +589,9 @@ public class PlayersChoices extends JogreComponent {
 		return panel;
 	}
 
-	/**/
+	/**when there is a bidding equality (the player with the throne can set the players the way he want)
+	 * @param bidding the bid that the player can arrange
+	 * */
 	public void biddingEgality(Bidding bidding){
 		panel=16;
 		this.bidding=bidding;

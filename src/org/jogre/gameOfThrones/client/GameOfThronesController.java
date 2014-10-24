@@ -214,7 +214,9 @@ public class GameOfThronesController extends JogreController {
     			case 2 : 
     				if(model.getPhase()==0){// on teste si on est pas dans la phase westeros, donc recrutement
     					playerChoices.getRelatedTerr().recruitmentDone();
-    					if(model.allRecruitementDone()){//on teste si tous les recrutement sont bon 
+    					sendProperty("recruitmentDone", playerChoices.getRelatedTerr().getName());
+    					if(model.allRecruitementDone()){//on teste si tous les recrutement sont bon
+    						sendProperty("allRecruitementDone", 0);
     						String card = model.choseCard();
         					playerChoices.westerosCard(card);
         					sendProperty("WesterosCard",card);
@@ -307,9 +309,9 @@ public class GameOfThronesController extends JogreController {
     			case 20 :
     				if(model.checkSupplyLimits(getSeatNum(), playerChoices.getRelatedTerr())){
     					playerChoices.getRelatedTerr().recruit(1);
-    					//((Land)playerChoices.getRelatedTerr()).haveRecruit(1);
     					sendProperty("recruitFoot", playerChoices.getRelatedTerr().getName());
     					if(model.getMusteringPhase() && model.allRecruitementDone()){
+    						sendProperty("allRecruitementDone", 0);
     						String card = model.choseCard();
     						playerChoices.westerosCard(card);
     						sendProperty("WesterosCard",card);
@@ -324,6 +326,7 @@ public class GameOfThronesController extends JogreController {
     				playerChoices.getRelatedTerr().recruit(2);
     				sendProperty("recruitKnight", playerChoices.getRelatedTerr().getName());
     				if(model.getMusteringPhase() && model.allRecruitementDone()){
+    					sendProperty("allRecruitementDone", 0);
     					String card = model.choseCard();
     					playerChoices.westerosCard(card);
     					sendProperty("WesterosCard",card);
@@ -337,6 +340,7 @@ public class GameOfThronesController extends JogreController {
     				playerChoices.getRelatedTerr().recruit(3);
     				sendProperty("recruitTower", playerChoices.getRelatedTerr().getName());
     				if(model.getMusteringPhase() && model.allRecruitementDone()){
+    					sendProperty("allRecruitementDone", 0);
     					String card = model.choseCard();
     					playerChoices.westerosCard(card);
     					sendProperty("WesterosCard",card);
@@ -386,7 +390,7 @@ public class GameOfThronesController extends JogreController {
         					playerChoices.bidding();
         					sendProperty("ClashOfKings", 0);
         				}else if (model.getCurrentCard().equals("Mustering")){
-        					model.mustering();
+        					model.westerosCardMustering();
         					sendProperty("Mustering", 0);
         				}else if (model.getCurrentCard().equals("Winter")){
     						model.westerosCardWinter();
@@ -589,6 +593,8 @@ public class GameOfThronesController extends JogreController {
     		model.westerosCardWinter();
     		playerChoices.westerosCard(value);
     		model.removeCard(value);
+    	}else if(key.equals("recruitmentDone")){
+    		model.getBoardModel().getTerritory(value).recruitmentDone();
     	}else{
     		model.getBoardModel().getTerritory(key).useOrderOn(model.getBoardModel().getTerritory(value));
     		model.nextPlayer();
@@ -654,6 +660,10 @@ public class GameOfThronesController extends JogreController {
     	}else if(key.equals("ClashOfKings")){
     		model.westerosCardClashOfKings();
 			playerChoices.bidding();
+    	}else if(key.equals("Mustering")){
+    		model.westerosCardMustering();
+    	}else if(key.equals("allRecruitementDone")){
+    		model.allRecruitementDone();
     	}else if(key.equals("bid done")){
     		if(model.biddingSort() ){//egality and player can chose
 				if( model.biddingResolution()<3){

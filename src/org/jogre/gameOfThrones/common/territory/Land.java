@@ -43,12 +43,15 @@ public class Land extends Territory {
 	public int consolidation() {
 		return 1+influ;
 	}
+	@Override
 	public void resetRecruit(){
 		recruit=castle;
 	}
+	@Override
 	public void recruitmentDone(){
 		recruit=0;
-	};
+	}
+	@Override
 	public int getRecruit(){
 		return recruit;
 	}
