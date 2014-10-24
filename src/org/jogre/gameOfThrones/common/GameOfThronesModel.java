@@ -80,7 +80,11 @@ public class GameOfThronesModel extends JogreModel {
 	private Deck wildDeck;
 	private String currentCard;
 	private Bidding bidding;
+	/*indicate the number of troops a player can have with is current supply */
 	private int[][] supplyLimites= {{2,2,0,0,0},{3,2,0,0,0},{3,2,2,0,0},{3,2,2,2,0},{3,3,2,2,0},{4,3,2,2,0},{4,3,2,2,2}};
+	/*indicate how many orders with stars a player can use*/
+	private int[] starsLimitation;
+	
     /**
      * Constructor which creates the model.
      */
@@ -94,6 +98,7 @@ public class GameOfThronesModel extends JogreModel {
         court= new int[numberPlayers];
         boardModel = new BoardModel();// ajouter numberPlayers en parametre ????
         families=new Family[numberPlayers];
+        starsLimitation=new int[numberPlayers];
         // placer le plateau en fonction du jeu
         familiesConstruction(numberPlayers);
         // le jeu commence à la phase programation
@@ -329,8 +334,12 @@ public class GameOfThronesModel extends JogreModel {
 
   //sert a la construction du plateau en fonction du nb de joueur
   	private void familiesConstruction(int playerNumber){
+  		//the stars limitation (change after 4 players)
+  		starsLimitation[0]=3;
+  		starsLimitation[1]=2;
+  		starsLimitation[2]=1;
   		//House Baratheon
-  		families[0]=new Family(0);
+  		families[0]=new Family(0,this);
   		throne[0]=0;
   		fiefdoms[1]=0;
   		court[2]=0;
@@ -344,7 +353,7 @@ public class GameOfThronesModel extends JogreModel {
         families[0].addCard(new CombatantCard("Davos",2, 0, 0));
         families[0].addCard(new CombatantCard("Brienne",2, 1, 1));
   		// House Starks 
-  		families[2]=new Family(2);
+  		families[2]=new Family(2,this);
   		throne[2]=2;
   		fiefdoms[0]=2;
   		court[1]=2;
@@ -361,7 +370,7 @@ public class GameOfThronesModel extends JogreModel {
         families[2].addCard(new CombatantCard("Robb",3, 0, 0));
         families[2].addCard(new CombatantCard("Eddard",4, 2, 0));
         //Lannister
-       	families[1]=new Family(1);
+       	families[1]=new Family(1,this);
        	court[0]=1;
         throne[1]=1;
       	fiefdoms[2]=1;
@@ -380,7 +389,7 @@ public class GameOfThronesModel extends JogreModel {
         
    		if(numberPlayers>3){
    			//House Greyjoy
-   			families[3]=new Family(3);
+   			families[3]=new Family(3,this);
    	       	court[3]=3;
    	        throne[3]=3;
    	      	fiefdoms[0]=3;
@@ -405,6 +414,15 @@ public class GameOfThronesModel extends JogreModel {
 	   		families[0].setFiefdomsTrack(3);
 	   		fiefdoms[3]=1;
 	   		families[1].setFiefdomsTrack(4);
+	   		
+	   		if(numberPlayers>4){
+	   			//the new star's Limitation
+	   			starsLimitation[1]=3;
+	   			starsLimitation[2]=2;
+	   			starsLimitation[3]=1;
+	   			//House Tyrell
+	   		}
+	   		
    		}
         this.supplyUpdate();
   	}
@@ -913,6 +931,20 @@ public class GameOfThronesModel extends JogreModel {
 		}
 		return res;
 	}
+	
+	/**
+	 * Search the court track's position of the given family 
+	 * @param family the family wich we want to know the position
+	 * @return the court track's position (be carfull it's start from 0 to numberPlayer-1)
+	 */
+	public int getCourtPosition(int family){
+		int res=0;
+		while (court[res]!=family){
+			res++;
+		}
+		return res;
+	}
+	
 	
 	// return true if the game is won by this player
 	public boolean isGameWon (int player) {

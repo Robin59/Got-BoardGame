@@ -97,11 +97,12 @@ public class PlayersChoices extends JogreComponent {
 	public int RigthClick(int x, int y, Family family) {
 		switch (panel) {
 		case 1 :
-			family.giveOrders(relatedTerr,choseOrder(x,y,family));
-			this.blank();
-			// on regarde si tout ses teritoires on des ordres!!!
-			if(family.allOrdersGived()){
-				endProgramation();
+			if(family.giveOrders(relatedTerr,choseOrder(x,y,family))){
+				this.blank();
+				// on regarde si tout ses teritoires on des ordres!!!
+				if(family.allOrdersGived()){
+					endProgramation();
+				}
 			}
 		break;
 		case 2 :// fin de phase de prog

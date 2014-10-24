@@ -33,16 +33,17 @@ public class Family {
 	//orders 
 	private List<Order> ordersAvailable;
 	private List<Order> ordersUse;
-	//position sur les pistes 
+	//position sur les pistes A RETIRER!!!! 
 	protected int fiefdomsTrack;
+	//the model of the game
+	private GameOfThronesModel model;
 	private boolean swordUsed;
 	
 	
 	/**
-	 *Pour la creation de famille utiliser une classe abstraite et ensuite creer autant
-	 *de classes qu'il y a de famille (avec seulement le constructeur qui change) ? 
 	*/
-	public Family (int player){
+	public Family (int player, GameOfThronesModel model){
+		this.model=model;
 		combatantsAvailable=new LinkedList<CombatantCard>();
 		territories=new LinkedList<Territory>();
 		combatantsUse=new LinkedList<CombatantCard>();
@@ -132,16 +133,40 @@ public class Family {
 	}
 	/**
 	 * during the order phase, the player give order to one of this territory (with troops)
-	 * To use this methode you have to be sure that the order is available and that the troops are from the right familly 
+	 * To use this methode you have to be sure that the order is available and that the troops are from the right familly
+	 * @return true if the operation succeed, false if the order is not gived  
 	 */
-	public void giveOrders(Territory territory,Order order){
-		//on retire l'ancien ordre avant
-		if (territory.getOrder()!=null){
-			ordersAvailable.add(territory.getOrder());
-		}
+	public boolean giveOrders(Territory territory,Order order){
+		if(canPlayThisOrder(order)){
+			//on retire l'ancien ordre avant
+			if (territory.getOrder()!=null){
+				ordersAvailable.add(territory.getOrder());
+				ordersUse.remove(territory.getOrder());
+			}
 			territory.setOrder(order);
 			ordersUse.add(order);
 			ordersAvailable.remove(order);
+			return true;
+		}else return false;
+	}
+	/**
+	 * tell if this family can play the given order (for now just check that it dosn't exceed the stars limitation
+	 * @param order the order we want to use
+	 * @return true if it can be played
+	 */
+	private boolean canPlayThisOrder(Order order){
+		if(order.getStar()){
+			int starAvailable=model.getCourtPosition(player);
+			for(Order orderGived : ordersUse){
+				if(orderGived.getStar()){
+					starAvailable--;
+				}
+			}
+			return starAvailable>0;
+		}else{
+			return true;
+		}
+		
 	}
 	
 	/** verifie que tous les territoires possedés un ordre*/
