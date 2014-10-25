@@ -156,7 +156,7 @@ public class Family {
 	 */
 	private boolean canPlayThisOrder(Order order){
 		if(order.getStar()){
-			int starAvailable=model.getCourtPosition(player);
+			int starAvailable=model.getStars(player);
 			for(Order orderGived : ordersUse){
 				if(orderGived.getStar()){
 					starAvailable--;

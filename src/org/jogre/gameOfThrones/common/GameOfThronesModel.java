@@ -948,12 +948,21 @@ public class GameOfThronesModel extends JogreModel {
 	 * @param family the family wich we want to know the position
 	 * @return the court track's position (be carfull it's start from 0 to numberPlayer-1)
 	 */
-	public int getCourtPosition(int family){
+	private int getCourtPosition(int family){
 		int res=0;
 		while (court[res]!=family){
 			res++;
 		}
 		return res;
+	}
+	
+	/**
+	 * Give the maximum number of stars that a player can use 
+	 * @param family
+	 * @return
+	 */
+	public int getStars(int family){
+		return starsLimitation[getCourtPosition(family)];
 	}
 	
 	
