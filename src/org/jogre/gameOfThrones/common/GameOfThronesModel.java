@@ -366,7 +366,7 @@ public class GameOfThronesModel extends JogreModel {
         families[2].addCard(new CombatantCard("Catelyn",0, 0, 0));
         families[2].addCard(new CombatantCard("BlackFish",1, 0, 0));
         families[2].addCard(new CombatantCard("Rodrick",1, 0, 2));
-        families[2].addCard(new CombatantCard("Bolton",2, 0, 0));
+        families[2].addCard(new CombatantCard("Roose",2, 0, 0));
         families[2].addCard(new CombatantCard("GreatJon",2, 1, 0));
         families[2].addCard(new CombatantCard("Robb",3, 0, 0));
         families[2].addCard(new CombatantCard("Eddard",4, 2, 0));
@@ -505,7 +505,7 @@ public class GameOfThronesModel extends JogreModel {
 			text+=" Programation's phase";
 			break;
 		case 2:
-			text+=" Exection's phase  :  "+families[currentPlayer].getName()+"'s turn";
+			text+=" Exection's phase  :  "+families[throne[currentPlayer]].getName()+"'s turn";
 			break;
 		}
 		text+="<br>Throne track : ";

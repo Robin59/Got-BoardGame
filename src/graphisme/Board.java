@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.jogre.client.awt.GameImages;
 import org.jogre.gameOfThrones.common.GameOfThronesModel;
+import org.jogre.gameOfThrones.common.combat.Troop;
 import org.jogre.gameOfThrones.common.orders.Order;
 import org.jogre.gameOfThrones.common.orders.OrderType;
 import org.jogre.gameOfThrones.common.territory.BoardModel;
@@ -28,7 +29,7 @@ public class Board {
 	private GameOfThronesModel gameModel;
 	/** la premiere coordoné est pour la famille, la seconde pour le type (terrestre ou naval)*/
 	private ImageSelector images;
-	//les coordonnée des territoires sont rangée dans une hash table
+	/*coordinate for the troops on the board*/
 	private Map<String,int[]> territoryCoord;
 	
 	public Board (GameOfThronesModel model){
@@ -194,17 +195,42 @@ public class Board {
 	}
 	
 	/**
-	 * Affiche les troupes d'un territoir,
-	 * on a verifié qu'il y avait bien des troupes sur le territoir
-	 * @param territory
+	 * Display the troops on the given territory
+	 * but first you must to be sure that there is some troops on it
+	 * @param territory territory with troop on it
 	 * @param g
 	 */
 	private void showTroops(Territory territory , Graphics g){
 		// recupere les coordonée dans territoryCoord
 		int[] coordinate=territoryCoord.get(territory.getName());
-		g.drawImage(images.getTroopImage(territory.getFamily(), territory),coordinate[0]+x,coordinate[1]+y, null);
+		Image[] troopsImage=images.getSmallTroopsImage(territory.getFamily());
+		if(territory instanceof Water){
+			Image strength=images.getSmallNumber(territory.getTroup().getEffectif());
+			g.drawImage(troopsImage[0],coordinate[0]+x,coordinate[1]+y, null);
+			g.drawImage(strength,coordinate[0]+x+15,coordinate[1]+y+13, null);
+		}else{
+			int[] troops= territory.getTroup().getTroops();
+			int i=0;
+			if(troops[1]>0){
+				g.drawImage(troopsImage[1],coordinate[0]+x,coordinate[1]+y, null);
+				g.drawImage(images.getSmallNumber(troops[1]),coordinate[0]+x+10,coordinate[1]+y+15, null);
+				i++;
+			}
+			if(troops[2]>0){
+				g.drawImage(troopsImage[2],coordinate[i*2]+x,coordinate[i*2+1]+y, null);
+				g.drawImage(images.getSmallNumber(troops[2]),coordinate[i*2]+x+10,coordinate[i*2+1]+y+15, null);
+				i++;
+			}
+			if(troops[3]>0){
+				g.drawImage(troopsImage[3],coordinate[i*2]+x,coordinate[i*2+1]+y, null);
+				g.drawImage(images.getSmallNumber(troops[3]),coordinate[i*2]+x+10,coordinate[i*2+1]+y+15, null);
+			}
+			
+		}
 	}
-	/*on affiche tous les ordres pour les troupes*/
+	
+	
+	/**display on the boards the orders that the player can see (is own during the programation's phase, all during the execution)*/
 	public void showOrders(Graphics g){
 		for (Territory territory : boardModel.board.values()){
 			if (territory.getOrder()!=null ){
@@ -223,66 +249,75 @@ public class Board {
 	//appelé dans le constructeur uniquement pour la creation des coordonnées
 	private void coordinate(){
 		territoryCoord = new HashMap<String,int[]>();
-		int[] winterfell ={370,271};
-		int[] karhold ={623,136};
-		int[] whiteHarbor = {460,340};
+		// for Water there is 2 coordinate and for Land 6 (2*potential different kind of troop) 
+		int[] winterfell ={330,271,360,270,390,270};
+		int[] karhold ={623,136,653,136,683,136};
+		int[] whiteHarbor = {460,340,471,376,508,406};
+		
+		int[] widowsWatch ={554,369,584,369,614,369};
+		int[] stonyShore ={222,343,252,343};
+		int[] castelBlack={460,45,490,45};
+		int[] moatCailin={354,536,384,536};
+		int[] greyWater={268,515,298,515};
+		int[] flintFiger={182,521,212,521};
+		
+		
+		int[] pike={127,681,157,681};
+		int[] seaguard={300,638,330,638};
+		int[] twins={398,629,228,629};
+		int[] fingers={539,592,569,592};
+		int[] mountainsMoon={462,687,492,687};
+		int[] eyrie={578,713,608,713};
+		int[] riverrun={351,726,381,726};
+		int[] lannisport={209,834,239,834};
+		
+		int[] dragonShore={715,829,745,828};
+		int[] harrenhale={431,829,461,829};
+		int[] stoneySept={313,860,343,860};
+		int[] crackClaw={524,826,554,826};
+		int[] searoad={194,956,224,956};
+		int[] blackwater={355,970,385,970};
+		int[] kingsWood={547,1025,507,1055};
+		int[] reach={384,1042,414,1042};
+		int[] stormeEnd={557,1104,587,1104};
+		int[] highgarden={214,1077,244,1077};
+		int[] kingsLanding={509,983,539,983};
+		int[] oldtown={173,1206,203,1206};
+		int[] dornishMarches={299,1150,329,1150};
+		int[] boneway={415,1169,445,1169};
+		int[] sunspear={618,1297,648,1297};
+		
+		int[] arbor={69,1400,99,1400};
+		int[] threeTowers={236,1272,236,1272};
+		int[] princePass={320,1212,320,1212};
+		int[] starfall={320,1328,320,1328};
+		int[] yronwood={457,1279,457,1279};
+		int[] saltShore={448,1341,448,1341};
+		//sea
 		int[] shiveringSea ={674,320};
-		int[] widowsWatch ={554,369};
-		int[] stonyShore ={222,343};
-		int[] narrowSea ={692,485};
-		int[] castelBlack={460,45};
-		//bay of ice
-		int[] moatCailin={354,536};
-		int[] greyWater={268,515};
-		int[] flintFiger={182,521};
-		int[] sunsetSea={32,524};
 		int[] ironManBay={256,679};
-		int[] pike={127,681};
-		int[] seaguard={300,638};
-		int[] twins={398,629};
-		int[] fingers={539,592};
-		int[] mountainsMoon={462,687};
-		int[] eyrie={578,713};
-		int[] riverrun={351,726};
-		int[] lannisport={209,834};
-		int[] goldenSound={78,838};
-		int[] dragonShore={745,829};
-		int[] harrenhale={431,829};
-		int[] stoneySept={313,860};
-		int[] crackClaw={524,826};
-		int[] searoad={194,956};
-		int[] blackwater={355,970};
-		int[] blackwaterBay={605,874};
-		int[] kingsWood={547,1025};
-		int[] shipbreaker={728,1050};
-		int[] reach={384,1042};
-		int[] stormeEnd={557,1104};
-		int[] highgarden={214,1077};
-		int[] kingsLanding={509,983};
-		int[] oldtown={173,1206};
-		int[] dornishMarches={299,1150};
-		int[] seaOfDorne={529,1238};
-		int[] boneway={415,1169};
-		int[] sunspear={618,1297};
 		int[] redwyne={62,1248};
-		int[] arbor={69,1400};
-		int[] threeTowers={236,1272};
-		int[] princePass={320,1212};
-		int[] starfall={320,1328};
-		int[] yronwood={457,1279};
-		int[] saltShore={448,1341};
+		int[] sunsetSea={32,524};
+		int[] goldenSound={78,838};
+		int[] shipbreaker={728,1050};
+		int[] seaOfDorne={529,1238};
+		int[] narrowSea ={692,485};
 		int[] westSummerSea={46,1066};
 		int[] eastSummerSea={706,1388};
+		int[] blackwaterBay={605,874};
+		int[] bayOfIce={64,176};
 		//ports
 		int[] winterfellPort={221,168};
 		int[] whitHarborPort={480,463};
-		int[] pykePort={185,617};
+		int[] pykePort={180,614};
 		int[] dragonstonePort={746,918};
 		int[] stormEndPort={629,1105};
 		int[] lannisportPort={154,822};
 		int[] oldtownPort={104,1179};
 		int[] sunspearport={715,1309};
 		
+		
+		territoryCoord.put("Bay Of Ice", bayOfIce);
 		territoryCoord.put("The Boneway", boneway);
 		territoryCoord.put("Sunspear", sunspear);
 		territoryCoord.put("Redwyne Straights", redwyne);

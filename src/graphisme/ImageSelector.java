@@ -25,19 +25,20 @@ public class  ImageSelector{
 	private Image[] smallOrdersImages;
 	private Image[] powerImages;
 	private Image[] numberImages;
+	private Image[] smallNumberImages;
 	private Map<String,Image> playerCards;
 	private Map<String,Image> westerosCards;
 	private Map<String,Image> wildingsCards;
 	
 	private ImageSelector (){
 		//images des troupes
-		troopsImages= new Image[6][2];
-		for (int i =0; i<2;i++){
+		troopsImages= new Image[6][4];
+		for (int i =0; i<4;i++){
 			for(int y=0;y<6;y++){
-				troopsImages[y][i]= GameImages.getImage(i+y*2+30);
+				troopsImages[y][i]= GameImages.getImage(i+y*4+164);
 			}
 		}
-		//image des troupes mais plus grandes et avec les cavaliers et les tours 
+		//image des troupes mais plus grandes 
 		troopsSelectImage =new Image[6][4];
 		for (int i =0; i<4;i++){
 			for(int y=0;y<6;y++){
@@ -60,6 +61,11 @@ public class  ImageSelector{
 		numberImages = new Image[6];
 		for (int i=0;i<5;i++){
 			numberImages[i]=GameImages.getImage(139+i);
+		}
+		
+		smallNumberImages = new Image[4];
+		for (int i=0;i<4;i++){
+			smallNumberImages[i]=GameImages.getImage(160+i);
 		}
 		// les cartes de famille
 		playerCards = new HashMap<String, Image>();
@@ -113,8 +119,8 @@ public class  ImageSelector{
 		
 		//Wildings Cards
 		wildingsCards= new HashMap<String, Image>();
-		wildingsCards.put("SilenceAtTheWall", GameImages.getImage(160));
-		wildingsCards.put("SkinchangerScout", GameImages.getImage(161));
+		wildingsCards.put("SilenceAtTheWall", GameImages.getImage(188));
+		wildingsCards.put("SkinchangerScout", GameImages.getImage(189));
 		
 	}
 	
@@ -122,16 +128,9 @@ public class  ImageSelector{
 		return troopsSelectImage[family.getPlayer()];
 	}
 	
-	
-	public Image getTroopImage(Family family, Territory territory){
-		int fam=territory.getFamily().getPlayer();
-		int typ=0;
-		if (territory instanceof Water){
-			typ++;
-		}
-		return troopsImages[fam][typ];
+	public Image[] getSmallTroopsImage(Family family){
+		return troopsImages[family.getPlayer()];
 	}
-	
 	
 	/**
 	 * 
@@ -177,10 +176,23 @@ public class  ImageSelector{
 		return westerosCards.get(westerosCard);
 	}
 	
+	/**
+	 * give an image of the given number
+	 * @param i the number you want to have the image
+	 * @return
+	 */
 	public Image getNumber(int i){
 		return numberImages[i];
 	}
-
+	/**
+	 * give a small image of the given number
+	 * @param i int between 1 to 4
+	 * @return
+	 */
+	public Image getSmallNumber(int i){
+		return smallNumberImages[i-1];
+	}
+	
 	public Image getWildingCardImage(String wildingsCard) {
 		return wildingsCards.get(wildingsCard);
 	}
