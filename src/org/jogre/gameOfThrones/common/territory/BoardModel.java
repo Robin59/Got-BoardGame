@@ -16,6 +16,11 @@ public class BoardModel {
 		
 		//Territory creation
 		Territory Winterfell = new HomeLand("Winterfell",1,1);
+		Territory Pyke = new HomeLand("Pyke",1,1);
+		Territory Lannisport = new HomeLand("Lannisport",0,2);
+		Territory Dragonstone = new HomeLand("Dragonstone",1,1);
+		Territory Highgarden= new HomeLand("Highgarden",0,2);
+		Territory Sunspear= new HomeLand("Sunspear",1,1);
 		Territory CastleBlack = new Land("Castle Black",1,0,0);
 		Territory Karhold = new Land("Karhold",1,0,0);
 		Territory StonyShore = new Land("The Stony Shore",0,1,0);
@@ -29,16 +34,14 @@ public class BoardModel {
 		Territory GreyWaterWatch = new Land("GreyWater Watch",0,1,0);
 		Territory FlintFinger = new Land("Flint's Finger",0,0,1);
 		Territory sunsetSea = new Water("Sunset Sea");
-		Territory Pike = new HomeLand("Pike",1,1);
 		Territory Seaguard = new Land("Seaguard",1,1,2);
 		Territory Riverrun = new Land("Riverrun",1,1,2);
 		Territory Twins = new Land("The Twins",1,0,0);
 		Territory Fingers = new Land("The Fingers",0,1,0);
 		Territory MountainsMoon = new Land("The Moutains of the Moon",1,0,0);
 		Territory Eyrie = new Land("The Eyrie",1,1,1);
-		Territory Lannisport = new HomeLand("Lannisport",0,2);
+		
 		Territory GoldenSound = new Water("The Golden Sound");
-		Territory Dragonstone = new HomeLand("Dragonstone",1,1);
 		Territory Harrenhal = new Land("Harrenhal",1,0,1);
 		Territory StoneySept= new Land("Stoney Sept",1,0,0);
 		Territory CrackclawPoint= new Land("Crackclaw Point",0,0,1);
@@ -49,8 +52,6 @@ public class BoardModel {
 		Territory Kingswood= new Land("Kingswood",1,1,0);
 		Territory Reach= new Land("The Reach",0,0,1);
 		Territory StormsEnd= new Land("Storm's End",0,0,1);
-		Territory Highgarden= new HomeLand("Highgarden",0,2);
-		Territory Sunspear= new HomeLand("Sunspear",1,1);
 		Territory KingsLanding= new Land("King's Landing",2,0,2);
 		Territory Oldtown= new Land("Oldtown",0,0,2);
 		Territory DornishMarches= new Land("Dornish Marches",1,0,0);
@@ -246,7 +247,7 @@ public class BoardModel {
 		Twins.addTerritory(Seaguard);
 		Twins.addTerritory(MountainsMoon);
 		Twins.addTerritory(NarrowSea);
-		Pike.addTerritory(IronmanBay);
+		Pyke.addTerritory(IronmanBay);
 		Seaguard.addTerritory(Riverrun);
 		Seaguard.addTerritory(GreyWaterWatch);
 		Seaguard.addTerritory(moatCailin);
@@ -258,7 +259,7 @@ public class BoardModel {
 		Riverrun.addTerritory(Lannisport);
 		Riverrun.addTerritory(StoneySept);
 		Riverrun.addTerritory(Harrenhal);
-		IronmanBay.addTerritory(Pike);
+		IronmanBay.addTerritory(Pyke);
 		IronmanBay.addTerritory(sunsetSea);
 		IronmanBay.addTerritory(FlintFinger);
 		IronmanBay.addTerritory(GoldenSound);
@@ -333,7 +334,7 @@ public class BoardModel {
 		winterfellPort.addTerritory(BayOfIce);
 		whiteHarborPort.addTerritory(WhiteHarbor);
 		whiteHarborPort.addTerritory(NarrowSea);
-		pikePort.addTerritory(Pike);
+		pikePort.addTerritory(Pyke);
 		pikePort.addTerritory(IronmanBay);
 		dragonstonePort.addTerritory(Dragonstone);
 		dragonstonePort.addTerritory(Shipbreaker);
@@ -365,7 +366,7 @@ public class BoardModel {
 		board.put("Sunset Sea", sunsetSea);
 		board.put("Ironman's Bay", IronmanBay);
 		board.put("The Golden Sound", GoldenSound);
-		board.put("Pike", Pike);
+		board.put("Pyke", Pyke);
 		board.put("Seaguard", Seaguard);
 		board.put("Riverrun", Riverrun);
 		board.put("The Twins", Twins);

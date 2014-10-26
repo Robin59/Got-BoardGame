@@ -240,6 +240,18 @@ public abstract class Territory {
 		this.owner=null;
 	}
 	
+	/**
+	 * Indicate if this territory have a garrison
+	 * @return true if there is a garrison on this land 
+	 */
+	public boolean haveGarrison(){
+		return false;
+	}
+	/**
+	 * Destruct the garrison on this land (don't do anything if the territory isn't an instance of HomeLand)
+	 */
+	public void destructGarrison(){}
+	
 	/*A recursive method that said if a troop can go to a land directly or by boat bridge */
 	protected Boolean navalTransport(Territory territory, List<Territory> alredyCheck){
 		alredyCheck.add(this);

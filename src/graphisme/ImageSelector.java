@@ -12,20 +12,29 @@ import org.jogre.gameOfThrones.common.territory.Territory;
 import org.jogre.gameOfThrones.common.territory.Water;
 
 
-
+/**
+ * This class the images of the game, its only purpose is to select and send the right images to the other classes.
+ * It's a singleton.
+ * @author robin
+ *
+ */
 public class  ImageSelector{
 
-	/** l'unique instance de cette classe*/
+	/** the only instance of this class*/
 	public final static ImageSelector IMAGESELECTOR=new ImageSelector();
 	
-	/** la premiere coordoné est pour la famille, la seconde pour le type (naval ou terrestre)*/
+	/* small images of the troops, for the board
+	 *the first coordinate is family.getPlayer, the second is for the kind of troop (0 for boat, 1 footman, 2 knigth, 3 seige tower)*/
 	private Image[][] troopsImages;
+	/*bigger images of the troops for the playerChoice*/
 	private Image[][] troopsSelectImage;
 	private Image[] bigOrdersImages;
 	private Image[] smallOrdersImages;
 	private Image[] powerImages;
 	private Image[] numberImages;
 	private Image[] smallNumberImages;
+	/*Image of the garrisons for the board*/
+	private Map<String,Image> garrisonImages;
 	private Map<String,Image> playerCards;
 	private Map<String,Image> westerosCards;
 	private Map<String,Image> wildingsCards;
@@ -122,12 +131,30 @@ public class  ImageSelector{
 		wildingsCards.put("SilenceAtTheWall", GameImages.getImage(188));
 		wildingsCards.put("SkinchangerScout", GameImages.getImage(189));
 		
+		//the garrisons 
+		garrisonImages= new HashMap<String,Image>();
+		garrisonImages.put("Dragonstone", GameImages.getImage(30));
+		garrisonImages.put("Lannisport", GameImages.getImage(31));
+		garrisonImages.put("Winterfell", GameImages.getImage(32));
+		garrisonImages.put("Pyke", GameImages.getImage(32));
+		garrisonImages.put("Highgarden", GameImages.getImage(34));
+		garrisonImages.put("Sunspear", GameImages.getImage(35));
+		
 	}
 	
+	/**
+	 * 
+	 * @param family
+	 * @return
+	 */
 	public Image[] getTroopImages(Family family){
 		return troopsSelectImage[family.getPlayer()];
 	}
-	
+	/**
+	 * 
+	 * @param family
+	 * @return
+	 */
 	public Image[] getSmallTroopsImage(Family family){
 		return troopsImages[family.getPlayer()];
 	}
@@ -191,6 +218,15 @@ public class  ImageSelector{
 	 */
 	public Image getSmallNumber(int i){
 		return smallNumberImages[i-1];
+	}
+	
+	/**
+	 * 
+	 * @param territory
+	 * @return
+	 */
+	public Image getGarrisonImage(String territory){
+		return garrisonImages.get(territory);
 	}
 	
 	public Image getWildingCardImage(String wildingsCard) {

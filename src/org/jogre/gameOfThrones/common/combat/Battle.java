@@ -78,9 +78,14 @@ public class Battle {
 	return res;
 	}
 	
+	/**
+	 * calculate the defensive initial force (without Family cards but with support, garrison, order's bonus)
+	 * @return the defensive force
+	 */
 	public int defPower(){
 		int res =0;
 		if (defTerritory.getOrder()!=null) res=defTerritory.getOrder().getDefBonus();
+		if (defTerritory.haveGarrison()) res+=2;
 		if(groundType==2){
 			res+= defTerritory.getTroup().getEffectif();
 		}else{
@@ -126,6 +131,8 @@ public class Battle {
 	public void battleResolution(){
 		if(this.battleWinner()){
 			//on applique les effets des cartes
+			//destruction of the garrison if there's one
+			defTerritory.destructGarrison();
 			//on detruit les troups du defenceur 
 			if (destructTroops(defTerritory, (attSwords-defTowers)) && defTerritory.canWithdraw()){
 				//il choisit une retraite car il reste des troupes

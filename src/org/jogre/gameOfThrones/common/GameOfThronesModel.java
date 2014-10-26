@@ -33,6 +33,7 @@ import org.jogre.gameOfThrones.common.combat.GroundForce;
 import org.jogre.gameOfThrones.common.combat.NavalTroup;
 import org.jogre.gameOfThrones.common.orders.OrderType;
 import org.jogre.gameOfThrones.common.territory.BoardModel;
+import org.jogre.gameOfThrones.common.territory.HomeLand;
 import org.jogre.gameOfThrones.common.territory.Land;
 import org.jogre.gameOfThrones.common.territory.Territory;
 import org.jogre.gameOfThrones.common.territory.Water;
@@ -395,7 +396,7 @@ public class GameOfThronesModel extends JogreModel {
    	        throne[3]=3;
    	      	fiefdoms[0]=3;
    	   		families[3].setFiefdomsTrack(1);
-   	   		boardModel.getTerritory("Pike").setTroup(new GroundForce(families[3],1,1,0));
+   	   		boardModel.getTerritory("Pyke").setTroup(new GroundForce(families[3],1,1,0));
    	   		boardModel.getTerritory("GreyWater Watch").setTroup(new GroundForce(families[3],1,0,0));
    	   		boardModel.getTerritory("Pyke's Port").setTroup(new NavalTroup(families[3], 1));
    	   		boardModel.getTerritory("Ironman's Bay").setTroup(new NavalTroup(families[3], 1));
@@ -422,8 +423,16 @@ public class GameOfThronesModel extends JogreModel {
 	   			starsLimitation[2]=2;
 	   			starsLimitation[3]=1;
 	   			//House Tyrell
+	   		}else{	
+	   			boardModel.getTerritory("Highgarden").destructGarrison();
+	   			boardModel.getTerritory("Sunspear").destructGarrison();
 	   		}
 	   		
+   		}
+   		else{
+   			boardModel.getTerritory("Pyke").destructGarrison();
+   			boardModel.getTerritory("Highgarden").destructGarrison();
+   			boardModel.getTerritory("Sunspear").destructGarrison();
    		}
         this.supplyUpdate();
   	}
