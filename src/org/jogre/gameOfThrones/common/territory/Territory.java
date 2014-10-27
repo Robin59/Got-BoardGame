@@ -238,6 +238,7 @@ public abstract class Territory {
 	public void removeOwner(){
 		this.owner.removeTerritory(this);
 		this.owner=null;
+		this.troop=null;
 	}
 	
 	/**

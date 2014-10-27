@@ -175,10 +175,8 @@ public class GameOfThronesController extends JogreController {
     						case 2:
     							playerChoices.attackTo(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
     							model.battle(playerChoices.getRelatedTerr(),gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
-    							if(gameOfThronesComponent.getTerritory(e.getX(),e.getY()).getNeutralForce()==0){
     								sendProperty("mvInitiated", playerChoices.getRelatedTerr().getName());
     								sendProperty("battleInitiated", gameOfThronesComponent.getTerritory(e.getX(),e.getY()).getName());
-    							}
     							break;
     						case 3://on a clicke sur le territoire de départ, on revient sur la croix
     							playerChoices.orderSelected(playerChoices.getRelatedTerr());
@@ -247,9 +245,15 @@ public class GameOfThronesController extends JogreController {
     				sendProperty("troopSend", 3);playerChoices.checkPlayerChoices();
     				break;
     			case 7:
-    				model.attPrepEnd();
-    				sendProperty("attPreparationEnded", 0);
-    				//playerChoices.blank();
+    				if(model.getBattle()!=null){
+	    				model.attPrepEnd();
+	    				sendProperty("attPreparationEnded", 0);
+	    				//playerChoices.blank();
+    				}else{
+    					model.resolutionPvE();
+    					sendProperty("resolutionPvE",0);
+    					playerChoices.blank2();
+    				}
     				break;
     			case 8 :
     				model.troopSend(1,0,0,0);
@@ -319,7 +323,7 @@ public class GameOfThronesController extends JogreController {
     						sendProperty("WesterosCard",card);
     					}else if(!model.getMusteringPhase() && playerChoices.getRelatedTerr().getOrder()==null ){
     						model.nextPlayer();
-    						//sendProperty("nextPlayer", 0);
+    						sendProperty("nextPlayer", 0);
     					}
     				}
     				break;
@@ -334,7 +338,7 @@ public class GameOfThronesController extends JogreController {
     					sendProperty("WesterosCard",card);
     				}else if(!model.getMusteringPhase() && playerChoices.getRelatedTerr().getOrder()==null){
     					model.nextPlayer();
-    					//sendProperty("nextPlayer", 0);
+    					sendProperty("nextPlayer", 0);
     				}}
     				break;
     			case 22 :
@@ -348,7 +352,7 @@ public class GameOfThronesController extends JogreController {
     					sendProperty("WesterosCard",card);
     				}else if(!model.getMusteringPhase() && playerChoices.getRelatedTerr().getOrder()==null){
     					model.nextPlayer();
-    					//sendProperty("nextPlayer", 0);
+    					sendProperty("nextPlayer", 0);
     				}}
     				break;
     			case 23 : 
@@ -695,6 +699,8 @@ public class GameOfThronesController extends JogreController {
 			}else if( model.haveThrone(getSeatNum())){
 				playerChoices.biddingEgality(model.getBidding());
 			}
+		}else if(key.equals("resolutionPvE")){
+			model.resolutionPvE();
 		}else{
     		//on indique que le joueur a fini de donner ses ordres
     		model.getFamily(value).ordersGived=true;
