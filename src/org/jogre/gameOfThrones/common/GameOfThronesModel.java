@@ -28,7 +28,7 @@ import nanoxml.XMLElement;
 import org.jogre.client.awt.GameImages;
 import org.jogre.common.JogreModel;
 import org.jogre.common.comm.Comm;
-import org.jogre.gameOfThrones.common.combat.Battle;
+import org.jogre.gameOfThrones.common.combat.BattlePvP;
 import org.jogre.gameOfThrones.common.combat.GroundForce;
 import org.jogre.gameOfThrones.common.combat.NavalTroup;
 import org.jogre.gameOfThrones.common.orders.OrderType;
@@ -71,7 +71,7 @@ public class GameOfThronesModel extends JogreModel {
 	private boolean combatInitiated;// utile ou faire battle==null ?????
 	private boolean musteringPhase;
 	//private boolean clashOfKings;
-	private Battle battle;
+	private BattlePvP battle;
 	private Territory territory1;
 	private Territory territory2;
 	private JLabel jLabel;
@@ -276,12 +276,16 @@ public class GameOfThronesModel extends JogreModel {
 		combatInitiated=true;
 		territory1=fromTerritory;
 		territory2=toTerritory;
-		battle = new Battle(fromTerritory, toTerritory);
+		if(toTerritory.getNeutralForce()>0){
+			
+		}else{
+			battle = new BattlePvP(fromTerritory, toTerritory);
+		}
 		
 	}
 	public void battleInitiated(Territory territory) {
 		territory2=territory;
-		battle = new Battle(territory1, territory2);
+		battle = new BattlePvP(territory1, territory2);
 	}
 
 	
@@ -423,17 +427,60 @@ public class GameOfThronesModel extends JogreModel {
 	   			starsLimitation[2]=2;
 	   			starsLimitation[3]=1;
 	   			//House Tyrell
+	   			if(numberPlayers>4){
+	   			//House Martell
+	   			}else{
+	   				boardModel.getTerritory("Sunspear").destructGarrison();
+		   			// 	neutral forces construction
+		   			boardModel.getTerritory("The Boneway").setNeutralForce(3);
+		   			boardModel.getTerritory("Prince's Pass").setNeutralForce(3);
+		   			boardModel.getTerritory("Salt Shore").setNeutralForce(3);
+		   			boardModel.getTerritory("Salt Shore").setNeutralForce(3);
+		   			boardModel.getTerritory("Starfall").setNeutralForce(3);
+		   			boardModel.getTerritory("Sunspear").setNeutralForce(5);
+		   			boardModel.getTerritory("Three Towers").setNeutralForce(3);
+		   			boardModel.getTerritory("Yronwood").setNeutralForce(3);
+	   			}
 	   		}else{	
 	   			boardModel.getTerritory("Highgarden").destructGarrison();
 	   			boardModel.getTerritory("Sunspear").destructGarrison();
+	   			// 	neutral forces construction
+	   			boardModel.getTerritory("The Boneway").setNeutralForce(3);
+	   			boardModel.getTerritory("Prince's Pass").setNeutralForce(3);
+	   			boardModel.getTerritory("Salt Shore").setNeutralForce(3);
+	   			boardModel.getTerritory("Salt Shore").setNeutralForce(3);
+	   			boardModel.getTerritory("Starfall").setNeutralForce(3);
+	   			boardModel.getTerritory("Sunspear").setNeutralForce(5);
+	   			boardModel.getTerritory("Three Towers").setNeutralForce(3);
+	   			boardModel.getTerritory("Yronwood").setNeutralForce(3);
+	   	 		boardModel.getTerritory("Storm's End").setNeutralForce(4);
+	   	 		boardModel.getTerritory("Oldtown").setNeutralForce(3);
+	   	 	boardModel.getTerritory("Dornish Marches").setNeutralForce(3);
 	   		}
 	   		
    		}
    		else{
+   			//garrison destruction
    			boardModel.getTerritory("Pyke").destructGarrison();
    			boardModel.getTerritory("Highgarden").destructGarrison();
    			boardModel.getTerritory("Sunspear").destructGarrison();
+   			// neutral forces construction
+   			boardModel.getTerritory("Dornish Marches").setNeutralForce(100);
+   	   		boardModel.getTerritory("The Boneway").setNeutralForce(100);
+   	   		boardModel.getTerritory("Highgarden").setNeutralForce(100);
+   	   		boardModel.getTerritory("Oldtown").setNeutralForce(100);
+   	   		boardModel.getTerritory("Prince's Pass").setNeutralForce(100);
+   	   		boardModel.getTerritory("Pyke").setNeutralForce(100);
+   	   		boardModel.getTerritory("Salt Shore").setNeutralForce(100);
+   	   		boardModel.getTerritory("Starfall").setNeutralForce(100);
+   	   		boardModel.getTerritory("Storm's End").setNeutralForce(100);
+   	   		boardModel.getTerritory("Sunspear").setNeutralForce(100);
+   	   		boardModel.getTerritory("Three Towers").setNeutralForce(100);
+   	   		boardModel.getTerritory("Yronwood").setNeutralForce(100);
    		}
+   		
+   		boardModel.getTerritory("The Eyrie").setNeutralForce(6);
+   		boardModel.getTerritory("King's Landing").setNeutralForce(5);
         this.supplyUpdate();
   	}
 
@@ -452,7 +499,7 @@ public class GameOfThronesModel extends JogreModel {
 		
 	}
 
-	public Battle getBattle() {
+	public BattlePvP getBattle() {
 		return battle;
 	}
 	/**end a battle and remove it
@@ -980,7 +1027,13 @@ public class GameOfThronesModel extends JogreModel {
 		return howManyCastle(getFamily(player))>6;
 	}
 
-
+	/**
+	 * This method return the number of players
+	 * @return the number of players
+	 */
+	public int getNumberPlayers(){
+		return numberPlayers;
+	}
 	
 
 	

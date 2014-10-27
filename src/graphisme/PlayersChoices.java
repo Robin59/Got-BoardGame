@@ -14,7 +14,7 @@ import org.jogre.gameOfThrones.common.Bidding;
 import org.jogre.gameOfThrones.common.CombatantCard;
 import org.jogre.gameOfThrones.common.Family;
 import org.jogre.gameOfThrones.common.GameOfThronesModel;
-import org.jogre.gameOfThrones.common.combat.Battle;
+import org.jogre.gameOfThrones.common.combat.BattlePvP;
 import org.jogre.gameOfThrones.common.orders.*;
 import org.jogre.gameOfThrones.common.territory.Territory;
 import org.jogre.gameOfThrones.common.territory.Water;
@@ -39,7 +39,7 @@ public class PlayersChoices extends JogreComponent {
 	Territory relatedTerr;
 	/*the cible territory when the player choice need 2 territory*/ 
 	Territory cibleTerr;
-	Battle battle;
+	BattlePvP battle;
 	/*The index of the selected house card. -1 if none*/
 	private int selectedHouseCard;
 	/*Said the index of the first house card show on the left during the battle*/
@@ -489,9 +489,6 @@ public class PlayersChoices extends JogreComponent {
 	public void attackTo(Territory territory) {
 		getGraphics().clearRect(0, 0, 600, 250);
 		cibleTerr = territory;
-		// related territory peut poser problem
-		//label.setText("wich troops do want to send from "+relatedTerr.getName()+" to attack "+cibleTerr.getName());
-		//Image[] troopsImages=images.getTroopImages(relatedTerr.getFamily());
 		if(territory instanceof Water){
 			panel=6;
 		}else{
@@ -507,7 +504,7 @@ public class PlayersChoices extends JogreComponent {
 	}
 	
 	// 1 indique cartes, 2 pour jouer l'épée, 3 retraite, 4 fin de combat
-	public int check(int modelState, Family family, Battle battle){
+	public int check(int modelState, Family family, BattlePvP battle){
 		if(modelState==1 && battle.canPlayCard(family) ){//on verifie si on peut afficher les cartes 
 			//getGraphics().clearRect(0, 0, 600, 250);
 			showHouseCards(battle);
@@ -527,7 +524,7 @@ public class PlayersChoices extends JogreComponent {
 	 * This method set all the parameters to show the house Cards
 	 * @param battle
 	 */
-	public void showHouseCards(Battle battle){
+	public void showHouseCards(BattlePvP battle){
 		this.battle=battle;
 		selectedHouseCard=-1;
 		panel=9;

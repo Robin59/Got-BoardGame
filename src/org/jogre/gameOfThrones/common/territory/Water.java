@@ -45,4 +45,13 @@ public class Water extends Territory {
 	protected boolean canGoTo(Territory territory) {
 		return territory instanceof Water && this.neighbors.contains(territory);
 	}
+
+	@Override
+	public int getNeutralForce() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void setNeutralForce(int neutralForce) {}
 }

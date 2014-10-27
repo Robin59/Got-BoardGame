@@ -32,7 +32,7 @@ import org.jogre.gameOfThrones.common.BiddingAgainstWild;
 import org.jogre.gameOfThrones.common.Deck;
 import org.jogre.gameOfThrones.common.Family;
 import org.jogre.gameOfThrones.common.GameOfThronesModel;
-import org.jogre.gameOfThrones.common.combat.Battle;
+import org.jogre.gameOfThrones.common.combat.BattlePvP;
 import org.jogre.gameOfThrones.common.orders.Order;
 import org.jogre.gameOfThrones.common.orders.OrderType;
 import org.jogre.gameOfThrones.common.territory.BoardModel;
@@ -175,8 +175,10 @@ public class GameOfThronesController extends JogreController {
     						case 2:
     							playerChoices.attackTo(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
     							model.battle(playerChoices.getRelatedTerr(),gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
-    							sendProperty("mvInitiated", playerChoices.getRelatedTerr().getName());
-    							sendProperty("battleInitiated", gameOfThronesComponent.getTerritory(e.getX(),e.getY()).getName());
+    							if(gameOfThronesComponent.getTerritory(e.getX(),e.getY()).getNeutralForce()==0){
+    								sendProperty("mvInitiated", playerChoices.getRelatedTerr().getName());
+    								sendProperty("battleInitiated", gameOfThronesComponent.getTerritory(e.getX(),e.getY()).getName());
+    							}
     							break;
     						case 3://on a clicke sur le territoire de départ, on revient sur la croix
     							playerChoices.orderSelected(playerChoices.getRelatedTerr());

@@ -54,6 +54,10 @@ public class Board {
 			if(territory.haveGarrison()){
 				displayGarrison(territory, g);
 			}
+			//display the neutral forces
+			if(territory.getNeutralForce()>0){
+				displayNeutralForce(territory,g);
+			}
 			//affiche les troupes et les symboles influence presentent sur les territoires
 			if (territory.getTroup()!=null){
 				showTroops(territory, g);
@@ -249,7 +253,14 @@ public class Board {
 			}
 		}
 	}
-	
+	/**
+	 * This method display the neutral force on the board 
+	 * @param territory on which we're going to display the neutral force
+	 * @param g
+	 */
+	private void displayNeutralForce(Territory territory,Graphics g){
+		g.drawImage(images.getNeutralForceImage(territory.getNeutralForce()),territoryCoord.get(territory.getName())[6],territoryCoord.get(territory.getName())[7]+y,null);
+	}
 	
 	/**
 	 * display the garrison on the correct emplacement   
@@ -266,44 +277,44 @@ public class Board {
 		territoryCoord = new HashMap<String,int[]>();
 		// for Water there is 2 coordinate and for Land 6 (2*potential different kind of troop) 
 		int[] winterfell ={330,271,360,270,390,270,303,204};
-		int[] lannisport={209,834,239,834,269,834,209,800};
+		int[] lannisport={190,800,220,800,250,800,190,837};
 		int[] pyke={127,681,157,681,187,681,69,645};
-		int[] sunspear={618,1297,648,1297,678,1297,648,1297};
+		int[] sunspear={618,1297,648,1297,678,1297,661,1260};
 		int[] dragonstone={715,829,745,828,775,828,690,828};
-		int[] highgarden={214,1077,244,1077,274,1077,184,1121};
+		int[] highgarden={214,1077,244,1077,274,1077,204,1121};
 		
-		int[] karhold ={623,136,653,136,683,136};
-		int[] whiteHarbor = {460,340,471,376,508,406};
-		int[] widowsWatch ={554,369,584,369,614,369};
-		int[] stonyShore ={222,343,252,343,282,343};
-		int[] castelBlack={460,45,490,45,520,45};
-		int[] moatCailin={354,536,384,536,414,536};
-		int[] greyWater={268,515,298,515,328,515};
-		int[] flintFiger={182,521,212,521,242,521};
-		int[] seaguard={300,638,330,638};
-		int[] twins={398,629,228,629};
-		int[] fingers={539,592,569,592};
-		int[] mountainsMoon={462,687,492,687};
-		int[] eyrie={578,713,608,713};
-		int[] riverrun={351,726,381,726};
-		int[] harrenhale={431,829,461,829};
-		int[] stoneySept={313,860,343,860};
-		int[] crackClaw={524,826,554,826};
-		int[] searoad={194,956,224,956};
-		int[] blackwater={355,970,385,970};
-		int[] kingsWood={547,1025,507,1055};
-		int[] reach={384,1042,414,1042};
-		int[] stormeEnd={557,1104,587,1104};
-		int[] kingsLanding={509,983,539,983};
-		int[] oldtown={173,1206,203,1206};
-		int[] dornishMarches={299,1150,329,1150};
-		int[] boneway={415,1169,445,1169};
-		int[] arbor={69,1400,99,1400};
-		int[] threeTowers={236,1272,236,1272};
-		int[] princePass={320,1212,320,1212};
-		int[] starfall={320,1328,320,1328};
-		int[] yronwood={457,1279,457,1279};
-		int[] saltShore={448,1341,448,1341};
+		int[] karhold ={623,136,653,136,683,136,683,136};
+		int[] whiteHarbor = {460,340,471,376,508,406,508,406};
+		int[] widowsWatch ={554,369,584,369,614,369,584,369};
+		int[] stonyShore ={222,343,252,343,282,343,282,343};
+		int[] castelBlack={460,45,490,45,520,45,490,45};
+		int[] moatCailin={354,536,384,536,414,536,414,536};
+		int[] greyWater={268,515,298,515,328,515,328,515};
+		int[] flintFiger={182,521,212,521,242,521,212,521};
+		int[] seaguard={300,638,330,638,360,638,330,638};
+		int[] twins={398,629,228,629,258,629,228,629};
+		int[] fingers={539,592,569,592,599,592,569,592};
+		int[] mountainsMoon={462,687,492,687,522,687,492,687};
+		int[] eyrie={578,713,608,713,638,713,600,757};
+		int[] riverrun={351,726,381,726,411,726,381,726};
+		int[] harrenhale={431,829,461,829,491,829,461,829};
+		int[] stoneySept={313,860,343,860,373,860,343,860};
+		int[] crackClaw={524,826,554,826,584,826,554,826};
+		int[] searoad={194,956,224,956,254,956,224,956};
+		int[] blackwater={355,970,385,970,415,970,385,970};
+		int[] kingsWood={547,1025,507,1055,537,1055,507,1055};
+		int[] reach={384,1042,414,1042,444,1042,414,1042};
+		int[] stormeEnd={557,1104,587,1104,617,1104,607,1154};
+		int[] kingsLanding={509,983,539,983,569,983,479,920};
+		int[] oldtown={173,1206,203,1206,233,1206,143,1206};
+		int[] dornishMarches={299,1150,329,1150,359,1150,329,1150};
+		int[] boneway={415,1169,445,1169,475,1169,445,1169};
+		int[] arbor={69,1400,99,1400,129,1400,99,1400};
+		int[] threeTowers={236,1272,236,1272,266,1272,236,1272};
+		int[] princePass={320,1212,320,1212,350,1212,320,1212};
+		int[] starfall={320,1328,320,1328,350,1328,320,1328};
+		int[] yronwood={457,1279,457,1279,487,1279,457,1279};
+		int[] saltShore={448,1341,448,1341,478,1341,448,1341};
 		//sea
 		int[] shiveringSea ={674,320};
 		int[] ironManBay={256,679};

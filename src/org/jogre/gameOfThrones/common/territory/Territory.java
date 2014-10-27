@@ -125,7 +125,7 @@ public abstract class Territory {
 			this.rmOrder();
 			return 0;
 		}else{
-			if(territory.getTroup()==null || territory.getFamily()==owner){
+			if((territory.getTroup()==null || territory.getFamily()==owner) && territory.getNeutralForce()==0){
 				return 1;
 			}else{
 				return 2;	
@@ -251,6 +251,16 @@ public abstract class Territory {
 	 * Destruct the garrison on this land (don't do anything if the territory isn't an instance of HomeLand)
 	 */
 	public void destructGarrison(){}
+	
+	/**
+	 * return the power of the neutral force occupying the territory
+	 * @return the power of the neutral force occupying this territory, 0 if there is no one, 100 if infinite
+	 */
+	public abstract int getNeutralForce();
+	/**
+	 * set the power of the neutral force occupying this territory, 0 if there is no one, 100 if infinite
+	 */
+	public abstract void setNeutralForce(int neutralForce);
 	
 	/*A recursive method that said if a troop can go to a land directly or by boat bridge */
 	protected Boolean navalTransport(Territory territory, List<Territory> alredyCheck){

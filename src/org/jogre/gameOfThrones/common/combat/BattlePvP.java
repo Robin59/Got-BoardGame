@@ -9,7 +9,7 @@ import org.jogre.gameOfThrones.common.orders.OrderType;
 import org.jogre.gameOfThrones.common.territory.Territory;
 import org.jogre.gameOfThrones.common.territory.Water;
 
-public class Battle {
+public class BattlePvP {
 
 	private Territory attTerritory;
 	private Territory defTerritory;
@@ -29,7 +29,7 @@ public class Battle {
 	CombatantCard attCard;
 	CombatantCard defCard;
 	
-	public Battle(Territory attTerritory, Territory defTerritory){
+	public BattlePvP(Territory attTerritory, Territory defTerritory){
 		System.out.println("a new battle begin");
 		this.attTerritory=attTerritory;
 		this.defTerritory=defTerritory;

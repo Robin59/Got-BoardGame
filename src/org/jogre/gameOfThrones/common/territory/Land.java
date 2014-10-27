@@ -13,6 +13,8 @@ public class Land extends Territory {
 	private int supply;
 	/***/
 	private int recruit;
+	/**the power of the neutral force that is controlling this land */
+	private int neutralForce;
 	
 	private boolean inf;//quand on met un pion d'influence (boolean ne permet pas de connaitre le proprio du pion...)
 	/**
@@ -28,6 +30,7 @@ public class Land extends Territory {
 		this.supply=supply;
 		this.castle=castle;
 		recruit=castle;
+		neutralForce=0;
 	}
 	
 	public boolean canUseOrderOn(Territory territory){
@@ -98,6 +101,17 @@ public class Land extends Territory {
 	protected Boolean navalTransport(Territory territory){
 		List<Territory> alredyCheck = new LinkedList<Territory>();
 		return navalTransport(territory, alredyCheck); 
+	}
+
+	@Override
+	public int getNeutralForce() {
+		return neutralForce;
+	}
+
+	@Override
+	public void setNeutralForce(int neutralForce) {
+		this.neutralForce=neutralForce;
+		
 	}
 	
 }

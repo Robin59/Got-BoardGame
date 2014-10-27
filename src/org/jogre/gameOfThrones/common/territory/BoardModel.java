@@ -71,7 +71,6 @@ public class BoardModel {
 		Territory whiteHarborPort= new Port("White Harbor's Port");
 		Territory pikePort= new Port("Pyke's Port");
 		Territory dragonstonePort= new Port("Dragonstone's Port");
-		
 		Territory lannisportPort= new Port("Lannisport's Port");
 		Territory sunspearPort= new Port("Sunspear's Port");
 		Territory stormEndPort= new Port("Storm's End's Port");

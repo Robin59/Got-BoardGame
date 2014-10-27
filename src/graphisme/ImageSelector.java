@@ -39,6 +39,10 @@ public class  ImageSelector{
 	private Map<String,Image> westerosCards;
 	private Map<String,Image> wildingsCards;
 	
+	// Images for the neutral forces
+	private Image[] neutralForceImages;
+	
+	
 	private ImageSelector (){
 		//images des troupes
 		troopsImages= new Image[6][4];
@@ -140,6 +144,13 @@ public class  ImageSelector{
 		garrisonImages.put("Highgarden", GameImages.getImage(34));
 		garrisonImages.put("Sunspear", GameImages.getImage(35));
 		
+		//the neutral force 
+		neutralForceImages=new Image[5];
+		neutralForceImages[0]=GameImages.getImage(197);
+		neutralForceImages[1]=GameImages.getImage(198);
+		neutralForceImages[2]=GameImages.getImage(199);
+		neutralForceImages[3]=GameImages.getImage(200);
+		neutralForceImages[4]=GameImages.getImage(201);
 	}
 	
 	/**
@@ -232,4 +243,18 @@ public class  ImageSelector{
 	public Image getWildingCardImage(String wildingsCard) {
 		return wildingsCards.get(wildingsCard);
 	}
+	
+	/**
+	 * This method return an image that show the neutral force's strength of the territory 
+	 * @param strength the strength of the territory
+	 * @return 
+	 */
+	 public Image getNeutralForceImage(int strength){
+		 if(strength>6){
+			 return neutralForceImages[4];
+		 }else{
+			 return neutralForceImages[strength-3];
+		 }
+	 }
+	
 }
