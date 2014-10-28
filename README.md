@@ -8,13 +8,17 @@ For more details about the game check : http://www.fantasyflightgames.com/edge_m
 And the rules book : http://www.fantasyflightgames.com/ffg_content/agot-bg-2nd-ed/support/VA65_AGoT2_Rulebook_web.pdf
 More details Jogre : http://jogre.sourceforge.net
 
-How to play
+How to install and launch the game
 -----------
 
-First install Jogre server (or have one of your friends doing it).
-Then download Got-BoardGame, install it in your jogre/games/gameofthrones repertory, compile the game with "build.xml".
+First install Jogre server (or have one of your friends doing it) and the line <game id="gameOfThrones" host="true" minPlayers="3" maxPlayers="6"/> under the line <supported_games>  to the file jogre/server/server.xml.
+Then download Got-BoardGame, install it in your jogre/games/gameofthrones repertory, compile the game with "build.xml" .
 Finally lunch jogre/server/server.sh (or .bat or have one of your friends doing it), then lunch jogre/games/gameofthrones/client.sh (or .bat).
 
+If you struggle to compile the game, here's an already compiled version with jogre tools. All you have to is to launch jogre/server/server.bat  and then jogre/games/gameOfThrones/client.bat.
+http://www.mediafire.com/download/su395jl9vcr22r7/Got_BoardGame.zip
+
+There are four already made accounts that you can use to test the game, bob, dave, john, sharon.
 
 About 
 -----
