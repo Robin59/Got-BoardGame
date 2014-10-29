@@ -339,9 +339,9 @@ public class PlayersChoices extends JogreComponent {
 	/**Draw the correct troop regarding the possibility and the family*/
 	private void drawRecruit(Graphics g){
 		if(relatedTerr.getRecruit()>0){
-			g.drawImage(images.getTroopImages(family)[0],50,100,null);
+			//g.drawImage(images.getTroopImages(family)[0],50,100,null);
 			g.drawImage(images.getTroopImages(family)[1],150,100,null);
-			if(relatedTerr.getRecruit()>1){// A CHANGER !!!
+			if(relatedTerr.getRecruit()>1 || (relatedTerr.getTroup()!=null && relatedTerr.getTroup().getTroops()[1]>0)){
 				g.drawImage(images.getTroopImages(family)[2],250,100,null);
 				g.drawImage(images.getTroopImages(family)[3],350,100,null);
 			}

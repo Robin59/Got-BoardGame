@@ -73,11 +73,21 @@ public class Land extends Territory {
 			break;
 		case 2:
 			this.troop.addToop(0,0,1,0);
-			recruit-=2;
+			if(troop.getTroops()[1]>0){
+				troop.rmToop(0, 1, 0, 0);
+				recruit-=1;
+			}else{
+				recruit-=2;
+			}
 			break;
 		case 3:
 			this.troop.addToop(0,0,0,1);
-			recruit-=2;
+			if(troop.getTroops()[1]>0){
+				troop.rmToop(0, 1, 0, 0);
+				recruit-=1;
+			}else{
+				recruit-=2;
+			}
 			break;
 		}
 		if(recruit<1 && order!=null){

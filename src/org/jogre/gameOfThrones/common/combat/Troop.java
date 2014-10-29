@@ -7,7 +7,7 @@ import org.jogre.gameOfThrones.common.territory.Territory;
 public abstract class Troop {
 	private Family family;
 	//private Territory territory;
-	private boolean naval;
+	
 	
 	public Troop (Family family ){
 		this.family=family;
