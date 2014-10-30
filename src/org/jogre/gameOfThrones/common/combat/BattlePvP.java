@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.jogre.gameOfThrones.common.CombatantCard;
 import org.jogre.gameOfThrones.common.Family;
+import org.jogre.gameOfThrones.common.orders.Order;
 import org.jogre.gameOfThrones.common.orders.OrderType;
 import org.jogre.gameOfThrones.common.territory.Territory;
 import org.jogre.gameOfThrones.common.territory.Water;
@@ -131,6 +132,7 @@ public class BattlePvP {
 	public void battleResolution(){
 		if(this.battleWinner()){
 			//on applique les effets des cartes
+			afterResolutionCardEffect(true);
 			//destruction of the garrison if there's one
 			defTerritory.destructGarrison();
 			//on detruit les troups du defenceur 
@@ -150,9 +152,14 @@ public class BattlePvP {
 			}
 			//on retire l'ordre
 			defTerritory.rmOrder();
+			if(attCard.getName().equals("Loras")){
+				defTerritory.setOrder(new Order(attTerritory.getOrder().getStar(),0,attTerritory.getOrder().getOthBonus(), OrderType.ATT));
+				attTerritory.rmOrder();
+			}
 			System.out.println("victoire");
 		}else{
 			//on applique les effets des cartes
+			afterResolutionCardEffect(false);
 			//on detruit les troups de l'attaquant
 			System.out.println("defailt");
 			// faire les destructions des troupes ici!!
@@ -380,18 +387,55 @@ public class BattlePvP {
 	
 	// on bellow is the different card effects 
 	
-	private void befforSwordCardEffect(){
-		if(attCard.getName().equals("Kevan")){
-			kevanEffect();
-		}else if(attCard.getName().equals("Victarion")){
-			victarionEffect();
-		}else if(attCard.getName().equals("Salladhor")|| defCard.getName().equals("Salladhor")){
-			salladhorEffect();
-		}else if(attCard.getName().equals("Davos")|| defCard.getName().equals("Davos")){
-			davosEffect();
+	
+	/*
+	 * card's effect that are use after the battle resolutions 
+	 * @param attackerWin true if the attacker win  
+	 */
+	private void afterResolutionCardEffect(boolean attackerWin){
+		if(attackerWin){
+			if(attCard.getName().equals("Tywin")){
+				attFamily.gainInflu(2);
+			}
+			if(defCard.getName().equals("BlackFish")){
+				attSwords=0;
+			}
+		}else{
+			if(defCard.getName().equals("Tywin")){
+				defFamily.gainInflu(2);
+			}
+			if(attCard.getName().equals("BlackFish")){
+				defSwords=0;
+			}
 		}
 	}
 	
+	/*card's effect that are use before the battle resolutions*/ 
+	private void befforSwordCardEffect(){
+		if(attCard.getName().equals("Kevan")){
+			kevanEffect();
+		}
+		if(attCard.getName().equals("Victarion")){
+			victarionEffect();
+		}
+		if(attCard.getName().equals("Salladhor")|| defCard.getName().equals("Salladhor")){
+			salladhorEffect();
+		}
+		if(attCard.getName().equals("Davos")|| defCard.getName().equals("Davos")){
+			davosEffect();
+		}
+		if(groundType<2 && (attCard.getName().equals("Mace")|| defCard.getName().equals("Mace")) && (!defCard.getName().equals("BlackFish") || !attCard.getName().equals("BlackFish"))){
+			maceEffect();
+		}
+	}
+	
+	private void maceEffect(){
+		if(attCard.getName().equals("Mace") && defTerritory.getTroup().getTroops()[1]>0){
+			defTerritory.getTroup().rmToop(0, 1, 0, 0);
+		}else if(defCard.getName().equals("Mace") && attTroops[1]>0){
+			attTroops[1]--;
+		}
+	}
 	
 	private void kevanEffect(){
 		att+=attTroops[1];
