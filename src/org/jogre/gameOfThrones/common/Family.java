@@ -13,7 +13,7 @@ import org.jogre.gameOfThrones.common.territory.Territory;
  */
 public class Family {
 	//names
-	private final static String[] NAMES = {"Baratheon","Lannister","Stark","Greyjoy"};
+	private final static String[] NAMES = {"Baratheon","Lannister","Stark","Greyjoy","Tyrell","Martell"};
 	// the player of the family (0 baratheon, 1 lannister, etc)
 	private int player;
 	public boolean ordersGived;

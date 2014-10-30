@@ -110,6 +110,14 @@ public class  ImageSelector{
 		playerCards.put("Theon", GameImages.getImage(91));
 		playerCards.put("Victarion", GameImages.getImage(92));
 		playerCards.put("Euron", GameImages.getImage(93));
+		//Tyrells
+		playerCards.put("Queen", GameImages.getImage(94));
+		playerCards.put("Margaery", GameImages.getImage(95));
+		playerCards.put("Alester", GameImages.getImage(96));
+		playerCards.put("Garlan", GameImages.getImage(97));
+		playerCards.put("Randyll", GameImages.getImage(98));
+		playerCards.put("Loras", GameImages.getImage(99));
+		playerCards.put("Mace", GameImages.getImage(100));
 		
 		
 		//westeros Cards

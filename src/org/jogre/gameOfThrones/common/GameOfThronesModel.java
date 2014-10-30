@@ -434,7 +434,33 @@ public class GameOfThronesModel extends JogreModel {
 	   			starsLimitation[2]=2;
 	   			starsLimitation[3]=1;
 	   			//House Tyrell
-	   			if(numberPlayers>4){
+	   			families[4]=new Family(4,this);
+	   	       	court[3]=4;
+	   	        throne[4]=4;
+	   	      	fiefdoms[1]=4;
+	   	   		families[4].setFiefdomsTrack(2);
+	   	   		boardModel.getTerritory("Highgarden").setTroup(new GroundForce(families[4],1,1,0));
+	   	   		boardModel.getTerritory("Dornish Marches").setTroup(new GroundForce(families[4],1,0,0));
+	   	   		boardModel.getTerritory("Redwyne Straights").setTroup(new NavalTroup(families[4],1));
+	   	   		//Tyrell cards
+	   	   		families[4].addCard(new CombatantCard("Queen",0,0,0));
+	   	   		families[4].addCard(new CombatantCard("Margaery",1,0,1));
+	   	   		families[4].addCard(new CombatantCard("Alester",1,0,1));
+	   	   		families[4].addCard(new CombatantCard("Garlan",2,2,0));
+		   	   	families[4].addCard(new CombatantCard("Randyll",2,1,0));
+		   	   	families[4].addCard(new CombatantCard("Loras",3,0,0));
+		   	   	families[4].addCard(new CombatantCard("Mace",4,0,0));
+	   	
+	   	   		// tracks actualisation
+	   	   		court[4]=3;
+	   	   		fiefdoms[3]=0;
+	   	   		families[0].setFiefdomsTrack(4);
+	   	   		fiefdoms[4]=1;
+	   	   		families[1].setFiefdomsTrack(5);
+	   	   		fiefdoms[2]=2;
+	   	   		families[2].setFiefdomsTrack(3);
+	   	   		
+	   	   		if(numberPlayers>5){
 	   			//House Martell
 	   			}else{
 	   				boardModel.getTerritory("Sunspear").destructGarrison();
@@ -462,7 +488,7 @@ public class GameOfThronesModel extends JogreModel {
 	   			boardModel.getTerritory("Yronwood").setNeutralForce(3);
 	   	 		boardModel.getTerritory("Storm's End").setNeutralForce(4);
 	   	 		boardModel.getTerritory("Oldtown").setNeutralForce(3);
-	   	 	boardModel.getTerritory("Dornish Marches").setNeutralForce(3);
+	   	 		boardModel.getTerritory("Dornish Marches").setNeutralForce(3);
 	   		}
 	   		
    		}
