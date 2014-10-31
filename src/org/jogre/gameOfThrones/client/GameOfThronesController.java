@@ -310,10 +310,10 @@ public class GameOfThronesController extends JogreController {
     				model.nextPlayer();
     				//sendProperty("nextPlayer", 0);
     				break;
-    			case 19 :
-    				System.out.println("recruit ship");
+    			case PlayersChoices.RECRUIT_SHIP :
+    				System.out.println("Ship Recrutement, not implented");
     				break;
-    			case 20 :
+    			case PlayersChoices.RECRUIT_FOOT :
     				if(model.checkSupplyLimits(getSeatNum(), playerChoices.getRelatedTerr())){
     					playerChoices.getRelatedTerr().recruit(1);
     					sendProperty("recruitFoot", playerChoices.getRelatedTerr().getName());
@@ -328,7 +328,7 @@ public class GameOfThronesController extends JogreController {
     					}
     				}
     				break;
-    			case 21 :
+    			case PlayersChoices.RECRUIT_KNIGHT :
     				if(model.checkSupplyLimits(getSeatNum(), playerChoices.getRelatedTerr())){
     				playerChoices.getRelatedTerr().recruit(2);
     				sendProperty("recruitKnight", playerChoices.getRelatedTerr().getName());
@@ -342,7 +342,7 @@ public class GameOfThronesController extends JogreController {
     					sendProperty("nextPlayer", 0);
     				}}
     				break;
-    			case 22 :
+    			case PlayersChoices.RECRUIT_SEIGE :
     				if(model.checkSupplyLimits(getSeatNum(), playerChoices.getRelatedTerr())){
     				playerChoices.getRelatedTerr().recruit(3);
     				sendProperty("recruitTower", playerChoices.getRelatedTerr().getName());

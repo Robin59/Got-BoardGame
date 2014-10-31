@@ -330,21 +330,37 @@ public class BoardModel {
 		WidowWatch.addTerritory(ShiveringSea);
 		//ports
 		winterfellPort.addTerritory(Winterfell);
+		Winterfell.addTerritory(winterfellPort);
 		winterfellPort.addTerritory(BayOfIce);
+		BayOfIce.addTerritory(winterfellPort);
 		whiteHarborPort.addTerritory(WhiteHarbor);
+		WhiteHarbor.addTerritory(whiteHarborPort);
 		whiteHarborPort.addTerritory(NarrowSea);
+		NarrowSea.addTerritory(whiteHarborPort);
 		pikePort.addTerritory(Pyke);
+		Pyke.addTerritory(pikePort);
 		pikePort.addTerritory(IronmanBay);
+		IronmanBay.addTerritory(pikePort);
 		dragonstonePort.addTerritory(Dragonstone);
+		Dragonstone.addTerritory(dragonstonePort);
 		dragonstonePort.addTerritory(Shipbreaker);
+		Shipbreaker.addTerritory(dragonstonePort);
 		lannisportPort.addTerritory(Lannisport);
+		Lannisport.addTerritory(lannisportPort);
 		lannisportPort.addTerritory(GoldenSound);
+		GoldenSound.addTerritory(lannisportPort);
 		stormEndPort.addTerritory(StormsEnd);
+		StormsEnd.addTerritory(stormEndPort);
 		stormEndPort.addTerritory(Shipbreaker);
+		Shipbreaker.addTerritory(stormEndPort);
 		sunspearPort.addTerritory(Sunspear);
+		Sunspear.addTerritory(sunspearPort);
 		sunspearPort.addTerritory(EastSummerSea);
+		EastSummerSea.addTerritory(sunspearPort);
 		oldtownPort.addTerritory(Oldtown);
+		Oldtown.addTerritory(oldtownPort);
 		oldtownPort.addTerritory(RedwyneStraights);
+		RedwyneStraights.addTerritory(oldtownPort);
 		
 		
 		

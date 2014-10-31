@@ -123,5 +123,36 @@ public class Land extends Territory {
 		this.neutralForce=neutralForce;
 		
 	}
-	
+	/**
+	 * Said if this territory can recruit ship
+	 * @return true if you can recruit ship with this territory
+	 */
+	public boolean canRecruitShip(){
+		for (Territory territory: neighbors){
+			if (territory instanceof Water && (territory.getFamily()==null ||territory.getFamily()==this.getFamily())){
+				for (Territory neighborsWaterTerritory :territory.neighbors){
+					if(neighborsWaterTerritory instanceof Port && neighborsWaterTerritory.getFamily()!=null && neighborsWaterTerritory.getFamily()==this.getFamily()){
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+	/**
+	 * If a land can recruit a ship, this method indicate on which instance of Water it appears
+	 * @return the instance of Water where the ship appears, return null if no place is found
+	 */
+	public Territory whereRecruitShip(){ // FAIRE AUTREMENT
+		for (Territory territory: neighbors){
+			if (territory instanceof Water && (territory.getFamily()==null ||territory.getFamily()==this.getFamily())){
+				for (Territory neighborsWaterTerritory :territory.neighbors){
+					if(neighborsWaterTerritory instanceof Port && neighborsWaterTerritory.getFamily()!=null && neighborsWaterTerritory.getFamily()==this.getFamily()){
+						return territory;
+					}
+				}
+			}
+		}
+		return null;
+	}
 }

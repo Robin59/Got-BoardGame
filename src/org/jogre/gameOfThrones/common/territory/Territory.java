@@ -254,6 +254,12 @@ public abstract class Territory {
 	public void destructGarrison(){}
 	
 	/**
+	 * Said if this territory can recruit ship
+	 * @return true if you can recruit ship with this territory
+	 */
+	public boolean canRecruitShip(){return false;}
+	
+	/**
 	 * return the power of the neutral force occupying the territory
 	 * @return the power of the neutral force occupying this territory, 0 if there is no one, 100 if infinite
 	 */

@@ -60,6 +60,11 @@ public class PlayersChoices extends JogreComponent {
 	private int powerBid;
 	private Bidding bidding;
 	
+	//Constant use for the message return by the main method (RigthClick) of this object 
+	public static final int RECRUIT_SHIP=19;
+	public static final int RECRUIT_FOOT=20;
+	public static final int RECRUIT_KNIGHT=21;
+	public static final int RECRUIT_SEIGE=22;
 	
 	
 	public PlayersChoices (JLabel label){
@@ -194,14 +199,14 @@ public class PlayersChoices extends JogreComponent {
 			}
 			break;
 		case DISPLAY_RECRUITEMENT :
-			if(x>50&&x<100){
-				return 19;
+			if(x>50&&x<100 && relatedTerr.canRecruitShip()){ //ajouter des conditions pour etre sur qu'on peut recruter
+				return RECRUIT_SHIP;
 			}else if (y<170 && x>150 && x<200){
-				return 20;
+				return RECRUIT_FOOT;
 			}else if (y<170 && x>250 && x<300){
-				return 21;
+				return RECRUIT_KNIGHT;
 			}else if (y<170 && x>350 && x<400){
-				return 22;
+				return RECRUIT_SEIGE;
 			}else if(y>190 && x>200 && x<270){
 				return 2;
 			}
@@ -336,7 +341,8 @@ public class PlayersChoices extends JogreComponent {
 	/**Draw the correct troop regarding the possibility and the family*/
 	private void drawRecruit(Graphics g){
 		if(relatedTerr.getRecruit()>0){
-			//g.drawImage(images.getTroopImages(family)[0],50,100,null);
+			if(relatedTerr.canRecruitShip())
+				g.drawImage(images.getTroopImages(family)[0],50,100,null);
 			g.drawImage(images.getTroopImages(family)[1],150,100,null);
 			if(relatedTerr.getRecruit()>1 || (relatedTerr.getTroup()!=null && relatedTerr.getTroup().getTroops()[1]>0)){
 				g.drawImage(images.getTroopImages(family)[2],250,100,null);
