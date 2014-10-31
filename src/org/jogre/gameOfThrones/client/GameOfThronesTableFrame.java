@@ -23,6 +23,7 @@ import java.awt.TextArea;
 
 import javax.swing.JLabel;
 
+import graphisme.BoardComponent;
 import graphisme.PlayersChoices;
 import graphisme.PlayersInfo;
 import info.clearthought.layout.TableLayout;
@@ -46,7 +47,7 @@ public class GameOfThronesTableFrame extends JogreTableFrame {
 
     // Declare MVC classes
     private GameOfThronesModel      gameOfThronesModel;      // model
-    private GameOfThronesComponent  gameOfThronesComponent;  // view
+    private BoardComponent  gameOfThronesComponent;  // view
     private GameOfThronesController gameOfThronesController; // controller
     
     private JLabel infoLabel; // affiches les informations volantes
@@ -71,7 +72,7 @@ public class GameOfThronesTableFrame extends JogreTableFrame {
         int nbPlayers=table.getNumOfPlayers();
         JLabel textLabel = new JLabel();
         this.gameOfThronesModel = new GameOfThronesModel (nbPlayers, textLabel);
-        this.gameOfThronesComponent = new GameOfThronesComponent (gameOfThronesModel);
+        this.gameOfThronesComponent = new BoardComponent (gameOfThronesModel);
         this.gameOfThronesController = new GameOfThronesController (gameOfThronesModel, gameOfThronesComponent, infoLabel, playerChoices);
     
         // The component observes the model

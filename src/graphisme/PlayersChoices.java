@@ -96,7 +96,7 @@ public class PlayersChoices extends JogreComponent {
 	// 3 à 6 envoi de troups
 	public int RigthClick(int x, int y, Family family) {
 		switch (panel) {
-		case 1 :
+		case DISPLAY_ORDERS :
 			if(family.giveOrders(relatedTerr,choseOrder(x,y,family))){
 				this.blank();
 				// on regarde si tout ses teritoires on des ordres!!!
@@ -105,25 +105,25 @@ public class PlayersChoices extends JogreComponent {
 				}
 			}
 		break;
-		case 2 :// fin de phase de prog
+		case DISPLAY_END_PROGRAMATION :
 			if (x>150 && x<200 && y>50 && y<100){
 				family.ordersGived=true; 
 				blank();
 				return 1;
 			}
 			break;
-		case 3 :
+		case DISPLAY_CANCEL :
 			if (x>150 && x<200 && y>50 && y<100){
 				return 2;
 			}
 			break;
 		//les mouvements
-		case 4 :
+		case DISPLAY_WATER_MOV :
 			if (x>150 && x<200 && y>50 && y<100){ // troop navals
 				return 3;
 			}
 			break;
-		case 5 :
+		case DISPLAY_LAND_MOV :
 			if (x>50 && x<100 && y>50 && y<100 && relatedTerr.getTroup().getTroops()[1]!=0){
 				return 4;
 			}else if(x>150 && x<200 && y>50 && y<100 && relatedTerr.getTroup().getTroops()[2]!=0){
@@ -133,12 +133,12 @@ public class PlayersChoices extends JogreComponent {
 			}
 			break;
 		//les combats
-		case 6 :
+		case DISPLAY_WATER_ATT :
 			if (x>150 && x<200 && y>150 && y<200){ 
 				return 7;
 			}
 			break;
-		case 7 :
+		case DISPLAY_LAND_ATT :
 			if (x>150 && x<200 && y>150 && y<200){ 
 				return 7;
 			}else if (x>50 && x<100 && y>50 && y<100 && relatedTerr.getTroup().getTroops()[1]!=0){
@@ -149,7 +149,7 @@ public class PlayersChoices extends JogreComponent {
 				return 11;
 			}
 			break;
-		case 8:
+		case DISPLAY_SUPPORT_CHOICE:
 			if (x>100 && x<150 && y>50 && y<100){ 
 				blank2();
 				return 12;
@@ -160,7 +160,7 @@ public class PlayersChoices extends JogreComponent {
 				return 14;
 			}
 			break;
-		case 9 :
+		case DISPLAY_HOUSE_CARDS :
 			if(x<60 && indexHouseCard>0){
 				indexHouseCard--;
 				repaint();
@@ -172,7 +172,7 @@ public class PlayersChoices extends JogreComponent {
 				return 15;
 			}
 			break;
-		case 10 :
+		case DISPLAY_VALYRIAN_SWORD :
 			if (x>50 && x<140){
 				blank2();
 				this.repaint();
@@ -183,7 +183,7 @@ public class PlayersChoices extends JogreComponent {
 				return 17;
 			}
 			break;
-		case 11 : 
+		case DISPLAY_RECRUIT_OR_CONSOLID : 
 			if(x>50 && x<130){
 				relatedTerr.resetRecruit();
 				this.recruit(relatedTerr);
@@ -193,7 +193,7 @@ public class PlayersChoices extends JogreComponent {
 				return 18;
 			}
 			break;
-		case 12 :
+		case DISPLAY_RECRUITEMENT :
 			if(x>50&&x<100){
 				return 19;
 			}else if (y<170 && x>150 && x<200){
@@ -206,9 +206,9 @@ public class PlayersChoices extends JogreComponent {
 				return 2;
 			}
 			break;
-		case 13:
+		case DISPLAY_WESTEROS_CARD:
 			return 23;
-		case 14 :
+		case DISPLAY_BID :
 			if(x>100&&x<150 && powerBid>0){
 				powerBid--;
 				label.setText("Power Bid : "+powerBid);
@@ -218,7 +218,7 @@ public class PlayersChoices extends JogreComponent {
 			}else if(x>240 && x<300){
 				return 24; // end of the biddings
 			}break;
-		case 15:
+		case DISPLAY_LETTERS:
 			if(x>100 && x<170){
 				blank();
 				return 25;
@@ -230,7 +230,7 @@ public class PlayersChoices extends JogreComponent {
 				return 27;
 			}
 		break;
-		case 16:
+		case DISPLAY_BID_SORT:
 			if(x>170 && x<230 && y>180){
 				selectedBid=-1;
 				return 28;
@@ -238,7 +238,7 @@ public class PlayersChoices extends JogreComponent {
 				changeTrack(x);
 			}
 		break;
-		case 17:
+		case DISPLAY_WILDINGS_CARD:
 			return 29;
 		}
 		return 0;
@@ -246,16 +246,13 @@ public class PlayersChoices extends JogreComponent {
 	
 	
 	
-	
-	
-	
 	public void paintComponent (Graphics g) { 
 		//super.paintComponent (g);
 		switch(panel){
-		case 0:
+		case DISPLAY_BLANK:
 			label.setText("");
 			break;
-		case 1:
+		case DISPLAY_ORDERS:
 			int x =0;
 			int y =0;
 			List<Order> orders =family.getOrders();
@@ -268,69 +265,69 @@ public class PlayersChoices extends JogreComponent {
 				}
 			}
 		break;
-		case 2:
+		case DISPLAY_END_PROGRAMATION:
 			g.drawImage(endTurnImage,150,50, null);
 			break;
-		case 3:
+		case DISPLAY_CANCEL:
 			g.drawImage(dontUseImage,150,50, null);
 			break;
-		case 4 :
+		case DISPLAY_WATER_MOV :
 			g.drawImage(images.getTroopImages(family)[0],150,50, null);
 		break;
-		case 5 :
+		case DISPLAY_LAND_MOV :
 			g.drawImage(images.getTroopImages(family)[1],50,50, null);
 			g.drawImage(images.getTroopImages(family)[2],150,50, null);
 			g.drawImage(images.getTroopImages(family)[3],250,50, null);
 			break;
-		case 6:
+		case DISPLAY_WATER_ATT:
 			g.drawImage(images.getTroopImages(family)[0],150,50, null);
 			g.drawImage(endTurnImage,150,150, null);
 			break;
-		case 7 :
+		case  DISPLAY_LAND_ATT:
 			g.drawImage(images.getTroopImages(family)[1],50,50, null);
 			g.drawImage(images.getTroopImages(family)[2],150,50, null);
 			g.drawImage(images.getTroopImages(family)[3],250,50, null);
 			g.drawImage(endTurnImage,150,150, null);
 			break;
-		case 8:
+		case DISPLAY_SUPPORT_CHOICE:
 			g.clearRect(0, 0, 600, 250);
 			g.drawImage(attackerImage, 100,50, null);
 			g.drawImage(defencerImage, 250,50, null);
 			g.drawImage(noOneImage, 175,150, null);
 			break;
-		case 9:
+		case DISPLAY_HOUSE_CARDS:
 			g.clearRect(0, 0, 600, 250);
 			drawHouseCards(g);
 			break;
-		case 10:
+		case DISPLAY_VALYRIAN_SWORD:
 			g.drawImage(swordImage, 50, 5, null);
 			g.drawImage(swordFlipImage, 200, 5, null);
 			break;
-		case 11:
+		case DISPLAY_RECRUIT_OR_CONSOLID:
 			g.drawImage(recruitImage, 50, 100, null);
 			g.drawImage(consoImage, 350, 100, null);
 			break;
-		case 12:
+		case DISPLAY_RECRUITEMENT:
 			drawRecruit(g);
 			g.drawImage(dontUseImage, 200,190,null);
 			break;
-		case 13:
+		case DISPLAY_WESTEROS_CARD:
 			g.drawImage(images.getWestCardImage(westerosCard), 50,0, null);
 			break;
-		case 14 : 
+		case DISPLAY_BID : 
 			g.drawImage(leftArrowImage,100,100,null);
 			g.drawImage(rigthArrowImage,400,100,null);
 			g.drawImage(images.getPowerImage(family),240,100, null);
 			break;
-		case 15:
+		case DISPLAY_LETTERS:
 			g.drawImage(letters[0],100,100,null);
 			g.drawImage(letters[1],190,100,null);
 			g.drawImage(letters[2],280,100,null);
 			break;
-		case 16:
+		case DISPLAY_BID_SORT:
 			drawBiddingTable(g);
 			break;
-		case 17:
+		case DISPLAY_WILDINGS_CARD:
 			g.drawImage(images.getWildingCardImage(wilidingsCard),100,0,null);
 			break;
 		}
@@ -389,27 +386,32 @@ public class PlayersChoices extends JogreComponent {
 	}
 	
 	/**
-	 * 
-	 * @param x
-	 * @param family
+	 * This method is call when a player chose a House card for a battle
+	 * @param x the x coordinate of the mouse 
+	 * @param family the family that have chose a House card
 	 */
-	public void choseCard(int x, Family family){
+	private void choseCard(int x, Family family){
 		if (((x-60)/150)+indexHouseCard<family.getCombatantCards().size()){
 			selectedHouseCard =((x-60)/150)+indexHouseCard;
 			CombatantCard card =family.getCombatantCards().get(selectedHouseCard);
 			battle.playCard(card, family);
-			panel=0;
+			panel=DISPLAY_BLANK;
 			this.repaint();
 		}
 	}
-		
-		public void showOrders(Family family, Territory terr) {
-			relatedTerr=terr;
-			this.family=family;
-			label.setText("Give order in "+terr.getName());
-			panel=1;
-			this.repaint();
-		}
+	/**
+	 * This method is call when a player want to give orders to a territory during the programations phase
+	 * It display the orders available on this component
+	 * @param family the family that want to give order
+	 * @param terr The territory on which we want to give orders
+	 */
+	public void showOrders(Family family, Territory terr) {
+		relatedTerr=terr;
+		this.family=family;
+		label.setText("Give order in "+terr.getName());
+		panel=DISPLAY_ORDERS;
+		this.repaint();
+	}
 	
 	/**
 	 * Show the recruit panel when a player click on a territory where he can recruit
@@ -417,25 +419,28 @@ public class PlayersChoices extends JogreComponent {
 	 */
 	public void recruit(Territory territory){
 		relatedTerr=territory;
-		panel=12;
+		panel=DISPLAY_RECRUITEMENT;
 		repaint();
 	}
-		
+	
+	/**
+	 * Return most of the attributes in this object to 0 or null and display a blank screen on this component
+	 */
 	public void blank() {
 		relatedTerr=null;//vraiment utile ?
 		cibleTerr=null;
 		//westerosCard=null;
 		wilidingsCard=null;
 		indexHouseCard=0;
-		panel=0;
+		panel=DISPLAY_BLANK;
 		label.setText("");
 		repaint();
 	}
-	
+	/**
+	 * Just display a blank screen on this component without returning the attributes to 0 or null
+	 */
 	public void blank2() {
-		//getGraphics().clearRect(0, 0, 600, 250);
-		//relatedTerr=null;//vraiment utile ?
-		panel=0;
+		panel=DISPLAY_BLANK;
 		label.setText("");
 		repaint();
 	}
@@ -445,16 +450,16 @@ public class PlayersChoices extends JogreComponent {
 	 */
 	public void endProgramation(){
 		label.setText("You have gived all your orders, do you want to end your turn ?");
-		panel=2;
+		panel=DISPLAY_END_PROGRAMATION;
 		repaint();
 	}
 	/*On indique l'ordre qu'on veut utiliser  */
 	public void orderSelected(Territory territory) {
 		if(territory.getOrder().getType()==OrderType.CON){
-			panel=11;
+			panel=DISPLAY_RECRUIT_OR_CONSOLID;
 			label.setText("Do you want to recruit or to consolidate your power");
 		}else{
-			panel=3;
+			panel=DISPLAY_CANCEL;
 			label.setText(territory.getName()+" gonna "+territory.getOrder().getType());
 		}
 		relatedTerr=territory;
@@ -472,9 +477,9 @@ public class PlayersChoices extends JogreComponent {
 		cibleTerr = territory;
 		label.setText("wich troops do want to send from "+relatedTerr.getName()+" to "+cibleTerr.getName());
 		if(territory instanceof Water){
-			panel=4;
+			panel=DISPLAY_WATER_MOV;
 		}else{
-			panel=5;
+			panel=DISPLAY_LAND_MOV;
 			}
 		this.repaint();
 	}
@@ -485,25 +490,37 @@ public class PlayersChoices extends JogreComponent {
 		}
 		
 	}
-
+	/**
+	 * display the troops that can be send for a battle
+	 * @param territory the territory who is attacked
+	 */
 	public void attackTo(Territory territory) {
 		getGraphics().clearRect(0, 0, 600, 250);
 		cibleTerr = territory;
 		if(territory instanceof Water){
-			panel=6;
+			panel=DISPLAY_WATER_ATT;
 		}else{
-			panel=7;
+			panel=DISPLAY_LAND_ATT;
 		}
 		this.repaint();
 	}
-
+	/**
+	 * Display a selection screen where a player can chose to support attackant, defencer or no one 
+	 * @param territory the territory who can support in this battle
+	 */
 	public void support(Territory territory) {
 		label.setText("who do you want to support ?");
-		panel=8;
+		panel=DISPLAY_SUPPORT_CHOICE;
 		relatedTerr = territory;
 	}
 	
-	// 1 indique cartes, 2 pour jouer l'épée, 3 retraite, 4 fin de combat
+	/**
+	 * 
+	 * @param modelState
+	 * @param family
+	 * @param battle
+	 * @return
+	 */
 	public int check(int modelState, Family family, BattlePvP battle){
 		if(modelState==1 && battle.canPlayCard(family) ){//on verifie si on peut afficher les cartes 
 			//getGraphics().clearRect(0, 0, 600, 250);
@@ -527,37 +544,47 @@ public class PlayersChoices extends JogreComponent {
 	public void showHouseCards(BattlePvP battle){
 		this.battle=battle;
 		selectedHouseCard=-1;
-		panel=9;
+		panel=DISPLAY_HOUSE_CARDS;
 		repaint();
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * Return the index of the selected house card, -1 if none
+	 * @return the index of the selected house card, -1 if none
 	 */
 	public int getIndexCard(){
 		return selectedHouseCard;
 	}
-	
+	/**
+	 * This method is call when it's time to play the valyrian sword,
+	 * if the family have the valyrian sword, it is displayed
+	 * @param family
+	 */
 	public void swordPlay(Family family){
 		if(family.canUseSword()){
-			panel=10;
+			panel=DISPLAY_VALYRIAN_SWORD;
 			repaint();
 		}else{
-			panel=0;
+			panel=DISPLAY_BLANK;
 			repaint();
 		}
 	}
 	
-	
+	/**
+	 * Display the wildings Card 
+	 * @param card the card that is gonna be displayed
+	 */
 	public void wilidingsCard(String card) {
-		panel=17;
+		panel=DISPLAY_WILDINGS_CARD;
 		wilidingsCard=card;
 		repaint();
 	}
-	
+	/**
+	 * Display the westeros Card 
+	 * @param card the card that is gonna be displayed
+	 */
 	public void westerosCard(String card) {
-		panel=13;
+		panel=DISPLAY_WESTEROS_CARD;
 		westerosCard=card;
 		repaint();
 		
@@ -566,7 +593,7 @@ public class PlayersChoices extends JogreComponent {
 	public void bidding() {
 		powerBid=0;
 		label.setText("Power Bid : "+powerBid);
-		panel=14;	
+		panel=DISPLAY_BID;	
 	}
 	
 	public int getBid(){
@@ -574,14 +601,17 @@ public class PlayersChoices extends JogreComponent {
 	}
 	/**Happend when a player have to make a ternair choice because of a westeros card (like dark Wings dark words, put to the sword or throne of blades)*/
 	public void westerosCardChoice(){
-		panel=15;
+		panel=DISPLAY_WESTEROS_CARD;
 		repaint();
 	}
 	
 	public String getWildingsCard(){
 		return wilidingsCard;
 	}
-	
+	/**
+	 * Return the current state of this component
+	 * @return the current state of this component
+	 */
 	public int getPanel(){
 		return panel;
 	}
@@ -590,7 +620,7 @@ public class PlayersChoices extends JogreComponent {
 	 * @param bidding the bid that the player can arrange
 	 * */
 	public void biddingEgality(Bidding bidding){
-		panel=16;
+		panel=DISPLAY_BID_SORT;
 		this.bidding=bidding;
 	}
 	/*All the mechanics to change the position on the track */
@@ -608,6 +638,26 @@ public class PlayersChoices extends JogreComponent {
 		repaint();
 	}
 	
+	
+	// This constant are use to know the state of this component 
+	private static final int DISPLAY_BLANK = 0;
+	private static final int DISPLAY_ORDERS = 1;
+	private static final int DISPLAY_END_PROGRAMATION = 2;
+	private static final int DISPLAY_CANCEL=3;
+	private static final int DISPLAY_WATER_MOV = 4;
+	private static final int DISPLAY_LAND_MOV = 5;
+	private static final int DISPLAY_WATER_ATT = 6;
+	private static final int DISPLAY_LAND_ATT = 7;
+	private static final int DISPLAY_SUPPORT_CHOICE=8;
+	private static final int DISPLAY_HOUSE_CARDS=9;
+	private static final int DISPLAY_VALYRIAN_SWORD=10;
+	private static final int DISPLAY_RECRUIT_OR_CONSOLID = 11;
+	private static final int DISPLAY_RECRUITEMENT = 12;
+	private static final int DISPLAY_WESTEROS_CARD=13;
+	private static final int DISPLAY_BID=14;
+	private static final int DISPLAY_LETTERS=15;
+	private static final int DISPLAY_BID_SORT=16;
+	private static final int DISPLAY_WILDINGS_CARD=17;
 }
 
 

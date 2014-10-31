@@ -17,9 +17,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.jogre.gameOfThrones.client;
+package graphisme;
 
-import graphisme.Board;
 
 import java.awt.Graphics;
 import java.awt.Image;
@@ -30,12 +29,12 @@ import org.jogre.client.awt.JogreComponent;
 import org.jogre.gameOfThrones.common.territory.*;
 /**
  * Main visual view for a game of gameOfThrones which should show a
- * graphical representation of the GameOfThronesModel.
+ * graphical representation of the GameOfThrones Board.
  *
  * @author  Robin Giraudon
  * @version Beta 0.3
  */
-public class GameOfThronesComponent extends JogreComponent {
+public class BoardComponent extends JogreComponent {
 
 	//private int curMousePoint;
 	private Board board;
@@ -43,7 +42,7 @@ public class GameOfThronesComponent extends JogreComponent {
     protected GameOfThronesModel model;
 
     // Constructor which creates the board
-    public GameOfThronesComponent (GameOfThronesModel model) {
+    public BoardComponent (GameOfThronesModel model) {
         super ();
        // curMousePoint =-1; 
         board =new Board(model);

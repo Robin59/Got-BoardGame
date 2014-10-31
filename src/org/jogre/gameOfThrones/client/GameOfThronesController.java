@@ -21,6 +21,7 @@ package org.jogre.gameOfThrones.client;
 
 import nanoxml.XMLElement;
 
+import graphisme.BoardComponent;
 import graphisme.PlayersChoices;
 
 import java.awt.event.MouseEvent;
@@ -58,7 +59,7 @@ public class GameOfThronesController extends JogreController {
 	
     // links to game data and the board component
     protected GameOfThronesModel     model;
-    protected GameOfThronesComponent gameOfThronesComponent;
+    protected BoardComponent gameOfThronesComponent;
     protected JLabel infoLabel;
     protected PlayersChoices playerChoices;
     /**
@@ -68,7 +69,7 @@ public class GameOfThronesController extends JogreController {
      * @param gameOfThronesModel      GameOfThrones model.
      * @param gameOfThronesComponent  GameOfThrones view.
      */
-    public GameOfThronesController (GameOfThronesModel gameOfThronesModel, GameOfThronesComponent gameOfThronesComponent, JLabel infoLabel,PlayersChoices playerChoices)
+    public GameOfThronesController (GameOfThronesModel gameOfThronesModel, BoardComponent gameOfThronesComponent, JLabel infoLabel,PlayersChoices playerChoices)
     {
         super (gameOfThronesModel, gameOfThronesComponent);
         this.model     = gameOfThronesModel;
