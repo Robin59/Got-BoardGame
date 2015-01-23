@@ -61,11 +61,35 @@ public class PlayersChoices extends JogreComponent {
 	private Bidding bidding;
 	
 	//Constant use for the message return by the main method (RigthClick) of this object 
+	public static final int END_PROGRAMATION_PHASE=1;
+	public static final int CANCEL=2;
+	public static final int SEND_SHIP=3;
+	public static final int SEND_FOOT=4;
+	public static final int SEND_KNIGHT=5;
+	public static final int SEND_SEIGE=6;
+	public static final int ATT_PREPARATION_ENDED=7;
+	public static final int SEND_SHIP_FOR_ATT=8;
+	public static final int SEND_FOOT_FOR_ATT=9;
+	public static final int SEND_KNIGHT_FOR_ATT=10;
+	public static final int SEND_SEIGE_FOR_ATT=11;
+	public static final int SUPPORT_ATT=12;
+	public static final int SUPPORT_DEF=13;
+	public static final int SUPPORT_NONE=14;
+	public static final int HOUSE_CARD_CHOSEN=15;
+	public static final int	VALYRIAN_SWORD_USE=16;
+	public static final int	VALYRIAN_SWORD_NOT_USE=17;
+	public static final int CONSOLID=18;
 	public static final int RECRUIT_SHIP=19;
 	public static final int RECRUIT_FOOT=20;
 	public static final int RECRUIT_KNIGHT=21;
 	public static final int RECRUIT_SEIGE=22;
-	
+	public static final int WESTEROS_CARD_SAW=23;
+	public static final int BID_CHOSED=24;
+	public static final int LETTER_A_CHOSE=25;
+	public static final int LETTER_B_CHOSE=26;
+	public static final int LETTER_C_CHOSE=27;
+	public static final int TRACK_SORTED=28;
+	public static final int WILDINGS_CARD_SAW=29; 
 	
 	public PlayersChoices (JLabel label){
 		this.label=label;
@@ -114,55 +138,55 @@ public class PlayersChoices extends JogreComponent {
 			if (x>150 && x<200 && y>50 && y<100){
 				family.ordersGived=true; 
 				blank();
-				return 1;
+				return END_PROGRAMATION_PHASE;
 			}
 			break;
 		case DISPLAY_CANCEL :
 			if (x>150 && x<200 && y>50 && y<100){
-				return 2;
+				return CANCEL;
 			}
 			break;
 		//les mouvements
 		case DISPLAY_WATER_MOV :
-			if (x>150 && x<200 && y>50 && y<100){ // troop navals
-				return 3;
+			if (x>150 && x<200 && y>50 && y<100){ 
+				return SEND_SHIP;
 			}
 			break;
 		case DISPLAY_LAND_MOV :
 			if (x>50 && x<100 && y>50 && y<100 && relatedTerr.getTroup().getTroops()[1]!=0){
-				return 4;
+				return SEND_FOOT;
 			}else if(x>150 && x<200 && y>50 && y<100 && relatedTerr.getTroup().getTroops()[2]!=0){
-				return 5;
+				return SEND_KNIGHT;
 			}else if(x>250 && x<300 && y>50 && y<100 && relatedTerr.getTroup().getTroops()[3]!=0){
-				return 6;
+				return SEND_SEIGE;
 			}
 			break;
 		//les combats
 		case DISPLAY_WATER_ATT :
 			if (x>150 && x<200 && y>150 && y<200){ 
-				return 7;
+				return ATT_PREPARATION_ENDED;
 			}
 			break;
 		case DISPLAY_LAND_ATT :
 			if (x>150 && x<200 && y>150 && y<200){ 
-				return 7;
+				return SEND_SHIP_FOR_ATT;
 			}else if (x>50 && x<100 && y>50 && y<100 && relatedTerr.getTroup().getTroops()[1]!=0){
-				return 9;
+				return SEND_FOOT_FOR_ATT;
 			}else if(x>150 && x<200 && y>50 && y<100 && relatedTerr.getTroup().getTroops()[2]!=0){
-				return 10;
+				return SEND_KNIGHT_FOR_ATT;
 			}else if(x>250 && x<300 && y>50 && y<100 && relatedTerr.getTroup().getTroops()[3]!=0){
-				return 11;
+				return SEND_SEIGE_FOR_ATT;
 			}
 			break;
 		case DISPLAY_SUPPORT_CHOICE:
 			if (x>100 && x<150 && y>50 && y<100){ 
 				blank2();
-				return 12;
+				return SUPPORT_ATT;
 			}else if(x>250 && x<300 && y>50 && y<100){
 				blank2();
-				return 13;
+				return SUPPORT_DEF;
 			}else if(x>250 && x<300 && y>175 && y<225){
-				return 14;
+				return SUPPORT_NONE;
 			}
 			break;
 		case DISPLAY_HOUSE_CARDS :
@@ -174,18 +198,18 @@ public class PlayersChoices extends JogreComponent {
 				repaint();
 			}else if (x>60 && x<510){
 				choseCard(x, family);
-				return 15;
+				return HOUSE_CARD_CHOSEN;
 			}
 			break;
 		case DISPLAY_VALYRIAN_SWORD :
 			if (x>50 && x<140){
 				blank2();
 				this.repaint();
-				return 16;
+				return VALYRIAN_SWORD_NOT_USE;
 			}else if(x>200 && x<300){
 				blank2();
 				this.repaint();
-				return 17;
+				return VALYRIAN_SWORD_NOT_USE;
 			}
 			break;
 		case DISPLAY_RECRUIT_OR_CONSOLID : 
@@ -195,7 +219,7 @@ public class PlayersChoices extends JogreComponent {
 			}else if(x>350 && x<430){
 				blank2();
 				this.repaint();
-				return 18;
+				return CONSOLID;
 			}
 			break;
 		case DISPLAY_RECRUITEMENT :
@@ -208,11 +232,11 @@ public class PlayersChoices extends JogreComponent {
 			}else if (y<170 && x>350 && x<400){
 				return RECRUIT_SEIGE;
 			}else if(y>190 && x>200 && x<270){
-				return 2;
+				return CANCEL;
 			}
 			break;
 		case DISPLAY_WESTEROS_CARD:
-			return 23;
+			return WESTEROS_CARD_SAW;
 		case DISPLAY_BID :
 			if(x>100&&x<150 && powerBid>0){
 				powerBid--;
@@ -221,30 +245,30 @@ public class PlayersChoices extends JogreComponent {
 				powerBid++;
 				label.setText("Power Bid : "+powerBid);
 			}else if(x>240 && x<300){
-				return 24; // end of the biddings
+				return BID_CHOSED; // end of the biddings
 			}break;
 		case DISPLAY_LETTERS:
 			if(x>100 && x<170){
 				blank();
-				return 25;
+				return LETTER_A_CHOSE;
 			}else if(x>190 && x<260){
 				blank();
-				return 26;
+				return LETTER_B_CHOSE;
 			}else if(x>280 && x<350){
 				blank();
-				return 27;
+				return LETTER_C_CHOSE;
 			}
 		break;
 		case DISPLAY_BID_SORT:
 			if(x>170 && x<230 && y>180){
 				selectedBid=-1;
-				return 28;
+				return TRACK_SORTED;
 			}else if (y<180){
 				changeTrack(x);
 			}
 		break;
 		case DISPLAY_WILDINGS_CARD:
-			return 29;
+			return WILDINGS_CARD_SAW;
 		}
 		return 0;
 	}
