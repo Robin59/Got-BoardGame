@@ -599,8 +599,8 @@ public class GameOfThronesModel extends JogreModel {
 		return territory2.getFamily().getPlayer()==seatNum && territory2.canWithdraw(territory);
 	}
 	
-	/*Pour le Label ajouter :  
-	 * - le nombre de chateau
+	/**
+	 * 
 	 */
 	public void updateLabel(){
 		String text= new String("<html>Turn: "+turn+"        Wildings: "+wildings+"  ");
@@ -696,12 +696,14 @@ public class GameOfThronesModel extends JogreModel {
 		return westerosPhase;
 	}
 
+	/**
+	 * Update the supply limits for each families, depending on which territories they possess, 
+	 * if a family don't have enough supply points they must suppress some of their troops
+	 */
 	public void supplyUpdate() {
 		for (Family  family : families){
 			int supply=0;
 			for(Territory territory :family.getTerritories()){
-				/*System.out.println(supply);
-				System.out.println(territory.getName()+" give "+territory.getSupply());*/
 				supply+=territory.getSupply();
 			}
 			family.setSupply(supply);
