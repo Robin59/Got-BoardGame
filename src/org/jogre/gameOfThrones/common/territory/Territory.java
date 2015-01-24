@@ -48,7 +48,9 @@ public abstract class Territory {
 	public List<Territory> getNeighbors(){
 		return neighbors; // plutôt utiliser un iterateur ?
 	}
-
+	public void setFamily(Family family){
+		owner=family;
+	}
 	public Family getFamily() {
 		return owner;
 	}

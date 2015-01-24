@@ -41,7 +41,8 @@ import org.jogre.gameOfThrones.common.territory.Water;
 
 /**
  * Game model for the gameOfThrones game.
- *
+ * The game is working more or less like an finished automate, with a lot of state from which some transition are available,
+ * so a lot of constant are use for represent this aspect of the game
  * @author  Robin Giraudon
  * @version Beta 0.3
  */
@@ -232,6 +233,14 @@ public class GameOfThronesModel extends JogreModel {
 		return families[seatNum];
 	}
 
+	public Family getFamily(String familyName){
+		for(Family family : families){
+			if (family.getName().equals(familyName))
+				return family;
+		}
+		return null;
+	}
+	
 	/**on verifie que tous les joueurs on donné leurs ordres.
 	 * Quand c'est le cas on passe à la phase suivante
 	 */

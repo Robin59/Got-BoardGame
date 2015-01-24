@@ -3,6 +3,7 @@ package org.jogre.gameOfThrones.common.territory;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.jogre.gameOfThrones.common.Family;
 import org.jogre.gameOfThrones.common.combat.GroundForce;
 import org.jogre.gameOfThrones.common.combat.NavalTroup;
 
@@ -63,10 +64,13 @@ public class Land extends Territory {
 	}*/
 	@Override
 	public void recruit(int troopIndex) {
-		if(troop==null){
+		if(troop==null && troopIndex>0){
 			troop= new GroundForce(getFamily(),0,0,0);
 		}
 		switch(troopIndex){
+		case 0:
+			recruit-=1;
+			break;
 		case 1:
 			this.troop.addToop(0,1,0,0);
 			recruit-=1;
@@ -124,7 +128,7 @@ public class Land extends Territory {
 		
 	}
 	/**
-	 * Said if this territory can recruit ship
+	 * Said if this territory can recruit ship (it means that there is a friendly port near)
 	 * @return true if you can recruit ship with this territory
 	 */
 	public boolean canRecruitShip(){
@@ -139,20 +143,6 @@ public class Land extends Territory {
 		}
 		return false;
 	}
-	/**
-	 * If a land can recruit a ship, this method indicate on which instance of Water it appears
-	 * @return the instance of Water where the ship appears, return null if no place is found
-	 */
-	public Territory whereRecruitShip(){ // FAIRE AUTREMENT
-		for (Territory territory: neighbors){
-			if (territory instanceof Water && (territory.getFamily()==null ||territory.getFamily()==this.getFamily())){
-				for (Territory neighborsWaterTerritory :territory.neighbors){
-					if(neighborsWaterTerritory instanceof Port && neighborsWaterTerritory.getFamily()!=null && neighborsWaterTerritory.getFamily()==this.getFamily()){
-						return territory;
-					}
-				}
-			}
-		}
-		return null;
-	}
+	
+	
 }
