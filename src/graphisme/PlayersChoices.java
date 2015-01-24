@@ -631,7 +631,7 @@ public class PlayersChoices extends JogreComponent {
 	}
 	/**Happend when a player have to make a ternair choice because of a westeros card (like dark Wings dark words, put to the sword or throne of blades)*/
 	public void westerosCardChoice(){
-		panel=DISPLAY_WESTEROS_CARD;
+		panel=DISPLAY_LETTERS;
 		repaint();
 	}
 	
