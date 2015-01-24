@@ -68,12 +68,12 @@ public class Board {
 	
 	public void down(){
 		if(y>(-980)){//ou 950
-			y-=5;
+			y-=15;
 		}
 	}
 	public void up(){
 		if(y<0){
-			y+=5;
+			y+=15;
 		}
 	}
 	
