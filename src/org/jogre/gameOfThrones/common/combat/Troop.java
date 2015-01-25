@@ -36,6 +36,14 @@ public abstract class Troop {
 	}
 	
 	public abstract void addToop(int ship,int foot,int knight,int siege);
+	
+	/**
+	 * Remove the number of troops given in parameters (be careful don't use negative numbers)  
+	 * @param ship the number of ship that will be removed
+	 * @param foot the number of footman that will be removed
+	 * @param knight the number of knight that will be removed
+	 * @param siege the number of siege machine that will be removed
+	 */
 	public abstract void rmToop(int ship,int foot,int knight,int siege);
 	
 	public abstract boolean canMoveTo(Territory territory);

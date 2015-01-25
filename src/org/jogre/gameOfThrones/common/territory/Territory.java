@@ -287,5 +287,33 @@ public abstract class Territory {
 			return false;
 		}
 	}
+	
+	/**
+	 * Remove the troop indicate in parameter to this territory, if it was the last one the troop(as instance) is destroy
+	 * be careful, this method don't check if there is no troops and will bug if thee is none
+	 * @param i indicate the kind of troop that must be remove (0 for ship, 1 for footman, 2 knight, 3 siege machine)
+	 */
+	public void removeTroop(int i) {
+		if (troop.getEffectif()<2){
+			troop=null;
+		}else{
+			switch(i){
+				case 0:
+					troop.rmToop(1,0,0,0);
+					break;
+				case 1:
+					troop.rmToop(0,1,0,0);
+					break;
+				case 2:
+					troop.rmToop(0,0,1,0);
+					break;
+				case 3:
+					troop.rmToop(0,0,0,1);
+					break;
+			}
+			
+		}
+		
+	}
 }
 	

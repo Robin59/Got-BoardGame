@@ -25,6 +25,7 @@ import graphisme.BoardComponent;
 import graphisme.PlayersChoices;
 
 import java.awt.event.MouseEvent;
+import java.lang.ref.PhantomReference;
 
 import javax.swing.JLabel;
 
@@ -48,7 +49,8 @@ import org.jogre.common.comm.CommGameOver;
 
 /**
  * Controller for the gameOfThrones game.
- * The game is working more or less like an finished automate, with a lot of state from which some transition are available 
+ * The game is working more or less like an finished automate, with a lot of state from which some transition are available
+ * The state here are combination of the state of the model and the state of the player(PlayerChoice classe) 
  * @author  Robin Giraudon
  * @version Beta 0.3
  */
@@ -124,11 +126,12 @@ public class GameOfThronesController extends JogreController {
     		
     }
     
+    /*This method is call whenever the player click on the board*/
     private void mouseClickOnBoard (MouseEvent e){
 
-		//on regarde si on click bien sur un territoir
+		//we first look if the player click on a territory
 		if (gameOfThronesComponent.getTerritory(e.getX(),e.getY())!=null){
-			//
+			
 			if(this.shipRecrutement){
 				Territory water = gameOfThronesComponent.getTerritory(e.getX(),e.getY());
 				if(water instanceof Water &&((Water) water).canRecruitShipHere(playerChoices.getRelatedTerr()) && model.checkSupplyLimits(getSeatNum(),water)){
@@ -153,13 +156,17 @@ public class GameOfThronesController extends JogreController {
 				shipRecrutement=false;
 			}else{
 				switch(model.getPhase()){
-				case 0 : 
+				case GameOfThronesModel.SUPPLY_TO_LOW:
+					if(gameOfThronesComponent.getTerritory(e.getX(),e.getY()).getFamily()==model.getFamily(getSeatNum())){
+						playerChoices.destroyTroop(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
+					}
+					break;
+				case GameOfThronesModel.PHASE_WESTEROS: 
 					if(model.canRecruit(gameOfThronesComponent.getTerritory(e.getX(),e.getY()), getSeatNum())){
-						//System.out.println("Can recruit");
 						playerChoices.recruit(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
 					}
 					break;
-				case 1 :
+				case GameOfThronesModel.PHASE_PROGRAMATION :
 					// on selectionne un territoire et on le passe en parametre de canGiveOrder(teritoir, numJoueur)
 					if(model.canGiveOrder(gameOfThronesComponent.getTerritory(e.getX(),e.getY()), getSeatNum())){
 						//on affiche en bas l'ecran d'ordres 
@@ -168,7 +175,7 @@ public class GameOfThronesController extends JogreController {
 						playerChoices.blank();
 					}
 					break;
-				case 2:
+				case GameOfThronesModel.PHASE_EXECUTION:
 					if(model.getBattle()!=null){//On verifie si il y a combat
 						//en cas de retraite !!
 						if(model.getBattle().getState()==3 && model.canWithdraw(gameOfThronesComponent.getTerritory(e.getX(),e.getY()),getSeatNum())){
@@ -243,7 +250,7 @@ public class GameOfThronesController extends JogreController {
 				model.endProg();
 			break;
 		case PlayersChoices.CANCEL : 
-			if(model.getPhase()==0){// on teste si on est pas dans la phase westeros, donc recrutement
+			if(model.getPhase()==GameOfThronesModel.PHASE_WESTEROS){// on teste si on est dans la phase westeros, donc recrutement
 				playerChoices.getRelatedTerr().recruitmentDone();
 				sendProperty("recruitmentDone", playerChoices.getRelatedTerr().getName());
 				if(model.allRecruitementDone()){//on teste si tous les recrutement sont bon
@@ -252,6 +259,8 @@ public class GameOfThronesController extends JogreController {
 					playerChoices.westerosCard(card);
 					sendProperty("WesterosCard",card);
 				}
+			}else if(model.getPhase()==GameOfThronesModel.SUPPLY_TO_LOW){
+				playerChoices.blank2();
 			}else{
 				sendProperty("cancelOrder",playerChoices.getRelatedTerr().getName());
 				playerChoices.getRelatedTerr().rmOrder();
@@ -459,7 +468,18 @@ public class GameOfThronesController extends JogreController {
 					playerChoices.biddingEgality(model.getBidding());
 				}
 			}
-		break;
+			break;
+		case PlayersChoices.REMOVE_SHIP:
+			playerChoices.getRelatedTerr().removeTroop(0);
+			sendProperty("remove_ship", playerChoices.getRelatedTerr().getName());//this line is not yet implented
+			this.checkSupplyLimit();
+			break;
+		case PlayersChoices.REMOVE_FOOT:
+			break;
+		case PlayersChoices.REMOVE_KNIGHT:
+			break;
+		case PlayersChoices.REMOVE_SIEGE:
+			break;
 		}
 		if(model.getMusteringPhase()){
 			//we do nothing
@@ -822,7 +842,18 @@ public class GameOfThronesController extends JogreController {
 	
 		
 	}		
-    
+    private void checkSupplyLimit(){
+    	if(model.checkSupplyLimits()){
+			playerChoices.blank2();
+			if(model.getWesterosPhase()==0){
+				model.setPhase(GameOfThronesModel.PHASE_WESTEROS);
+				String card = model.choseCard();
+				playerChoices.westerosCard(card);
+				sendProperty("WesterosCard",card);
+			}
+			//AUTRES CAS OU ON MET A JOUR LE ravitaillement ??
+		}
+    }
     
  // Check to see if the game is over or not.
     private void checkGameOver () {

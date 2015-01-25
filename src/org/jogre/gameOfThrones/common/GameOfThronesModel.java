@@ -89,6 +89,8 @@ public class GameOfThronesModel extends JogreModel {
 	private int[][] supplyLimites= {{2,2,0,0,0},{3,2,0,0,0},{3,2,2,0,0},{3,2,2,2,0},{3,3,2,2,0},{4,3,2,2,0},{4,3,2,2,2}};
 	/*indicate how many orders with stars a player can use*/
 	private int[] starsLimitation;
+	/*indicate the current state of the game(if we consider it as an finished automate)*/
+	private int state;
 	
     /**
      * Constructor which creates the model.
@@ -108,6 +110,7 @@ public class GameOfThronesModel extends JogreModel {
         familiesConstruction(numberPlayers);
         // le jeu commence à la phase programation
         phase=1;
+        state=PHASE_PROGRAMATION;
         internPhase=0;
         biddingPhase=3;
         turn=1;
@@ -150,7 +153,8 @@ public class GameOfThronesModel extends JogreModel {
     	//System.out.println("nextInternPhase");
     }
     public void nextPhase(){
-    	phase= (phase+1)%3;
+    	phase=(phase+1)%3;
+    	state=phase;
     	//AJOUTER DES CHOSES EN FONCTION DES PHASES 
     	if(phase==2){
     		//on initialise
@@ -216,7 +220,7 @@ public class GameOfThronesModel extends JogreModel {
     }
     
     public boolean canGiveOrder(Territory territory, int player){
-    	return phase==1 && (territory.getFamily()!=null) && territory.getTroup()!=null &&territory.getFamily().getPlayer()==player;
+    	return state==PHASE_PROGRAMATION && (territory.getFamily()!=null) && territory.getTroup()!=null &&territory.getFamily().getPlayer()==player;
     }
 
     public boolean canPlayThisOrder(Territory territory, int seatNum) {
@@ -257,9 +261,9 @@ public class GameOfThronesModel extends JogreModel {
 	}
 	
 
-	public int getPhase() {	
+	/*public int getPhase() {	
 		return phase;
-	}
+	}*/
 	
 	/** this method indicate to the model that a move as been selected from the territory*/
 	// il faut empecher de declancher un mouvement une fois qu'il est commencé
@@ -604,15 +608,18 @@ public class GameOfThronesModel extends JogreModel {
 	 */
 	public void updateLabel(){
 		String text= new String("<html>Turn: "+turn+"        Wildings: "+wildings+"  ");
-		switch(phase){
-		case 0:
+		switch(state){
+		case PHASE_WESTEROS:
 			text+=" Westeros phase";
 			break;
-		case 1:
+		case PHASE_PROGRAMATION:
 			text+=" Programation's phase";
 			break;
-		case 2:
+		case PHASE_EXECUTION:
 			text+=" Exection's phase  :  "+families[throne[currentPlayer]].getName()+"'s turn";
+			break;
+		case SUPPLY_TO_LOW :
+			text+=" The supply of some players is too low, they have too destruct troops";
 			break;
 		}
 		text+="<br>Throne track : ";
@@ -710,10 +717,12 @@ public class GameOfThronesModel extends JogreModel {
 		}
 		updateLabel();
 		if(!this.checkSupplyLimits()){
-			System.out.println("Some families exceeds their supply limits, they have to delete troops. Not yet implemented");
+			state=SUPPLY_TO_LOW;
 		}
 	}
 
+	
+	
 	 private void westerosCardNotSaw() {
 		 for(Family family : families){
 			family.carteNonVu(); 
@@ -1088,9 +1097,30 @@ public class GameOfThronesModel extends JogreModel {
 		return numberPlayers;
 	}
 	
+	/**
+	 * Return the current state of the model
+	 * @return the current state of the model
+	 */
+	public int getPhase(){
+		return state;
+	}
+	/**
+	 * 
+	 * @param newState
+	 */
+	public void setPhase(int newState) {
+		this.state=newState;
+		
+	}
+	
+	//Constant that are use to indicate the state of the game (as finished automate) 
+	public static final int PHASE_WESTEROS=0;
+	public static final int PHASE_PROGRAMATION=1;
+	public static final int PHASE_EXECUTION=2;
+	
+	public static final int SUPPLY_TO_LOW=4;
 
 	
-
 
 	
 

@@ -90,6 +90,10 @@ public class PlayersChoices extends JogreComponent {
 	public static final int LETTER_C_CHOSE=27;
 	public static final int TRACK_SORTED=28;
 	public static final int WILDINGS_CARD_SAW=29; 
+	public static final int REMOVE_SHIP=30;
+	public static final int REMOVE_FOOT=31;
+	public static final int REMOVE_KNIGHT=32;
+	public static final int REMOVE_SIEGE=33;
 	
 	public PlayersChoices (JLabel label){
 		this.label=label;
@@ -258,7 +262,7 @@ public class PlayersChoices extends JogreComponent {
 				blank();
 				return LETTER_C_CHOSE;
 			}
-		break;
+			break;
 		case DISPLAY_BID_SORT:
 			if(x>170 && x<230 && y>180){
 				selectedBid=-1;
@@ -266,9 +270,23 @@ public class PlayersChoices extends JogreComponent {
 			}else if (y<180){
 				changeTrack(x);
 			}
-		break;
+			break;
 		case DISPLAY_WILDINGS_CARD:
 			return WILDINGS_CARD_SAW;
+		case DISPLAY_TROOP_DESTRUCTION:
+			int troops[]=relatedTerr.getTroup().getTroops();
+			if(x>50&&x<100 && troops[0]>0){
+				return REMOVE_SHIP;
+			}else if (y<170 && x>150 && x<200 && troops[1]>0){
+				return REMOVE_FOOT;
+			}else if (y<170 && x>250 && x<300 && troops[2]>0){
+				return REMOVE_KNIGHT;
+			}else if (y<170 && x>350 && x<400 && troops[3]>0){
+				return REMOVE_SIEGE;
+			}else if(y>190 && x>200 && x<270){
+				return CANCEL;
+			}
+			
 		}
 		return 0;
 	}
@@ -359,9 +377,22 @@ public class PlayersChoices extends JogreComponent {
 		case DISPLAY_WILDINGS_CARD:
 			g.drawImage(images.getWildingCardImage(wilidingsCard),100,0,null);
 			break;
+		case DISPLAY_TROOP_DESTRUCTION:
+			drawTroops(g);
+			g.drawImage(dontUseImage, 200,190,null);
+			break;
 		}
 	}
 	
+	/**draw the troops actually on this current land*/
+	private void drawTroops(Graphics g){
+		int[] effectif =relatedTerr.getTroup().getTroops();
+		for(int i=0; i<4; i++){
+			if(effectif[i]>0){
+				g.drawImage(images.getTroopImages(family)[i],i*100+50,100,null);
+			}
+		}
+	}
 	/**Draw the correct troop regarding the possibility and the family*/
 	private void drawRecruit(Graphics g){
 		if(relatedTerr.getRecruit()>0){
@@ -668,6 +699,16 @@ public class PlayersChoices extends JogreComponent {
 		repaint();
 	}
 	
+	/**
+	 * This method is call when a player have to destroy troops and click on one of this territory
+	 * @param territory the territory where the player want to destroy troops
+	 */
+	public void destroyTroop(Territory territory) {
+		relatedTerr=territory;
+		label.setText("wich troops do want remove from "+relatedTerr.getName());
+		panel=DISPLAY_TROOP_DESTRUCTION;
+		repaint();
+	}
 	
 	// This constant are use to know the state of this component 
 	private static final int DISPLAY_BLANK = 0;
@@ -688,6 +729,8 @@ public class PlayersChoices extends JogreComponent {
 	private static final int DISPLAY_LETTERS=15;
 	private static final int DISPLAY_BID_SORT=16;
 	private static final int DISPLAY_WILDINGS_CARD=17;
+	private static final int DISPLAY_TROOP_DESTRUCTION=18;
+	
 }
 
 
