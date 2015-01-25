@@ -408,7 +408,7 @@ public class GameOfThronesController extends JogreController {
 				}else if(model.getWesterosPhase()==2){
 					playerChoices.bidding();
 					sendProperty("ClashOfKings", 0);
-				}else{
+				}else if (model.getPhase()!=GameOfThronesModel.SUPPLY_TO_LOW){
 					String card = model.choseCard();
 					playerChoices.westerosCard(card);
 					sendProperty("WesterosCard",card);
@@ -471,18 +471,26 @@ public class GameOfThronesController extends JogreController {
 			break;
 		case PlayersChoices.REMOVE_SHIP:
 			playerChoices.getRelatedTerr().removeTroop(0);
-			sendProperty("remove_ship", playerChoices.getRelatedTerr().getName());//this line is not yet implented
-			this.checkSupplyLimit();
+			sendProperty("remove_ship", playerChoices.getRelatedTerr().getName());
 			break;
 		case PlayersChoices.REMOVE_FOOT:
+			playerChoices.getRelatedTerr().removeTroop(1);
+			sendProperty("remove_foot", playerChoices.getRelatedTerr().getName());
 			break;
 		case PlayersChoices.REMOVE_KNIGHT:
+			playerChoices.getRelatedTerr().removeTroop(2);
+			sendProperty("remove_knight", playerChoices.getRelatedTerr().getName());
 			break;
 		case PlayersChoices.REMOVE_SIEGE:
+			playerChoices.getRelatedTerr().removeTroop(3);
+			sendProperty("remove_siege", playerChoices.getRelatedTerr().getName());
+			
 			break;
 		}
 		if(model.getMusteringPhase()){
 			//we do nothing
+		}else if (model.getPhase()==GameOfThronesModel.SUPPLY_TO_LOW){
+			this.checkSupplyLimit();
 		}else if(model.checkNewTurn() && model.getWesterosPhase()==0){
 			String card = model.choseCard();
 			playerChoices.westerosCard(card);
@@ -548,8 +556,8 @@ public class GameOfThronesController extends JogreController {
 		model.getFamily(getSeatNum()).carteVu();
 		sendProperty("cardSaw", getSeatNum());
 		playerChoices.blank();
-		//verifie si tout le monde a executé
-		if(model.westerosCardcheck()){
+		//verifie si tout le monde a executé et qu'on est tjs dans un la phase westeros (cad aucun effet d'autre carte n'a pertubé le cours normal)
+		if(model.westerosCardcheck() && model.getPhase()==GameOfThronesModel.PHASE_WESTEROS){
 			if(model.getCurrentCard().equals("DarkWingsDarkWords")||model.getCurrentCard().equals("PutToTheSword")||model.getCurrentCard().equals("ThroneOfBlades") ){
 				if( model.canChose((getSeatNum()))){
 					playerChoices.westerosCardChoice();
@@ -673,6 +681,14 @@ public class GameOfThronesController extends JogreController {
     		temp=value;
     	}else if (key.equals("setFamilyOn")){
     		model.getBoardModel().getTerritory(value).setFamily(model.getFamily(temp));
+    	}else if(key.equals("remove_ship")){
+    		model.getBoardModel().getTerritory(value).removeTroop(0);
+    	}else if(key.equals("remove_foot")){
+    		model.getBoardModel().getTerritory(value).removeTroop(1);
+    	}else if(key.equals("remove_knight")){
+    		model.getBoardModel().getTerritory(value).removeTroop(2);
+    	}else if(key.equals("remove_siege")){
+    		model.getBoardModel().getTerritory(value).removeTroop(3);
     	}else{
     		model.getBoardModel().getTerritory(key).useOrderOn(model.getBoardModel().getTerritory(value));
     		model.nextPlayer();
@@ -845,8 +861,8 @@ public class GameOfThronesController extends JogreController {
     private void checkSupplyLimit(){
     	if(model.checkSupplyLimits()){
 			playerChoices.blank2();
-			if(model.getWesterosPhase()==0){
-				model.setPhase(GameOfThronesModel.PHASE_WESTEROS);
+			if(model.getWesterosPhase()==1){
+				//model.setPhase(GameOfThronesModel.PHASE_WESTEROS);
 				String card = model.choseCard();
 				playerChoices.westerosCard(card);
 				sendProperty("WesterosCard",card);

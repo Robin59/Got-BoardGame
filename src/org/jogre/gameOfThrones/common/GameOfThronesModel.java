@@ -654,6 +654,7 @@ public class GameOfThronesModel extends JogreModel {
 	}
 	
 	public String choseCard() {
+		state=PHASE_WESTEROS;
 		westerosCardNotSaw();
 		switch (westerosPhase){
 		case 0:
@@ -668,12 +669,14 @@ public class GameOfThronesModel extends JogreModel {
 			break;
 		}
 		westerosPhase++;
+		updateLabel();
 		return currentCard;
 	}
 
 
 	public void removeCard(String card) {
 		westerosCardNotSaw();
+		state=PHASE_WESTEROS;
 		switch (westerosPhase){
 		case 0:
 			deck1.cardPlayed(card);
@@ -686,6 +689,7 @@ public class GameOfThronesModel extends JogreModel {
 			break;
 		}
 		westerosPhase++;
+		updateLabel();
 		currentCard=card;
 	}
 
@@ -715,10 +719,10 @@ public class GameOfThronesModel extends JogreModel {
 			}
 			family.setSupply(supply);
 		}
-		updateLabel();
 		if(!this.checkSupplyLimits()){
 			state=SUPPLY_TO_LOW;
 		}
+		updateLabel();
 	}
 
 	
