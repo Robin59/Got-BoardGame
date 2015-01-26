@@ -46,6 +46,8 @@ import org.jogre.client.awt.PlayerComponent;
 import org.jogre.common.PlayerList;
 import org.jogre.common.comm.CommGameOver;
 
+import state.ModelState;
+
 
 /**
  * Controller for the gameOfThrones game.
@@ -155,18 +157,18 @@ public class GameOfThronesController extends JogreController {
 				}
 				shipRecrutement=false;
 			}else{
-				switch(model.getPhase()){
-				case GameOfThronesModel.SUPPLY_TO_LOW:
+				switch(model.getPhase().getModelState()){
+				case SUPPLY_TO_LOW:
 					if(gameOfThronesComponent.getTerritory(e.getX(),e.getY()).getFamily()==model.getFamily(getSeatNum())){
 						playerChoices.destroyTroop(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
 					}
 					break;
-				case GameOfThronesModel.PHASE_WESTEROS: 
+				case PHASE_WESTEROS: 
 					if(model.canRecruit(gameOfThronesComponent.getTerritory(e.getX(),e.getY()), getSeatNum())){
 						playerChoices.recruit(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
 					}
 					break;
-				case GameOfThronesModel.PHASE_PROGRAMATION :
+				case PHASE_PROGRAMATION :
 					// on selectionne un territoire et on le passe en parametre de canGiveOrder(teritoir, numJoueur)
 					if(model.canGiveOrder(gameOfThronesComponent.getTerritory(e.getX(),e.getY()), getSeatNum())){
 						//on affiche en bas l'ecran d'ordres 
@@ -175,7 +177,7 @@ public class GameOfThronesController extends JogreController {
 						playerChoices.blank();
 					}
 					break;
-				case GameOfThronesModel.PHASE_EXECUTION:
+				case PHASE_EXECUTION:
 					if(model.getBattle()!=null){//On verifie si il y a combat
 						//en cas de retraite !!
 						if(model.getBattle().getState()==3 && model.canWithdraw(gameOfThronesComponent.getTerritory(e.getX(),e.getY()),getSeatNum())){
@@ -250,7 +252,7 @@ public class GameOfThronesController extends JogreController {
 				model.endProg();
 			break;
 		case PlayersChoices.CANCEL : 
-			if(model.getPhase()==GameOfThronesModel.PHASE_WESTEROS){// on teste si on est dans la phase westeros, donc recrutement
+			if(model.getPhase().getModelState()==ModelState.PHASE_WESTEROS){// on teste si on est dans la phase westeros, donc recrutement
 				playerChoices.getRelatedTerr().recruitmentDone();
 				sendProperty("recruitmentDone", playerChoices.getRelatedTerr().getName());
 				if(model.allRecruitementDone()){//on teste si tous les recrutement sont bon
@@ -259,7 +261,7 @@ public class GameOfThronesController extends JogreController {
 					playerChoices.westerosCard(card);
 					sendProperty("WesterosCard",card);
 				}
-			}else if(model.getPhase()==GameOfThronesModel.SUPPLY_TO_LOW){
+			}else if(model.getPhase().getModelState()==ModelState.SUPPLY_TO_LOW){
 				playerChoices.blank2();
 			}else{
 				sendProperty("cancelOrder",playerChoices.getRelatedTerr().getName());
@@ -408,7 +410,7 @@ public class GameOfThronesController extends JogreController {
 				}else if(model.getWesterosPhase()==2){
 					playerChoices.bidding();
 					sendProperty("ClashOfKings", 0);
-				}else if (model.getPhase()!=GameOfThronesModel.SUPPLY_TO_LOW){
+				}else if (model.getPhase().getModelState()!=ModelState.SUPPLY_TO_LOW){
 					String card = model.choseCard();
 					playerChoices.westerosCard(card);
 					sendProperty("WesterosCard",card);
@@ -489,7 +491,7 @@ public class GameOfThronesController extends JogreController {
 		}
 		if(model.getMusteringPhase()){
 			//we do nothing
-		}else if (model.getPhase()==GameOfThronesModel.SUPPLY_TO_LOW){
+		}else if (model.getPhase().getModelState()==ModelState.SUPPLY_TO_LOW){
 			this.checkSupplyLimit();
 		}else if(model.checkNewTurn() && model.getWesterosPhase()==0){
 			String card = model.choseCard();
@@ -557,7 +559,7 @@ public class GameOfThronesController extends JogreController {
 		sendProperty("cardSaw", getSeatNum());
 		playerChoices.blank();
 		//verifie si tout le monde a executé et qu'on est tjs dans un la phase westeros (cad aucun effet d'autre carte n'a pertubé le cours normal)
-		if(model.westerosCardcheck() && model.getPhase()==GameOfThronesModel.PHASE_WESTEROS){
+		if(model.westerosCardcheck() && model.getPhase().getModelState()==ModelState.PHASE_WESTEROS){
 			if(model.getCurrentCard().equals("DarkWingsDarkWords")||model.getCurrentCard().equals("PutToTheSword")||model.getCurrentCard().equals("ThroneOfBlades") ){
 				if( model.canChose((getSeatNum()))){
 					playerChoices.westerosCardChoice();

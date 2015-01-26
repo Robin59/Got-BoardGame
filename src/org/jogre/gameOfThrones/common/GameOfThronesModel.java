@@ -39,6 +39,9 @@ import org.jogre.gameOfThrones.common.territory.Land;
 import org.jogre.gameOfThrones.common.territory.Territory;
 import org.jogre.gameOfThrones.common.territory.Water;
 
+import state.GameState;
+import state.ModelState;
+
 /**
  * Game model for the gameOfThrones game.
  * The game is working more or less like an finished automate, with a lot of state from which some transition are available,
@@ -90,7 +93,7 @@ public class GameOfThronesModel extends JogreModel {
 	/*indicate how many orders with stars a player can use*/
 	private int[] starsLimitation;
 	/*indicate the current state of the game(if we consider it as an finished automate)*/
-	private int state;
+	private GameState state;
 	
     /**
      * Constructor which creates the model.
@@ -106,11 +109,10 @@ public class GameOfThronesModel extends JogreModel {
         boardModel = new BoardModel();// ajouter numberPlayers en parametre ????
         families=new Family[numberPlayers];
         starsLimitation=new int[numberPlayers];
-        // placer le plateau en fonction du jeu
-        familiesConstruction(numberPlayers);
         // le jeu commence à la phase programation
         phase=1;
-        state=PHASE_PROGRAMATION;
+        state=new GameState();
+        state.setModelState(ModelState.PHASE_PROGRAMATION);
         internPhase=0;
         biddingPhase=3;
         turn=1;
@@ -124,6 +126,8 @@ public class GameOfThronesModel extends JogreModel {
         deck2=new Deck(2);
         deck3=new Deck(3);
         wildDeck=new Deck(0);
+     // placer le plateau en fonction du jeu
+        familiesConstruction(numberPlayers);
         updateLabel();
     }
 
@@ -154,7 +158,7 @@ public class GameOfThronesModel extends JogreModel {
     }
     public void nextPhase(){
     	phase=(phase+1)%3;
-    	state=phase;
+    	state.setModelState(phase);
     	//AJOUTER DES CHOSES EN FONCTION DES PHASES 
     	if(phase==2){
     		//on initialise
@@ -220,7 +224,7 @@ public class GameOfThronesModel extends JogreModel {
     }
     
     public boolean canGiveOrder(Territory territory, int player){
-    	return state==PHASE_PROGRAMATION && (territory.getFamily()!=null) && territory.getTroup()!=null &&territory.getFamily().getPlayer()==player;
+    	return state.getModelState()==ModelState.PHASE_PROGRAMATION && (territory.getFamily()!=null) && territory.getTroup()!=null &&territory.getFamily().getPlayer()==player;
     }
 
     public boolean canPlayThisOrder(Territory territory, int seatNum) {
@@ -584,7 +588,7 @@ public class GameOfThronesModel extends JogreModel {
 	}
 
 	/**Give some information about the state of the game (for the playerChoice)
-	 * 
+	 * 0 if there is no battle or if the player gived in parameter don't participate 
 	 * 1- is for the battle card
 	 */
 	public int informations(int seatNum) {
@@ -608,7 +612,7 @@ public class GameOfThronesModel extends JogreModel {
 	 */
 	public void updateLabel(){
 		String text= new String("<html>Turn: "+turn+"        Wildings: "+wildings+"  ");
-		switch(state){
+		switch(state.getModelState()){
 		case PHASE_WESTEROS:
 			text+=" Westeros phase";
 			break;
@@ -654,7 +658,7 @@ public class GameOfThronesModel extends JogreModel {
 	}
 	
 	public String choseCard() {
-		state=PHASE_WESTEROS;
+		state.setModelState(ModelState.PHASE_WESTEROS);
 		westerosCardNotSaw();
 		switch (westerosPhase){
 		case 0:
@@ -676,7 +680,7 @@ public class GameOfThronesModel extends JogreModel {
 
 	public void removeCard(String card) {
 		westerosCardNotSaw();
-		state=PHASE_WESTEROS;
+		state.setModelState(ModelState.PHASE_WESTEROS);
 		switch (westerosPhase){
 		case 0:
 			deck1.cardPlayed(card);
@@ -720,7 +724,7 @@ public class GameOfThronesModel extends JogreModel {
 			family.setSupply(supply);
 		}
 		if(!this.checkSupplyLimits()){
-			state=SUPPLY_TO_LOW;
+			state.setModelState(ModelState.SUPPLY_TO_LOW);
 		}
 		updateLabel();
 	}
@@ -1105,27 +1109,18 @@ public class GameOfThronesModel extends JogreModel {
 	 * Return the current state of the model
 	 * @return the current state of the model
 	 */
-	public int getPhase(){
+	public GameState getPhase(){
 		return state;
 	}
 	/**
 	 * 
 	 * @param newState
 	 */
-	public void setPhase(int newState) {
+	public void setPhase(GameState newState) {
 		this.state=newState;
 		
 	}
 	
-	//Constant that are use to indicate the state of the game (as finished automate) 
-	public static final int PHASE_WESTEROS=0;
-	public static final int PHASE_PROGRAMATION=1;
-	public static final int PHASE_EXECUTION=2;
-	
-	public static final int SUPPLY_TO_LOW=4;
 
-	
-
-	
 
 }

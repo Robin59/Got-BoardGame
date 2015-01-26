@@ -14,6 +14,8 @@ import org.jogre.gameOfThrones.common.territory.BoardModel;
 import org.jogre.gameOfThrones.common.territory.Territory;
 import org.jogre.gameOfThrones.common.territory.Water;
 
+import state.ModelState;
+
 /**
  * Classe qui gere la gestion du plateau et la partie qu'on doit afficher
  * (donc aussi les troupes etc..)
@@ -243,7 +245,7 @@ public class Board {
 	public void showOrders(Graphics g){
 		for (Territory territory : boardModel.board.values()){
 			if (territory.getOrder()!=null ){
-				if(territory.getFamily().getPlayer()==player || gameModel.getPhase()==GameOfThronesModel.PHASE_EXECUTION){
+				if(territory.getFamily().getPlayer()==player || gameModel.getPhase().getModelState()==ModelState.PHASE_EXECUTION){
 					// on choisit la bonne image
 					Image orderImage= images.getSmallOrderImage(territory.getOrder());
 					// 	recupere les coordonée dans territoryCoord

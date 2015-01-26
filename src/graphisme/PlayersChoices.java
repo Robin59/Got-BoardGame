@@ -584,7 +584,6 @@ public class PlayersChoices extends JogreComponent {
 	 */
 	public int check(int modelState, Family family, BattlePvP battle){
 		if(modelState==1 && battle.canPlayCard(family) ){//on verifie si on peut afficher les cartes 
-			//getGraphics().clearRect(0, 0, 600, 250);
 			showHouseCards(battle);
 			return 1;
 		}else if(modelState==2){

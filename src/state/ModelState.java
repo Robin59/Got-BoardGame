@@ -1,0 +1,5 @@
+package state;
+
+public enum ModelState {
+	PHASE_WESTEROS,PHASE_PROGRAMATION, PHASE_EXECUTION, SUPPLY_TO_LOW, /*BATTLE_SHOW_CARDS*/;
+}
