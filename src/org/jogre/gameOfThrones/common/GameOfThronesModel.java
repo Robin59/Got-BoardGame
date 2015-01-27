@@ -39,7 +39,7 @@ import org.jogre.gameOfThrones.common.territory.Land;
 import org.jogre.gameOfThrones.common.territory.Territory;
 import org.jogre.gameOfThrones.common.territory.Water;
 
-import state.GameState;
+import state.*;
 import state.ModelState;
 
 /**
@@ -73,8 +73,7 @@ public class GameOfThronesModel extends JogreModel {
 	private Family[] families;
 	// pour les mouvements et combat
 	private boolean mvInitiated;
-	private boolean combatInitiated;// utile ou faire battle==null ?????
-	private boolean musteringPhase;
+	//private boolean musteringPhase;
 	//private boolean clashOfKings;
 	// Must make an Interface or abstract class for the 2 objects below
 	private BattlePvP battle;
@@ -93,7 +92,7 @@ public class GameOfThronesModel extends JogreModel {
 	/*indicate how many orders with stars a player can use*/
 	private int[] starsLimitation;
 	/*indicate the current state of the game(if we consider it as an finished automate)*/
-	private GameState state;
+	private ModelState state;
 	
     /**
      * Constructor which creates the model.
@@ -111,16 +110,14 @@ public class GameOfThronesModel extends JogreModel {
         starsLimitation=new int[numberPlayers];
         // le jeu commence à la phase programation
         phase=1;
-        state=new GameState();
-        state.setModelState(ModelState.PHASE_PROGRAMATION);
+        state=ModelState.PHASE_PROGRAMATION;
         internPhase=0;
         biddingPhase=3;
         turn=1;
         wildings=2;
         currentPlayer=0;
         mvInitiated=false;
-        combatInitiated=false;
-        musteringPhase=false;
+        // musteringPhase=false;
         battle=null;
         deck1=new Deck(1);
         deck2=new Deck(2);
@@ -158,7 +155,7 @@ public class GameOfThronesModel extends JogreModel {
     }
     public void nextPhase(){
     	phase=(phase+1)%3;
-    	state.setModelState(phase);
+    	state=ModelState.values()[phase];
     	//AJOUTER DES CHOSES EN FONCTION DES PHASES 
     	if(phase==2){
     		//on initialise
@@ -224,7 +221,7 @@ public class GameOfThronesModel extends JogreModel {
     }
     
     public boolean canGiveOrder(Territory territory, int player){
-    	return state.getModelState()==ModelState.PHASE_PROGRAMATION && (territory.getFamily()!=null) && territory.getTroup()!=null &&territory.getFamily().getPlayer()==player;
+    	return state==ModelState.PHASE_PROGRAMATION && (territory.getFamily()!=null) && territory.getTroup()!=null &&territory.getFamily().getPlayer()==player;
     }
 
     public boolean canPlayThisOrder(Territory territory, int seatNum) {
@@ -291,7 +288,6 @@ public class GameOfThronesModel extends JogreModel {
 	
 	/***/
 	public void battle(Territory fromTerritory,Territory toTerritory) {
-		combatInitiated=true;
 		territory1=fromTerritory;
 		territory2=toTerritory;
 		if(toTerritory.getNeutralForce()>0){
@@ -612,7 +608,7 @@ public class GameOfThronesModel extends JogreModel {
 	 */
 	public void updateLabel(){
 		String text= new String("<html>Turn: "+turn+"        Wildings: "+wildings+"  ");
-		switch(state.getModelState()){
+		switch(state){
 		case PHASE_WESTEROS:
 			text+=" Westeros phase";
 			break;
@@ -658,7 +654,7 @@ public class GameOfThronesModel extends JogreModel {
 	}
 	
 	public String choseCard() {
-		state.setModelState(ModelState.PHASE_WESTEROS);
+		state=ModelState.PHASE_WESTEROS;
 		westerosCardNotSaw();
 		switch (westerosPhase){
 		case 0:
@@ -680,7 +676,7 @@ public class GameOfThronesModel extends JogreModel {
 
 	public void removeCard(String card) {
 		westerosCardNotSaw();
-		state.setModelState(ModelState.PHASE_WESTEROS);
+		state=ModelState.PHASE_WESTEROS;
 		switch (westerosPhase){
 		case 0:
 			deck1.cardPlayed(card);
@@ -724,7 +720,7 @@ public class GameOfThronesModel extends JogreModel {
 			family.setSupply(supply);
 		}
 		if(!this.checkSupplyLimits()){
-			state.setModelState(ModelState.SUPPLY_TO_LOW);
+			state=(ModelState.SUPPLY_TO_LOW);
 		}
 		updateLabel();
 	}
@@ -894,7 +890,8 @@ public class GameOfThronesModel extends JogreModel {
 
 	/** initialize the mustering phase*/
 	public void westerosCardMustering() {
-		musteringPhase=true;
+		state=(ModelState.MUSTERING);
+		//musteringPhase=true;
 		//return the recruits available to the initial state
 		for(Family family: families){
 			for(Territory territory : family.getTerritories()){
@@ -910,11 +907,7 @@ public class GameOfThronesModel extends JogreModel {
 	 * @return true if the player can recruit in this territory
 	 */
 	public boolean canRecruit(Territory territory, int player){
-		return musteringPhase && (territory.getFamily()!=null) && (territory.getFamily().getPlayer()==player)&& territory.getRecruit()>0;
-	}
-
-	public boolean getMusteringPhase(){
-		return musteringPhase;
+		return state==ModelState.MUSTERING && (territory.getFamily()!=null) && (territory.getFamily().getPlayer()==player)&& territory.getRecruit()>0;
 	}
 	
 	/**
@@ -930,7 +923,7 @@ public class GameOfThronesModel extends JogreModel {
 				}
 			}
 		}
-		musteringPhase=false;
+		state=ModelState.values()[phase];
 		return true;
 	}
 	
@@ -1109,14 +1102,14 @@ public class GameOfThronesModel extends JogreModel {
 	 * Return the current state of the model
 	 * @return the current state of the model
 	 */
-	public GameState getPhase(){
+	public ModelState getPhase(){
 		return state;
 	}
 	/**
 	 * 
 	 * @param newState
 	 */
-	public void setPhase(GameState newState) {
+	public void setPhase(ModelState newState) {
 		this.state=newState;
 		
 	}

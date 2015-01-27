@@ -245,7 +245,7 @@ public class Board {
 	public void showOrders(Graphics g){
 		for (Territory territory : boardModel.board.values()){
 			if (territory.getOrder()!=null ){
-				if(territory.getFamily().getPlayer()==player || gameModel.getPhase().getModelState()==ModelState.PHASE_EXECUTION){
+				if(territory.getFamily().getPlayer()==player || gameModel.getPhase()==ModelState.PHASE_EXECUTION){
 					// on choisit la bonne image
 					Image orderImage= images.getSmallOrderImage(territory.getOrder());
 					// 	recupere les coordonée dans territoryCoord
