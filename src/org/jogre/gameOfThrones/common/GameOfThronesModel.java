@@ -774,7 +774,7 @@ public class GameOfThronesModel extends JogreModel {
 		for(Family family: families){
 			family.removeConsOrder();
 		}
-		widingsGrow();
+		wildingsGrow();
 	}
 	/**this method apply the Westeros card "feast for crows",
 	 * remove the consolidate orders, the wildings force grow
@@ -783,7 +783,7 @@ public class GameOfThronesModel extends JogreModel {
 		for(Family family: families){
 			family.removeMarchPOrder();
 		}
-		widingsGrow();
+		wildingsGrow();
 	}
 
 
@@ -791,7 +791,7 @@ public class GameOfThronesModel extends JogreModel {
 		for(Family family: families){
 			family.removeRaidOrder();
 		}
-		widingsGrow();
+		wildingsGrow();
 	}
 
 
@@ -799,14 +799,14 @@ public class GameOfThronesModel extends JogreModel {
 		for(Family family: families){
 			family.removeDefenceOrder();
 		}
-		widingsGrow();
+		wildingsGrow();
 		
 	}
 	public void westerosCardWebOfLies() {
 		for(Family family: families){
 			family.removeSupportOrder();
 		}
-		widingsGrow();
+		wildingsGrow();
 		
 	}
 	public int getWildings(){
@@ -820,8 +820,10 @@ public class GameOfThronesModel extends JogreModel {
 			this.wildings=wildings;
 		}
 	}
-	
-	public void widingsGrow() {
+	/**
+	 * Add 2 to the wildings threat
+	 */
+	public void wildingsGrow() {
 		wildings+=2;
 		updateLabel();
 		//tester si on arrive à 12
@@ -1027,7 +1029,7 @@ public class GameOfThronesModel extends JogreModel {
 			}else{
 				westerosCardMustering();
 			}
-			widingsGrow();
+			wildingsGrow();
 			break;
 		case 2:
 			if(choice){
@@ -1035,7 +1037,7 @@ public class GameOfThronesModel extends JogreModel {
 			}else{
 				westerosCardGameOfThrones();
 			}
-			widingsGrow();
+			wildingsGrow();
 			break;
 		case 3:
 			if(choice){

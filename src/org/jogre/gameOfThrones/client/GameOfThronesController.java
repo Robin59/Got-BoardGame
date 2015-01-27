@@ -433,7 +433,8 @@ public class GameOfThronesController extends JogreController {
 					model.nextPhase();
 					sendProperty("nextPhase", 0);
 				}else{
-					model.widingsGrow();
+					model.wildingsGrow();
+					if(model.getWesterosPhase()!=3) sendProperty("wildingsGrow", 0);
 					String card = model.choseCard();
 					playerChoices.westerosCard(card);
 					sendProperty("WesterosCard",card);
@@ -539,7 +540,7 @@ public class GameOfThronesController extends JogreController {
     
     private void westerosCardSaw(){
     	if(model.getCurrentCard().equals("Summer")){
-			model.widingsGrow();
+			model.wildingsGrow();
 		}else if(model.getCurrentCard().equals("Supply")){
 			model.supplyUpdate();
 		}else if(model.getCurrentCard().equals("GameOfThrones")){
@@ -666,6 +667,8 @@ public class GameOfThronesController extends JogreController {
     	}else if (key.equals("WesterosCard")){
     		playerChoices.westerosCard(value);
     		model.removeCard(value);
+    	}else if(key.equals("wildingsGrow")){
+    		model.wildingsGrow();
     	}else if (key.equals("WildingsCard")){
     		playerChoices.wilidingsCard(value);
     		model.removeWildingCard(value);
