@@ -395,14 +395,14 @@ public class BattlePvP {
 	private void afterResolutionCardEffect(boolean attackerWin){
 		if(attackerWin){
 			if(attCard.getName().equals("Tywin")){
-				attFamily.gainInflu(2);
+				attFamily.addInflu(2);
 			}
 			if(defCard.getName().equals("BlackFish")){
 				attSwords=0;
 			}
 		}else{
 			if(defCard.getName().equals("Tywin")){
-				defFamily.gainInflu(2);
+				defFamily.addInflu(2);
 			}
 			if(attCard.getName().equals("BlackFish")){
 				defSwords=0;

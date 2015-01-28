@@ -16,8 +16,8 @@ public class Land extends Territory {
 	private int recruit;
 	/**the power of the neutral force that is controlling this land */
 	private int neutralForce;
-	
-	private boolean inf;//quand on met un pion d'influence (boolean ne permet pas de connaitre le proprio du pion...)
+	/*tell if there is an influence token on this land (the owner of the influence token is always the owner of the land */
+	private boolean influenceToken;
 	/**
 	 * 
 	 * @param name
@@ -143,6 +143,18 @@ public class Land extends Territory {
 		}
 		return false;
 	}
-	
-	
+	/**
+	 * This method is use to put or remove an influence token on this land, there is no verification of the previous state
+	 * @param influenceToken true if an influence token is put on this land, false if it's remove
+	 */
+	public void setInfluenceToken(Boolean influenceToken){
+		this.influenceToken=influenceToken;
+	}
+	/**
+	 * Tell if there is an influence token on this land
+	 * @return return true if there is an influence token on this land
+	 */
+	public boolean getInfluenceToken(){
+		return influenceToken;
+	}
 }

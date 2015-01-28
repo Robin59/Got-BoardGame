@@ -67,11 +67,11 @@ public class GameOfThronesTableFrame extends JogreTableFrame {
         //
         infoLabel = new JLabel("Welcome to Game of Thrones board game!");
         infoPlayerC = new JogreLabel("");  //JogreLabel(text, style, size, color);
-        playerChoices = new PlayersChoices(infoPlayerC);
         // Initialise MVC classes
         int nbPlayers=table.getNumOfPlayers();
         JLabel textLabel = new JLabel();
         this.gameOfThronesModel = new GameOfThronesModel (nbPlayers, textLabel);
+        playerChoices = new PlayersChoices(infoPlayerC, gameOfThronesModel);
         this.gameOfThronesComponent = new BoardComponent (gameOfThronesModel);
         this.gameOfThronesController = new GameOfThronesController (gameOfThronesModel, gameOfThronesComponent, infoLabel, playerChoices);
     

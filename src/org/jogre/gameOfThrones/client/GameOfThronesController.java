@@ -341,7 +341,7 @@ public class GameOfThronesController extends JogreController {
 			break;
 		case PlayersChoices.CONSOLID :
 			sendProperty("consolidation", playerChoices.getRelatedTerr().getName());
-			model.getFamily(getSeatNum()).gainInflu(playerChoices.getRelatedTerr().consolidation());
+			model.getFamily(getSeatNum()).addInflu(playerChoices.getRelatedTerr().consolidation());
 			model.updateLabel();
 			playerChoices.getRelatedTerr().rmOrder();
 			model.nextPlayer();
@@ -487,7 +487,16 @@ public class GameOfThronesController extends JogreController {
 		case PlayersChoices.REMOVE_SIEGE:
 			playerChoices.getRelatedTerr().removeTroop(3);
 			sendProperty("remove_siege", playerChoices.getRelatedTerr().getName());
-			
+			break;
+		case PlayersChoices.USE_INF_TOKEN:
+			this.useInfluToken(playerChoices.getRelatedTerr());
+			sendProperty("use_inf_token", playerChoices.getRelatedTerr().getName());
+			playerChoices.blank2();
+			break;
+		case PlayersChoices.DONT_USE_INF_TOKEN:
+			this.dontUseInfluToken(playerChoices.getRelatedTerr());
+			sendProperty("dont_use_inf_token", playerChoices.getRelatedTerr().getName());
+			playerChoices.blank2();
 			break;
 		}
 		if(model.getPhase()==ModelState.MUSTERING){
@@ -655,7 +664,7 @@ public class GameOfThronesController extends JogreController {
 			gameOfThronesComponent.repaint();
     	}else if(key.equals("consolidation")){
     		Territory terr =model.getBoardModel().getTerritory(value);
-    		terr.getFamily().gainInflu(terr.consolidation()); model.updateLabel();
+    		terr.getFamily().addInflu(terr.consolidation()); model.updateLabel();
     		terr.rmOrder();playerChoices.blank();
     		model.nextPlayer();
     	}else if (key.equals("recruitFoot")){
@@ -694,6 +703,10 @@ public class GameOfThronesController extends JogreController {
     		model.getBoardModel().getTerritory(value).removeTroop(2);
     	}else if(key.equals("remove_siege")){
     		model.getBoardModel().getTerritory(value).removeTroop(3);
+    	}else if(key.equals("use_inf_token")){
+    		this.useInfluToken(model.getBoardModel().getTerritory(value));
+    	}else if(key.equals("dont_use_inf_token")){
+    		this.dontUseInfluToken(model.getBoardModel().getTerritory(value));
     	}else{
     		model.getBoardModel().getTerritory(key).useOrderOn(model.getBoardModel().getTerritory(value));
     		model.nextPlayer();
@@ -701,6 +714,26 @@ public class GameOfThronesController extends JogreController {
     	
     }
     
+    /**
+     * This method is for the process of using an influence token on a territory
+     * @param territory the territory on which the influence token is put
+     */
+    private void useInfluToken(Territory territory){
+    	((Land) territory).setInfluenceToken(true);
+		territory.getFamily().addInflu(-1);
+		model.setPhase(ModelState.PHASE_EXECUTION);
+		model.nextPlayer();	
+    }
+    
+    /**
+     * This method call when a player had the choice but refuse to use an influence token on a territory
+     * @param territory the territory on which the influence token is not put
+     */
+    private void dontUseInfluToken(Territory territory){
+		territory.removeOwner();
+		model.setPhase(ModelState.PHASE_EXECUTION);
+		model.nextPlayer();	
+    }
     //
     public void receiveProperty(String key, int type, int bonus) {
     	if(key.equals("bidSet")){
@@ -826,7 +859,7 @@ public class GameOfThronesController extends JogreController {
 		if(((BiddingAgainstWild)model.getBidding()).victory()){
 			System.out.println("Victoire garde de la nuit");
 			if(card.equals("SkinchangerScout")){
-				families[0].gainInflu(model.getBidding().getTrack()[0].getBid());
+				families[0].addInflu(model.getBidding().getTrack()[0].getBid());
 			}else if(card.equals("Massing on the Milkwater")){
 				families[0].regainCombatantCards();
 			}
@@ -838,9 +871,9 @@ public class GameOfThronesController extends JogreController {
 			if(card.equals("SkinchangerScout")){
 				int i;
 				for(i=0;i<families.length-1;i++){
-					families[i].gainInflu(-2);
+					families[i].addInflu(-2);
 				}	
-				families[i].gainInflu(families[i].getBid()-families[i].getInflu());
+				families[i].addInflu(families[i].getBid()-families[i].getInflu());
 			}
 			/*if(card.equals("Massing on the Milkwater")){
 				

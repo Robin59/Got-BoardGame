@@ -19,6 +19,8 @@ import org.jogre.gameOfThrones.common.orders.*;
 import org.jogre.gameOfThrones.common.territory.Territory;
 import org.jogre.gameOfThrones.common.territory.Water;
 
+import state.ModelState;
+
 
 public class PlayersChoices extends JogreComponent {
 
@@ -28,6 +30,7 @@ public class PlayersChoices extends JogreComponent {
 	private Image attackerImage;
 	private Image defencerImage;
 	private Image noOneImage;
+	private Image validateImage;
 	private ImageSelector images;
 	//le label qui affiche les info
 	private JLabel label;
@@ -59,6 +62,8 @@ public class PlayersChoices extends JogreComponent {
 	private int selectedBid;
 	private int powerBid;
 	private Bidding bidding;
+	//pointeur to the model
+	GameOfThronesModel model;
 	
 	//Constant use for the message return by the main method (RigthClick) of this object 
 	public static final int END_PROGRAMATION_PHASE=1;
@@ -94,9 +99,12 @@ public class PlayersChoices extends JogreComponent {
 	public static final int REMOVE_FOOT=31;
 	public static final int REMOVE_KNIGHT=32;
 	public static final int REMOVE_SIEGE=33;
+	public static final int USE_INF_TOKEN=34;
+	public static final int DONT_USE_INF_TOKEN=35;
 	
-	public PlayersChoices (JLabel label){
+	public PlayersChoices (JLabel label, GameOfThronesModel model){
 		this.label=label;
+		this.model=model;
 		panel=0;
 		relatedTerr =null;
 		cibleTerr = null;
@@ -106,6 +114,7 @@ public class PlayersChoices extends JogreComponent {
 		selectionBid= GameImages.getImage(127);
 		endTurnImage = GameImages.getImage(6);
 		dontUseImage = GameImages.getImage(7);
+		validateImage = GameImages.getImage(202);
 		attackerImage= GameImages.getImage(4);
 		defencerImage= GameImages.getImage(5);
 		leftArrowImage=GameImages.getImage(134);
@@ -286,7 +295,14 @@ public class PlayersChoices extends JogreComponent {
 			}else if(y>190 && x>200 && x<270){
 				return CANCEL;
 			}
-			
+			break;
+		case DISPLAY_USE_INF_TOKEN:
+			if(x>120 && x<200){
+				return USE_INF_TOKEN;
+			}else if (x>320 && x<400){
+				return DONT_USE_INF_TOKEN;
+			}
+			break;
 		}
 		return 0;
 	}
@@ -381,6 +397,11 @@ public class PlayersChoices extends JogreComponent {
 			drawTroops(g);
 			g.drawImage(dontUseImage, 200,190,null);
 			break;
+		case DISPLAY_USE_INF_TOKEN:
+			g.drawImage(images.getPowerImage(family),200,50,null);
+			g.drawImage(validateImage, 120, 140, null);
+			g.drawImage(dontUseImage, 320,140,null);
+			break;
 		}
 	}
 	
@@ -427,7 +448,6 @@ public class PlayersChoices extends JogreComponent {
 		int i = 10;
 		for(Family family : bidding.getTrack()){
 			g.drawImage(images.getPowerImage(family),i,100,null);
-			//System.out.println(family.getBid());
 			g.drawImage(images.getNumber(family.getBid()),i+5,110,null);
 			i+=70;
 		}
@@ -546,7 +566,10 @@ public class PlayersChoices extends JogreComponent {
 	}
 
 	public void checkPlayerChoices() {
-		if(relatedTerr.getOrder()==null){
+		if(model.getPhase()==ModelState.USE_INF_TOKEN){
+			panel=DISPLAY_USE_INF_TOKEN;
+			label.setText("Do you want to use an influence token to keep this territory?");
+		}else if(relatedTerr.getOrder()==null){
 			this.blank();
 		}
 		
@@ -729,6 +752,7 @@ public class PlayersChoices extends JogreComponent {
 	private static final int DISPLAY_BID_SORT=16;
 	private static final int DISPLAY_WILDINGS_CARD=17;
 	private static final int DISPLAY_TROOP_DESTRUCTION=18;
+	private static final int DISPLAY_USE_INF_TOKEN=19;
 	
 }
 

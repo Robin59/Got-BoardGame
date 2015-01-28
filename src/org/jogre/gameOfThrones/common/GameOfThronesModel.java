@@ -141,7 +141,7 @@ public class GameOfThronesModel extends JogreModel {
     		for(Family family : families){
     			for (Territory territory : family.getTerritories()){
     				if(territory.getOrder()!=null && !territory.getOrder().getStar() && territory.getOrder().getType()==OrderType.CON){
-    					family.gainInflu(territory.consolidation());
+    					family.addInflu(territory.consolidation());
     					territory.rmOrder();
     				}
     			}
@@ -536,12 +536,15 @@ public class GameOfThronesModel extends JogreModel {
 		}else if(battlePvE!=null) {
 			battlePvE.addTroop(boat,foot,knigth,siege);
 		}else if(mvInitiated){//on est dans le cas d'un mouvement 
-			System.out.println("troopSend");
 			territory1.mouveTroops(territory2,boat,foot,knigth, siege );
 			if(territory1.getTroup()==null){// dans le cas où il n'y a plus de troupes on supprime l'ordre
 				territory1.rmOrder();
+				if (territory1 instanceof Water || territory1.getFamily().getInflu()<1){
 				territory1.removeOwner();
 				nextPlayer();
+				}else{//the player have the possiblity to use a influence token to keep is territory
+					state=ModelState.USE_INF_TOKEN;
+				}
 			}
 		}
 		
@@ -761,7 +764,7 @@ public class GameOfThronesModel extends JogreModel {
 	public void westerosCardGameOfThrones(){ // commerce from port rules not implented
 		for(Family family: families){
 			for(Territory territory : family.getTerritories()){
-				family.gainInflu(territory.westerosCardGameOfThrones());
+				family.addInflu(territory.westerosCardGameOfThrones());
 			}
 		}
 		updateLabel();

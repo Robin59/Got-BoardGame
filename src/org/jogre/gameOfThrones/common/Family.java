@@ -111,8 +111,8 @@ public class Family {
 		return player;
 	}
 	
-	/**This method add influence to the current influence points*/
-	public void gainInflu(int influ){
+	/**This method add influence to the current influence points (you can use negative point for loosing influence)*/
+	public void addInflu(int influ){
 		inflPoint+=influ;
 	}
 	public void setBid(int bid){
