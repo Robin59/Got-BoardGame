@@ -434,7 +434,7 @@ public class GameOfThronesController extends JogreController {
 					sendProperty("nextPhase", 0);
 				}else{
 					model.wildingsGrow();
-					if(model.getWesterosPhase()!=3) sendProperty("wildingsGrow", 0);
+					sendProperty("wildingsGrow", 0);
 					String card = model.choseCard();
 					playerChoices.westerosCard(card);
 					sendProperty("WesterosCard",card);
@@ -676,8 +676,6 @@ public class GameOfThronesController extends JogreController {
     	}else if (key.equals("WesterosCard")){
     		playerChoices.westerosCard(value);
     		model.removeCard(value);
-    	}else if(key.equals("wildingsGrow")){
-    		model.wildingsGrow();
     	}else if (key.equals("WildingsCard")){
     		playerChoices.wilidingsCard(value);
     		model.removeWildingCard(value);
@@ -816,7 +814,9 @@ public class GameOfThronesController extends JogreController {
 			playerChoices.westerosCardChoice();
 		}else if (key.equals("westerosCardChoiceSelected")){
 			model.westerosCardChoice(value==1);
-		}else if(key.equals("WildingsAttack")){
+		}else if(key.equals("wildingsGrow")){
+    		model.wildingsGrow();
+    	}else if(key.equals("WildingsAttack")){
 			playerChoices.bidding();
 			model.wildingsAttack();
 		}else if (key.equals("wilidingBattle")){
