@@ -30,7 +30,8 @@ public class  ImageSelector{
 	private Image[][] troopsSelectImage;
 	private Image[] bigOrdersImages;
 	private Image[] smallOrdersImages;
-	private Image[] powerImages;
+	private Image[] powerImages;//influence token
+	private Image[] smallInfluenceTonken;
 	private Image[] numberImages;
 	private Image[] smallNumberImages;
 	/*Image of the garrisons for the board*/
@@ -70,6 +71,10 @@ public class  ImageSelector{
 		powerImages = new Image[6];
 		for (int i=0;i<6;i++){
 			powerImages[i]=GameImages.getImage(128+i);
+		}
+		smallInfluenceTonken = new Image[6];
+		for (int i=0;i<6;i++){
+			smallInfluenceTonken[i]=GameImages.getImage(203+i);
 		}
 		numberImages = new Image[6];
 		for (int i=0;i<5;i++){
@@ -264,5 +269,9 @@ public class  ImageSelector{
 			 return neutralForceImages[strength-3];
 		 }
 	 }
+
+	public Image getSmallInfluenceToken(Family family) {
+		return smallInfluenceTonken[family.getPlayer()];
+	}
 	
 }

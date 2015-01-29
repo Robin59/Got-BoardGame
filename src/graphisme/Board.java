@@ -64,10 +64,15 @@ public class Board {
 			if (territory.getTroup()!=null){
 				showTroops(territory, g);
 			}//maintenant on test si il y a un pion influence
+			if (territory.getInfluenceToken()){
+				showInflenceToken(territory, g);
+			}
 		}
 			this.showOrders(g);
 	}
 	
+	
+
 	public void down(){
 		if(y>(-980)){//ou 950
 			y-=15;
@@ -273,6 +278,10 @@ public class Board {
 		g.drawImage(images.getGarrisonImage(territory.getName()),territoryCoord.get(territory.getName())[6],territoryCoord.get(territory.getName())[7]+y,null);
 	}
 	
+	/*Display the small influence on the board*/
+	private void showInflenceToken(Territory territory, Graphics g) {
+		g.drawImage(images.getSmallInfluenceToken(territory.getFamily()),territoryCoord.get(territory.getName())[6],territoryCoord.get(territory.getName())[7]+y,null);
+	}
 	
 	//appelé dans le constructeur uniquement pour la creation des coordonnées
 	private void coordinate(){
