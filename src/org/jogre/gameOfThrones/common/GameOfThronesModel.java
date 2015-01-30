@@ -625,6 +625,9 @@ public class GameOfThronesModel extends JogreModel {
 		case SUPPLY_TO_LOW :
 			text+=" The supply of some players is too low, they have too destruct troops";
 			break;
+		case MUSTERING :
+			text+=" Mustering";// add explenetion on which player can muster 
+			break;
 		}
 		text+="<br>Throne track : ";
 		for(int i :throne){
@@ -897,13 +900,13 @@ public class GameOfThronesModel extends JogreModel {
 	/** initialize the mustering phase*/
 	public void westerosCardMustering() {
 		state=(ModelState.MUSTERING);
-		//musteringPhase=true;
 		//return the recruits available to the initial state
 		for(Family family: families){
 			for(Territory territory : family.getTerritories()){
 				territory.resetRecruit();
 			}
 		}
+		updateLabel();
 	}
 	
 	/**
@@ -913,7 +916,7 @@ public class GameOfThronesModel extends JogreModel {
 	 * @return true if the player can recruit in this territory
 	 */
 	public boolean canRecruit(Territory territory, int player){
-		return state==ModelState.MUSTERING && (territory.getFamily()!=null) && (territory.getFamily().getPlayer()==player)&& territory.getRecruit()>0;
+		return /*state==ModelState.MUSTERING &&*/ (territory.getFamily()!=null) && (territory.getFamily().getPlayer()==player)&& territory.getRecruit()>0;
 	}
 	
 	/**

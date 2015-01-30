@@ -130,110 +130,106 @@ public class GameOfThronesController extends JogreController {
     
     /*This method is call whenever the player click on the board*/
     private void mouseClickOnBoard (MouseEvent e){
+    	//we first look if the player click on a territory
+    	if (gameOfThronesComponent.getTerritory(e.getX(),e.getY())!=null){
+    		switch(model.getPhase()){
+    		case SUPPLY_TO_LOW:
+    			if(gameOfThronesComponent.getTerritory(e.getX(),e.getY()).getFamily()==model.getFamily(getSeatNum())){
+    				playerChoices.destroyTroop(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
+    			}
+    			break;
+    		case MUSTERING: 
+    			if(model.canRecruit(gameOfThronesComponent.getTerritory(e.getX(),e.getY()), getSeatNum())){
+    				playerChoices.recruit(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
+    			}else if(this.shipRecrutement){
+    				Territory water = gameOfThronesComponent.getTerritory(e.getX(),e.getY());
+    				if(water instanceof Water &&((Water) water).canRecruitShipHere(playerChoices.getRelatedTerr()) && model.checkSupplyLimits(getSeatNum(),water)){
+    					//recruitement
+    					water.setFamily(playerChoices.getRelatedTerr().getFamily());
+    					water.recruit(0);
+    					playerChoices.getRelatedTerr().recruit(0);
+    					sendProperty("setFamily",playerChoices.getRelatedTerr().getFamily().getName());
+    					sendProperty("setFamilyOn",water.getName());
+    					sendProperty("recruitShipAt", water.getName());
+    					sendProperty("recruitShipFrom", playerChoices.getRelatedTerr().getName());
+    					if(model.getPhase()==ModelState.MUSTERING && model.allRecruitementDone()){
+    						sendProperty("allRecruitementDone", 0);
+    						String card = model.choseCard();
+    						playerChoices.westerosCard(card);
+    						sendProperty("WesterosCard",card);
+    					}else if(model.getPhase()!=ModelState.MUSTERING && playerChoices.getRelatedTerr().getOrder()==null ){
+    						model.nextPlayer();
+    						sendProperty("nextPlayer", 0);
+    					}
+    				}
+    				shipRecrutement=false;
+    			}
+    			break;
+    		case PHASE_PROGRAMATION :
+    			// on selectionne un territoire et on le passe en parametre de canGiveOrder(teritoir, numJoueur)
+    			if(model.canGiveOrder(gameOfThronesComponent.getTerritory(e.getX(),e.getY()), getSeatNum())){
+    				//on affiche en bas l'ecran d'ordres 
+    				playerChoices.showOrders(model.getFamily(getSeatNum()),gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
+    			}else{
+    				playerChoices.blank();
+    			}
+    			break;
+    		case PHASE_EXECUTION:
+    			if(model.getBattle()!=null){//On verifie si il y a combat
+    				//en cas de retraite !!
+    				if(model.getBattle().getState()==3 && model.canWithdraw(gameOfThronesComponent.getTerritory(e.getX(),e.getY()),getSeatNum())){
+    					//System.out.println("can withdraw here");
+    					model.getBattle().withdraw(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
+    					model.battleEnd();
+    					gameOfThronesComponent.repaint();
+    					sendProperty("withdraw", gameOfThronesComponent.getTerritory(e.getX(),e.getY()).getName());
+    				}// on peut clicker pour supporter
+    				else if(model.canSupport(gameOfThronesComponent.getTerritory(e.getX(),e.getY()),getSeatNum())){
+    					playerChoices.support(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
+    				}else if(gameOfThronesComponent.getTerritory(e.getX(),e.getY())==model.getTerritory1()){
+    					playerChoices.attackTo(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
+    				}
+    				// on regarde si un ordre est deja selectioné, qu'il peut etre utilisé dans le territoir voulu et qu'on peut l'utiliser
+    			}else if(playerChoices.getRelatedTerr()!=null && playerChoices.getRelatedTerr().canUseOrderOn(gameOfThronesComponent.getTerritory(e.getX(),e.getY()))){
+    				//On execute l'ordre
+    				int orderEx =playerChoices.getRelatedTerr().useOrderOn(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
+    				switch(orderEx){
+    				case 0:
+    					// on envoi le territoir qui donne l'ordre et celui qui execute
+    					sendProperty(playerChoices.getRelatedTerr().getName(), gameOfThronesComponent.getTerritory(e.getX(),e.getY()).getName());
+    					playerChoices.blank();
+    					model.nextPlayer(); //model.checkRaid(); // peut-etre tout mettre en 1
+    					break;
+    				case 1:
+    					playerChoices.moveTo(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
+    					model.mvInitiated(playerChoices.getRelatedTerr(),gameOfThronesComponent.getTerritory(e.getX(),e.getY()));// on indique au model qu'un mouvement est commencé on ne peut plus changer d'ordre
+    					//ICI IL faut indiquer les info aux autres joueurs
+    					sendProperty("mvInitiated", playerChoices.getRelatedTerr().getName());
+    					sendProperty("mvInitiated2", gameOfThronesComponent.getTerritory(e.getX(),e.getY()).getName());
+    					break;
+    				case 2:
+    					playerChoices.attackTo(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
+    					model.battle(playerChoices.getRelatedTerr(),gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
+    					sendProperty("mvInitiated", playerChoices.getRelatedTerr().getName());
+    					sendProperty("battleInitiated", gameOfThronesComponent.getTerritory(e.getX(),e.getY()).getName());
+    					break;
+    				case 3://on a clicke sur le territoire de départ, on revient sur la croix
+    					playerChoices.orderSelected(playerChoices.getRelatedTerr());
+    					break;
+    				}
+    				gameOfThronesComponent.repaint();
 
-		//we first look if the player click on a territory
-		if (gameOfThronesComponent.getTerritory(e.getX(),e.getY())!=null){
-			
-			if(this.shipRecrutement){
-				Territory water = gameOfThronesComponent.getTerritory(e.getX(),e.getY());
-				if(water instanceof Water &&((Water) water).canRecruitShipHere(playerChoices.getRelatedTerr()) && model.checkSupplyLimits(getSeatNum(),water)){
-					//recruitement
-					water.setFamily(playerChoices.getRelatedTerr().getFamily());
-					water.recruit(0);
-					playerChoices.getRelatedTerr().recruit(0);
-					sendProperty("setFamily",playerChoices.getRelatedTerr().getFamily().getName());
-					sendProperty("setFamilyOn",water.getName());
-					sendProperty("recruitShipAt", water.getName());
-					sendProperty("recruitShipFrom", playerChoices.getRelatedTerr().getName());
-					if(model.getPhase()==ModelState.MUSTERING && model.allRecruitementDone()){
-						sendProperty("allRecruitementDone", 0);
-						String card = model.choseCard();
-						playerChoices.westerosCard(card);
-						sendProperty("WesterosCard",card);
-					}else if(model.getPhase()!=ModelState.MUSTERING && playerChoices.getRelatedTerr().getOrder()==null ){
-						model.nextPlayer();
-						sendProperty("nextPlayer", 0);
-					}
-				}
-				shipRecrutement=false;
-			}else{
-				switch(model.getPhase()){
-				case SUPPLY_TO_LOW:
-					if(gameOfThronesComponent.getTerritory(e.getX(),e.getY()).getFamily()==model.getFamily(getSeatNum())){
-						playerChoices.destroyTroop(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
-					}
-					break;
-				case PHASE_WESTEROS: 
-					if(model.canRecruit(gameOfThronesComponent.getTerritory(e.getX(),e.getY()), getSeatNum())){
-						playerChoices.recruit(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
-					}
-					break;
-				case PHASE_PROGRAMATION :
-					// on selectionne un territoire et on le passe en parametre de canGiveOrder(teritoir, numJoueur)
-					if(model.canGiveOrder(gameOfThronesComponent.getTerritory(e.getX(),e.getY()), getSeatNum())){
-						//on affiche en bas l'ecran d'ordres 
-						playerChoices.showOrders(model.getFamily(getSeatNum()),gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
-					}else{
-						playerChoices.blank();
-					}
-					break;
-				case PHASE_EXECUTION:
-					if(model.getBattle()!=null){//On verifie si il y a combat
-						//en cas de retraite !!
-						if(model.getBattle().getState()==3 && model.canWithdraw(gameOfThronesComponent.getTerritory(e.getX(),e.getY()),getSeatNum())){
-							//System.out.println("can withdraw here");
-							model.getBattle().withdraw(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
-							model.battleEnd();
-							gameOfThronesComponent.repaint();
-							sendProperty("withdraw", gameOfThronesComponent.getTerritory(e.getX(),e.getY()).getName());
-						}// on peut clicker pour supporter
-						else if(model.canSupport(gameOfThronesComponent.getTerritory(e.getX(),e.getY()),getSeatNum())){
-							playerChoices.support(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
-						}else if(gameOfThronesComponent.getTerritory(e.getX(),e.getY())==model.getTerritory1()){
-							playerChoices.attackTo(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
-						}
-					// on regarde si un ordre est deja selectioné, qu'il peut etre utilisé dans le territoir voulu et qu'on peut l'utiliser
-					}else if(playerChoices.getRelatedTerr()!=null && playerChoices.getRelatedTerr().canUseOrderOn(gameOfThronesComponent.getTerritory(e.getX(),e.getY()))){
-						//On execute l'ordre
-						int orderEx =playerChoices.getRelatedTerr().useOrderOn(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
-						switch(orderEx){
-						case 0:
-							// on envoi le territoir qui donne l'ordre et celui qui execute
-							sendProperty(playerChoices.getRelatedTerr().getName(), gameOfThronesComponent.getTerritory(e.getX(),e.getY()).getName());
-							playerChoices.blank();
-							model.nextPlayer(); //model.checkRaid(); // peut-etre tout mettre en 1
-							break;
-						case 1:
-							playerChoices.moveTo(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
-							model.mvInitiated(playerChoices.getRelatedTerr(),gameOfThronesComponent.getTerritory(e.getX(),e.getY()));// on indique au model qu'un mouvement est commencé on ne peut plus changer d'ordre
-							//ICI IL faut indiquer les info aux autres joueurs
-							sendProperty("mvInitiated", playerChoices.getRelatedTerr().getName());
-							sendProperty("mvInitiated2", gameOfThronesComponent.getTerritory(e.getX(),e.getY()).getName());
-							break;
-						case 2:
-							playerChoices.attackTo(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
-							model.battle(playerChoices.getRelatedTerr(),gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
-								sendProperty("mvInitiated", playerChoices.getRelatedTerr().getName());
-								sendProperty("battleInitiated", gameOfThronesComponent.getTerritory(e.getX(),e.getY()).getName());
-							break;
-						case 3://on a clicke sur le territoire de départ, on revient sur la croix
-							playerChoices.orderSelected(playerChoices.getRelatedTerr());
-							break;
-						}
-						gameOfThronesComponent.repaint();
-						
-					}else if(model.canPlayThisOrder(gameOfThronesComponent.getTerritory(e.getX(),e.getY()), getSeatNum())){
-						playerChoices.orderSelected(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
-					}
-					break;
-				}
-			}
-			if(model.checkNewTurn() && model.getWesterosPhase()==0){
-				String card = model.choseCard();
-				playerChoices.westerosCard(card);
-				sendProperty("WesterosCard",card);
-			}
-		}
+    			}else if(model.canPlayThisOrder(gameOfThronesComponent.getTerritory(e.getX(),e.getY()), getSeatNum())){
+    				playerChoices.orderSelected(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
+    			}
+    			break;
+    		}
+    	}
+    	if(model.checkNewTurn() && model.getWesterosPhase()==0){
+    		String card = model.choseCard();
+    		playerChoices.westerosCard(card);
+    		sendProperty("WesterosCard",card);
+    	}
     }
     
     private void mouseClickOnPlayerChoices (MouseEvent e){
@@ -255,7 +251,7 @@ public class GameOfThronesController extends JogreController {
 			model.endProg();
 			break;
 		case PlayersChoices.CANCEL : 
-			if(model.getPhase()==ModelState.PHASE_WESTEROS){// on teste si on est dans la phase westeros, donc recrutement
+			if(model.getPhase()==ModelState.MUSTERING){
 				playerChoices.getRelatedTerr().recruitmentDone();
 				sendProperty("recruitmentDone", playerChoices.getRelatedTerr().getName());
 				if(model.allRecruitementDone()){//on teste si tous les recrutement sont bon

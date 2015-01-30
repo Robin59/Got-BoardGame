@@ -45,7 +45,7 @@ public class ModelTest {
 	@Test
 	public void basicMusteringTest(){
 		GameOfThronesModel model = new GameOfThronesModel(3, new JLabel());
-		assertFalse(model.canRecruit(model.getBoardModel().getTerritory("Lannisport"), 1));
+		//assertFalse(model.canRecruit(model.getBoardModel().getTerritory("Lannisport"), 1));
 		model.westerosCardMustering();
 		assertTrue(model.canRecruit(model.getBoardModel().getTerritory("Lannisport"), 1));
 		assertFalse(model.canRecruit(model.getBoardModel().getTerritory("Lannisport"), 2));
