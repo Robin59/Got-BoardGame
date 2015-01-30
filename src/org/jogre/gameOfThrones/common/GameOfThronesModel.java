@@ -220,8 +220,14 @@ public class GameOfThronesModel extends JogreModel {
     	return throne[currentPlayer];
     }
     
+    /**
+     * This method tell if an order can be given by a player to territory
+     * @param territory the territory where the player want to put his order
+     * @param player the player who want to put an order on a territory 
+     * @return true if the player can put an order on the territory 
+     */
     public boolean canGiveOrder(Territory territory, int player){
-    	return state==ModelState.PHASE_PROGRAMATION && (territory.getFamily()!=null) && territory.getTroup()!=null &&territory.getFamily().getPlayer()==player;
+    	return state==ModelState.PHASE_PROGRAMATION && territory.getTroup()!=null &&territory.getFamily().getPlayer()==player;
     }
 
     public boolean canPlayThisOrder(Territory territory, int seatNum) {
@@ -252,7 +258,7 @@ public class GameOfThronesModel extends JogreModel {
 	public void endProg(){
 		boolean res=true;
 		for(Family family : families){
-			if(!family.ordersGived){
+			if(!family.getOrdersGiven()){
 				res=false;
 			}
 		}
@@ -260,11 +266,6 @@ public class GameOfThronesModel extends JogreModel {
 			nextPhase();
 		}
 	}
-	
-
-	/*public int getPhase() {	
-		return phase;
-	}*/
 	
 	/** this method indicate to the model that a move as been selected from the territory*/
 	// il faut empecher de declancher un mouvement une fois qu'il est commencé

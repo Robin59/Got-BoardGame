@@ -242,14 +242,17 @@ public class GameOfThronesController extends JogreController {
 		switch (playerChoices.RigthClick(e.getX(),e.getY(),model.getFamily(getSeatNum()))){
 		case PlayersChoices.END_PROGRAMATION_PHASE :
 			//Quand un joueur a donnée tous ses ordres (durant la phase1) on les envois et on l'indique au autres
-			Family family =model.getFamily(getSeatNum());
+			Family family=model.getFamily(getSeatNum());
 			for(Territory territory : family.getTerritories() )
 			{	
-				int[] order =territory.getOrder().getOrderInt();
-				sendProperty(territory.getName(),order[0],order[1]);
+				if(territory.getOrder()!=null){ // condition in case territory don't have any orders, like territory without troops but with influence token
+					int[] order =territory.getOrder().getOrderInt();
+					sendProperty(territory.getName(),order[0],order[1]);
 				}
-				sendProperty ("endProg",getSeatNum());
-				model.endProg();
+			}
+			family.ordersGiven();
+			sendProperty ("endProg",getSeatNum());
+			model.endProg();
 			break;
 		case PlayersChoices.CANCEL : 
 			if(model.getPhase()==ModelState.PHASE_WESTEROS){// on teste si on est dans la phase westeros, donc recrutement
@@ -827,13 +830,11 @@ public class GameOfThronesController extends JogreController {
 			}
 		}else if(key.equals("resolutionPvE")){
 			model.resolutionPvE();
-		}else{
+		}else if (key.equals("endProg")){
     		//on indique que le joueur a fini de donner ses ordres
-    		model.getFamily(value).ordersGived=true;
+    		model.getFamily(value).ordersGiven();
     		// on verifie que si c'etait le dernier
     		model.endProg();
-    		//gameOfThronesComponent.repaint();
-    		//playerChoices.repaint();
           }
        }
     

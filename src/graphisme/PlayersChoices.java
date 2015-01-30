@@ -149,8 +149,7 @@ public class PlayersChoices extends JogreComponent {
 		break;
 		case DISPLAY_END_PROGRAMATION :
 			if (x>150 && x<200 && y>50 && y<100){
-				family.ordersGived=true; 
-				blank();
+				blank2();
 				return END_PROGRAMATION_PHASE;
 			}
 			break;

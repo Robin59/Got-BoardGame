@@ -16,7 +16,7 @@ public class Family {
 	private final static String[] NAMES = {"Baratheon","Lannister","Stark","Greyjoy","Tyrell","Martell"};
 	// the player of the family (0 baratheon, 1 lannister, etc)
 	private int player;
-	public boolean ordersGived;
+	private boolean ordersGiven;
 	// current value of the supply 
 	private int supply; // influence the max troop
 	private boolean cardSaw;
@@ -48,7 +48,7 @@ public class Family {
 		territories=new LinkedList<Territory>();
 		combatantsUse=new LinkedList<CombatantCard>();
 		this.player=player;
-		ordersGived=false;
+		ordersGiven=false;
 		inflPoint=5;
 		swordUsed=false;
 		//orders list creation
@@ -169,11 +169,15 @@ public class Family {
 		
 	}
 	
-	/** verifie que tous les territoires possedés un ordre*/
+	/**
+	 * This method is use to know  if a family have put order on all its territory with troops
+	 * @return true if the family have put order on all its territory with troops
+	 */
 	public boolean allOrdersGived(){
 		boolean res=true;
+		// AJOUTER UNE CONDITION AU CAS OU LE JOUEUR N'AURAIT PLUS D'ORDRE A DONNER
 		for(Territory territory: territories){
-			if(territory.getOrder()==null){
+			if(territory.getOrder()==null && territory.getTroup()!=null){
 				res=false;
 			}
 		}
@@ -262,6 +266,19 @@ public class Family {
 		return false;
 		}
 	
+	/**
+	 * This method is used to say that all orders have been given and validate by the family
+	 */ 
+	public void ordersGiven(){
+		this.ordersGiven=true;
+	}
+	/**
+	 * This method return the value of ordersGiven which tell us if all orders have been given and validate by the family
+	 * @return True if all orders have been given and validate by the family, false if there is still orders to give or if the family havn't validate them already
+	 */
+	public boolean getOrdersGiven(){
+		return ordersGiven;
+	}
 	
 	/**remove the consolidation's orders from the ordersAivalable list*/
 	public void removeConsOrder(){
@@ -310,7 +327,7 @@ public class Family {
 		for(Territory territory : territories){
 			territory.rmOrder();
 		}
-		ordersGived=false;
+		ordersGiven=false;
 		ordersAvailable= new LinkedList<Order>();
 		// we add the defence orders
 		ordersAvailable.add(new Order(false,1,0,OrderType.DEF));
