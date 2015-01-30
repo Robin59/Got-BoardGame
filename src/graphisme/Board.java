@@ -283,7 +283,8 @@ public class Board {
 		g.drawImage(images.getSmallInfluenceToken(territory.getFamily()),territoryCoord.get(territory.getName())[6],territoryCoord.get(territory.getName())[7]+y,null);
 	}
 	
-	//appelé dans le constructeur uniquement pour la creation des coordonnées
+	//this method is just call by the constructor for the construction of the coordinates where pieces are display on the board
+	//(orders and the first troop show use the same coordiathe 2 last one are for neutral force or power token)
 	private void coordinate(){
 		territoryCoord = new HashMap<String,int[]>();
 		// for Water there is 2 coordinate and for Land 6 (2*potential different kind of troop) 

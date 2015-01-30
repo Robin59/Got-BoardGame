@@ -16,7 +16,7 @@ Then download Got-BoardGame, install it in your jogre/games/gameofthrones repert
 Finally lunch jogre/server/server.sh (or .bat or have one of your friends doing it), then lunch jogre/games/gameofthrones/client.sh (or .bat).
 
 If you struggle to compile the game, here's an already compiled version with jogre tools :
-http://www.mediafire.com/download/721y8gsxuea0oqs/game_of_thrones_boardGame.zip
+http://www.mediafire.com/download/ne6e5usrev0bqz0/Got_BoardGame.zip
 All you have to is to launch jogre/server/server.bat and then jogre/games/gameOfThrones/client.bat.
 
 There are four already made accounts that you can use to test the game, bob, dave, john, sharon.
@@ -25,5 +25,6 @@ About
 -----
 
 The Game is not complete and the documentation is not clear or inexistent. 
-I intend to improve the game, clean the code and write the documentation as soon as possible. 
-
+I intend to improve the game, clean the code and write the documentation as soon as possible. Right now the code is a mess, I feel like it will be very hard to anyone to help on the core game. But you can change the place where pieces appear, open src/graphism/Board.java , go to the method coordinate and change the values.
+Also I intend to do a small tutorial(but not in game) to explain how to play the game.
+It seems to have small differences between the Linux and windows version, the windows  version is not tested and more bugs may occur.
