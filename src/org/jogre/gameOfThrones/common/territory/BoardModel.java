@@ -15,12 +15,12 @@ public class BoardModel {
 		board = new HashMap<String,Territory>();
 		
 		//Territory creation
-		Territory Winterfell = new HomeLand("Winterfell",1,1);
-		Territory Pyke = new HomeLand("Pyke",1,1);
-		Territory Lannisport = new HomeLand("Lannisport",0,2);
-		Territory Dragonstone = new HomeLand("Dragonstone",1,1);
-		Territory Highgarden= new HomeLand("Highgarden",0,2);
-		Territory Sunspear= new HomeLand("Sunspear",1,1);
+		Territory Winterfell = new HomeLand("Winterfell",1,1,"Stark");
+		Territory Pyke = new HomeLand("Pyke",1,1,"Greyjoy");
+		Territory Lannisport = new HomeLand("Lannisport",0,2,"Lannister");
+		Territory Dragonstone = new HomeLand("Dragonstone",1,1,"Baratheon");
+		Territory Highgarden= new HomeLand("Highgarden",0,2,"Tyrell");
+		Territory Sunspear= new HomeLand("Sunspear",1,1,"Martell");
 		Territory CastleBlack = new Land("Castle Black",1,0,0);
 		Territory Karhold = new Land("Karhold",1,0,0);
 		Territory StonyShore = new Land("The Stony Shore",0,1,0);

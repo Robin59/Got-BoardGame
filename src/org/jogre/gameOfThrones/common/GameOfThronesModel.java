@@ -543,7 +543,7 @@ public class GameOfThronesModel extends JogreModel {
 				if (territory1 instanceof Water || territory1.getFamily().getInflu()<1){
 					territory1.removeOwner();
 					nextPlayer();
-				}else if (territory1.getInfluenceToken()){ // the territory already have an influence token, don't need to had one more
+				}else if (territory1.getInfluenceToken() || (territory1 instanceof HomeLand && ((HomeLand) territory1).originalOwner(territory1.getFamily()))){ // the territory already have an influence token(or is Homeland), don't need to had one more
 					nextPlayer();
 				}else{//the player have the possiblity to use a influence token to keep is territory
 					state=ModelState.USE_INF_TOKEN;
