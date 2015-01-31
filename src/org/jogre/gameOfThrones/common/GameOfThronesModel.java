@@ -541,8 +541,10 @@ public class GameOfThronesModel extends JogreModel {
 			if(territory1.getTroup()==null){// dans le cas où il n'y a plus de troupes on supprime l'ordre
 				territory1.rmOrder();
 				if (territory1 instanceof Water || territory1.getFamily().getInflu()<1){
-				territory1.removeOwner();
-				nextPlayer();
+					territory1.removeOwner();
+					nextPlayer();
+				}else if (territory1.getInfluenceToken()){ // the territory already have an influence token, don't need to had one more
+					nextPlayer();
 				}else{//the player have the possiblity to use a influence token to keep is territory
 					state=ModelState.USE_INF_TOKEN;
 				}
