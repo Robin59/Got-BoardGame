@@ -14,6 +14,7 @@ import org.jogre.gameOfThrones.common.Bidding;
 import org.jogre.gameOfThrones.common.CombatantCard;
 import org.jogre.gameOfThrones.common.Family;
 import org.jogre.gameOfThrones.common.GameOfThronesModel;
+import org.jogre.gameOfThrones.common.combat.Battle;
 import org.jogre.gameOfThrones.common.combat.BattlePvP;
 import org.jogre.gameOfThrones.common.orders.*;
 import org.jogre.gameOfThrones.common.territory.Territory;
@@ -42,7 +43,7 @@ public class PlayersChoices extends JogreComponent {
 	Territory relatedTerr;
 	/*the cible territory when the player choice need 2 territory*/ 
 	Territory cibleTerr;
-	BattlePvP battle;
+	Battle battle;
 	/*The index of the selected house card. -1 if none*/
 	private int selectedHouseCard;
 	/*Said the index of the first house card show on the left during the battle*/
@@ -181,7 +182,7 @@ public class PlayersChoices extends JogreComponent {
 			break;
 		case DISPLAY_LAND_ATT :
 			if (x>150 && x<200 && y>150 && y<200){ 
-				return SEND_SHIP_FOR_ATT;
+				return ATT_PREPARATION_ENDED;
 			}else if (x>50 && x<100 && y>50 && y<100 && relatedTerr.getTroup().getTroops()[1]!=0){
 				return SEND_FOOT_FOR_ATT;
 			}else if(x>150 && x<200 && y>50 && y<100 && relatedTerr.getTroup().getTroops()[2]!=0){
@@ -598,23 +599,23 @@ public class PlayersChoices extends JogreComponent {
 	}
 	
 	/**
-	 * 
+	 * This method is use to check if there is new things to display during a battle
 	 * @param modelState
 	 * @param family
 	 * @param battle
 	 * @return
 	 */
-	public int check(int modelState, Family family, BattlePvP battle){
-		if(modelState==1 && battle.canPlayCard(family) ){//on verifie si on peut afficher les cartes 
+	public int check(int battleState, Family family, Battle battle){
+		if(battleState==Battle.BATTLE_CHOOSE_CARD && battle.canPlayCard(family) ){//on verifie si on peut afficher les cartes 
 			showHouseCards(battle);
 			return 1;
-		}else if(modelState==2){
+		}else if(battleState==Battle.BATTLE_PLAY_SWORD){
 			swordPlay(family);
 			return 2;
-		}else if(modelState==3 && family==battle.getDefFamily()){	
+		}else if(battleState==Battle.BATTLE_WITHDRAWAL && family==battle.getDefFamily()){	
 			label.setText("Choose a place to withdraw");
 			return 3;
-		}else if(modelState==4){
+		}else if(battleState==Battle.BATTLE_END){
 			return 4;
 		}
 		return 0;
@@ -623,7 +624,7 @@ public class PlayersChoices extends JogreComponent {
 	 * This method set all the parameters to show the house Cards
 	 * @param battle
 	 */
-	public void showHouseCards(BattlePvP battle){
+	public void showHouseCards(Battle battle){
 		this.battle=battle;
 		selectedHouseCard=-1;
 		panel=DISPLAY_HOUSE_CARDS;

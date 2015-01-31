@@ -286,14 +286,9 @@ public class GameOfThronesController extends JogreController {
 			sendProperty("troopSend", 3);playerChoices.checkPlayerChoices();
 			break;
 		case PlayersChoices.ATT_PREPARATION_ENDED:
-			if(model.getBattle()!=null){
 				model.attPrepEnd();
 				sendProperty("attPreparationEnded", 0);
-			}else{
-				model.resolutionPvE();
-				sendProperty("resolutionPvE",0);
 				playerChoices.blank2();
-			}
 			break;
 		case PlayersChoices.SEND_SHIP_FOR_ATT :
 			model.troopSend(1,0,0,0);
@@ -824,8 +819,6 @@ public class GameOfThronesController extends JogreController {
 			}else if( model.haveThrone(getSeatNum())){
 				playerChoices.biddingEgality(model.getBidding());
 			}
-		}else if(key.equals("resolutionPvE")){
-			model.resolutionPvE();
 		}else if (key.equals("endProg")){
     		//on indique que le joueur a fini de donner ses ordres
     		model.getFamily(value).ordersGiven();

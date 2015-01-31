@@ -10,43 +10,24 @@ import org.jogre.gameOfThrones.common.orders.OrderType;
 import org.jogre.gameOfThrones.common.territory.Territory;
 import org.jogre.gameOfThrones.common.territory.Water;
 
-public class BattlePvP {
+public class BattlePvP extends Battle{
 
-	private Territory attTerritory;
-	private Territory defTerritory;
-	private int[] attTroops;
-	private List<Territory> attSupport;
-	private List<Territory> defSupport;
-	private int groundType; // 2 water, 0 land, 1 castle
+	
 	private int def;
 	private int att;
 	private int attSwords;
 	private int attTowers;
 	private int defSwords;
 	private int defTowers;
-	private Family attFamily;
 	private Family defFamily;
-	private int state; // 0 for the choosing troops, 1 for choosing cards, 2 for sword, 3 for the withdrawal, 4 when it's ended
 	CombatantCard attCard;
 	CombatantCard defCard;
 	
 	public BattlePvP(Territory attTerritory, Territory defTerritory){
-		System.out.println("a new battle begin");
-		this.attTerritory=attTerritory;
-		this.defTerritory=defTerritory;
-		attTroops= new int[4];
-		attSupport= new LinkedList<Territory>();
-		defSupport= new LinkedList<Territory>();
-		if(defTerritory instanceof Water){
-			groundType=2;
-		}else if(defTerritory.getCastle()>0){
-			groundType=1;
-		}else{groundType=0;}
+		super(attTerritory, defTerritory);
 		def=0;
 		att=0;
-		attFamily=attTerritory.getFamily();
 		defFamily=defTerritory.getFamily();
-		state=0;
 		attCard=null;
 		defCard=null;
 		attSwords=0;
@@ -55,14 +36,6 @@ public class BattlePvP {
 		defTowers=0;
 	}
 
-
-	public void addTroop(int boat, int foot, int knight, int siege) {
-		attTerritory.mouveTroops(new Water("trash"),boat,foot,knight, siege);
-		attTroops[0]+=boat;
-		attTroops[1]+=foot;
-		attTroops[2]+=knight;
-		attTroops[3]+=siege;
-	}
 
 	/** brute force without Family cards*/
 	public int attPower(){
@@ -200,46 +173,11 @@ public class BattlePvP {
 		}
 	}
 	
-	public void addAttSupport(Territory territory){
-		System.out.println("AttSupport"+territory.getName());
-		attSupport.add(territory);
-		territory.getOrder().used(); 
-		//on verifie si on peut commencer la bataille
-		if(checkSupport()){
-			startBattle();			
-		}
-	}
-
-
-	public void addDefSupport(Territory territory) {
-		System.out.println("defSupport");
-		defSupport.add(territory);
-		territory.getOrder().used();
-		//on verifie si on peut commencer la bataille
-		if(checkSupport()){
-			startBattle();
-		}
-	}
 	
-	/**
-	 * Check if all territory with support and the attaquant territory have done their orders
-	 * @return true if all supports and the attaquant troups are sended
-	 */
-	public boolean checkSupport(){	
-		System.out.println("Inside checkSupport");
-		for (Territory territory : defTerritory.getNeighbors()){
-			if(territory.getOrder()!=null && territory.getOrder().getType()==OrderType.SUP && !territory.getOrder().getUse()){
-				return false;
-			}
-		}
-		return attTerritory.getOrder().getUse();
-	}
 
-/**
- * Return a boolean saying if a player is participating or not to this battle (support dosen't count)
- * @param seatNum
- * @return true if the player is participating 
- */
+
+	
+	@Override
 	public boolean playerPartisipate(int seatNum) {
 		return (attFamily.getPlayer()==seatNum || defTerritory.getFamily().getPlayer()==seatNum);
 	}
@@ -257,9 +195,9 @@ public class BattlePvP {
  * return the state of the battle	
  * @return 0 for the support, 1 for cards 
  */
-	public int getState(){
+	/*public int getState(){
 		return state;
-	}
+	}*/
 
 	public boolean cardsPlayed(){
 		return attCard!=null && defCard!=null;

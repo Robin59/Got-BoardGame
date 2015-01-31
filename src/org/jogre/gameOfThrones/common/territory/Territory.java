@@ -118,7 +118,11 @@ public abstract class Territory {
 	/** Said if a troop can go to a territory, independent to the given order*/
 	protected abstract boolean canGoTo(Territory territory);
 	
-	/** 0 for raid, 1 for move, 2 for combats*/
+	/**
+	 * 
+	 * @param territory
+	 * @return  0 for raid, 1 for move, 2 for combats, 3 when the territory give in parameter is the territory who call the method
+	 */
 	public int useOrderOn(Territory territory){ // int ou void ???
 		if(this==territory){
 			return 3;

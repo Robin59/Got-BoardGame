@@ -28,6 +28,7 @@ import nanoxml.XMLElement;
 import org.jogre.client.awt.GameImages;
 import org.jogre.common.JogreModel;
 import org.jogre.common.comm.Comm;
+import org.jogre.gameOfThrones.common.combat.Battle;
 import org.jogre.gameOfThrones.common.combat.BattlePvE;
 import org.jogre.gameOfThrones.common.combat.BattlePvP;
 import org.jogre.gameOfThrones.common.combat.GroundForce;
@@ -76,8 +77,9 @@ public class GameOfThronesModel extends JogreModel {
 	//private boolean musteringPhase;
 	//private boolean clashOfKings;
 	// Must make an Interface or abstract class for the 2 objects below
-	private BattlePvP battle;
-	private BattlePvE battlePvE;
+	private Battle battle;
+	//private BattlePvP battlePvP;
+	//private BattlePvE battlePvE;
 	private Territory territory1;
 	private Territory territory2;
 	private JLabel jLabel;
@@ -117,7 +119,6 @@ public class GameOfThronesModel extends JogreModel {
         wildings=2;
         currentPlayer=0;
         mvInitiated=false;
-        // musteringPhase=false;
         battle=null;
         deck1=new Deck(1);
         deck2=new Deck(2);
@@ -292,7 +293,7 @@ public class GameOfThronesModel extends JogreModel {
 		territory1=fromTerritory;
 		territory2=toTerritory;
 		if(toTerritory.getNeutralForce()>0){
-			battlePvE= new BattlePvE(fromTerritory, toTerritory);
+			battle= new BattlePvE(fromTerritory, toTerritory);
 		}else{
 			battle = new BattlePvP(fromTerritory, toTerritory);
 		}
@@ -301,7 +302,7 @@ public class GameOfThronesModel extends JogreModel {
 	public void battleInitiated(Territory territory) {
 		territory2=territory;
 		if(territory2.getNeutralForce()>0){
-			battlePvE = new BattlePvE(territory1, territory2);
+			battle = new BattlePvE(territory1, territory2);
 		}else{
 			battle = new BattlePvP(territory1, territory2);
 		}
@@ -423,8 +424,6 @@ public class GameOfThronesModel extends JogreModel {
 	public void troopSend(int boat, int foot, int knigth, int siege) {
 		if(battle!=null){
 			battle.addTroop(boat,foot,knigth,siege);
-		}else if(battlePvE!=null) {
-			battlePvE.addTroop(boat,foot,knigth,siege);
 		}else if(mvInitiated){//on est dans le cas d'un mouvement 
 			territory1.mouveTroops(territory2,boat,foot,knigth, siege );
 			if(territory1.getTroup()==null){// dans le cas où il n'y a plus de troupes on supprime l'ordre
@@ -442,13 +441,13 @@ public class GameOfThronesModel extends JogreModel {
 		
 	}
 
-	public BattlePvP getBattle() {
+	public Battle getBattle() {
 		return battle;
 	}
 	/**end a battle and remove it
 	 */
 	public void battleEnd(){
-		battle.end();
+		//battle.end();
 		battle=null;
 		System.out.println("fin battaille");
 	}
@@ -473,18 +472,19 @@ public class GameOfThronesModel extends JogreModel {
 	/**
 	 * resolution of a battle against neutral force (after the player get is troops selected)
 	 */
-	public void resolutionPvE(){
+	/*public void resolutionPvE(){
 		battlePvE.resolution(this);
 		battlePvE=null;
-	}
+	}*/
 
-	/**Give some information about the state of the game (for the playerChoice)
-	 * 0 if there is no battle or if the player gived in parameter don't participate 
-	 * 1- is for the battle card
+	/**
+	 * Give some information about the state of the battle (for the playerChoice)
+	 * @param seatNum 
+	 * @return 0 if there is no battle or if the player don't participate to the battle, else return the battle state 
 	 */
 	public int informations(int seatNum) {
 		if(battle!=null && battle.playerPartisipate(seatNum)){
-				return battle.getState();
+				return battle.getState(); 
 		}
 		return 0;
 	}

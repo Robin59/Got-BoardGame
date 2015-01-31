@@ -6,34 +6,40 @@ import org.jogre.gameOfThrones.common.orders.OrderType;
 import org.jogre.gameOfThrones.common.territory.Territory;
 import org.jogre.gameOfThrones.common.territory.Water;
 
-public class BattlePvE {
+public class BattlePvE extends Battle{
 
 	private Territory attTerritory;
 	private Territory defTerritory;
 	private int[] attTroops;
 	private int groundType;
+	
 	public BattlePvE(Territory attTerritory, Territory defTerritory) {
-		this.attTerritory=attTerritory;
-		this.defTerritory=defTerritory;
-		attTroops=new int[4];
-		if(defTerritory.getCastle()>0){
-			groundType=1;
-		}else{
-			groundType=1;
-		}
-		
+		super(attTerritory, defTerritory);
 	}
 
 	
-	public void addTroop(int boat, int foot, int knight, int siege) {
-		attTerritory.getTroup().rmToop(boat, foot, knight, siege);
-		attTroops[1]+=foot;
-		attTroops[2]+=knight;
-		attTroops[3]+=siege;
+	
+	
+
+
+	@Override
+	public void startBattle() {
+		System.out.println("PvE battle start");
+		
 	}
 
 
 
+
+
+	@Override
+	public Family getDefFamily() {return null;}
+	@Override
+	public boolean canPlayCard(Family family) {return false;}
+	
+	
+	
+	///////old class
 	public void resolution(GameOfThronesModel model) {
 		if(victory()){
 			defTerritory.setNeutralForce(0);
@@ -64,5 +70,9 @@ public class BattlePvE {
 		}
 		return res>=defTerritory.getNeutralForce();
 	}
+
+
+
+
 	
 }
