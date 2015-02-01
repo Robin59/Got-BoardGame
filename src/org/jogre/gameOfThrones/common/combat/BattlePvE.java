@@ -26,6 +26,7 @@ public class BattlePvE extends Battle{
 
 	@Override
 	public void startBattle() {
+		attTerritory.getOrder().setUse(true);
 		if(attPower()<defPower()){
 			if(attTerritory.getTroup()!=null){
 				attTroops[3]=0;

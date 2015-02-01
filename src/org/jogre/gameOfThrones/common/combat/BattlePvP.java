@@ -55,13 +55,11 @@ public class BattlePvP extends Battle{
 		return res;
 	}
 	
-	public void startBattle() { 
-		att=this.attPower();
-		def=this.defPower();
-		System.out.println("attack power "+att);
-		System.out.println("def power "+def);
+	public void startBattle() {
+		attTerritory.getOrder().setUse(true);
 		state=1;
 	}
+	
 	/**
 	 * 
 	 * @param territory
@@ -296,7 +294,6 @@ public class BattlePvP extends Battle{
 	 * This method is call when a battle end 
 	 */
 	public void end(){
-		attTerritory.getOrder().setUse(true);
 		// on regarde si un joueur n'a plus de cartes, au quel cas on lui rend
 		if (attFamily.getCombatantCards().isEmpty()){
 			attFamily.regainCombatantCards(attCard);

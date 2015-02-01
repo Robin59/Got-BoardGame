@@ -3,6 +3,7 @@ import org.jogre.gameOfThrones.common.Family;
 import org.jogre.gameOfThrones.common.combat.*;
 import org.jogre.gameOfThrones.common.orders.Order;
 import org.jogre.gameOfThrones.common.orders.OrderType;
+import org.jogre.gameOfThrones.common.territory.HomeLand;
 import org.jogre.gameOfThrones.common.territory.Land;
 import org.jogre.gameOfThrones.common.territory.Territory;
 import org.junit.Test;
@@ -33,7 +34,31 @@ public class BattleTest {
 	
 	@Test
 	 public void initialForceCalulTestPvP() {
-		//tester le cas où il y a une garnison 
+		Family attFamily = new Family(1, null);
+		Family defFamily = new Family(2, null);
+		//contruction territory 
+		Territory attTerritory= new Land("test",0,0,0);
+		Territory defTerritory= new HomeLand("test",0,0,"");
+		attTerritory.setTroup(new GroundForce(attFamily,1,0,1));
+		attTerritory.setOrder(new Order(false,0,0,OrderType.ATT));
+		defTerritory.setTroup(new GroundForce(defFamily,1,0,1));
+		Battle battle=new BattlePvP(attTerritory,defTerritory);
+		//test defender force
+		assertEquals(battle.defPower(),3);
+		defTerritory.setOrder(new Order(false,0,0,OrderType.CON));
+		assertEquals(battle.defPower(),3);
+		defTerritory.setOrder(new Order(true,2,0,OrderType.DEF));
+		assertEquals(battle.defPower(),5);
+		defTerritory.setTroup(new GroundForce(defFamily,1,1,1));
+		assertEquals(battle.defPower(),7);
+		//without garisson
+		defTerritory.destructGarrison();
+		assertEquals(battle.defPower(),5);
+		//att force
+		battle.addTroop(0, 1, 0, 0);
+		assertEquals(battle.attPower(),1);
+		battle.addTroop(0, 0, 0, 1);
+		assertEquals(battle.attPower(),5);
 	};
 	
 	@Test
@@ -86,6 +111,7 @@ public class BattleTest {
 		Battle battle2=new BattlePvE(attTerritory,neutralTerritory);
 		battle2.addTroop(0, 0, 1, 0);
 		battle2.startBattle();
+		assertTrue(attTerritory.getOrder().getUse());
 		assertEquals(battlePvE.getState(),Battle.BATTLE_END);
 		assertEquals(attTerritory.getTroup().getTroops()[1],1);
 		assertEquals(attTerritory.getTroup().getTroops()[2],0);
