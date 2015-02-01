@@ -141,11 +141,11 @@ public class BattlePvP extends Battle{
 				}
 			}
 			System.out.println("befor state 4");
-			state=4;	
+			state=BATTLE_END;	
 		}
 	}
 
-/**return true if the attaquant win, false if it's the defencer*/
+	/**return true if the attaquant win, false if it's the defencer*/
 	private boolean battleWinner() {
 		if(att==def){
 			return attFamily.getFiefdomsTrack()<defFamily.getFiefdomsTrack();
@@ -194,6 +194,9 @@ public class BattlePvP extends Battle{
 				System.out.println("Tyrion has been played");
 				attCard=null;
 			}else{*/
+			
+			att=this.attPower()+attCard.getPower();
+			def=this.defPower()+defCard.getPower();
 				//la reines des epines, Faire un etat particulié qui permet de clicker sur la carte pour les cartes 
 				//les autres (vict,etc)
 				befforSwordCardEffect();
@@ -248,7 +251,7 @@ public class BattlePvP extends Battle{
 	 */
 	public void withdraw (Territory territory){
 		defTerritory.mouveTroops(territory);
-		state=4;
+		state=BATTLE_END;
 		System.out.println("retraite");
 		// on met les nouvelles troupes sur le territoire
 		if(groundType==2){
@@ -294,6 +297,10 @@ public class BattlePvP extends Battle{
 			}
 		}
 	}
+	
+	public int getAtt(){return att;}
+	public int getDef(){return def;}
+	
 	
 	/*card's effect that are use before the battle resolutions*/ 
 	private void befforSwordCardEffect(){

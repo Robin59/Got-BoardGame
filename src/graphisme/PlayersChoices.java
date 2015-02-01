@@ -608,15 +608,15 @@ public class PlayersChoices extends JogreComponent {
 	public int check(int battleState, Family family, Battle battle){
 		if(battleState==Battle.BATTLE_CHOOSE_CARD && battle.canPlayCard(family) ){//on verifie si on peut afficher les cartes 
 			showHouseCards(battle);
-			return 1;
+			return Battle.BATTLE_CHOOSE_CARD;
 		}else if(battleState==Battle.BATTLE_PLAY_SWORD){
 			swordPlay(family);
-			return 2;
+			return Battle.BATTLE_PLAY_SWORD;
 		}else if(battleState==Battle.BATTLE_WITHDRAWAL && family==battle.getDefFamily()){	
 			label.setText("Choose a place to withdraw");
-			return 3;
+			return Battle.BATTLE_WITHDRAWAL;
 		}else if(battleState==Battle.BATTLE_END){
-			return 4;
+			return Battle.BATTLE_END;
 		}
 		return 0;
 	}
@@ -626,6 +626,7 @@ public class PlayersChoices extends JogreComponent {
 	 */
 	public void showHouseCards(Battle battle){
 		this.battle=battle;
+		label.setText("The attacker force is "+battle.attPower()+" the defender power is "+battle.defPower());
 		selectedHouseCard=-1;
 		panel=DISPLAY_HOUSE_CARDS;
 		repaint();
@@ -646,6 +647,7 @@ public class PlayersChoices extends JogreComponent {
 	public void swordPlay(Family family){
 		if(family.canUseSword()){
 			panel=DISPLAY_VALYRIAN_SWORD;
+			label.setText("The attacker force is "+((BattlePvP)battle).getAtt()+" the defender power is "+((BattlePvP)battle).getDef());
 			repaint();
 		}else{
 			panel=DISPLAY_BLANK;

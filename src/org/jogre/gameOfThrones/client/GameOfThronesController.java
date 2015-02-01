@@ -34,6 +34,7 @@ import org.jogre.gameOfThrones.common.BiddingAgainstWild;
 import org.jogre.gameOfThrones.common.Deck;
 import org.jogre.gameOfThrones.common.Family;
 import org.jogre.gameOfThrones.common.GameOfThronesModel;
+import org.jogre.gameOfThrones.common.combat.Battle;
 import org.jogre.gameOfThrones.common.combat.BattlePvP;
 import org.jogre.gameOfThrones.common.orders.Order;
 import org.jogre.gameOfThrones.common.orders.OrderType;
@@ -176,8 +177,7 @@ public class GameOfThronesController extends JogreController {
     			break;
     		case PHASE_EXECUTION:
     			if(model.getBattle()!=null){//On verifie si il y a combat
-    				//en cas de retraite !!
-    				if(model.getBattle().getState()==3 && model.canWithdraw(gameOfThronesComponent.getTerritory(e.getX(),e.getY()),getSeatNum())){
+    				if(model.getBattle().getState()==Battle.BATTLE_WITHDRAWAL && model.canWithdraw(gameOfThronesComponent.getTerritory(e.getX(),e.getY()),getSeatNum())){
     					//System.out.println("can withdraw here");
     					model.getBattle().withdraw(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
     					model.battleEnd();
@@ -523,13 +523,13 @@ public class GameOfThronesController extends JogreController {
 		}else{
 			//le playerChoice verifie si il doit afficher quelque chose de nouveau
 			switch(playerChoices.check(model.informations(getSeatNum()), model.getFamily(getSeatNum()), model.getBattle())){
-			case 1:
+			case Battle.BATTLE_CHOOSE_CARD:
 				sendProperty("FamilyCards", 0);
 				break;
-			case 2:
+			case Battle.BATTLE_PLAY_SWORD:
 				sendProperty("Sword", 0);
 				break;
-			case 3: // NE SERT A RIEN !!!!!
+			case Battle.BATTLE_WITHDRAWAL: // Display a message
 				//System.out.println("controller : cheked state 3");
 				break;
 			case 4:
