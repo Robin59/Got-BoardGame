@@ -114,6 +114,9 @@ public class Family {
 	/**This method add influence to the current influence points (you can use negative point for loosing influence)*/
 	public void addInflu(int influ){
 		inflPoint+=influ;
+		if(inflPoint<0){
+			inflPoint=0;
+		}
 	}
 	public void setBid(int bid){
 		this.bid=bid;
