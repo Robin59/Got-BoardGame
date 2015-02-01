@@ -1,4 +1,5 @@
 package org.jogre.gameOfThrones.common.Battle;
+import org.jogre.gameOfThrones.common.CombatantCard;
 import org.jogre.gameOfThrones.common.Family;
 import org.jogre.gameOfThrones.common.combat.*;
 import org.jogre.gameOfThrones.common.orders.Order;
@@ -143,6 +144,46 @@ public class BattleTest {
 		assertFalse(supTerritory.getOrder().getUse());
 	
 	}
+	@Test
+	public void swordTest(){
+		Family attFamily = new Family(1, null);
+		Family defFamily = new Family(2, null);
+		attFamily.setFiefdomsTrack(1);
+		//contruction territory 
+		Territory attTerritory= new Land("test",0,0,0);
+		Territory defTerritory= new HomeLand("test",0,0,"");
+		attTerritory.setTroup(new GroundForce(attFamily,1,0,1));
+		attTerritory.setOrder(new Order(false,0,0,OrderType.ATT));
+		defTerritory.setTroup(new GroundForce(defFamily,1,0,0));
+		defTerritory.setOrder(new Order(true,2,0,OrderType.DEF));
+		Battle battle=new BattlePvP(attTerritory,defTerritory);
+		battle.addTroop(0,1,0,0);
+		battle.startBattle();
+		battle.playCard(new CombatantCard("", 1, 0, 0), attFamily);
+		battle.playCard(new CombatantCard("", 1, 0, 0), defFamily);
+		assertEquals(battle.getState(), Battle.BATTLE_PLAY_SWORD);
+	}
 	
-	
+	@Test
+	public void cardsTest(){
+		Family attFamily = new Family(1, null);
+		Family defFamily = new Family(2, null);
+		attFamily.setFiefdomsTrack(1);
+		//contruction territory 
+		Territory attTerritory= new Land("test",0,0,0);
+		Territory defTerritory= new HomeLand("test",0,0,"");
+		attTerritory.setTroup(new GroundForce(attFamily,1,0,1));
+		attTerritory.setOrder(new Order(false,0,0,OrderType.ATT));
+		defTerritory.setTroup(new GroundForce(defFamily,1,0,0));
+		defTerritory.setOrder(new Order(true,2,0,OrderType.DEF));
+		Battle battle=new BattlePvP(attTerritory,defTerritory);
+		battle.addTroop(0,1,0,0);
+		assertEquals(battle.getState(), Battle.BATTLE_SUPPORT_PHASE);
+		battle.startBattle();
+		assertEquals(battle.getState(), Battle.BATTLE_CHOOSE_CARD);
+		battle.playCard(new CombatantCard("", 1, 0, 0), attFamily);
+		assertEquals(battle.getState(), Battle.BATTLE_CHOOSE_CARD);
+		battle.playCard(new CombatantCard("", 1, 0, 0), defFamily);
+		assertEquals(battle.getState(), Battle.BATTLE_PLAY_SWORD);
+	}
 }

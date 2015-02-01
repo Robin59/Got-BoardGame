@@ -57,7 +57,7 @@ public class BattlePvP extends Battle{
 	
 	public void startBattle() {
 		attTerritory.getOrder().setUse(true);
-		state=1;
+		state=BATTLE_CHOOSE_CARD;
 	}
 	
 	/**
@@ -162,28 +162,21 @@ public class BattlePvP extends Battle{
 	public boolean playerPartisipate(int seatNum) {
 		return (attFamily.getPlayer()==seatNum || defTerritory.getFamily().getPlayer()==seatNum);
 	}
-/**
- * Return a boolean saying if a player is participating or not to this battle (support dosen't count)
- * @param family
- * @return true if the player is participating 
- */
-	public boolean playerPartisipate(Family family) { // NOT USE !!
-		return (attFamily==family || defTerritory.getFamily()==family);
-	}
 	
 	
-/**
- * return the state of the battle	
- * @return 0 for the support, 1 for cards 
- */
-	/*public int getState(){
-		return state;
-	}*/
-
+	/**
+	 * Tell if the attacker and the defender have choose theirs cards
+	 * @return true if the attacker and the defender have choose theirs cards
+	 */
 	public boolean cardsPlayed(){
 		return attCard!=null && defCard!=null;
 	}
 	
+	/**
+	 * 
+	 * @param card
+	 * @param family
+	 */
 	public void playCard(CombatantCard card, Family family) {
 		if(family==attFamily){
 			attCard=card;
@@ -194,34 +187,24 @@ public class BattlePvP extends Battle{
 		}
 		if(cardsPlayed()){
 			//on test Tyrion 
-			if(attCard.getName().equals("Tyrion")){
+			/*if(attCard.getName().equals("Tyrion")){
 				System.out.println("Tyrion has been played");
 				defCard=null;
 			}else if(defCard.getName().equals("Tyrion")) {
 				System.out.println("Tyrion has been played");
 				attCard=null;
-			}else{
-				System.out.println("Cartes jouée :");
-				System.out.println("carte att "+attCard.getName());
-				System.out.println("carte def "+defCard.getName());
-				//on effectue le calcul la puissance final avant épée
-				this.powerWithoutSword();
-				//on applique les effets de carte
-				attSwords=attCard.getSword();
-				defSwords=defCard.getSword();
-				attTowers=attCard.getTower();
-				defTowers=defCard.getTower();
-					//la reines des epines, Faire un etat particulié qui permet de clicker sur la carte pour les cartes 
-					//les autres (vict,etc)
+			}else{*/
+				//la reines des epines, Faire un etat particulié qui permet de clicker sur la carte pour les cartes 
+				//les autres (vict,etc)
 				befforSwordCardEffect();
 				//on regarde si un des deux joueurs a l'épée
 				if(attFamily.canUseSword()||defFamily.canUseSword()){
-					this.state=2;
+					this.state=BATTLE_PLAY_SWORD;
 				}else{
 					//on passe directement à la resolution
 					battleResolution();
 				}
-			}
+			//}
 		}
 	}
 	/**
@@ -234,16 +217,10 @@ public class BattlePvP extends Battle{
 			def++;
 			defFamily.swordUse();
 		}
-		System.out.println("sword use");
-		System.out.println("attack power "+att);
-		System.out.println("def power "+def);
 		battleResolution();
 		
 	}
 	public void dontUseSword(){
-		System.out.println("sword don't use");
-		System.out.println("attack power "+att);
-		System.out.println("def power "+def);
 		battleResolution();
 	}
 	/*public CombatantCard getAttCard(){
@@ -253,24 +230,14 @@ public class BattlePvP extends Battle{
 	public CombatantCard getDefCard(){
 		return defCard;
 	}*/
-	public Family getAttFamily (){
-		return attFamily;
-	}
 	public Family getDefFamily() {
 		return defTerritory.getFamily();
 	}
-	
-	private void powerWithoutSword() {
-		att=this.attPower()+attCard.getPower();
-		def=this.defPower()+defCard.getPower();
-		System.out.println("attack power "+att);
-		System.out.println("def power "+def);
-	}
 
 
 	
 
-
+	
 	public boolean canPlayCard(Family family) {
 		return ((family==attFamily && attCard==null)||(family==defTerritory.getFamily() && defCard==null));
 	}
