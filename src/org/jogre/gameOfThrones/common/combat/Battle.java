@@ -57,7 +57,7 @@ public abstract class Battle {
 	public void addDefSupport(Territory territory) {
 		System.out.println("defSupport");
 		defSupport.add(territory);
-		territory.getOrder().used();
+		territory.getOrder().setUse(true);
 		//on verifie si on peut commencer la bataille
 		if(checkSupport()){
 			startBattle();
@@ -71,7 +71,7 @@ public abstract class Battle {
 	public void addAttSupport(Territory territory){
 		System.out.println("AttSupport"+territory.getName());
 		attSupport.add(territory);
-		territory.getOrder().used(); 
+		territory.getOrder().setUse(true); 
 		//on verifie si on peut commencer la bataille
 		if(checkSupport()){
 			startBattle();			
@@ -105,6 +105,32 @@ public abstract class Battle {
 		return attFamily;
 	}
 		
+	/** 
+	 * This method calculate the brute force of the attacker army without Family cards and valaryan sword
+	 * @return the force of the attacker army
+	 * */
+	public int attPower(){
+		int res=attTerritory.getOrder().getOthBonus();
+		if(groundType==2){
+			res+= attTroops[0];
+		}else{
+			res+=(attTroops[2])*2+attTroops[1]+attTroops[3]*4*groundType;
+		}
+		for(Territory territory : attSupport){
+			int[] troops =territory.getTroup().getTroops();
+			res+=territory.getOrder().getOthBonus()+troops[0]+troops[1]+troops[2]*2+troops[3]*4*groundType;
+		}
+	return res;
+	}
+	
+	/**
+	 * calculate the defensive initial force (without Family cards but with support, garrison, order's bonus)
+	 * @return the defensive force
+	 */
+	public abstract int defPower();
+	
+	
+	/***/
 	public abstract void startBattle();
 	public abstract Family getDefFamily();
 	public abstract boolean canPlayCard(Family family);
@@ -114,10 +140,25 @@ public abstract class Battle {
 	public void dontUseSword(){};
 	public void playCard(CombatantCard card, Family family) {}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public int getState(){
 		return state;
 	}
 	
+	/**
+	 * 
+	 */
+	public void endBattle(){ // this method could change and take the winner in parameter to factories more code
+		for(Territory territory : defTerritory.getNeighbors()){
+			if(territory.getOrder()!=null && territory.getOrder().getType()==OrderType.SUP){
+				territory.getOrder().setUse(false);
+			}
+		}
+		state=BATTLE_END;
+	}
 	
 	public static final int BATTLE_SUPPORT_PHASE=0;
 	public static final int BATTLE_CHOOSE_CARD=1;

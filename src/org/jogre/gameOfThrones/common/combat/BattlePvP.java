@@ -37,25 +37,8 @@ public class BattlePvP extends Battle{
 	}
 
 
-	/** brute force without Family cards*/
-	public int attPower(){
-		int res=attTerritory.getOrder().getOthBonus();
-		if(groundType==2){
-			res+= attTroops[0];
-		}else{
-			res+=(attTroops[2])*2+attTroops[1]+attTroops[3]*4*groundType;
-		}
-		for(Territory territory : attSupport){
-			int[] troops =territory.getTroup().getTroops();
-			res+=territory.getOrder().getOthBonus()+troops[0]+troops[1]+troops[2]*2+troops[3]*4*groundType;
-		}
-	return res;
-	}
 	
-	/**
-	 * calculate the defensive initial force (without Family cards but with support, garrison, order's bonus)
-	 * @return the defensive force
-	 */
+	@Override
 	public int defPower(){
 		int res =0;
 		if (defTerritory.getOrder()!=null) res=defTerritory.getOrder().getDefBonus();
@@ -313,7 +296,7 @@ public class BattlePvP extends Battle{
 	 * This method is call when a battle end 
 	 */
 	public void end(){
-		attTerritory.getOrder().used();
+		attTerritory.getOrder().setUse(true);
 		// on regarde si un joueur n'a plus de cartes, au quel cas on lui rend
 		if (attFamily.getCombatantCards().isEmpty()){
 			attFamily.regainCombatantCards(attCard);

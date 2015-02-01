@@ -315,7 +315,7 @@ public class GameOfThronesController extends JogreController {
 			sendProperty("defSupport",playerChoices.getRelatedTerr().getName());
 			break;
 		case PlayersChoices.SUPPORT_NONE:
-			playerChoices.getRelatedTerr().getOrder().used();
+			playerChoices.getRelatedTerr().getOrder().setUse(true);
 			sendProperty("noSupport",playerChoices.getRelatedTerr().getName());
 			break;
 		case PlayersChoices.HOUSE_CARD_CHOSEN:
@@ -651,7 +651,7 @@ public class GameOfThronesController extends JogreController {
     	}else if(key.equals("defSupport")){
         	model.getBattle().addDefSupport(model.getBoardModel().getTerritory(value));
     	}else if(key.equals("noSupport")){
-    		model.getBoardModel().getTerritory(value).getOrder().used();
+    		model.getBoardModel().getTerritory(value).getOrder().setUse(true);
     	}else if(key.equals("withdraw")){
     		model.getBattle().withdraw(model.getBoardModel().getTerritory(value));
 			model.battleEnd();

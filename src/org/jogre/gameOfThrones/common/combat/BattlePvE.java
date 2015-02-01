@@ -7,25 +7,37 @@ import org.jogre.gameOfThrones.common.territory.Territory;
 import org.jogre.gameOfThrones.common.territory.Water;
 
 public class BattlePvE extends Battle{
-
-	private Territory attTerritory;
-	private Territory defTerritory;
-	private int[] attTroops;
-	private int groundType;
 	
 	public BattlePvE(Territory attTerritory, Territory defTerritory) {
 		super(attTerritory, defTerritory);
 	}
 
 	
-	
-	
+	@Override
+	public int defPower(){
+		int res= defTerritory.getNeutralForce();
+		for(Territory territory : defSupport){
+			int[] troops =territory.getTroup().getTroops();
+			res+=territory.getOrder().getOthBonus()+troops[0]+troops[1]+troops[2]*2;
+		}
+		return res;
+	}
 
 
 	@Override
 	public void startBattle() {
-		System.out.println("PvE battle start");
-		
+		if(attPower()<defPower()){
+			if(attTerritory.getTroup()!=null){
+				attTroops[3]=0;
+				attTerritory.getTroup().addTroop(attTroops);
+			}else{
+				attTerritory.setTroup(new GroundForce(attFamily, attTroops[1],attTroops[2],0));
+			}
+		}else{
+			defTerritory.setNeutralForce(0);
+			defTerritory.setTroup(new GroundForce(attFamily, attTroops[1],attTroops[2],attTroops[3]));
+		}
+		endBattle();
 	}
 
 

@@ -462,7 +462,7 @@ public class GameOfThronesModel extends JogreModel {
 	}
 
 	public void attPrepEnd(){
-		territory1.getOrder().used();
+		territory1.getOrder().setUse(true);
 		if(battle.checkSupport()){
 			System.out.println("battle check=true");
 			battle.startBattle();
