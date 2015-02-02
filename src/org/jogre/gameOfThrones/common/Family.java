@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.jogre.gameOfThrones.common.orders.Order;
 import org.jogre.gameOfThrones.common.orders.OrderType;
+import org.jogre.gameOfThrones.common.territory.HomeLand;
 import org.jogre.gameOfThrones.common.territory.Territory;
 
 
@@ -20,7 +21,7 @@ public class Family {
 	// current value of the supply 
 	private int supply; // influence the max troop
 	private boolean cardSaw;
-	// influence points 
+	/* The number of influence point is always between 0 and 20 */ 
 	private int inflPoint;
 	private int bid;
 	
@@ -116,8 +117,21 @@ public class Family {
 		inflPoint+=influ;
 		if(inflPoint<0){
 			inflPoint=0;
+		}else if (inflPoint+influencePointOnBoard()>20){
+			inflPoint=20-influencePointOnBoard();
 		}
 	}
+	//return the nomber of influence point the family have put and board
+	private int influencePointOnBoard(){
+		int res=0;
+		for(Territory territory : territories){
+			if(territory.getInfluenceToken() && (!(territory instanceof HomeLand)|| ((HomeLand) territory).originalOwner(this))){
+				res++;
+			}
+		}
+		return res;
+	}
+	
 	public void setBid(int bid){
 		this.bid=bid;
 	}
@@ -128,6 +142,10 @@ public class Family {
 		inflPoint-=bid;
 		bid=-1;
 	}
+	/**
+	 * Give the number of influence point available for the family (always between 0 and 20) 
+	 * @return the number of influence point in the family reserve (always between 0 and 20)
+	 */
 	public int getInflu(){
 		return inflPoint;
 	}

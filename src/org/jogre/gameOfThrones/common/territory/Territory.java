@@ -318,7 +318,7 @@ public abstract class Territory {
 	
 	/**
 	 * Tell if there is an influence token on this land
-	 * @return return true if there is an influence token on this land, always return if it's not a land
+	 * @return return true if there is an influence token on this land, always return false if it's not a land
 	 */
 	public boolean getInfluenceToken(){
 		return false;
