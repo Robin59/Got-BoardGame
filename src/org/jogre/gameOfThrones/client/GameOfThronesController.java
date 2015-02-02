@@ -522,17 +522,20 @@ public class GameOfThronesController extends JogreController {
 			}
 		}else{
 			//le playerChoice verifie si il doit afficher quelque chose de nouveau
-			switch(playerChoices.check(model.informations(getSeatNum()), model.getFamily(getSeatNum()), model.getBattle())){
+			switch(model.informations(getSeatNum())){
 			case Battle.BATTLE_CHOOSE_CARD:
+				if(model.getBattle().canPlayCard(model.getFamily(getSeatNum()))){playerChoices.showHouseCards(model.getBattle());}
 				sendProperty("FamilyCards", 0);
 				break;
 			case Battle.BATTLE_PLAY_SWORD:
+				playerChoices.swordPlay(model.getFamily(getSeatNum()));
 				sendProperty("Sword", 0);
 				break;
-			case Battle.BATTLE_WITHDRAWAL: // Display a message
-				//System.out.println("controller : cheked state 3");
+			case Battle.BATTLE_WITHDRAWAL:
+				playerChoices.withdrawal(model.getFamily(getSeatNum()), model.getBattle());
+				sendProperty("withdraw", 0);
 				break;
-			case 4:
+			case Battle.BATTLE_END:
 				model.battleEnd();
 				sendProperty("BattleEnd", 0);// VRAIMENT Necessaire ?!!
 				break;
@@ -763,7 +766,7 @@ public class GameOfThronesController extends JogreController {
      		troops[value]=1;
      		model.troopSend(troops[0],troops[1],troops[2],troops[3]);
     	 }else if(key.equals("FamilyCards")){
-    		 playerChoices.check(model.informations(getSeatNum()), model.getFamily(getSeatNum()), model.getBattle());
+    		 if(model.getBattle().canPlayCard(model.getFamily(getSeatNum()))){playerChoices.showHouseCards(model.getBattle());}
     	 }else if(key.equals("attPreparationEnded")){
      		System.out.println("Inside controller send  attPrepEnd");
      		model.attPrepEnd();
@@ -779,6 +782,8 @@ public class GameOfThronesController extends JogreController {
     		model.getBattle().useSword();
     	}else if (key.equals("dontUseSword")){
     		model.getBattle().dontUseSword();
+    	}else if (key.equals("withdraw")){
+    		playerChoices.withdrawal(model.getFamily(getSeatNum()), model.getBattle());
     	}else if (key.equals("cardSaw")){
     		model.getFamily(value).carteVu();
     	}else if(key.equals("ClashOfKings")){

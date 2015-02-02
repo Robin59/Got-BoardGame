@@ -599,27 +599,16 @@ public class PlayersChoices extends JogreComponent {
 	}
 	
 	/**
-	 * This method is use to check if there is new things to display during a battle
-	 * @param modelState
+	 * This method change the text of the label if the player must withdraw
 	 * @param family
 	 * @param battle
-	 * @return
 	 */
-	public int check(int battleState, Family family, Battle battle){
-		if(battleState==Battle.BATTLE_CHOOSE_CARD && battle.canPlayCard(family) ){//on verifie si on peut afficher les cartes 
-			showHouseCards(battle);
-			return Battle.BATTLE_CHOOSE_CARD;
-		}else if(battleState==Battle.BATTLE_PLAY_SWORD){
-			swordPlay(family);
-			return Battle.BATTLE_PLAY_SWORD;
-		}else if(battleState==Battle.BATTLE_WITHDRAWAL && family==battle.getDefFamily()){	
+	public void withdrawal(Family family, Battle battle){
+		if(family==battle.getDefFamily()){	
 			label.setText("Choose a place to withdraw");
-			return Battle.BATTLE_WITHDRAWAL;
-		}else if(battleState==Battle.BATTLE_END){
-			return Battle.BATTLE_END;
 		}
-		return 0;
 	}
+	
 	/**
 	 * This method set all the parameters to show the house Cards
 	 * @param battle

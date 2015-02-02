@@ -145,7 +145,7 @@ public class BattlePvP extends Battle{
 		}
 	}
 
-	/**return true if the attaquant win, false if it's the defencer*/
+	/**return true if the attacker win, false if it's the defender*/
 	private boolean battleWinner() {
 		if(att==def){
 			return attFamily.getFiefdomsTrack()<defFamily.getFiefdomsTrack();
