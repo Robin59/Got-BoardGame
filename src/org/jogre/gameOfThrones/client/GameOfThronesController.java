@@ -34,6 +34,7 @@ import org.jogre.gameOfThrones.common.BiddingAgainstWild;
 import org.jogre.gameOfThrones.common.Deck;
 import org.jogre.gameOfThrones.common.Family;
 import org.jogre.gameOfThrones.common.GameOfThronesModel;
+import org.jogre.gameOfThrones.common.combat.Battle;
 import org.jogre.gameOfThrones.common.combat.BattlePvP;
 import org.jogre.gameOfThrones.common.orders.Order;
 import org.jogre.gameOfThrones.common.orders.OrderType;
@@ -176,8 +177,7 @@ public class GameOfThronesController extends JogreController {
     			break;
     		case PHASE_EXECUTION:
     			if(model.getBattle()!=null){//On verifie si il y a combat
-    				//en cas de retraite !!
-    				if(model.getBattle().getState()==3 && model.canWithdraw(gameOfThronesComponent.getTerritory(e.getX(),e.getY()),getSeatNum())){
+    				if(model.getBattle().getState()==Battle.BATTLE_WITHDRAWAL && model.canWithdraw(gameOfThronesComponent.getTerritory(e.getX(),e.getY()),getSeatNum())){
     					//System.out.println("can withdraw here");
     					model.getBattle().withdraw(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
     					model.battleEnd();
@@ -286,14 +286,9 @@ public class GameOfThronesController extends JogreController {
 			sendProperty("troopSend", 3);playerChoices.checkPlayerChoices();
 			break;
 		case PlayersChoices.ATT_PREPARATION_ENDED:
-			if(model.getBattle()!=null){
 				model.attPrepEnd();
 				sendProperty("attPreparationEnded", 0);
-			}else{
-				model.resolutionPvE();
-				sendProperty("resolutionPvE",0);
 				playerChoices.blank2();
-			}
 			break;
 		case PlayersChoices.SEND_SHIP_FOR_ATT :
 			model.troopSend(1,0,0,0);
@@ -320,7 +315,7 @@ public class GameOfThronesController extends JogreController {
 			sendProperty("defSupport",playerChoices.getRelatedTerr().getName());
 			break;
 		case PlayersChoices.SUPPORT_NONE:
-			playerChoices.getRelatedTerr().getOrder().used();
+			playerChoices.getRelatedTerr().getOrder().setUse(true);
 			sendProperty("noSupport",playerChoices.getRelatedTerr().getName());
 			break;
 		case PlayersChoices.HOUSE_CARD_CHOSEN:
@@ -527,17 +522,20 @@ public class GameOfThronesController extends JogreController {
 			}
 		}else{
 			//le playerChoice verifie si il doit afficher quelque chose de nouveau
-			switch(playerChoices.check(model.informations(getSeatNum()), model.getFamily(getSeatNum()), model.getBattle())){
-			case 1:
+			switch(model.informations(getSeatNum())){
+			case Battle.BATTLE_CHOOSE_CARD:
+				if(model.getBattle().canPlayCard(model.getFamily(getSeatNum()))){playerChoices.showHouseCards(model.getBattle());}
 				sendProperty("FamilyCards", 0);
 				break;
-			case 2:
+			case Battle.BATTLE_PLAY_SWORD:
+				playerChoices.swordPlay(model.getFamily(getSeatNum()));
 				sendProperty("Sword", 0);
 				break;
-			case 3: // NE SERT A RIEN !!!!!
-				//System.out.println("controller : cheked state 3");
+			case Battle.BATTLE_WITHDRAWAL:
+				playerChoices.withdrawal(model.getFamily(getSeatNum()), model.getBattle());
+				sendProperty("withdraw", 0);
 				break;
-			case 4:
+			case Battle.BATTLE_END:
 				model.battleEnd();
 				sendProperty("BattleEnd", 0);// VRAIMENT Necessaire ?!!
 				break;
@@ -656,7 +654,7 @@ public class GameOfThronesController extends JogreController {
     	}else if(key.equals("defSupport")){
         	model.getBattle().addDefSupport(model.getBoardModel().getTerritory(value));
     	}else if(key.equals("noSupport")){
-    		model.getBoardModel().getTerritory(value).getOrder().used();
+    		model.getBoardModel().getTerritory(value).getOrder().setUse(true);
     	}else if(key.equals("withdraw")){
     		model.getBattle().withdraw(model.getBoardModel().getTerritory(value));
 			model.battleEnd();
@@ -768,7 +766,7 @@ public class GameOfThronesController extends JogreController {
      		troops[value]=1;
      		model.troopSend(troops[0],troops[1],troops[2],troops[3]);
     	 }else if(key.equals("FamilyCards")){
-    		 playerChoices.check(model.informations(getSeatNum()), model.getFamily(getSeatNum()), model.getBattle());
+    		 if(model.getBattle().canPlayCard(model.getFamily(getSeatNum()))){playerChoices.showHouseCards(model.getBattle());}
     	 }else if(key.equals("attPreparationEnded")){
      		System.out.println("Inside controller send  attPrepEnd");
      		model.attPrepEnd();
@@ -784,6 +782,8 @@ public class GameOfThronesController extends JogreController {
     		model.getBattle().useSword();
     	}else if (key.equals("dontUseSword")){
     		model.getBattle().dontUseSword();
+    	}else if (key.equals("withdraw")){
+    		playerChoices.withdrawal(model.getFamily(getSeatNum()), model.getBattle());
     	}else if (key.equals("cardSaw")){
     		model.getFamily(value).carteVu();
     	}else if(key.equals("ClashOfKings")){
@@ -824,8 +824,6 @@ public class GameOfThronesController extends JogreController {
 			}else if( model.haveThrone(getSeatNum())){
 				playerChoices.biddingEgality(model.getBidding());
 			}
-		}else if(key.equals("resolutionPvE")){
-			model.resolutionPvE();
 		}else if (key.equals("endProg")){
     		//on indique que le joueur a fini de donner ses ordres
     		model.getFamily(value).ordersGiven();

@@ -10,43 +10,24 @@ import org.jogre.gameOfThrones.common.orders.OrderType;
 import org.jogre.gameOfThrones.common.territory.Territory;
 import org.jogre.gameOfThrones.common.territory.Water;
 
-public class BattlePvP {
+public class BattlePvP extends Battle{
 
-	private Territory attTerritory;
-	private Territory defTerritory;
-	private int[] attTroops;
-	private List<Territory> attSupport;
-	private List<Territory> defSupport;
-	private int groundType; // 2 water, 0 land, 1 castle
+	
 	private int def;
 	private int att;
 	private int attSwords;
 	private int attTowers;
 	private int defSwords;
 	private int defTowers;
-	private Family attFamily;
 	private Family defFamily;
-	private int state; // 0 for the choosing troops, 1 for choosing cards, 2 for sword, 3 for the withdrawal, 4 when it's ended
 	CombatantCard attCard;
 	CombatantCard defCard;
 	
 	public BattlePvP(Territory attTerritory, Territory defTerritory){
-		System.out.println("a new battle begin");
-		this.attTerritory=attTerritory;
-		this.defTerritory=defTerritory;
-		attTroops= new int[4];
-		attSupport= new LinkedList<Territory>();
-		defSupport= new LinkedList<Territory>();
-		if(defTerritory instanceof Water){
-			groundType=2;
-		}else if(defTerritory.getCastle()>0){
-			groundType=1;
-		}else{groundType=0;}
+		super(attTerritory, defTerritory);
 		def=0;
 		att=0;
-		attFamily=attTerritory.getFamily();
 		defFamily=defTerritory.getFamily();
-		state=0;
 		attCard=null;
 		defCard=null;
 		attSwords=0;
@@ -56,33 +37,8 @@ public class BattlePvP {
 	}
 
 
-	public void addTroop(int boat, int foot, int knight, int siege) {
-		attTerritory.mouveTroops(new Water("trash"),boat,foot,knight, siege);
-		attTroops[0]+=boat;
-		attTroops[1]+=foot;
-		attTroops[2]+=knight;
-		attTroops[3]+=siege;
-	}
-
-	/** brute force without Family cards*/
-	public int attPower(){
-		int res=attTerritory.getOrder().getOthBonus();
-		if(groundType==2){
-			res+= attTroops[0];
-		}else{
-			res+=(attTroops[2])*2+attTroops[1]+attTroops[3]*4*groundType;
-		}
-		for(Territory territory : attSupport){
-			int[] troops =territory.getTroup().getTroops();
-			res+=territory.getOrder().getOthBonus()+troops[0]+troops[1]+troops[2]*2+troops[3]*4*groundType;
-		}
-	return res;
-	}
 	
-	/**
-	 * calculate the defensive initial force (without Family cards but with support, garrison, order's bonus)
-	 * @return the defensive force
-	 */
+	@Override
 	public int defPower(){
 		int res =0;
 		if (defTerritory.getOrder()!=null) res=defTerritory.getOrder().getDefBonus();
@@ -99,18 +55,16 @@ public class BattlePvP {
 		return res;
 	}
 	
-	public void startBattle() { 
-		att=this.attPower();
-		def=this.defPower();
-		System.out.println("attack power "+att);
-		System.out.println("def power "+def);
-		state=1;
+	public void startBattle() {
+		attTerritory.getOrder().setUse(true);
+		state=BATTLE_CHOOSE_CARD;
 	}
+	
 	/**
-	 * 
-	 * @param territory
-	 * @param casualties
-	 * @return false if all the troop is destructed
+	 * Remove troops to the army (be careful this method automatically remove the siege engines)
+	 * @param territory the territory who loose some troops
+	 * @param casualties the number of troops that are remove
+	 * @return false if all the troops are remove and the army doesn't exist anymore 
 	 */
 	private boolean destructTroops(Territory territory, int casualties){
 		territory.getTroup().getTroops()[3]=0;
@@ -121,7 +75,7 @@ public class BattlePvP {
 			return true;
 		}else{
 			if(groundType==2){
-				territory.mouveTroops(new Water("trash"),casualties,0,0,0);
+				territory.getTroup().destruction(casualties);
 			}else{
 				territory.getTroup().destruction(casualties);
 			}
@@ -139,9 +93,9 @@ public class BattlePvP {
 			if (destructTroops(defTerritory, (attSwords-defTowers)) && defTerritory.canWithdraw()){
 				//il choisit une retraite car il reste des troupes
 				System.out.println("retraite");
-				state=3;
+				state=BATTLE_WITHDRAWAL;
 			}else{
-				state=4;//all defenciv force have been killed, no withdraw 
+				state=BATTLE_END; 
 				// on met les nouvelles troupes sur le territoire
 				if(groundType==2){
 					defTerritory.setTroup(new NavalTroup(attFamily, attTroops[0]));
@@ -152,6 +106,7 @@ public class BattlePvP {
 			}
 			//on retire l'ordre
 			defTerritory.rmOrder();
+			defTerritory.setInfluenceToken(false);
 			if(attCard.getName().equals("Loras")){
 				defTerritory.setOrder(new Order(attTerritory.getOrder().getStar(),0,attTerritory.getOrder().getOthBonus(), OrderType.ATT));
 				attTerritory.rmOrder();
@@ -187,11 +142,11 @@ public class BattlePvP {
 				}
 			}
 			System.out.println("befor state 4");
-			state=4;	
+			state=BATTLE_END;	
 		}
 	}
 
-/**return true if the attaquant win, false if it's the defencer*/
+	/**return true if the attacker win, false if it's the defender*/
 	private boolean battleWinner() {
 		if(att==def){
 			return attFamily.getFiefdomsTrack()<defFamily.getFiefdomsTrack();
@@ -200,71 +155,29 @@ public class BattlePvP {
 		}
 	}
 	
-	public void addAttSupport(Territory territory){
-		System.out.println("AttSupport"+territory.getName());
-		attSupport.add(territory);
-		territory.getOrder().used(); 
-		//on verifie si on peut commencer la bataille
-		if(checkSupport()){
-			startBattle();			
-		}
-	}
-
-
-	public void addDefSupport(Territory territory) {
-		System.out.println("defSupport");
-		defSupport.add(territory);
-		territory.getOrder().used();
-		//on verifie si on peut commencer la bataille
-		if(checkSupport()){
-			startBattle();
-		}
-	}
 	
-	/**
-	 * Check if all territory with support and the attaquant territory have done their orders
-	 * @return true if all supports and the attaquant troups are sended
-	 */
-	public boolean checkSupport(){	
-		System.out.println("Inside checkSupport");
-		for (Territory territory : defTerritory.getNeighbors()){
-			if(territory.getOrder()!=null && territory.getOrder().getType()==OrderType.SUP && !territory.getOrder().getUse()){
-				return false;
-			}
-		}
-		return attTerritory.getOrder().getUse();
-	}
 
-/**
- * Return a boolean saying if a player is participating or not to this battle (support dosen't count)
- * @param seatNum
- * @return true if the player is participating 
- */
+
+	
+	@Override
 	public boolean playerPartisipate(int seatNum) {
 		return (attFamily.getPlayer()==seatNum || defTerritory.getFamily().getPlayer()==seatNum);
 	}
-/**
- * Return a boolean saying if a player is participating or not to this battle (support dosen't count)
- * @param family
- * @return true if the player is participating 
- */
-	public boolean playerPartisipate(Family family) { // NOT USE !!
-		return (attFamily==family || defTerritory.getFamily()==family);
-	}
 	
 	
-/**
- * return the state of the battle	
- * @return 0 for the support, 1 for cards 
- */
-	public int getState(){
-		return state;
-	}
-
+	/**
+	 * Tell if the attacker and the defender have choose theirs cards
+	 * @return true if the attacker and the defender have choose theirs cards
+	 */
 	public boolean cardsPlayed(){
 		return attCard!=null && defCard!=null;
 	}
 	
+	/**
+	 * 
+	 * @param card
+	 * @param family
+	 */
 	public void playCard(CombatantCard card, Family family) {
 		if(family==attFamily){
 			attCard=card;
@@ -275,34 +188,31 @@ public class BattlePvP {
 		}
 		if(cardsPlayed()){
 			//on test Tyrion 
-			if(attCard.getName().equals("Tyrion")){
+			/*if(attCard.getName().equals("Tyrion")){
 				System.out.println("Tyrion has been played");
 				defCard=null;
 			}else if(defCard.getName().equals("Tyrion")) {
 				System.out.println("Tyrion has been played");
 				attCard=null;
-			}else{
-				System.out.println("Cartes jouée :");
-				System.out.println("carte att "+attCard.getName());
-				System.out.println("carte def "+defCard.getName());
-				//on effectue le calcul la puissance final avant épée
-				this.powerWithoutSword();
-				//on applique les effets de carte
-				attSwords=attCard.getSword();
-				defSwords=defCard.getSword();
-				attTowers=attCard.getTower();
-				defTowers=defCard.getTower();
-					//la reines des epines, Faire un etat particulié qui permet de clicker sur la carte pour les cartes 
-					//les autres (vict,etc)
+			}else{*/
+			
+			attSwords=attCard.getSword();
+			attTowers=attCard.getTower();
+			defSwords=defCard.getSword();
+			defTowers=defCard.getTower();
+			att=this.attPower()+attCard.getPower();
+			def=this.defPower()+defCard.getPower();
+				//la reines des epines, Faire un etat particulié qui permet de clicker sur la carte pour les cartes 
+				//les autres (vict,etc)
 				befforSwordCardEffect();
 				//on regarde si un des deux joueurs a l'épée
 				if(attFamily.canUseSword()||defFamily.canUseSword()){
-					this.state=2;
+					this.state=BATTLE_PLAY_SWORD;
 				}else{
 					//on passe directement à la resolution
 					battleResolution();
 				}
-			}
+			//}
 		}
 	}
 	/**
@@ -315,16 +225,10 @@ public class BattlePvP {
 			def++;
 			defFamily.swordUse();
 		}
-		System.out.println("sword use");
-		System.out.println("attack power "+att);
-		System.out.println("def power "+def);
 		battleResolution();
 		
 	}
 	public void dontUseSword(){
-		System.out.println("sword don't use");
-		System.out.println("attack power "+att);
-		System.out.println("def power "+def);
 		battleResolution();
 	}
 	/*public CombatantCard getAttCard(){
@@ -334,24 +238,14 @@ public class BattlePvP {
 	public CombatantCard getDefCard(){
 		return defCard;
 	}*/
-	public Family getAttFamily (){
-		return attFamily;
-	}
 	public Family getDefFamily() {
 		return defTerritory.getFamily();
 	}
-	
-	private void powerWithoutSword() {
-		att=this.attPower()+attCard.getPower();
-		def=this.defPower()+defCard.getPower();
-		System.out.println("attack power "+att);
-		System.out.println("def power "+def);
-	}
 
 
 	
 
-
+	
 	public boolean canPlayCard(Family family) {
 		return ((family==attFamily && attCard==null)||(family==defTerritory.getFamily() && defCard==null));
 	}
@@ -362,7 +256,7 @@ public class BattlePvP {
 	 */
 	public void withdraw (Territory territory){
 		defTerritory.mouveTroops(territory);
-		state=4;
+		state=BATTLE_END;
 		System.out.println("retraite");
 		// on met les nouvelles troupes sur le territoire
 		if(groundType==2){
@@ -375,7 +269,6 @@ public class BattlePvP {
 	 * This method is call when a battle end 
 	 */
 	public void end(){
-		attTerritory.getOrder().used();
 		// on regarde si un joueur n'a plus de cartes, au quel cas on lui rend
 		if (attFamily.getCombatantCards().isEmpty()){
 			attFamily.regainCombatantCards(attCard);
@@ -409,6 +302,10 @@ public class BattlePvP {
 			}
 		}
 	}
+	
+	public int getAtt(){return att;}
+	public int getDef(){return def;}
+	
 	
 	/*card's effect that are use before the battle resolutions*/ 
 	private void befforSwordCardEffect(){

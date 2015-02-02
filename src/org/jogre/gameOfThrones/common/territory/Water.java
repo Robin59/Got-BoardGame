@@ -95,4 +95,5 @@ public class Water extends Territory {
 	
 	@Override
 	public void setNeutralForce(int neutralForce) {}
+	public void setInfluenceToken(Boolean influenceToken){}
 }

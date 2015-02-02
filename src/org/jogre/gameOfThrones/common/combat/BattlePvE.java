@@ -6,34 +6,53 @@ import org.jogre.gameOfThrones.common.orders.OrderType;
 import org.jogre.gameOfThrones.common.territory.Territory;
 import org.jogre.gameOfThrones.common.territory.Water;
 
-public class BattlePvE {
-
-	private Territory attTerritory;
-	private Territory defTerritory;
-	private int[] attTroops;
-	private int groundType;
+public class BattlePvE extends Battle{
+	
 	public BattlePvE(Territory attTerritory, Territory defTerritory) {
-		this.attTerritory=attTerritory;
-		this.defTerritory=defTerritory;
-		attTroops=new int[4];
-		if(defTerritory.getCastle()>0){
-			groundType=1;
-		}else{
-			groundType=1;
-		}
-		
+		super(attTerritory, defTerritory);
 	}
 
 	
-	public void addTroop(int boat, int foot, int knight, int siege) {
-		attTerritory.getTroup().rmToop(boat, foot, knight, siege);
-		attTroops[1]+=foot;
-		attTroops[2]+=knight;
-		attTroops[3]+=siege;
+	@Override
+	public int defPower(){
+		int res= defTerritory.getNeutralForce();
+		for(Territory territory : defSupport){
+			int[] troops =territory.getTroup().getTroops();
+			res+=territory.getOrder().getOthBonus()+troops[0]+troops[1]+troops[2]*2;
+		}
+		return res;
+	}
+
+
+	@Override
+	public void startBattle() {
+		attTerritory.getOrder().setUse(true);
+		if(attPower()<defPower()){
+			if(attTerritory.getTroup()!=null){
+				attTroops[3]=0;
+				attTerritory.getTroup().addTroop(attTroops);
+			}else{
+				attTerritory.setTroup(new GroundForce(attFamily, attTroops[1],attTroops[2],0));
+			}
+		}else{
+			defTerritory.setNeutralForce(0);
+			defTerritory.setTroup(new GroundForce(attFamily, attTroops[1],attTroops[2],attTroops[3]));
+		}
+		endBattle();
 	}
 
 
 
+
+
+	@Override
+	public Family getDefFamily() {return null;}
+	@Override
+	public boolean canPlayCard(Family family) {return false;}
+	
+	
+	
+	///////old class
 	public void resolution(GameOfThronesModel model) {
 		if(victory()){
 			defTerritory.setNeutralForce(0);
@@ -64,5 +83,9 @@ public class BattlePvE {
 		}
 		return res>=defTerritory.getNeutralForce();
 	}
+
+
+
+
 	
 }

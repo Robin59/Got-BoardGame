@@ -54,11 +54,13 @@ public class Order {
 	}
 	
 	public boolean getUse(){
-		System.out.println("check if used");
 		return use;
 	}
-	
-	public void used() {
-		use=true;
+	/**
+	 * 
+	 * @param use
+	 */
+	public void setUse(boolean use) {
+		this.use=use;
 	}
 }

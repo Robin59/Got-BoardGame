@@ -28,6 +28,7 @@ import nanoxml.XMLElement;
 import org.jogre.client.awt.GameImages;
 import org.jogre.common.JogreModel;
 import org.jogre.common.comm.Comm;
+import org.jogre.gameOfThrones.common.combat.Battle;
 import org.jogre.gameOfThrones.common.combat.BattlePvE;
 import org.jogre.gameOfThrones.common.combat.BattlePvP;
 import org.jogre.gameOfThrones.common.combat.GroundForce;
@@ -76,8 +77,9 @@ public class GameOfThronesModel extends JogreModel {
 	//private boolean musteringPhase;
 	//private boolean clashOfKings;
 	// Must make an Interface or abstract class for the 2 objects below
-	private BattlePvP battle;
-	private BattlePvE battlePvE;
+	private Battle battle;
+	//private BattlePvP battlePvP;
+	//private BattlePvE battlePvE;
 	private Territory territory1;
 	private Territory territory2;
 	private JLabel jLabel;
@@ -117,7 +119,6 @@ public class GameOfThronesModel extends JogreModel {
         wildings=2;
         currentPlayer=0;
         mvInitiated=false;
-        // musteringPhase=false;
         battle=null;
         deck1=new Deck(1);
         deck2=new Deck(2);
@@ -292,7 +293,7 @@ public class GameOfThronesModel extends JogreModel {
 		territory1=fromTerritory;
 		territory2=toTerritory;
 		if(toTerritory.getNeutralForce()>0){
-			battlePvE= new BattlePvE(fromTerritory, toTerritory);
+			battle= new BattlePvE(fromTerritory, toTerritory);
 		}else{
 			battle = new BattlePvP(fromTerritory, toTerritory);
 		}
@@ -301,7 +302,7 @@ public class GameOfThronesModel extends JogreModel {
 	public void battleInitiated(Territory territory) {
 		territory2=territory;
 		if(territory2.getNeutralForce()>0){
-			battlePvE = new BattlePvE(territory1, territory2);
+			battle = new BattlePvE(territory1, territory2);
 		}else{
 			battle = new BattlePvP(territory1, territory2);
 		}
@@ -359,183 +360,174 @@ public class GameOfThronesModel extends JogreModel {
 
 
 
-  //sert a la construction du plateau en fonction du nb de joueur
-  	private void familiesConstruction(int playerNumber){
-  		//the stars limitation (change after 4 players)
-  		starsLimitation[0]=3;
-  		starsLimitation[1]=2;
-  		starsLimitation[2]=1;
-  		//House Baratheon
-  		families[0]=new Family(0,this);
-  		throne[0]=0;
-  		fiefdoms[1]=0;
-  		court[2]=0;
-  		families[0].setFiefdomsTrack(2);
-  		boardModel.getTerritory("Dragonstone").setTroup(new GroundForce(families[0],1,1,0));
-  		boardModel.getTerritory("Kingswood").setTroup(new GroundForce(families[0],1,0,0));
-  		boardModel.getTerritory("Shipbreaker Bay").setTroup(new NavalTroup(families[0],2));
-  		//Baratheon's cards
-  		families[0].addCard(new CombatantCard("Mellissandre",1, 1, 0));
-        families[0].addCard(new CombatantCard("Salladhor",1, 0, 0));
-        families[0].addCard(new CombatantCard("Davos",2, 0, 0));
-        families[0].addCard(new CombatantCard("Brienne",2, 1, 1));
-  		// House Starks 
-  		families[2]=new Family(2,this);
-  		throne[2]=2;
-  		fiefdoms[0]=2;
-  		court[1]=2;
-  		families[2].setFiefdomsTrack(1);
-        boardModel.getTerritory("Winterfell").setTroup(new GroundForce(families[2],1,1,0));
-        boardModel.getTerritory("White Harbor").setTroup(new GroundForce(families[2],1,0,0));
-        boardModel.getTerritory("Shivering Sea").setTroup(new NavalTroup(families[2],1));
-        // Stark's cards
-        families[2].addCard(new CombatantCard("Catelyn",0, 0, 0));
-        families[2].addCard(new CombatantCard("BlackFish",1, 0, 0));
-        families[2].addCard(new CombatantCard("Rodrick",1, 0, 2));
-        families[2].addCard(new CombatantCard("Roose",2, 0, 0));
-        families[2].addCard(new CombatantCard("GreatJon",2, 1, 0));
-        families[2].addCard(new CombatantCard("Robb",3, 0, 0));
-        families[2].addCard(new CombatantCard("Eddard",4, 2, 0));
-        //Lannister
-       	families[1]=new Family(1,this);
-       	court[0]=1;
-        throne[1]=1;
-      	fiefdoms[2]=1;
-   		families[1].setFiefdomsTrack(3);
-   		boardModel.getTerritory("Lannisport").setTroup(new GroundForce(families[1],1,1,0));
-   		boardModel.getTerritory("Stoney Sept").setTroup(new GroundForce(families[1],1,0,0));
-   		boardModel.getTerritory("The Golden Sound").setTroup(new NavalTroup(families[1],1));
-   		// Lannister's cards
-   		families[1].addCard(new CombatantCard("Cersei",0, 0, 0));
-   		families[1].addCard(new CombatantCard("Tyrion",1, 0, 0));
-   		families[1].addCard(new CombatantCard("Kevan",1, 0, 0));
-   		families[1].addCard(new CombatantCard("The Hound",2, 0, 2));
-   		families[1].addCard(new CombatantCard("Jaime",2, 1, 0));
-   		families[1].addCard(new CombatantCard("Gregor",3, 3, 0));
-   		families[1].addCard(new CombatantCard("Tywin",4, 0, 0));
-        
-   		if(numberPlayers>3){
-   			//House Greyjoy
-   			families[3]=new Family(3,this);
-   	       	court[3]=3;
-   	        throne[3]=3;
-   	      	fiefdoms[0]=3;
-   	   		families[3].setFiefdomsTrack(1);
-   	   		boardModel.getTerritory("Pyke").setTroup(new GroundForce(families[3],1,1,0));
-   	   		boardModel.getTerritory("GreyWater Watch").setTroup(new GroundForce(families[3],1,0,0));
-   	   		boardModel.getTerritory("Pyke's Port").setTroup(new NavalTroup(families[3], 1));
-   	   		boardModel.getTerritory("Ironman's Bay").setTroup(new NavalTroup(families[3], 1));
-   	   		//Greyjoy cards
-   	   		families[3].addCard(new CombatantCard("Aeron",0,0,0));
-   	   		families[3].addCard(new CombatantCard("Asha",1,0,0));
-   	   		families[3].addCard(new CombatantCard("Dagmar",1,1,1));
-   	   		families[3].addCard(new CombatantCard("Theon",2,0,0));
-   	   		families[3].addCard(new CombatantCard("Baelon",2,0,0));
-   	   		families[3].addCard(new CombatantCard("Victarion",3,0,0));
-   	   		families[3].addCard(new CombatantCard("Euron",4,1,0));
-   	   		
-   	   		// tracks actualisation
-   	   		fiefdoms[1]=2;
-	   		families[2].setFiefdomsTrack(2);
-	   		fiefdoms[2]=0;
-	   		families[0].setFiefdomsTrack(3);
-	   		fiefdoms[3]=1;
-	   		families[1].setFiefdomsTrack(4);
-	   		
-	   		if(numberPlayers>4){
-	   			//the new star's Limitation
-	   			starsLimitation[1]=3;
-	   			starsLimitation[2]=2;
-	   			starsLimitation[3]=1;
-	   			//House Tyrell
-	   			families[4]=new Family(4,this);
-	   	       	court[3]=4;
-	   	        throne[4]=4;
-	   	      	fiefdoms[1]=4;
-	   	   		families[4].setFiefdomsTrack(2);
-	   	   		boardModel.getTerritory("Highgarden").setTroup(new GroundForce(families[4],1,1,0));
-	   	   		boardModel.getTerritory("Dornish Marches").setTroup(new GroundForce(families[4],1,0,0));
-	   	   		boardModel.getTerritory("Redwyne Straights").setTroup(new NavalTroup(families[4],1));
-	   	   		//Tyrell cards
-	   	   		families[4].addCard(new CombatantCard("Queen",0,0,0));
-	   	   		families[4].addCard(new CombatantCard("Margaery",1,0,1));
-	   	   		families[4].addCard(new CombatantCard("Alester",1,0,1));
-	   	   		families[4].addCard(new CombatantCard("Garlan",2,2,0));
-		   	   	families[4].addCard(new CombatantCard("Randyll",2,1,0));
-		   	   	families[4].addCard(new CombatantCard("Loras",3,0,0));
-		   	   	families[4].addCard(new CombatantCard("Mace",4,0,0));
-	   	
-	   	   		// tracks actualisation
-	   	   		court[4]=3;
-	   	   		fiefdoms[3]=0;
-	   	   		families[0].setFiefdomsTrack(4);
-	   	   		fiefdoms[4]=1;
-	   	   		families[1].setFiefdomsTrack(5);
-	   	   		fiefdoms[2]=2;
-	   	   		families[2].setFiefdomsTrack(3);
-	   	   		
-	   	   		if(numberPlayers>5){
-	   			//House Martell
-	   			}else{
-	   				boardModel.getTerritory("Sunspear").destructGarrison();
-		   			// 	neutral forces construction
-		   			boardModel.getTerritory("The Boneway").setNeutralForce(3);
-		   			boardModel.getTerritory("Prince's Pass").setNeutralForce(3);
-		   			boardModel.getTerritory("Salt Shore").setNeutralForce(3);
-		   			boardModel.getTerritory("Salt Shore").setNeutralForce(3);
-		   			boardModel.getTerritory("Starfall").setNeutralForce(3);
-		   			boardModel.getTerritory("Sunspear").setNeutralForce(5);
-		   			boardModel.getTerritory("Three Towers").setNeutralForce(3);
-		   			boardModel.getTerritory("Yronwood").setNeutralForce(3);
-	   			}
-	   		}else{	
-	   			boardModel.getTerritory("Highgarden").destructGarrison();
-	   			boardModel.getTerritory("Sunspear").destructGarrison();
-	   			// 	neutral forces construction
-	   			boardModel.getTerritory("The Boneway").setNeutralForce(3);
-	   			boardModel.getTerritory("Prince's Pass").setNeutralForce(3);
-	   			boardModel.getTerritory("Salt Shore").setNeutralForce(3);
-	   			boardModel.getTerritory("Salt Shore").setNeutralForce(3);
-	   			boardModel.getTerritory("Starfall").setNeutralForce(3);
-	   			boardModel.getTerritory("Sunspear").setNeutralForce(5);
-	   			boardModel.getTerritory("Three Towers").setNeutralForce(3);
-	   			boardModel.getTerritory("Yronwood").setNeutralForce(3);
-	   	 		boardModel.getTerritory("Storm's End").setNeutralForce(4);
-	   	 		boardModel.getTerritory("Oldtown").setNeutralForce(3);
-	   	 		boardModel.getTerritory("Dornish Marches").setNeutralForce(3);
-	   		}
-	   		
-   		}
-   		else{
-   			//garrison destruction
-   			boardModel.getTerritory("Pyke").destructGarrison();
-   			boardModel.getTerritory("Highgarden").destructGarrison();
-   			boardModel.getTerritory("Sunspear").destructGarrison();
-   			// neutral forces construction
-   			boardModel.getTerritory("Dornish Marches").setNeutralForce(100);
-   	   		boardModel.getTerritory("The Boneway").setNeutralForce(100);
-   	   		boardModel.getTerritory("Highgarden").setNeutralForce(100);
-   	   		boardModel.getTerritory("Oldtown").setNeutralForce(100);
-   	   		boardModel.getTerritory("Prince's Pass").setNeutralForce(100);
-   	   		boardModel.getTerritory("Pyke").setNeutralForce(100);
-   	   		boardModel.getTerritory("Salt Shore").setNeutralForce(100);
-   	   		boardModel.getTerritory("Starfall").setNeutralForce(100);
-   	   		boardModel.getTerritory("Storm's End").setNeutralForce(100);
-   	   		boardModel.getTerritory("Sunspear").setNeutralForce(100);
-   	   		boardModel.getTerritory("Three Towers").setNeutralForce(100);
-   	   		boardModel.getTerritory("Yronwood").setNeutralForce(100);
-   		}
-   		
-   		boardModel.getTerritory("The Eyrie").setNeutralForce(6);
-   		boardModel.getTerritory("King's Landing").setNeutralForce(5);
-        this.supplyUpdate();
-  	}
+    //sert a la construction du plateau en fonction du nb de joueur
+    private void familiesConstruction(int playerNumber){
+    	//the stars limitation (change after 4 players)
+    	starsLimitation[0]=3;
+    	starsLimitation[1]=2;
+    	starsLimitation[2]=1;
+    	//House Baratheon
+    	families[0]=new Family(0,this);
+    	throne[0]=0;
+    	fiefdoms[1]=0;
+    	court[2]=0;
+    	families[0].setFiefdomsTrack(2);
+    	boardModel.getTerritory("Dragonstone").setTroup(new GroundForce(families[0],1,1,0));
+    	boardModel.getTerritory("Kingswood").setTroup(new GroundForce(families[0],1,0,0));
+    	boardModel.getTerritory("Shipbreaker Bay").setTroup(new NavalTroup(families[0],2));
+    	//Baratheon's cards
+    	families[0].addCard(new CombatantCard("Mellissandre",1, 1, 0));
+    	families[0].addCard(new CombatantCard("Salladhor",1, 0, 0));
+    	families[0].addCard(new CombatantCard("Davos",2, 0, 0));
+    	families[0].addCard(new CombatantCard("Brienne",2, 1, 1));
+    	// House Starks
+    	families[2]=new Family(2,this);
+    	throne[2]=2;
+    	fiefdoms[0]=2;
+    	court[1]=2;
+    	families[2].setFiefdomsTrack(1);
+    	boardModel.getTerritory("Winterfell").setTroup(new GroundForce(families[2],1,1,0));
+    	boardModel.getTerritory("White Harbor").setTroup(new GroundForce(families[2],1,0,0));
+    	boardModel.getTerritory("Shivering Sea").setTroup(new NavalTroup(families[2],1));
+    	// Stark's cards
+    	families[2].addCard(new CombatantCard("Catelyn",0, 0, 0));
+    	families[2].addCard(new CombatantCard("BlackFish",1, 0, 0));
+    	families[2].addCard(new CombatantCard("Rodrick",1, 0, 2));
+    	families[2].addCard(new CombatantCard("Roose",2, 0, 0));
+    	families[2].addCard(new CombatantCard("GreatJon",2, 1, 0));
+    	families[2].addCard(new CombatantCard("Robb",3, 0, 0));
+    	families[2].addCard(new CombatantCard("Eddard",4, 2, 0));
+    	//Lannister
+    	families[1]=new Family(1,this);
+    	court[0]=1;
+    	throne[1]=1;
+    	fiefdoms[2]=1;
+    	families[1].setFiefdomsTrack(3);
+    	boardModel.getTerritory("Lannisport").setTroup(new GroundForce(families[1],1,1,0));
+    	boardModel.getTerritory("Stoney Sept").setTroup(new GroundForce(families[1],1,0,0));
+    	boardModel.getTerritory("The Golden Sound").setTroup(new NavalTroup(families[1],1));
+    	// Lannister's cards
+    	families[1].addCard(new CombatantCard("Cersei",0, 0, 0));
+    	families[1].addCard(new CombatantCard("Tyrion",1, 0, 0));
+    	families[1].addCard(new CombatantCard("Kevan",1, 0, 0));
+    	families[1].addCard(new CombatantCard("The Hound",2, 0, 2));
+    	families[1].addCard(new CombatantCard("Jaime",2, 1, 0));
+    	families[1].addCard(new CombatantCard("Gregor",3, 3, 0));
+    	families[1].addCard(new CombatantCard("Tywin",4, 0, 0));
+    	if(numberPlayers>3){
+    		//House Greyjoy
+    		families[3]=new Family(3,this);
+    		court[3]=3;
+    		throne[3]=3;
+    		fiefdoms[0]=3;
+    		families[3].setFiefdomsTrack(1);
+    		boardModel.getTerritory("Pyke").setTroup(new GroundForce(families[3],1,1,0));
+    		boardModel.getTerritory("GreyWater Watch").setTroup(new GroundForce(families[3],1,0,0));
+    		boardModel.getTerritory("Pyke's Port").setTroup(new NavalTroup(families[3], 1));
+    		boardModel.getTerritory("Ironman's Bay").setTroup(new NavalTroup(families[3], 1));
+    		//Greyjoy cards
+    		families[3].addCard(new CombatantCard("Aeron",0,0,0));
+    		families[3].addCard(new CombatantCard("Asha",1,0,0));
+    		families[3].addCard(new CombatantCard("Dagmar",1,1,1));
+    		families[3].addCard(new CombatantCard("Theon",2,0,0));
+    		families[3].addCard(new CombatantCard("Baelon",2,0,0));
+    		families[3].addCard(new CombatantCard("Victarion",3,0,0));
+    		families[3].addCard(new CombatantCard("Euron",4,1,0));
+    		// tracks actualisation
+    		fiefdoms[1]=2;
+    		families[2].setFiefdomsTrack(2);
+    		fiefdoms[2]=0;
+    		families[0].setFiefdomsTrack(3);
+    		fiefdoms[3]=1;
+    		families[1].setFiefdomsTrack(4);
+    		if(numberPlayers>4){
+    			//the new star's Limitation
+    			starsLimitation[1]=3;
+    			starsLimitation[2]=2;
+    			starsLimitation[3]=1;
+    			//House Tyrell
+    			families[4]=new Family(4,this);
+    			court[3]=4;
+    			throne[4]=4;
+    			fiefdoms[1]=4;
+    			families[4].setFiefdomsTrack(2);
+    			boardModel.getTerritory("Highgarden").setTroup(new GroundForce(families[4],1,1,0));
+    			boardModel.getTerritory("Dornish Marches").setTroup(new GroundForce(families[4],1,0,0));
+    			boardModel.getTerritory("Redwyne Straights").setTroup(new NavalTroup(families[4],1));
+    			//Tyrell cards
+    			families[4].addCard(new CombatantCard("Queen",0,0,0));
+    			families[4].addCard(new CombatantCard("Margaery",1,0,1));
+    			families[4].addCard(new CombatantCard("Alester",1,0,1));
+    			families[4].addCard(new CombatantCard("Garlan",2,2,0));
+    			families[4].addCard(new CombatantCard("Randyll",2,1,0));
+    			families[4].addCard(new CombatantCard("Loras",3,0,0));
+    			families[4].addCard(new CombatantCard("Mace",4,0,0));
+    			// tracks actualisation
+    			court[4]=3;
+    			fiefdoms[3]=0;
+    			families[0].setFiefdomsTrack(4);
+    			fiefdoms[4]=1;
+    			families[1].setFiefdomsTrack(5);
+    			fiefdoms[2]=2;
+    			families[2].setFiefdomsTrack(3);
+    			if(numberPlayers>5){
+    				//House Martell
+    			}else{
+    				boardModel.getTerritory("Sunspear").destructGarrison();
+    				// neutral forces construction
+    				boardModel.getTerritory("The Boneway").setNeutralForce(3);
+    				boardModel.getTerritory("Prince's Pass").setNeutralForce(3);
+    				boardModel.getTerritory("Salt Shore").setNeutralForce(3);
+    				boardModel.getTerritory("Salt Shore").setNeutralForce(3);
+    				boardModel.getTerritory("Starfall").setNeutralForce(3);
+    				boardModel.getTerritory("Sunspear").setNeutralForce(5);
+    				boardModel.getTerritory("Three Towers").setNeutralForce(3);
+    				boardModel.getTerritory("Yronwood").setNeutralForce(3);
+    			}
+    		}else{
+    			boardModel.getTerritory("Highgarden").destructGarrison();
+    			boardModel.getTerritory("Sunspear").destructGarrison();
+    			// neutral forces construction
+    			boardModel.getTerritory("The Boneway").setNeutralForce(3);
+    			boardModel.getTerritory("Prince's Pass").setNeutralForce(3);
+    			boardModel.getTerritory("Salt Shore").setNeutralForce(3);
+    			boardModel.getTerritory("Salt Shore").setNeutralForce(3);
+    			boardModel.getTerritory("Starfall").setNeutralForce(3);
+    			boardModel.getTerritory("Sunspear").setNeutralForce(5);
+    			boardModel.getTerritory("Three Towers").setNeutralForce(3);
+    			boardModel.getTerritory("Yronwood").setNeutralForce(3);
+    			boardModel.getTerritory("Storm's End").setNeutralForce(4);
+    			boardModel.getTerritory("Oldtown").setNeutralForce(3);
+    			boardModel.getTerritory("Dornish Marches").setNeutralForce(3);
+    		}
+    	}
+    	else{
+    		//garrison destruction
+    		boardModel.getTerritory("Pyke").destructGarrison();
+    		boardModel.getTerritory("Highgarden").destructGarrison();
+    		boardModel.getTerritory("Sunspear").destructGarrison();
+    		// neutral forces construction
+    		boardModel.getTerritory("Dornish Marches").setNeutralForce(100);
+    		boardModel.getTerritory("The Boneway").setNeutralForce(100);
+    		boardModel.getTerritory("Highgarden").setNeutralForce(100);
+    		boardModel.getTerritory("Oldtown").setNeutralForce(100);
+    		boardModel.getTerritory("Prince's Pass").setNeutralForce(100);
+    		boardModel.getTerritory("Pyke").setNeutralForce(100);
+    		boardModel.getTerritory("Salt Shore").setNeutralForce(100);
+    		boardModel.getTerritory("Starfall").setNeutralForce(100);
+    		boardModel.getTerritory("Storm's End").setNeutralForce(100);
+    		boardModel.getTerritory("Sunspear").setNeutralForce(100);
+    		boardModel.getTerritory("Three Towers").setNeutralForce(100);
+    		boardModel.getTerritory("Yronwood").setNeutralForce(100);
+    	}
+    	boardModel.getTerritory("The Eyrie").setNeutralForce(6);
+    	boardModel.getTerritory("King's Landing").setNeutralForce(5);
+    	this.supplyUpdate();
+    }
 
 	public void troopSend(int boat, int foot, int knigth, int siege) {
 		if(battle!=null){
 			battle.addTroop(boat,foot,knigth,siege);
-		}else if(battlePvE!=null) {
-			battlePvE.addTroop(boat,foot,knigth,siege);
 		}else if(mvInitiated){//on est dans le cas d'un mouvement 
 			territory1.mouveTroops(territory2,boat,foot,knigth, siege );
 			if(territory1.getTroup()==null){// dans le cas où il n'y a plus de troupes on supprime l'ordre
@@ -553,13 +545,13 @@ public class GameOfThronesModel extends JogreModel {
 		
 	}
 
-	public BattlePvP getBattle() {
+	public Battle getBattle() {
 		return battle;
 	}
 	/**end a battle and remove it
 	 */
 	public void battleEnd(){
-		battle.end();
+		//battle.end();
 		battle=null;
 		System.out.println("fin battaille");
 	}
@@ -574,7 +566,7 @@ public class GameOfThronesModel extends JogreModel {
 	}
 
 	public void attPrepEnd(){
-		territory1.getOrder().used();
+		territory1.getOrder().setUse(true);
 		if(battle.checkSupport()){
 			System.out.println("battle check=true");
 			battle.startBattle();
@@ -584,18 +576,19 @@ public class GameOfThronesModel extends JogreModel {
 	/**
 	 * resolution of a battle against neutral force (after the player get is troops selected)
 	 */
-	public void resolutionPvE(){
+	/*public void resolutionPvE(){
 		battlePvE.resolution(this);
 		battlePvE=null;
-	}
+	}*/
 
-	/**Give some information about the state of the game (for the playerChoice)
-	 * 0 if there is no battle or if the player gived in parameter don't participate 
-	 * 1- is for the battle card
+	/**
+	 * Give some information about the state of the battle (for the playerChoice)
+	 * @param seatNum 
+	 * @return 0 if there is no battle or if the player don't participate to the battle, else return the battle state 
 	 */
 	public int informations(int seatNum) {
 		if(battle!=null && battle.playerPartisipate(seatNum)){
-				return battle.getState();
+				return battle.getState(); 
 		}
 		return 0;
 	}

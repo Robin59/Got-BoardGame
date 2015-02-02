@@ -34,6 +34,17 @@ public class TerritoryTest{
 	}
 	
 	@Test
+	public void setTroopTest(){
+		 Territory territory= new Land("test",0,0,0);
+		 Family family = new Family(1, null);
+		 assertNull(territory.getTroup());
+		 territory.setTroup(new GroundForce(family,1,0,0));
+		 assertNotNull(territory.getTroup());
+		 territory.setTroup(null);
+		 assertNull(territory.getTroup());
+	}
+	
+	@Test
 	public void port(){
 		 BoardModel board = new BoardModel();
 		 Family family = new Family(1, null);

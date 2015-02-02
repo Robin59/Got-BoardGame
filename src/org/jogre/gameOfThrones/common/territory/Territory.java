@@ -66,15 +66,15 @@ public abstract class Territory {
 		//we remove the territory to the old owner if the troups is not its
 		if(troop!=null && (newTroup==null || newTroup.getFamily()!=troop.getFamily())){
 			troop.getFamily().removeTerritory(this);
-			// if this is a land with a port we change the owner of the troops in the port 
-			if(this instanceof Land && this.havePort()){
-				this.getPort().changeOwner(newTroup.getFamily());
-			}
 		}
 		this.troop=newTroup;
 		if(newTroup!=null){
 			owner=newTroup.getFamily();
 			owner.addTerritory(this);
+			// if this is a land with a port we change the owner of the troops in the port 
+			if(this instanceof Land && this.havePort()){
+				this.getPort().changeOwner(newTroup.getFamily());
+			}
 		}else{owner=null;} // verifier que ça ne pose pas de problemes
 	}
 	
@@ -118,7 +118,11 @@ public abstract class Territory {
 	/** Said if a troop can go to a territory, independent to the given order*/
 	protected abstract boolean canGoTo(Territory territory);
 	
-	/** 0 for raid, 1 for move, 2 for combats*/
+	/**
+	 * 
+	 * @param territory
+	 * @return  0 for raid, 1 for move, 2 for combats, 3 when the territory give in parameter is the territory who call the method
+	 */
 	public int useOrderOn(Territory territory){ // int ou void ???
 		if(this==territory){
 			return 3;
@@ -169,8 +173,8 @@ public abstract class Territory {
 	}
 	
 	/**
-	 * When there is a battle and the defencer lose, said if there is a territory to withdraw
-	 * @return
+	 * When there is a battle and the defender lose, said if there is a territory to withdraw
+	 * @return true if the troops on this territory can withdraw to an other territory
 	 */
 	public boolean canWithdraw(){
 		for(Territory territory :neighbors){
@@ -323,5 +327,7 @@ public abstract class Territory {
 	public boolean getInfluenceToken(){
 		return false;
 	}
+	//just use for Land
+	public abstract void setInfluenceToken(Boolean influenceToken);
 }
 	
