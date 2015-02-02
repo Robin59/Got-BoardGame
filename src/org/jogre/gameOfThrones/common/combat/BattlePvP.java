@@ -61,10 +61,10 @@ public class BattlePvP extends Battle{
 	}
 	
 	/**
-	 * 
-	 * @param territory
-	 * @param casualties
-	 * @return false if all the troop is destructed
+	 * Remove troops to the army (be careful this method automatically remove the siege engines)
+	 * @param territory the territory who loose some troops
+	 * @param casualties the number of troops that are remove
+	 * @return false if all the troops are remove and the army doesn't exist anymore 
 	 */
 	private boolean destructTroops(Territory territory, int casualties){
 		territory.getTroup().getTroops()[3]=0;
@@ -75,7 +75,7 @@ public class BattlePvP extends Battle{
 			return true;
 		}else{
 			if(groundType==2){
-				territory.mouveTroops(new Water("trash"),casualties,0,0,0);
+				territory.getTroup().destruction(casualties);
 			}else{
 				territory.getTroup().destruction(casualties);
 			}
@@ -93,9 +93,9 @@ public class BattlePvP extends Battle{
 			if (destructTroops(defTerritory, (attSwords-defTowers)) && defTerritory.canWithdraw()){
 				//il choisit une retraite car il reste des troupes
 				System.out.println("retraite");
-				state=3;
+				state=BATTLE_WITHDRAWAL;
 			}else{
-				state=4;//all defenciv force have been killed, no withdraw 
+				state=BATTLE_END; 
 				// on met les nouvelles troupes sur le territoire
 				if(groundType==2){
 					defTerritory.setTroup(new NavalTroup(attFamily, attTroops[0]));
@@ -106,6 +106,7 @@ public class BattlePvP extends Battle{
 			}
 			//on retire l'ordre
 			defTerritory.rmOrder();
+			defTerritory.setInfluenceToken(false);
 			if(attCard.getName().equals("Loras")){
 				defTerritory.setOrder(new Order(attTerritory.getOrder().getStar(),0,attTerritory.getOrder().getOthBonus(), OrderType.ATT));
 				attTerritory.rmOrder();
@@ -195,6 +196,10 @@ public class BattlePvP extends Battle{
 				attCard=null;
 			}else{*/
 			
+			attSwords=attCard.getSword();
+			attTowers=attCard.getTower();
+			defSwords=defCard.getSword();
+			defTowers=defCard.getTower();
 			att=this.attPower()+attCard.getPower();
 			def=this.defPower()+defCard.getPower();
 				//la reines des epines, Faire un etat particulié qui permet de clicker sur la carte pour les cartes 

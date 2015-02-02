@@ -6,19 +6,19 @@ import org.jogre.gameOfThrones.common.territory.Territory;
 
 public abstract class Troop {
 	private Family family;
-	//private Territory territory;
 	
 	
 	public Troop (Family family ){
 		this.family=family;
-		//this.territory=territory;
-		//family.addTerritory(territory);// NON UTILE DEJA AJOUTE DANS LA METHODE setTroop DE TERRITORY 
-		//we add the troup to the territory
-		//territory.setTroup(this);
 	}
-	/***/
+	/**
+	 * remove some soldier to this troop
+	 * @param casualties the number of soldier that are gonna be remove 
+	 */
 	public abstract void destruction (int casualties);
-	// effectif pour le ravitaillement
+	/**
+	 * @return
+	 */
 	public abstract int getEffectif();
 	
 	/**add to this troop some new force*/
