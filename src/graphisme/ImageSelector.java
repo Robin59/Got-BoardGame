@@ -145,6 +145,7 @@ public class  ImageSelector{
 		
 		//Wildings Cards
 		wildingsCards= new HashMap<String, Image>();
+		wildingsCards.put("WildingsBack", GameImages.getImage(209));
 		wildingsCards.put("SilenceAtTheWall", GameImages.getImage(188));
 		wildingsCards.put("SkinchangerScout", GameImages.getImage(189));
 		

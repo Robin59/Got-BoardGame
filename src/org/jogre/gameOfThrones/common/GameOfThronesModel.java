@@ -155,10 +155,10 @@ public class GameOfThronesModel extends JogreModel {
     	//System.out.println("nextInternPhase");
     }
     public void nextPhase(){
-    	phase=(phase+1)%3;
+    	phase=(phase+1)%4;
     	state=ModelState.values()[phase];
     	//AJOUTER DES CHOSES EN FONCTION DES PHASES 
-    	if(phase==2){
+    	if(phase==3){
     		//on initialise
     		 internPhase=0;
     		 currentPlayer=0;
@@ -614,6 +614,9 @@ public class GameOfThronesModel extends JogreModel {
 		case PHASE_PROGRAMATION:
 			text+=" Programation's phase";
 			break;
+		case CROW_CHOICE:
+			text+="Crow action";
+			break;
 		case PHASE_EXECUTION:
 			text+=" Exection's phase  :  "+families[throne[currentPlayer]].getName()+"'s turn";
 			break;
@@ -1015,7 +1018,7 @@ public class GameOfThronesModel extends JogreModel {
 	}
 	
 	/**Said if a player have the raven*/
-	private boolean haveRaven(int player) {
+	public boolean haveRaven(int player) {
 		return court[0]==player;
 	}
 

@@ -262,6 +262,9 @@ public class GameOfThronesController extends JogreController {
 				}
 			}else if(model.getPhase()==ModelState.SUPPLY_TO_LOW){
 				playerChoices.blank2();
+			}else if(model.getPhase()==ModelState.CROW_CHOICE){
+				model.nextPhase();
+				sendProperty("nextPhase", 0);
 			}else{
 				sendProperty("cancelOrder",playerChoices.getRelatedTerr().getName());
 				playerChoices.getRelatedTerr().rmOrder();
@@ -706,7 +709,8 @@ public class GameOfThronesController extends JogreController {
     		model.getBoardModel().getTerritory(key).useOrderOn(model.getBoardModel().getTerritory(value));
     		model.nextPlayer();
     	}
-    	
+    	gameOfThronesComponent.repaint(); 
+		playerChoices.repaint();
     }
     
     /**
@@ -753,6 +757,8 @@ public class GameOfThronesController extends JogreController {
 				break;
 			}
     	}
+    	gameOfThronesComponent.repaint(); 
+		playerChoices.repaint(); 
 	}
     
     
@@ -829,7 +835,9 @@ public class GameOfThronesController extends JogreController {
     		model.getFamily(value).ordersGiven();
     		// on verifie que si c'etait le dernier
     		model.endProg();
-          }
+        }
+    	gameOfThronesComponent.repaint(); 
+    	playerChoices.repaint();  
        }
     
     

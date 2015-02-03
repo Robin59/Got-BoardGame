@@ -303,14 +303,18 @@ public class PlayersChoices extends JogreComponent {
 				return DONT_USE_INF_TOKEN;
 			}
 			break;
+		case DISPLAY_CROW_CHOICE:
+			if(x>400){
+				blank2();
+				return CANCEL;
+			}
 		}
 		return 0;
 	}
 	
 	
-	
 	public void paintComponent (Graphics g) { 
-		//super.paintComponent (g);
+		
 		switch(panel){
 		case DISPLAY_BLANK:
 			label.setText("");
@@ -401,6 +405,11 @@ public class PlayersChoices extends JogreComponent {
 			g.drawImage(images.getPowerImage(family),200,50,null);
 			g.drawImage(validateImage, 120, 140, null);
 			g.drawImage(dontUseImage, 320,140,null);
+			break;
+		case DISPLAY_CROW_CHOICE:
+			label.setText("You can change an order, see the wildings card on top or do nothing");
+			g.drawImage(images.getWildingCardImage("WildingsBack"), 25, 25,null);
+			g.drawImage(dontUseImage, 400,100,null);
 			break;
 		}
 	}
@@ -723,6 +732,14 @@ public class PlayersChoices extends JogreComponent {
 		repaint();
 	}
 	
+	@Override
+	public void repaint(){
+		if(model.getPhase()==ModelState.CROW_CHOICE && model.haveRaven(family.getPlayer())){
+			panel=DISPLAY_CROW_CHOICE;
+		}
+		super.repaint();
+	}
+	
 	// This constant are use to know the state of this component 
 	private static final int DISPLAY_BLANK = 0;
 	private static final int DISPLAY_ORDERS = 1;
@@ -744,6 +761,7 @@ public class PlayersChoices extends JogreComponent {
 	private static final int DISPLAY_WILDINGS_CARD=17;
 	private static final int DISPLAY_TROOP_DESTRUCTION=18;
 	private static final int DISPLAY_USE_INF_TOKEN=19;
+	private static final int DISPLAY_CROW_CHOICE=20;
 	
 }
 
