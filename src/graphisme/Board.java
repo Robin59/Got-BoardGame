@@ -250,7 +250,7 @@ public class Board {
 	public void showOrders(Graphics g){
 		for (Territory territory : boardModel.board.values()){
 			if (territory.getOrder()!=null ){
-				if(territory.getFamily().getPlayer()==player || gameModel.getPhase()==ModelState.PHASE_EXECUTION || gameModel.getPhase()==ModelState.USE_INF_TOKEN || gameModel.getPhase()==ModelState.CROW_CHOICE ){
+				if(territory.getFamily().getPlayer()==player || gameModel.getPhase()==ModelState.PHASE_EXECUTION || gameModel.getPhase()==ModelState.USE_INF_TOKEN || gameModel.getPhase()==ModelState.CROW_CHOICE || gameModel.getPhase()==ModelState.RAVEN_SEE_WILDINGS){
 					// on choisit la bonne image
 					Image orderImage= images.getSmallOrderImage(territory.getOrder());
 					// 	recupere les coordonée dans territoryCoord

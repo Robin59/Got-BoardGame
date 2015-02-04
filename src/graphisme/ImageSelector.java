@@ -42,7 +42,9 @@ public class  ImageSelector{
 	
 	// Images for the neutral forces
 	private Image[] neutralForceImages;
-	
+	//Images for PlayersChoices
+	private Image bottomImage;
+	private Image topImage;
 	
 	private ImageSelector (){
 		//images des troupes
@@ -165,6 +167,9 @@ public class  ImageSelector{
 		neutralForceImages[2]=GameImages.getImage(199);
 		neutralForceImages[3]=GameImages.getImage(200);
 		neutralForceImages[4]=GameImages.getImage(201);
+		//other
+		bottomImage=GameImages.getImage(210);
+		topImage=GameImages.getImage(211);
 	}
 	
 	/**
@@ -274,5 +279,7 @@ public class  ImageSelector{
 	public Image getSmallInfluenceToken(Family family) {
 		return smallInfluenceTonken[family.getPlayer()];
 	}
+	public Image getTopImage(){ return topImage;}
+	public Image getBottomImage(){ return bottomImage;}
 	
 }

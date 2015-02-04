@@ -103,6 +103,8 @@ public class PlayersChoices extends JogreComponent {
 	public static final int USE_INF_TOKEN=34;
 	public static final int DONT_USE_INF_TOKEN=35;
 	public static final int ORDER_CHANGED=36;
+	public static final int PUT_CARD_TOP=39;
+	public static final int PUT_CARD_BOTTOM=38;
 	
 	public PlayersChoices (JLabel label, GameOfThronesModel model){
 		this.label=label;
@@ -314,7 +316,19 @@ public class PlayersChoices extends JogreComponent {
 			if(x>400){
 				blank2();
 				return CANCEL;
+			}else if (x>20 && x<180){
+				ravenSeeWildings();
 			}
+			break;
+		case DISPLAY_RAVEN_SEE_WILDINGS:
+			if(x>50 && x<100){
+				blank2();
+				return PUT_CARD_TOP;
+			}else if(x>450 && x<500){
+				blank2();
+				return PUT_CARD_BOTTOM;
+			}
+			break;
 		}
 		return 0;
 	}
@@ -408,6 +422,12 @@ public class PlayersChoices extends JogreComponent {
 			label.setText("You can change an order, see the wildings card on top or do nothing");
 			g.drawImage(images.getWildingCardImage("WildingsBack"), 25, 25,null);
 			g.drawImage(dontUseImage, 400,100,null);
+			break;
+		case DISPLAY_RAVEN_SEE_WILDINGS:
+			label.setText("You can put the card on top or bottom of the deck");
+			g.drawImage(images.getWildingCardImage(wilidingsCard),180,5,null);
+			g.drawImage(images.getTopImage(), 50, 125,null);
+			g.drawImage(images.getBottomImage(), 450, 125,null);
 			break;
 		}
 	}
@@ -765,6 +785,12 @@ public class PlayersChoices extends JogreComponent {
 		super.repaint();
 	}
 	
+	private void ravenSeeWildings(){
+		model.setPhase(ModelState.RAVEN_SEE_WILDINGS);
+		wilidingsCard=model.choseWildingCard();
+		panel=DISPLAY_RAVEN_SEE_WILDINGS;
+	}
+	
 	// This constant are use to know the state of this component 
 	private static final int DISPLAY_BLANK = 0;
 	private static final int DISPLAY_ORDERS = 1;
@@ -788,7 +814,7 @@ public class PlayersChoices extends JogreComponent {
 	private static final int DISPLAY_USE_INF_TOKEN=19;
 	private static final int DISPLAY_CROW_CHOICE=20;
 	private static final int DISPLAY_CHANGE_ORDER=21;
-	
+	private static final int DISPLAY_RAVEN_SEE_WILDINGS=22;
 }
 
 

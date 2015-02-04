@@ -20,6 +20,8 @@
 package org.jogre.gameOfThrones.common;
 
 import java.awt.Image;
+import java.util.List;
+import java.util.ListIterator;
 
 import javax.swing.JLabel;
 
@@ -41,7 +43,7 @@ import org.jogre.gameOfThrones.common.territory.Territory;
 import org.jogre.gameOfThrones.common.territory.Water;
 
 import state.*;
-import state.ModelState;
+import sun.org.mozilla.javascript.ObjToIntMap.Iterator;
 
 /**
  * Game model for the gameOfThrones game.
@@ -154,6 +156,16 @@ public class GameOfThronesModel extends JogreModel {
     	}
     	//System.out.println("nextInternPhase");
     }
+    /**
+     * The model go to the execution's phase(all initialization for the phase do in this methode)
+     */
+    public void goToExecutionPhase(){
+    	phase=3;
+    	state=ModelState.values()[phase];
+    	internPhase=0;
+    	currentPlayer=0;
+    	updateLabel();
+    }
     public void nextPhase(){
     	phase=(phase+1)%4;
     	state=ModelState.values()[phase];
@@ -172,7 +184,6 @@ public class GameOfThronesModel extends JogreModel {
     		turn++;//nouveau tour
     		westerosPhase=0;
     		this.westerosCardNotSaw();
-    		updateLabel();
     		//ici on test si on arrive au tour 11 et on fini le jeu dans ce cas
     		
     	}
@@ -666,6 +677,15 @@ public class GameOfThronesModel extends JogreModel {
 		return currentCard;
 	}
 	
+	/**
+	 * This method show the top card of the wildings' deck
+	 * @return the name of the card
+	 */
+	public String topWildingCard(){
+		currentCard=wildDeck.nextCard();
+		return currentCard;
+	}
+	
 	public String choseCard() {
 		state=ModelState.PHASE_WESTEROS;
 		westerosCardNotSaw();
@@ -1129,6 +1149,37 @@ public class GameOfThronesModel extends JogreModel {
 		
 	}
 	
+	/**
+	 * Put a card on the top of the wildings deck and return the deck list
+	 * @param card the card which is put on the top of the deck
+	 * @return the list of the card in the deck
+	 */
+	public List<String> putCardOnTop(String card){
+		wildDeck.putOnTop(card);
+		return wildDeck.getList();
+	}
 
+	/**
+	 * Put a card on the bottom of the wildings deck and return the deck list
+	 * @param card the card which is put on the bottom of the deck
+	 * @return the list of the card in the deck
+	 */
+	public List<String> putCardOnBottom(String card){
+		wildDeck.putOnbottom(card);
+		return wildDeck.getList();
+	}
+	/**
+	 * reinitialize the wilding deck, letting it without card
+	 */
+	public void reinitializeDeck(){
+		wildDeck.reinitialize();
+	}
 
+	/**
+	 * Add a card on the bottom of the deck
+	 * @param card the card which is put on the bottom of the deck
+	 */
+	public void addWidingsCard(String card) {
+		wildDeck.putOnbottom(card);
+	}
 }

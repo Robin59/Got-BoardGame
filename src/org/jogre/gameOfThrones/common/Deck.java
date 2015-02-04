@@ -3,6 +3,7 @@ package org.jogre.gameOfThrones.common;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 
 public class Deck {
 	
@@ -69,5 +70,32 @@ public class Deck {
 	
 	public void cardPlayed(String card){
 		deck.remove(card);
+	}
+	
+	/**
+	 * This method is use to put on top of the deck
+	 * @param card the name of the card (with uperCase at the beging of a word and no space between words, ex: GameOfThrones)
+	 */
+	public void putOnTop(String card){
+		deck.add(0, card);
+	}
+	/**
+	 * This method is use to put on bottom of the deck
+	 * @param card the name of the card (with uperCase at the beging of a word and no space between words, ex: GameOfThrones)
+	 */
+	public void putOnbottom(String card){
+		deck.add(card);
+	}
+	
+	/**
+	 * Return the deck list of cards
+	 * @return the deck list of cards
+	 */
+	public List<String> getList(){
+		return deck;
+	}
+	/**reinitialize the wilding deck, letting it without card*/
+	public void reinitialize(){
+		deck= new LinkedList<String>();
 	}
 }

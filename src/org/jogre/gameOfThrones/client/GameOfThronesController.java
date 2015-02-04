@@ -26,6 +26,8 @@ import graphisme.PlayersChoices;
 
 import java.awt.event.MouseEvent;
 import java.lang.ref.PhantomReference;
+import java.util.List;
+import java.util.ListIterator;
 
 import javax.swing.JLabel;
 
@@ -406,12 +408,12 @@ public class GameOfThronesController extends JogreController {
 			break;
 		case PlayersChoices.WESTEROS_CARD_SAW: 
 			this.westerosCardSaw();
-		break;
+			break;
 		case PlayersChoices.BID_CHOSED :
 			model.getFamily(getSeatNum()).setBid(playerChoices.getBid());
 			sendProperty("bidSet", getSeatNum(),playerChoices.getBid());
 			playerChoices.blank();
-		break;
+			break;
 		case PlayersChoices.LETTER_A_CHOSE :
 				model.westerosCardChoice(true);
 				sendProperty("westerosCardChoiceSelected", 1);
@@ -508,6 +510,22 @@ public class GameOfThronesController extends JogreController {
 			this.dontUseInfluToken(playerChoices.getRelatedTerr());
 			sendProperty("dont_use_inf_token", playerChoices.getRelatedTerr().getName());
 			playerChoices.blank2();
+			break;
+		case PlayersChoices.PUT_CARD_BOTTOM:
+			sendProperty("SendWildingsDeck",0);
+			for (String card : model.putCardOnBottom(playerChoices.getWildingsCard())){
+				sendProperty("AddWildingsCard", card);
+			}
+			model.goToExecutionPhase();
+			sendProperty("goToExecutionPhase",0);
+			break;
+		case PlayersChoices.PUT_CARD_TOP:
+			sendProperty("SendWildingsDeck",0);
+			for (String card : model.putCardOnTop(playerChoices.getWildingsCard())){
+				sendProperty("AddWildingsCard", card);
+			}
+			model.goToExecutionPhase();
+			sendProperty("goToExecutionPhase",0);
 			break;
 		}
 		if(model.getPhase()==ModelState.MUSTERING){
@@ -657,7 +675,9 @@ public class GameOfThronesController extends JogreController {
 
     // Receive
     public void receiveProperty(String key, String value){ // changer par Value
-    	if(key.equals("cancelOrder")){
+    	if(key.equals("AddWildingsCard")){
+    		model.addWidingsCard(value);
+    	}else if(key.equals("cancelOrder")){
     		model.getBoardModel().getTerritory(value).rmOrder();
     		model.nextPlayer();
     	}else if(key.equals("mvInitiated")){
@@ -777,7 +797,11 @@ public class GameOfThronesController extends JogreController {
     
     
      public void receiveProperty (String key, int value) { 
-    	 if (key.equals("nextPlayer")){
+    	 if(key.equals("SendWildingsDeck")){
+    		 model.reinitializeDeck();
+    	 }else if(key.equals("goToExecutionPhase")){
+    		 model.goToExecutionPhase();
+    	 }else if (key.equals("nextPlayer")){
     		 model.nextPlayer();
     	 }else if (key.equals("nextPhase")){
     		 model.nextPhase();
