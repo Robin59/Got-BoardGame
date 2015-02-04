@@ -102,6 +102,7 @@ public class PlayersChoices extends JogreComponent {
 	public static final int REMOVE_SIEGE=33;
 	public static final int USE_INF_TOKEN=34;
 	public static final int DONT_USE_INF_TOKEN=35;
+	public static final int ORDER_CHANGED=36;
 	
 	public PlayersChoices (JLabel label, GameOfThronesModel model){
 		this.label=label;
@@ -148,6 +149,12 @@ public class PlayersChoices extends JogreComponent {
 				}
 			}
 		break;
+		case DISPLAY_CHANGE_ORDER:
+			if(family.giveOrders(relatedTerr,choseOrder(x,y,family))){
+				this.blank2();
+				return ORDER_CHANGED;
+			}
+			break;
 		case DISPLAY_END_PROGRAMATION :
 			if (x>150 && x<200 && y>50 && y<100){
 				blank2();
@@ -312,26 +319,17 @@ public class PlayersChoices extends JogreComponent {
 		return 0;
 	}
 	
-	
 	public void paintComponent (Graphics g) { 
-		
 		switch(panel){
 		case DISPLAY_BLANK:
 			label.setText("");
 			break;
 		case DISPLAY_ORDERS:
-			int x =0;
-			int y =0;
-			List<Order> orders =family.getOrders();
-			for (Order order : orders){
-				g.drawImage(images.getOrderImage(order), (10+x*80), (10+y*80), null);
-				x++;
-				if(x==6){
-					y++;
-					x=0;
-				}
-			}
-		break;
+			showOrders(g);
+			break;
+		case DISPLAY_CHANGE_ORDER :
+			showOrders(g);
+			break;
 		case DISPLAY_END_PROGRAMATION:
 			g.drawImage(endTurnImage,150,50, null);
 			break;
@@ -411,6 +409,21 @@ public class PlayersChoices extends JogreComponent {
 			g.drawImage(images.getWildingCardImage("WildingsBack"), 25, 25,null);
 			g.drawImage(dontUseImage, 400,100,null);
 			break;
+		}
+	}
+
+	/*this method is use to show orders available*/
+	private void showOrders(Graphics g){
+		int x =0;
+		int y =0;
+		List<Order> orders =family.getOrders();
+		for (Order order : orders){
+			g.drawImage(images.getOrderImage(order), (10+x*80), (10+y*80), null);
+			x++;
+			if(x==6){
+				y++;
+				x=0;
+			}
 		}
 	}
 	
@@ -500,6 +513,17 @@ public class PlayersChoices extends JogreComponent {
 		this.family=family;
 		label.setText("Give order in "+terr.getName());
 		panel=DISPLAY_ORDERS;
+		this.repaint();
+	}
+	/**
+	 * This method is call when a player want to change an order to a territory with is raven token
+	 * It display the orders available on this component
+	 * @param terr The territory on which you want to change the order
+	 */
+	public void changeOrder(Territory terr){
+		relatedTerr=terr;
+		label.setText("Give order in "+terr.getName());
+		panel=DISPLAY_CHANGE_ORDER;
 		this.repaint();
 	}
 	
@@ -731,10 +755,11 @@ public class PlayersChoices extends JogreComponent {
 		panel=DISPLAY_TROOP_DESTRUCTION;
 		repaint();
 	}
-	
-	@Override
-	public void repaint(){
-		if(model.getPhase()==ModelState.CROW_CHOICE && model.haveRaven(family.getPlayer())){
+	/**
+	 * this method is call at the begining of the raven phase, if the player have Raven the display change
+	 */
+	public void crowChoice(){
+		if(model.haveRaven(family.getPlayer())){
 			panel=DISPLAY_CROW_CHOICE;
 		}
 		super.repaint();
@@ -762,6 +787,7 @@ public class PlayersChoices extends JogreComponent {
 	private static final int DISPLAY_TROOP_DESTRUCTION=18;
 	private static final int DISPLAY_USE_INF_TOKEN=19;
 	private static final int DISPLAY_CROW_CHOICE=20;
+	private static final int DISPLAY_CHANGE_ORDER=21;
 	
 }
 

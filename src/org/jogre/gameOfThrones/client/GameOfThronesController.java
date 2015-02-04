@@ -223,6 +223,13 @@ public class GameOfThronesController extends JogreController {
     				playerChoices.orderSelected(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
     			}
     			break;
+			case CROW_CHOICE:
+				if(model.canChangeOrder(gameOfThronesComponent.getTerritory(e.getX(),e.getY()), getSeatNum())){
+    				playerChoices.changeOrder(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
+    			}
+				break;
+			default:
+				break;
     		}
     	}
     	if(model.checkNewTurn() && model.getWesterosPhase()==0){
@@ -249,6 +256,7 @@ public class GameOfThronesController extends JogreController {
 			family.ordersGiven();
 			sendProperty ("endProg",getSeatNum());
 			model.endProg();
+			if(model.getPhase()==ModelState.CROW_CHOICE) playerChoices.crowChoice();
 			break;
 		case PlayersChoices.CANCEL : 
 			if(model.getPhase()==ModelState.MUSTERING){
@@ -271,6 +279,12 @@ public class GameOfThronesController extends JogreController {
 				model.nextPlayer();
 				playerChoices.blank();
 			}
+			break;
+		case PlayersChoices.ORDER_CHANGED:
+			int[] order =playerChoices.getRelatedTerr().getOrder().getOrderInt();
+			sendProperty(playerChoices.getRelatedTerr().getName(),order[0],order[1]);
+			model.nextPhase();
+			sendProperty("nextPhase", 0);
 			break;
 		case PlayersChoices.SEND_SHIP :
 			model.troopSend(1,0,0,0);
@@ -831,10 +845,9 @@ public class GameOfThronesController extends JogreController {
 				playerChoices.biddingEgality(model.getBidding());
 			}
 		}else if (key.equals("endProg")){
-    		//on indique que le joueur a fini de donner ses ordres
     		model.getFamily(value).ordersGiven();
-    		// on verifie que si c'etait le dernier
     		model.endProg();
+    		if(model.getPhase()==ModelState.CROW_CHOICE) playerChoices.crowChoice();
         }
     	gameOfThronesComponent.repaint(); 
     	playerChoices.repaint();  

@@ -230,7 +230,15 @@ public class GameOfThronesModel extends JogreModel {
     public boolean canGiveOrder(Territory territory, int player){
     	return state==ModelState.PHASE_PROGRAMATION && territory.getTroup()!=null &&territory.getFamily().getPlayer()==player;
     }
-
+    /**
+     * This method tell if an order can change an order during the crow phase 
+     * @param territory the territory where the player want to put his order
+     * @param player the player who want to put an order on a territory 
+     * @return true if the player can put an order on the territory 
+     */
+    public boolean canChangeOrder(Territory territory, int player){
+    	return state==ModelState.CROW_CHOICE && territory.getTroup()!=null &&territory.getFamily().getPlayer()==player && haveRaven(player);
+    }
     public boolean canPlayThisOrder(Territory territory, int seatNum) {
 		return ( territory.getFamily()!=null && territory.getFamily().getPlayer()==seatNum && seatNum==getCurrentPlayer() &&  territory.getOrder()!=null &&territory.getOrder().getType().ordinal()==internPhase ) ;
 	}
