@@ -282,6 +282,7 @@ public class BoardModel {
 		moatCailin.addTerritory(Winterfell);
 		moatCailin.addTerritory(GreyWaterWatch);
 		moatCailin.addTerritory(NarrowSea);
+		moatCailin.addTerritory(Seaguard);
 		ShiveringSea.addTerritory(Karhold);
 		ShiveringSea.addTerritory(CastleBlack);
 		ShiveringSea.addTerritory(Winterfell);
