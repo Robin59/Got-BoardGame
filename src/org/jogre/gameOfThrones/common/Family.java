@@ -154,8 +154,8 @@ public class Family {
 	}
 	/**
 	 * during the order phase, the player give order to one of this territory (with troops)
-	 * To use this methode you have to be sure that the order is available and that the troops are from the right familly
-	 * @return true if the operation succeed, false if the order is not gived  
+	 * To use this method you have to be sure that the order is available and that the troops are from the right family
+	 * @return true if the operation succeed, false if the order is not given  
 	 */
 	public boolean giveOrders(Territory territory,Order order){
 		if(canPlayThisOrder(order)){
@@ -192,11 +192,12 @@ public class Family {
 	
 	/**
 	 * This method is use to know  if a family have put order on all its territory with troops
-	 * @return true if the family have put order on all its territory with troops
+	 * or if the family have no more orders available
+	 * @return true if the family have put order on all its territory with troops or have no more orders 
 	 */
 	public boolean allOrdersGived(){
 		boolean res=true;
-		// AJOUTER UNE CONDITION AU CAS OU LE JOUEUR N'AURAIT PLUS D'ORDRE A DONNER
+		if(ordersAvailable.isEmpty()) return true;
 		for(Territory territory: territories){
 			if(territory.getOrder()==null && territory.getTroup()!=null){
 				res=false;
