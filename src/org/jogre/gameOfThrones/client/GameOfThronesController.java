@@ -504,12 +504,12 @@ public class GameOfThronesController extends JogreController {
 		case PlayersChoices.USE_INF_TOKEN:
 			this.useInfluToken(playerChoices.getRelatedTerr());
 			sendProperty("use_inf_token", playerChoices.getRelatedTerr().getName());
-			playerChoices.blank2();
+			playerChoices.blank();
 			break;
 		case PlayersChoices.DONT_USE_INF_TOKEN:
 			this.dontUseInfluToken(playerChoices.getRelatedTerr());
 			sendProperty("dont_use_inf_token", playerChoices.getRelatedTerr().getName());
-			playerChoices.blank2();
+			playerChoices.blank();
 			break;
 		case PlayersChoices.PUT_CARD_BOTTOM:
 			sendProperty("SendWildingsDeck",0);
