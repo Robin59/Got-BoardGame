@@ -127,6 +127,7 @@ public abstract class Territory {
 		if(this==territory){
 			return 3;
 		}else if(order.getType()==OrderType.RAI){
+			if(territory.getOrder().getType()==OrderType.CON) pillaging(territory);
 			territory.rmOrder();
 			this.rmOrder();
 			return 0;
@@ -329,5 +330,15 @@ public abstract class Territory {
 	}
 	//just use for Land
 	public abstract void setInfluenceToken(Boolean influenceToken);
+	/**
+	 * This method is use when this territory pillaging the territory given in parameters, the pillager win one power token and his opponent loose one
+	 * (Pillaging happen when a territory use a raid order against consolidate order)
+	 * @param territory the territory who is pillaged 
+	 */
+	private void pillaging(Territory territory){
+		this.getFamily().addInflu(1);
+		territory.getFamily().addInflu(-1);
+	}
 }
 	
+
