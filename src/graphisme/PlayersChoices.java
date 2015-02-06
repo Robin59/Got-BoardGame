@@ -65,6 +65,8 @@ public class PlayersChoices extends JogreComponent {
 	private Bidding bidding;
 	//pointeur to the model
 	GameOfThronesModel model;
+	// True if a ship is selected during the mustering phase, false else
+	private Boolean shipRecrutement;
 	
 	//Constant use for the message return by the main method (RigthClick) of this object 
 	public static final int END_PROGRAMATION_PHASE=1;
@@ -114,6 +116,7 @@ public class PlayersChoices extends JogreComponent {
 		cibleTerr = null;
 		battle = null;
 		selectedBid=-1;
+		shipRecrutement=false;
 		//on ajoute les images qui seront utitles
 		selectionBid= GameImages.getImage(127);
 		endTurnImage = GameImages.getImage(6);
@@ -245,8 +248,9 @@ public class PlayersChoices extends JogreComponent {
 			}
 			break;
 		case DISPLAY_RECRUITEMENT :
-			if(x>50&&x<100 && relatedTerr.canRecruitShip()){ //ajouter des conditions pour etre sur qu'on peut recruter
-				return RECRUIT_SHIP;
+			if(y<170 && x>40&&x<130 && relatedTerr.canRecruitShip()){ 
+				shipRecrutement=true;
+				break;
 			}else if (y<170 && x>150 && x<200){
 				return RECRUIT_FOOT;
 			}else if (y<170 && x>250 && x<300){
@@ -459,8 +463,10 @@ public class PlayersChoices extends JogreComponent {
 	/**Draw the correct troop regarding the possibility and the family*/
 	private void drawRecruit(Graphics g){
 		if(relatedTerr.getRecruit()>0){
-			if(relatedTerr.canRecruitShip())
+			if(relatedTerr.canRecruitShip()){
 				g.drawImage(images.getTroopImages(family)[0],50,100,null);
+				if(shipRecrutement) g.drawImage(images.getSelectShipImage(),40,90,null);
+			}
 			g.drawImage(images.getTroopImages(family)[1],150,100,null);
 			if(relatedTerr.getRecruit()>1 || (relatedTerr.getTroup()!=null && relatedTerr.getTroup().getTroops()[1]>0)){
 				g.drawImage(images.getTroopImages(family)[2],250,100,null);
@@ -789,6 +795,16 @@ public class PlayersChoices extends JogreComponent {
 		model.setPhase(ModelState.RAVEN_SEE_WILDINGS);
 		wilidingsCard=model.choseWildingCard();
 		panel=DISPLAY_RAVEN_SEE_WILDINGS;
+	}
+	/**
+	 * Said if the ship is selected for mustering, during the mustering phase 
+	 * @return true a the ship as been selected for mustering
+	 */
+	public Boolean getShipSelected(){
+		return shipRecrutement;
+	}
+	public void setShipSelected(boolean shipSelected){
+		shipRecrutement=shipSelected;
 	}
 	
 	// This constant are use to know the state of this component 

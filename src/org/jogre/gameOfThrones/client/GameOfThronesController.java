@@ -71,8 +71,6 @@ public class GameOfThronesController extends JogreController {
     protected BoardComponent gameOfThronesComponent;
     protected JLabel infoLabel;
     protected PlayersChoices playerChoices;
-    /*this boolean is use to say */
-    private Boolean shipRecrutement;
     private String temp;
     
     /**
@@ -91,7 +89,6 @@ public class GameOfThronesController extends JogreController {
         
         this.playerChoices=playerChoices;
         this.infoLabel=infoLabel;
-        shipRecrutement=false;
         
     }
 
@@ -144,7 +141,7 @@ public class GameOfThronesController extends JogreController {
     		case MUSTERING: 
     			if(model.canRecruit(gameOfThronesComponent.getTerritory(e.getX(),e.getY()), getSeatNum())){
     				playerChoices.recruit(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
-    			}else if(this.shipRecrutement){
+    			}else if(playerChoices.getShipSelected()){
     				Territory water = gameOfThronesComponent.getTerritory(e.getX(),e.getY());
     				if(water instanceof Water &&((Water) water).canRecruitShipHere(playerChoices.getRelatedTerr()) && model.checkSupplyLimits(getSeatNum(),water)){
     					//recruitement
@@ -165,7 +162,7 @@ public class GameOfThronesController extends JogreController {
     						sendProperty("nextPlayer", 0);
     					}
     				}
-    				shipRecrutement=false;
+    				playerChoices.setShipSelected(false);
     			}
     			break;
     		case PHASE_PROGRAMATION :
@@ -358,10 +355,6 @@ public class GameOfThronesController extends JogreController {
 			model.updateLabel();
 			playerChoices.getRelatedTerr().rmOrder();
 			model.nextPlayer();
-			break;
-		case PlayersChoices.RECRUIT_SHIP :
-			shipRecrutement=true;
-			// add a message ?
 			break;
 		case PlayersChoices.RECRUIT_FOOT :
 			if(model.checkSupplyLimits(getSeatNum(), playerChoices.getRelatedTerr())){

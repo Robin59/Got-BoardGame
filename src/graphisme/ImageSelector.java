@@ -45,6 +45,7 @@ public class  ImageSelector{
 	//Images for PlayersChoices
 	private Image bottomImage;
 	private Image topImage;
+	private Image selectShip;
 	
 	private ImageSelector (){
 		//images des troupes
@@ -61,6 +62,7 @@ public class  ImageSelector{
 				troopsSelectImage[y][i]= GameImages.getImage(i+y*4+42);
 			}
 		}
+		selectShip =GameImages.getImage(212); // when a ship is selected during mustering
 		//Images des ordres, grand de 19 à 29 et petit de 8 à 18
 		bigOrdersImages = new Image[11];
 		for (int i=0;i<11;i++){
@@ -281,5 +283,5 @@ public class  ImageSelector{
 	}
 	public Image getTopImage(){ return topImage;}
 	public Image getBottomImage(){ return bottomImage;}
-	
+	public Image getSelectShipImage(){return selectShip;}
 }
