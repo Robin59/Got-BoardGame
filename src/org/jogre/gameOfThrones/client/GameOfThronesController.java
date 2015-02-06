@@ -142,27 +142,7 @@ public class GameOfThronesController extends JogreController {
     			if(model.canRecruit(gameOfThronesComponent.getTerritory(e.getX(),e.getY()), getSeatNum())){
     				playerChoices.recruit(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
     			}else if(playerChoices.getShipSelected()){
-    				Territory water = gameOfThronesComponent.getTerritory(e.getX(),e.getY());
-    				if(water instanceof Water &&((Water) water).canRecruitShipHere(playerChoices.getRelatedTerr()) && model.checkSupplyLimits(getSeatNum(),water)){
-    					//recruitement
-    					water.setFamily(playerChoices.getRelatedTerr().getFamily());
-    					water.recruit(0);
-    					playerChoices.getRelatedTerr().recruit(0);
-    					sendProperty("setFamily",playerChoices.getRelatedTerr().getFamily().getName());
-    					sendProperty("setFamilyOn",water.getName());
-    					sendProperty("recruitShipAt", water.getName());
-    					sendProperty("recruitShipFrom", playerChoices.getRelatedTerr().getName());
-    					if(model.getPhase()==ModelState.MUSTERING && model.allRecruitementDone()){
-    						sendProperty("allRecruitementDone", 0);
-    						String card = model.choseCard();
-    						playerChoices.westerosCard(card);
-    						sendProperty("WesterosCard",card);
-    					}else if(model.getPhase()!=ModelState.MUSTERING && playerChoices.getRelatedTerr().getOrder()==null ){
-    						model.nextPlayer();
-    						sendProperty("nextPlayer", 0);
-    					}
-    				}
-    				playerChoices.setShipSelected(false);
+    				musterShip(e);
     			}
     			break;
     		case PHASE_PROGRAMATION :
@@ -218,7 +198,9 @@ public class GameOfThronesController extends JogreController {
     				}
     				gameOfThronesComponent.repaint();
 
-    			}else if(model.canPlayThisOrder(gameOfThronesComponent.getTerritory(e.getX(),e.getY()), getSeatNum())){
+    			}else if(playerChoices.getShipSelected()){
+        				musterShip(e);
+        		}else if(model.canPlayThisOrder(gameOfThronesComponent.getTerritory(e.getX(),e.getY()), getSeatNum())){
     				playerChoices.orderSelected(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
     			}
     			break;
@@ -929,6 +911,34 @@ public class GameOfThronesController extends JogreController {
 	
 		
 	}		
+	
+	/** This method is use to put a new ship on the board 
+	 * this method must be call when a player click on the board after selecting a ship to muster. (there is no verification if the player can muster and have selected a ship in this method)
+	 *@param e  the coordinate of the territory where the ship is put*/
+	private void musterShip(MouseEvent e){
+		Territory water = gameOfThronesComponent.getTerritory(e.getX(),e.getY());
+		if(water instanceof Water &&((Water) water).canRecruitShipHere(playerChoices.getRelatedTerr()) && model.checkSupplyLimits(getSeatNum(),water)){
+			//recruitement
+			water.setFamily(playerChoices.getRelatedTerr().getFamily());
+			water.recruit(0);
+			playerChoices.getRelatedTerr().recruit(0);
+			sendProperty("setFamily",playerChoices.getRelatedTerr().getFamily().getName());
+			sendProperty("setFamilyOn",water.getName());
+			sendProperty("recruitShipAt", water.getName());
+			sendProperty("recruitShipFrom", playerChoices.getRelatedTerr().getName());
+			if(model.getPhase()==ModelState.MUSTERING && model.allRecruitementDone()){
+				sendProperty("allRecruitementDone", 0);
+				String card = model.choseCard();
+				playerChoices.westerosCard(card);
+				sendProperty("WesterosCard",card);
+			}else if(model.getPhase()!=ModelState.MUSTERING && playerChoices.getRelatedTerr().getOrder()==null ){
+				model.nextPlayer();
+				sendProperty("nextPlayer", 0);
+			}
+		}
+		playerChoices.setShipSelected(false);
+	}
+	
     private void checkSupplyLimit(){
     	if(model.checkSupplyLimits()){
 			playerChoices.blank2();
