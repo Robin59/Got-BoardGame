@@ -348,7 +348,7 @@ public class GameOfThronesController extends JogreController {
 			}
 			break;
 		case PlayersChoices.RECRUIT_KNIGHT :
-			if(model.checkSupplyLimits(getSeatNum(), playerChoices.getRelatedTerr())){
+			if(model.checkRecrutment(getSeatNum(), playerChoices.getRelatedTerr())){
 			playerChoices.getRelatedTerr().recruit(2);
 			sendProperty("recruitKnight", playerChoices.getRelatedTerr().getName());
 			if(model.getPhase()==ModelState.MUSTERING && model.allRecruitementDone()){
@@ -360,7 +360,7 @@ public class GameOfThronesController extends JogreController {
 			}}
 			break;
 		case PlayersChoices.RECRUIT_SEIGE :
-			if(model.checkSupplyLimits(getSeatNum(), playerChoices.getRelatedTerr())){
+			if(model.checkRecrutment(getSeatNum(), playerChoices.getRelatedTerr())){
 			playerChoices.getRelatedTerr().recruit(3);
 			sendProperty("recruitTower", playerChoices.getRelatedTerr().getName());
 			if(model.getPhase()==ModelState.MUSTERING && model.allRecruitementDone()){

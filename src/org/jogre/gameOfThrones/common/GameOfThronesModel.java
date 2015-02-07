@@ -955,6 +955,19 @@ public class GameOfThronesModel extends JogreModel {
 		return true;
 	}
 	
+	/**
+	 * Said if a family can recruit a knight or a siege machine on a specific territory
+	 * @param player the number corresponding to the player who want to recruit
+	 * @param territorythe territory where the musterring is do
+	 * @return true if the player can recruit a knight or a siege machine on the territory
+	 */
+	public boolean checkRecrutment(int player, Territory territory) {
+		if (territory.getTroup()!=null && territory.getTroup().getTroops()[1]>0){
+			return true;
+		}
+		return checkSupplyLimits(player, territory);
+	}
+	
 	/**said if a family can recruit a new troop in this territory*/
 	public boolean checkSupplyLimits(int player, Territory territory){
 		return checkSupplyLimits(getFamily(player), territory);

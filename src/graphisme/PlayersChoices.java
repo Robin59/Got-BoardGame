@@ -178,11 +178,11 @@ public class PlayersChoices extends JogreComponent {
 			}
 			break;
 		case DISPLAY_LAND_MOV :
-			if (x>50 && x<100 && y>50 && y<100 && relatedTerr.getTroup().getTroops()[1]!=0){
+			if (y<170 && x>150 && x<200 && relatedTerr.getTroup().getTroops()[1]!=0){
 				return SEND_FOOT;
-			}else if(x>150 && x<200 && y>50 && y<100 && relatedTerr.getTroup().getTroops()[2]!=0){
+			}else if (y<170 && x>250 && x<300 && relatedTerr.getTroup().getTroops()[2]!=0){
 				return SEND_KNIGHT;
-			}else if(x>250 && x<300 && y>50 && y<100 && relatedTerr.getTroup().getTroops()[3]!=0){
+			}else if (y<170 && x>350 && x<400 && relatedTerr.getTroup().getTroops()[3]!=0){
 				return SEND_SEIGE;
 			}
 			break;
@@ -358,9 +358,7 @@ public class PlayersChoices extends JogreComponent {
 			g.drawImage(images.getTroopImages(family)[0],150,50, null);
 		break;
 		case DISPLAY_LAND_MOV :
-			g.drawImage(images.getTroopImages(family)[1],50,50, null);
-			g.drawImage(images.getTroopImages(family)[2],150,50, null);
-			g.drawImage(images.getTroopImages(family)[3],250,50, null);
+			drawTroops(g);
 			break;
 		case DISPLAY_WATER_ATT:
 			g.drawImage(images.getTroopImages(family)[0],150,50, null);
