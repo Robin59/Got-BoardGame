@@ -593,14 +593,6 @@ public class GameOfThronesModel extends JogreModel {
 	}
 	
 	/**
-	 * resolution of a battle against neutral force (after the player get is troops selected)
-	 */
-	/*public void resolutionPvE(){
-		battlePvE.resolution(this);
-		battlePvE=null;
-	}*/
-
-	/**
 	 * Give some information about the state of the battle (for the playerChoice)
 	 * @param seatNum 
 	 * @return 0 if there is no battle or if the player don't participate to the battle, else return the battle state 
@@ -629,6 +621,7 @@ public class GameOfThronesModel extends JogreModel {
 		switch(state){
 		case PHASE_WESTEROS:
 			text+=" Westeros phase";
+			if(bidding!=null && bidding instanceof BiddingAgainstWild) text+=" Wildings attack";
 			break;
 		case PHASE_PROGRAMATION:
 			text+=" Programation's phase";
@@ -859,7 +852,6 @@ public class GameOfThronesModel extends JogreModel {
 	public void wildingsGrow() {
 		wildings+=2;
 		updateLabel();
-		//tester si on arrive à 12
 	}
 	
 	/***/
@@ -876,6 +868,7 @@ public class GameOfThronesModel extends JogreModel {
 			family.setBid(-1);
 		}
 		bidding=new BiddingAgainstWild(families, wildings);
+		updateLabel();
 	}
 	
 	/**
@@ -1181,5 +1174,10 @@ public class GameOfThronesModel extends JogreModel {
 	 */
 	public void addWidingsCard(String card) {
 		wildDeck.putOnbottom(card);
+	}
+
+
+	public void setBidding(Bidding bid) {
+		this.bidding=bid;
 	}
 }
