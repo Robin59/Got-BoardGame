@@ -302,6 +302,87 @@ public class Family {
 		return ordersGiven;
 	}
 	
+	/**
+	 * Tell if this family can add new ship on the board
+	 * @return true if the family can add new ship on the board
+	 */
+	public boolean shipAvailable(){
+		return this.getNumberShip()<6;
+	}
+	/**
+	 * Tell if this family can add new footman on the board
+	 * @return true if the family can add new footman on the board
+	 */
+	public boolean footmanAvailable(){
+		return this.getNumberFootman()<10;
+	}
+	/**
+	 * Tell if this family can add new knight on the board
+	 * @return true if the family can add new knights on the board
+	 */
+	public boolean knightAvailable(){
+		return this.getNumberKnight()<5;
+	}
+	/**
+	 * Tell if this family can add new siege on the board
+	 * @return true if the family can add new siege on the board
+	 */
+	public boolean siegeAvailable(){
+		return this.getNumberSiege()<2;
+	}
+	/**
+	 * Return the number of ship (own by this family) already on the board 
+	 * @return  Return the number of ship (own by this family) already on the board
+	 */
+	public int getNumberShip(){
+		int result=0;
+		for(Territory territory : territories){
+			if(territory.getTroup()!=null){
+				result+=territory.getTroup().getTroops()[0];
+			}
+		}
+		return result;
+	}
+	/**
+	 * Return the number of footman(own by this family) already on the board 
+	 * @return  Return the number of footman (own by this family) already on the board
+	 */
+	public int getNumberFootman(){
+		int result=0;
+		for(Territory territory : territories){
+			if(territory.getTroup()!=null){
+				result+=territory.getTroup().getTroops()[1];
+			}
+		}
+		return result;
+	}
+	/**
+	 * Return the number of knight (own by this family) already on the board 
+	 * @return  Return the number of knight (own by this family) already on the board
+	 */
+	public int getNumberKnight(){
+		int result=0;
+		for(Territory territory : territories){
+			if(territory.getTroup()!=null){
+				result+=territory.getTroup().getTroops()[2];
+			}
+		}
+		return result;
+	}
+	/**
+	 * Return the number of siege machine (own by this family) already on the board 
+	 * @return  Return the number of siege machine (own by this family) already on the board
+	 */
+	public int getNumberSiege(){
+		int result=0;
+		for(Territory territory : territories){
+			if(territory.getTroup()!=null){
+				result+=territory.getTroup().getTroops()[3];
+			}
+		}
+		return result;
+	}
+	
 	/**remove the consolidation's orders from the ordersAivalable list*/
 	public void removeConsOrder(){
 		ordersAvailable= new LinkedList<Order>();

@@ -173,12 +173,12 @@ public class PlayersChoices extends JogreComponent {
 			break;
 		//les mouvements
 		case DISPLAY_WATER_MOV :
-			if (x>150 && x<200 && y>50 && y<100){ 
+			if (x>150 && x<200 && y>50 && y<100 ){ 
 				return SEND_SHIP;
 			}
 			break;
 		case DISPLAY_LAND_MOV :
-			if (y<170 && x>150 && x<200 && relatedTerr.getTroup().getTroops()[1]!=0){
+			if (y<170 && x>150 && x<200 && relatedTerr.getTroup().getTroops()[1]!=0 ){
 				return SEND_FOOT;
 			}else if (y<170 && x>250 && x<300 && relatedTerr.getTroup().getTroops()[2]!=0){
 				return SEND_KNIGHT;
@@ -248,14 +248,14 @@ public class PlayersChoices extends JogreComponent {
 			}
 			break;
 		case DISPLAY_RECRUITEMENT :
-			if(y<170 && x>40&&x<130 && relatedTerr.canRecruitShip()){ 
+			if(y<170 && x>40&&x<130 && relatedTerr.canRecruitShip() && family.shipAvailable()){ 
 				shipRecrutement=true;
 				break;
-			}else if (y<170 && x>150 && x<200){
+			}else if (y<170 && x>150 && x<200 && family.footmanAvailable()){
 				return RECRUIT_FOOT;
-			}else if (y<170 && x>250 && x<300){
+			}else if (y<170 && x>250 && x<300 && family.knightAvailable()){
 				return RECRUIT_KNIGHT;
-			}else if (y<170 && x>350 && x<400){
+			}else if (y<170 && x>350 && x<400 && family.siegeAvailable()){
 				return RECRUIT_SEIGE;
 			}else if(y>190 && x>200 && x<270){
 				return CANCEL;
@@ -461,14 +461,14 @@ public class PlayersChoices extends JogreComponent {
 	/**Draw the correct troop regarding the possibility and the family*/
 	private void drawRecruit(Graphics g){
 		if(relatedTerr.getRecruit()>0){
-			if(relatedTerr.canRecruitShip()){
+			if(relatedTerr.canRecruitShip() && family.shipAvailable()){
 				g.drawImage(images.getTroopImages(family)[0],50,100,null);
 				if(shipRecrutement) g.drawImage(images.getSelectShipImage(),40,90,null);
 			}
-			g.drawImage(images.getTroopImages(family)[1],150,100,null);
+			if(family.footmanAvailable()) g.drawImage(images.getTroopImages(family)[1],150,100,null);
 			if(relatedTerr.getRecruit()>1 || (relatedTerr.getTroup()!=null && relatedTerr.getTroup().getTroops()[1]>0)){
-				g.drawImage(images.getTroopImages(family)[2],250,100,null);
-				g.drawImage(images.getTroopImages(family)[3],350,100,null);
+				if(family.knightAvailable()) g.drawImage(images.getTroopImages(family)[2],250,100,null);
+				if(family.siegeAvailable())g.drawImage(images.getTroopImages(family)[3],350,100,null);
 			}
 		}
 	}
