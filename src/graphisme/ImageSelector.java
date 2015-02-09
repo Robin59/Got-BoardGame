@@ -80,8 +80,8 @@ public class  ImageSelector{
 		for (int i=0;i<6;i++){
 			smallInfluenceTonken[i]=GameImages.getImage(203+i);
 		}
-		numberImages = new Image[6];
-		for (int i=0;i<5;i++){
+		numberImages = new Image[20];
+		for (int i=0;i<20;i++){
 			numberImages[i]=GameImages.getImage(139+i);
 		}
 		
