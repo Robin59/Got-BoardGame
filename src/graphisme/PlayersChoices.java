@@ -119,14 +119,14 @@ public class PlayersChoices extends JogreComponent {
 		shipRecrutement=false;
 		//on ajoute les images qui seront utitles
 		selectionBid= GameImages.getImage(127);
-		endTurnImage = GameImages.getImage(6);
+		endTurnImage = GameImages.getImage(202);
 		dontUseImage = GameImages.getImage(7);
 		validateImage = GameImages.getImage(202);
 		attackerImage= GameImages.getImage(4);
 		defencerImage= GameImages.getImage(5);
 		leftArrowImage=GameImages.getImage(134);
 		rigthArrowImage=GameImages.getImage(135);		
-		noOneImage= GameImages.getImage(3);
+		noOneImage= GameImages.getImage(7);
 		images= ImageSelector.IMAGESELECTOR;
 		swordImage =GameImages.getImage(108);
 		swordFlipImage =GameImages.getImage(109);
@@ -161,7 +161,7 @@ public class PlayersChoices extends JogreComponent {
 			}
 			break;
 		case DISPLAY_END_PROGRAMATION :
-			if (x>150 && x<200 && y>50 && y<100){
+			if (x>200 && x<275 && y>100 && y<200){
 				blank2();
 				return END_PROGRAMATION_PHASE;
 			}
@@ -349,7 +349,7 @@ public class PlayersChoices extends JogreComponent {
 			showOrders(g);
 			break;
 		case DISPLAY_END_PROGRAMATION:
-			g.drawImage(endTurnImage,150,50, null);
+			g.drawImage(endTurnImage,200,100, null);
 			break;
 		case DISPLAY_CANCEL:
 			g.drawImage(dontUseImage,150,50, null);
