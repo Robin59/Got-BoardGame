@@ -842,49 +842,14 @@ public class GameOfThronesController extends JogreController {
     
     /** this method is call for the resolution of the wilding attack, after the bid, it applies the effects of the card and go to next proper phase (picking a new westeros card or going to the execution's phase) */
 	private void wilidingBattleResolution() {
-		String card =playerChoices.getWildingsCard();
-		Family[] families = model.getBidding().getTrack(); 
-
-		if(((BiddingAgainstWild)model.getBidding()).victory()){
-			if(card.equals("SkinchangerScout")){
-				families[0].addInflu(model.getBidding().getTrack()[0].getBid());
-			}else if(card.equals("Massing on the Milkwater")){
-				families[0].regainCombatantCards();
-			}else{
-				model.wildingsResolution();
-			}
-			model.setWildings(0);
-		}else{
-			System.out.println("Victoire sauvages");
-			if(card.equals("SkinchangerScout")){
-				int i;
-				for(i=0;i<families.length-1;i++){
-					families[i].addInflu(-2);
-				}	
-				families[i].addInflu(families[i].getBid()-families[i].getInflu());
-			}
-			/*if(card.equals("Massing on the Milkwater")){
-				
-			}*/
-			else{
-				model.wildingsResolution();
-			}
-			model.setWildings(model.getWildings()-4);
-		}
-		//bid go back to 0
-		for(Family family : model.getBidding().getTrack()){
-			family.resetBid();
-		}
+		model.wildingsResolution(playerChoices.getWildingsCard());
 		
-		
-		model.updateLabel();
-		model.setBidding(null);
-		if(model.getPhase()!=ModelState.WILDINGSRESOLUTION){
+		if(model.getPhase()!=ModelState.WILDINGSRESOLUTION){//case when the wildings resolution is directly solve
 			playerChoices.blank();
 			if(model.getWesterosPhase()==3){
 				model.nextPhase();
 			}else if(getSeatNum()==0){ /*case when the wildings where attacking beacause of the 12 power*/
-				card = model.choseCard();
+				String card = model.choseCard();
 				playerChoices.westerosCard(card);
 				sendProperty("WesterosCard",card);
 			}

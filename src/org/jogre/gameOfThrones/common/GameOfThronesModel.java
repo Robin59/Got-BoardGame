@@ -1196,8 +1196,48 @@ public class GameOfThronesModel extends JogreModel {
 		this.bidding=bid;
 	}
 	
-	public void wildingsResolution(){
-		setPhase(ModelState.WILDINGSRESOLUTION);
-		//wildResolution = new 
+	/**
+	 * 
+	 * @param card
+	 */
+	public void wildingsResolution(String card){
+		
+		//wildResolution = new  
+
+		if(((BiddingAgainstWild)getBidding()).victory()){
+			if(card.equals("SkinchangerScout")){
+				families[0].addInflu(getBidding().getTrack()[0].getBid());
+			}else if(card.equals("Massing on the Milkwater")){
+				families[0].regainCombatantCards();
+			}/*else if() {
+				setPhase(ModelState.WILDINGSRESOLUTION);
+				wildResolution = new
+			}*/
+			wildings=0;
+		}else{
+			System.out.println("Victoire sauvages");
+			if(card.equals("SkinchangerScout")){
+				int i;
+				for(i=0;i<families.length-1;i++){
+					families[i].addInflu(-2);
+				}	
+				families[i].addInflu(families[i].getBid()-families[i].getInflu());
+			}/*else if() {
+				setPhase(ModelState.WILDINGSRESOLUTION);
+				wildResolution = new
+			}*/
+			/*if(card.equals("Massing on the Milkwater")){
+				
+			}*/
+			setWildings(wildings-4);
+		}
+		//bid go back to 0
+		for(Family family : getBidding().getTrack()){
+			family.resetBid();
+		}
+		
+		
+		updateLabel();
+		setBidding(null);
 	}
 }
