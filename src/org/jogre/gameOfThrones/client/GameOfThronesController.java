@@ -846,14 +846,13 @@ public class GameOfThronesController extends JogreController {
 		Family[] families = model.getBidding().getTrack(); 
 
 		if(((BiddingAgainstWild)model.getBidding()).victory()){
-			System.out.println("Victoire garde de la nuit");
 			if(card.equals("SkinchangerScout")){
 				families[0].addInflu(model.getBidding().getTrack()[0].getBid());
 			}else if(card.equals("Massing on the Milkwater")){
 				families[0].regainCombatantCards();
+			}else{
+				model.wildingsResolution();
 			}
-			
-			
 			model.setWildings(0);
 		}else{
 			System.out.println("Victoire sauvages");
@@ -867,24 +866,29 @@ public class GameOfThronesController extends JogreController {
 			/*if(card.equals("Massing on the Milkwater")){
 				
 			}*/
+			else{
+				model.wildingsResolution();
+			}
 			model.setWildings(model.getWildings()-4);
 		}
-		//on remet les paris à 0
+		//bid go back to 0
 		for(Family family : model.getBidding().getTrack()){
 			family.resetBid();
 		}
-		//model.setCurrentCard(null);
-		playerChoices.blank();
+		
+		
 		model.updateLabel();
 		model.setBidding(null);
-		if(model.getWesterosPhase()==3){
-			model.nextPhase();
-		}else if(getSeatNum()==0){ /*case when the wildings where attacking beacause of the 12 power*/
-			card = model.choseCard();
-			playerChoices.westerosCard(card);
-			sendProperty("WesterosCard",card);
+		if(model.getPhase()!=ModelState.WILDINGSRESOLUTION){
+			playerChoices.blank();
+			if(model.getWesterosPhase()==3){
+				model.nextPhase();
+			}else if(getSeatNum()==0){ /*case when the wildings where attacking beacause of the 12 power*/
+				card = model.choseCard();
+				playerChoices.westerosCard(card);
+				sendProperty("WesterosCard",card);
+			}
 		}
-	
 		
 	}		
 	

@@ -97,6 +97,7 @@ public class GameOfThronesModel extends JogreModel {
 	private int[] starsLimitation;
 	/*indicate the current state of the game(if we consider it as an finished automate)*/
 	private ModelState state;
+	private WildingsResolution wildResolution;
 	
     /**
      * Constructor which creates the model.
@@ -126,6 +127,7 @@ public class GameOfThronesModel extends JogreModel {
         deck2=new Deck(2);
         deck3=new Deck(3);
         wildDeck=new Deck(0);
+        wildResolution=null;
      // placer le plateau en fonction du jeu
         familiesConstruction(numberPlayers);
         updateLabel();
@@ -1192,5 +1194,10 @@ public class GameOfThronesModel extends JogreModel {
 
 	public void setBidding(Bidding bid) {
 		this.bidding=bid;
+	}
+	
+	public void wildingsResolution(){
+		setPhase(ModelState.WILDINGSRESOLUTION);
+		//wildResolution = new 
 	}
 }
