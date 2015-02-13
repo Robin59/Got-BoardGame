@@ -209,12 +209,16 @@ public class GameOfThronesController extends JogreController {
     				playerChoices.changeOrder(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
     			}
 				break;
+			case WILDINGSRESOLUTION:
+				//if() nextWesterosPhase()
+				break;
 			default:
+				System.out.println(model.getPhase());
 				break;
     		}
     	}
     	if(model.checkNewTurn() && model.getWesterosPhase()==0){
-    		nextCard();
+    		nextWesterosPhase();
     	}
     }
     
@@ -243,7 +247,7 @@ public class GameOfThronesController extends JogreController {
 				sendProperty("recruitmentDone", playerChoices.getRelatedTerr().getName());
 				if(model.allRecruitementDone()){//on teste si tous les recrutement sont bon
 					sendProperty("allRecruitementDone", 0);
-					nextCard();
+					nextWesterosPhase();
 				}
 			}else if(model.getPhase()==ModelState.SUPPLY_TO_LOW){
 				playerChoices.blank2();
@@ -340,7 +344,7 @@ public class GameOfThronesController extends JogreController {
 				sendProperty("recruitFoot", playerChoices.getRelatedTerr().getName());
 				if(model.getPhase()==ModelState.MUSTERING && model.allRecruitementDone()){
 					sendProperty("allRecruitementDone", 0);
-					nextCard();
+					nextWesterosPhase();
 				}else if(model.getPhase()!=ModelState.MUSTERING && playerChoices.getRelatedTerr().getOrder()==null ){
 					model.nextPlayer();
 					sendProperty("nextPlayer", 0);
@@ -353,7 +357,7 @@ public class GameOfThronesController extends JogreController {
 			sendProperty("recruitKnight", playerChoices.getRelatedTerr().getName());
 			if(model.getPhase()==ModelState.MUSTERING && model.allRecruitementDone()){
 				sendProperty("allRecruitementDone", 0);
-				nextCard();
+				nextWesterosPhase();
 			}else if(model.getPhase()!=ModelState.MUSTERING && playerChoices.getRelatedTerr().getOrder()==null){
 				model.nextPlayer();
 				sendProperty("nextPlayer", 0);
@@ -365,7 +369,7 @@ public class GameOfThronesController extends JogreController {
 			sendProperty("recruitTower", playerChoices.getRelatedTerr().getName());
 			if(model.getPhase()==ModelState.MUSTERING && model.allRecruitementDone()){
 				sendProperty("allRecruitementDone", 0);
-				nextCard();
+				nextWesterosPhase();
 			}else if(model.getPhase()!=ModelState.MUSTERING && playerChoices.getRelatedTerr().getOrder()==null){
 				model.nextPlayer();
 				sendProperty("nextPlayer", 0);
@@ -382,35 +386,26 @@ public class GameOfThronesController extends JogreController {
 		case PlayersChoices.LETTER_A_CHOSE :
 				model.westerosCardChoice(true);
 				sendProperty("westerosCardChoiceSelected", 1);
-				if(model.getWesterosPhase()==3){
-					model.nextPhase();
-					sendProperty("nextPhase", 0);
-				}else if(model.getWesterosPhase()==2){
+				if(model.getWesterosPhase()==2){
 					playerChoices.bidding();
 					sendProperty("ClashOfKings", 0);
 				}else if (model.getPhase()!=ModelState.SUPPLY_TO_LOW){
-					nextCard();
+					nextWesterosPhase();
 				}
 				break;
 		case PlayersChoices.LETTER_B_CHOSE :
 				sendProperty("westerosCardChoiceSelected", 0);
 				model.westerosCardChoice(false);
-				if(model.getWesterosPhase()==3){
-					model.nextPhase();
-					sendProperty("nextPhase", 0);
-				}else if(model.getWesterosPhase()==2){
-					nextCard();
+				if(model.getWesterosPhase()!=1){
+					nextWesterosPhase();
 				}
 			break;
 		case PlayersChoices.LETTER_C_CHOSE :
-				if(model.getWesterosPhase()==3){
-					model.nextPhase();
-					sendProperty("nextPhase", 0);
-				}else{
+				if(model.getWesterosPhase()!=3){
 					model.wildingsGrow();
 					sendProperty("wildingsGrow", 0);
-					nextCard();
 				}
+					nextWesterosPhase();
 			break;
 		case PlayersChoices.TRACK_SORTED:
 			//on envoi l'ordre des joueurs
@@ -424,7 +419,7 @@ public class GameOfThronesController extends JogreController {
 				if( model.biddingResolution()<3){
 					playerChoices.bidding();
 				}else{
-					nextCard();
+					nextWesterosPhase();
 				}
 			}
 			break;
@@ -490,7 +485,7 @@ public class GameOfThronesController extends JogreController {
 		}else if (model.getPhase()==ModelState.SUPPLY_TO_LOW){
 			this.checkSupplyLimit();
 		}else if(model.checkNewTurn() && model.getWesterosPhase()==0){
-			nextCard();
+			nextWesterosPhase();
 		}else if(model.getBidding()!=null && playerChoices.getPanel()!=16 && model.getBidding().allBidsDone() && playerChoices.getWildingsCard()==null){
 			if(model.getBidding() instanceof BiddingAgainstWild ){
 				String card = model.choseWildingCard();
@@ -502,7 +497,7 @@ public class GameOfThronesController extends JogreController {
 					if( model.biddingResolution()<3){
 						playerChoices.bidding();
 					}else {
-						nextCard();
+						nextWesterosPhase();
 					}
 				}else if( model.haveThrone(getSeatNum())){
 					playerChoices.biddingEgality(model.getBidding());
@@ -565,9 +560,6 @@ public class GameOfThronesController extends JogreController {
 				playerChoices.bidding();
 				model.wildingsAttack();
 				sendProperty("WildingsAttack", 0);
-			}else if(model.getWesterosPhase()==3){
-				model.nextPhase();
-				sendProperty("nextPhase", 0);
 			}else if(model.getCurrentCard().equals("ClashOfKings")){
 				model.westerosCardClashOfKings();
 				playerChoices.bidding();
@@ -577,9 +569,9 @@ public class GameOfThronesController extends JogreController {
 				sendProperty("Mustering", 0);
 			}else if (model.getCurrentCard().equals("Winter")){
 				model.westerosCardWinter();
-				nextCard();
+				nextWesterosPhase();
 			}else {
-				nextCard();
+				nextWesterosPhase();
 			}
 		}
     }
@@ -873,7 +865,7 @@ public class GameOfThronesController extends JogreController {
 			sendProperty("recruitShipFrom", playerChoices.getRelatedTerr().getName());
 			if(model.getPhase()==ModelState.MUSTERING && model.allRecruitementDone()){
 				sendProperty("allRecruitementDone", 0);
-				nextCard();
+				nextWesterosPhase();
 			}else if(model.getPhase()!=ModelState.MUSTERING && playerChoices.getRelatedTerr().getOrder()==null ){
 				model.nextPlayer();
 				sendProperty("nextPlayer", 0);
@@ -881,9 +873,13 @@ public class GameOfThronesController extends JogreController {
 		}
 		playerChoices.setShipSelected(false);
 	}
-	/*This method is use to know which card must be the next*/
-	public void nextCard(){
+	/*This method is use to know which card must be the next or if we have to go to the next phase*/
+	public void nextWesterosPhase(){
 		if(model.getWildings()>=12) wildingsAttack();
+		else if (model.getWesterosPhase()==3){
+			model.nextPhase();
+			sendProperty("nextPhase", 0);
+		}
 		else nextWesterosCard(); 
 	}
 	/*this method pick a new westeros card and send it to all the players*/
@@ -902,8 +898,8 @@ public class GameOfThronesController extends JogreController {
     private void checkSupplyLimit(){
     	if(model.checkSupplyLimits()){
 			playerChoices.blank2();
-			if(model.getWesterosPhase()==1){
-				nextCard();
+			if(model.getPhase()==ModelState.PHASE_WESTEROS){
+				nextWesterosPhase();
 			}
 			//AUTRES CAS OU ON MET A JOUR LE ravitaillement ??
 		}
