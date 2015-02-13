@@ -44,6 +44,7 @@ import org.jogre.gameOfThrones.common.territory.Water;
 
 import state.*;
 import sun.org.mozilla.javascript.ObjToIntMap.Iterator;
+import wildlingsResolution.WildlingsResolution;
 
 /**
  * Game model for the gameOfThrones game.
@@ -97,7 +98,7 @@ public class GameOfThronesModel extends JogreModel {
 	private int[] starsLimitation;
 	/*indicate the current state of the game(if we consider it as an finished automate)*/
 	private ModelState state;
-	private WildingsResolution wildResolution;
+	private WildlingsResolution wildResolution;
 	
     /**
      * Constructor which creates the model.
@@ -639,6 +640,9 @@ public class GameOfThronesModel extends JogreModel {
 			break;
 		case MUSTERING :
 			text+=" Mustering";// add explenetion on which player can muster 
+			break;
+		case WILDINGSRESOLUTION:
+			text+=wildResolution.toString();
 			break;
 		}
 		text+="<br>Throne track : ";
