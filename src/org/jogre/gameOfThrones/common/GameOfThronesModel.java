@@ -44,6 +44,7 @@ import org.jogre.gameOfThrones.common.territory.Water;
 
 import state.*;
 import sun.org.mozilla.javascript.ObjToIntMap.Iterator;
+import wildlingsResolution.CrowKillers;
 import wildlingsResolution.WildlingsResolution;
 
 /**
@@ -73,16 +74,10 @@ public class GameOfThronesModel extends JogreModel {
 	private int westerosPhase; 
 	private int biddingPhase;// O for the throne bidding, 1 for the fiefdoms, 2 for the court 
 	private BoardModel boardModel;
-	//Creation des fammilles
 	private Family[] families;
 	// pour les mouvements et combat
 	private boolean mvInitiated;
-	//private boolean musteringPhase;
-	//private boolean clashOfKings;
-	// Must make an Interface or abstract class for the 2 objects below
 	private Battle battle;
-	//private BattlePvP battlePvP;
-	//private BattlePvE battlePvE;
 	private Territory territory1;
 	private Territory territory2;
 	private JLabel jLabel;
@@ -1201,31 +1196,31 @@ public class GameOfThronesModel extends JogreModel {
 	}
 	
 	/**
-	 * 
-	 * @param card
+	 * This method must be call for resolve a wildings attack after all the players did their bids and the owner of the throne sort them
+	 * @param card the name of the wildings card
 	 */
 	public void wildingsResolution(String card){
+		Family[] familiesBidOrder=getBidding().getTrack();
 		
-		//wildResolution = new  
 
 		if(((BiddingAgainstWild)getBidding()).victory()){
 			if(card.equals("SkinchangerScout")){
-				families[0].addInflu(getBidding().getTrack()[0].getBid());
+				familiesBidOrder[0].addInflu(getBidding().getTrack()[0].getBid());
 			}else if(card.equals("Massing on the Milkwater")){
-				families[0].regainCombatantCards();
-			}/*else if() {
+				familiesBidOrder[0].regainCombatantCards();
+			}else if(card.equals("CrowKillers")) {
 				setPhase(ModelState.WILDINGSRESOLUTION);
-				wildResolution = new
-			}*/
+				wildResolution = new CrowKillers(true, familiesBidOrder[0], this);
+			}
 			wildings=0;
 		}else{
 			System.out.println("Victoire sauvages");
 			if(card.equals("SkinchangerScout")){
 				int i;
-				for(i=0;i<families.length-1;i++){
-					families[i].addInflu(-2);
+				for(i=0;i<familiesBidOrder.length-1;i++){
+					familiesBidOrder[i].addInflu(-2);
 				}	
-				families[i].addInflu(families[i].getBid()-families[i].getInflu());
+				familiesBidOrder[i].addInflu(familiesBidOrder[i].getBid()-familiesBidOrder[i].getInflu());
 			}/*else if() {
 				setPhase(ModelState.WILDINGSRESOLUTION);
 				wildResolution = new
@@ -1236,12 +1231,19 @@ public class GameOfThronesModel extends JogreModel {
 			setWildings(wildings-4);
 		}
 		//bid go back to 0
-		for(Family family : getBidding().getTrack()){
+		for(Family family : familiesBidOrder){
 			family.resetBid();
 		}
 		
-		
+
 		updateLabel();
 		setBidding(null);
+	}
+	/**
+	 * Return the wildlings resolution class for resolution who needs actions from players
+	 * @return return the wildlings resolution
+	 */
+	public WildlingsResolution getWildingsResolution(){
+		return wildResolution;
 	}
 }
