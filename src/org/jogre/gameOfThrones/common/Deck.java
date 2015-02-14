@@ -52,6 +52,7 @@ public class Deck {
 		default:
 			deck.add("SkinchangerScout");
 			deck.add("SilenceAtTheWall");
+			deck.add("CrowKillers");
 			//deck.add("RattleshirtRaiders");
 			break;
 		}

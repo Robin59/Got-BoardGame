@@ -50,6 +50,7 @@ import org.jogre.common.PlayerList;
 import org.jogre.common.comm.CommGameOver;
 
 import state.*;
+import wildlingsResolution.WildlingsResolution;
 
 
 /**
@@ -209,8 +210,10 @@ public class GameOfThronesController extends JogreController {
     				playerChoices.changeOrder(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
     			}
 				break;
-			case WILDINGSRESOLUTION:
-				//if() nextWesterosPhase()
+			case WILDLINGSRESOLUTION:
+				wildlingsAction(gameOfThronesComponent.getTerritory(e.getX(),e.getY()), getSeatNum());
+				sendProperty(gameOfThronesComponent.getTerritory(e.getX(),e.getY()).getName(), getSeatNum());
+				if(model.getWildingsResolution().getEnded()) nextWesterosPhase();
 				break;
 			default:
 				System.out.println(model.getPhase());
@@ -813,6 +816,8 @@ public class GameOfThronesController extends JogreController {
     		model.getFamily(value).ordersGiven();
     		model.endProg();
     		if(model.getPhase()==ModelState.CROW_CHOICE) playerChoices.crowChoice();
+        }else{ // Wildlings card resolution
+        	wildlingsAction(model.getBoardModel().getTerritory(key), value);
         }
     	gameOfThronesComponent.repaint(); 
     	playerChoices.repaint();  
@@ -836,7 +841,7 @@ public class GameOfThronesController extends JogreController {
 	private void wilidingBattleResolution() {
 		model.wildingsResolution(playerChoices.getWildingsCard());
 		
-		if(model.getPhase()!=ModelState.WILDINGSRESOLUTION){//case when the wildings resolution is directly solve
+		if(model.getPhase()!=ModelState.WILDLINGSRESOLUTION){//case when the wildings resolution is directly solve
 			playerChoices.blank();
 			if(model.getWesterosPhase()==3){
 				model.nextPhase();
@@ -904,6 +909,13 @@ public class GameOfThronesController extends JogreController {
 			//AUTRES CAS OU ON MET A JOUR LE ravitaillement ??
 		}
     }
+    
+    /*This method is call when a player click on a territory during a wildlings resolution phase*/
+    private void wildlingsAction(Territory territory, int player){
+    	model.getWildingsResolution().action(territory, player);
+    }
+    
+    
     
  // Check to see if the game is over or not.
     private void checkGameOver () {

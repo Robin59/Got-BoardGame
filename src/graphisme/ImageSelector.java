@@ -152,6 +152,7 @@ public class  ImageSelector{
 		wildingsCards.put("WildingsBack", GameImages.getImage(209));
 		wildingsCards.put("SilenceAtTheWall", GameImages.getImage(188));
 		wildingsCards.put("SkinchangerScout", GameImages.getImage(189));
+		wildingsCards.put("CrowKillers", GameImages.getImage(196));
 		
 		//the garrisons 
 		garrisonImages= new HashMap<String,Image>();

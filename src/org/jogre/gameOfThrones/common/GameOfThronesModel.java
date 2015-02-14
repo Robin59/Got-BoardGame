@@ -636,7 +636,7 @@ public class GameOfThronesModel extends JogreModel {
 		case MUSTERING :
 			text+=" Mustering";// add explenetion on which player can muster 
 			break;
-		case WILDINGSRESOLUTION:
+		case WILDLINGSRESOLUTION:
 			text+=wildResolution.toString();
 			break;
 		}
@@ -1209,7 +1209,7 @@ public class GameOfThronesModel extends JogreModel {
 			}else if(card.equals("Massing on the Milkwater")){
 				familiesBidOrder[0].regainCombatantCards();
 			}else if(card.equals("CrowKillers")) {
-				setPhase(ModelState.WILDINGSRESOLUTION);
+				setPhase(ModelState.WILDLINGSRESOLUTION);
 				wildResolution = new CrowKillers(true, familiesBidOrder[0], this);
 			}
 			wildings=0;
@@ -1221,10 +1221,10 @@ public class GameOfThronesModel extends JogreModel {
 					familiesBidOrder[i].addInflu(-2);
 				}	
 				familiesBidOrder[i].addInflu(familiesBidOrder[i].getBid()-familiesBidOrder[i].getInflu());
-			}/*else if() {
-				setPhase(ModelState.WILDINGSRESOLUTION);
-				wildResolution = new
-			}*/
+			}else if(card.equals("CrowKillers")) {
+				setPhase(ModelState.WILDLINGSRESOLUTION);
+				wildResolution = new CrowKillers(false, familiesBidOrder[numberPlayers-1], this);
+			}
 			/*if(card.equals("Massing on the Milkwater")){
 				
 			}*/

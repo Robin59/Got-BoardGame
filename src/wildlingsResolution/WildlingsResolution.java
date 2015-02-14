@@ -2,6 +2,7 @@ package wildlingsResolution;
 
 import org.jogre.gameOfThrones.common.Family;
 import org.jogre.gameOfThrones.common.GameOfThronesModel;
+import org.jogre.gameOfThrones.common.territory.Territory;
 
 
 /**
@@ -52,4 +53,12 @@ public abstract class WildlingsResolution {
 	 * @return The description of the wildlings card and what players have to do
 	 */
 	public abstract String Description();
+
+
+	/**
+	 * This method is call when a player click on the board to resolve the wildlings attack effects
+	 * @param territory the territory that was clicked 
+	 * @param player the player who clicked
+	 */
+	public abstract void action(Territory territory, int player);
 }
