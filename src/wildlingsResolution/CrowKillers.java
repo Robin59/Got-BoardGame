@@ -26,7 +26,7 @@ public class CrowKillers extends WildlingsResolution {
 	}
 
 	@Override
-	public void action(Territory territory, int player){
+	public int actionOnBoard(Territory territory, int player){
 		if(victory){
 			if(territory.getFamily()==model.getFamily(player) && territory.getTroup()!=null && territory.getTroup().getTroops()[1]>0){
 				territory.getTroup().addToop(0, 0, 1, 0);
@@ -43,6 +43,7 @@ public class CrowKillers extends WildlingsResolution {
 			}
 		}
 		checkFinish();
+		return 0;
 	}
 	
 
@@ -83,5 +84,10 @@ public class CrowKillers extends WildlingsResolution {
 			if (i>0) finish=false;
 		}
 		if(finish) this.end();
+	}
+
+	@Override
+	public void actionOnPChoice(int choice, int player) {
+		// There is no use of this method in this class 
 	}
 }

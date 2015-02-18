@@ -21,6 +21,7 @@ import org.jogre.gameOfThrones.common.territory.Territory;
 import org.jogre.gameOfThrones.common.territory.Water;
 
 import state.ModelState;
+import wildlingsResolution.WildlingsResolution;
 
 
 public class PlayersChoices extends JogreComponent {
@@ -67,6 +68,7 @@ public class PlayersChoices extends JogreComponent {
 	GameOfThronesModel model;
 	// True if a ship is selected during the mustering phase, false else
 	private Boolean shipRecrutement;
+	private WildlingsResolution wildlingsResolution;
 	
 	//Constant use for the message return by the main method (RigthClick) of this object 
 	public static final int END_PROGRAMATION_PHASE=1;
@@ -136,6 +138,7 @@ public class PlayersChoices extends JogreComponent {
 		letters[0]=GameImages.getImage(136);
 		letters[1]=GameImages.getImage(137);
 		letters[2]=GameImages.getImage(138);
+		wildlingsResolution=null;
 	}
 	
 //c'est la methode appelé quand on click gauche dans le playerChoice
@@ -747,6 +750,12 @@ public class PlayersChoices extends JogreComponent {
 		return panel;
 	}
 
+	public void setPanel(int panel, WildlingsResolution wildlingsResolution){
+		this.wildlingsResolution=wildlingsResolution;
+		relatedTerr=wildlingsResolution.getTerritory(family);
+		this.panel=panel;
+		repaint();
+	}
 	/**when there is a bidding equality (the player with the throne can set the players the way he want)
 	 * @param bidding the bid that the player can arrange
 	 * */
@@ -818,13 +827,13 @@ public class PlayersChoices extends JogreComponent {
 	private static final int DISPLAY_HOUSE_CARDS=9;
 	private static final int DISPLAY_VALYRIAN_SWORD=10;
 	private static final int DISPLAY_RECRUIT_OR_CONSOLID = 11;
-	private static final int DISPLAY_RECRUITEMENT = 12;
+	public static final int DISPLAY_RECRUITEMENT = 12;
 	private static final int DISPLAY_WESTEROS_CARD=13;
 	private static final int DISPLAY_BID=14;
 	private static final int DISPLAY_LETTERS=15;
 	private static final int DISPLAY_BID_SORT=16;
 	private static final int DISPLAY_WILDINGS_CARD=17;
-	private static final int DISPLAY_TROOP_DESTRUCTION=18;
+	public static final int DISPLAY_TROOP_DESTRUCTION=18;
 	private static final int DISPLAY_USE_INF_TOKEN=19;
 	private static final int DISPLAY_CROW_CHOICE=20;
 	private static final int DISPLAY_CHANGE_ORDER=21;

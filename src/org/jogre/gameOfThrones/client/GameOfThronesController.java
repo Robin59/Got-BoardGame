@@ -213,7 +213,10 @@ public class GameOfThronesController extends JogreController {
 			case WILDLINGSRESOLUTION:
 				wildlingsAction(gameOfThronesComponent.getTerritory(e.getX(),e.getY()), getSeatNum());
 				sendProperty(gameOfThronesComponent.getTerritory(e.getX(),e.getY()).getName(), getSeatNum());
-				if(model.getWildingsResolution().getEnded()) nextWesterosPhase();
+				if(model.getWildingsResolution().getEnded()){
+					playerChoices.blank();
+					nextWesterosPhase();
+				}
 				break;
 			default:
 				System.out.println(model.getPhase());
@@ -226,311 +229,321 @@ public class GameOfThronesController extends JogreController {
     }
     
     private void mouseClickOnPlayerChoices (MouseEvent e){
-
-		// quand on click sur le playerChoice on reccupère un message de ce qui s'est passe 
-		switch (playerChoices.RigthClick(e.getX(),e.getY(),model.getFamily(getSeatNum()))){
-		case PlayersChoices.END_PROGRAMATION_PHASE :
-			//Quand un joueur a donnée tous ses ordres (durant la phase1) on les envois et on l'indique au autres
-			Family family=model.getFamily(getSeatNum());
-			for(Territory territory : family.getTerritories() )
-			{	
-				if(territory.getOrder()!=null){ // condition in case territory don't have any orders, like territory without troops but with influence token
-					int[] order =territory.getOrder().getOrderInt();
-					sendProperty(territory.getName(),order[0],order[1]);
-				}
-			}
-			family.ordersGiven();
-			sendProperty ("endProg",getSeatNum());
-			model.endProg();
-			if(model.getPhase()==ModelState.CROW_CHOICE) playerChoices.crowChoice();
-			break;
-		case PlayersChoices.CANCEL : 
-			if(model.getPhase()==ModelState.MUSTERING){
-				playerChoices.getRelatedTerr().recruitmentDone();
-				sendProperty("recruitmentDone", playerChoices.getRelatedTerr().getName());
-				if(model.allRecruitementDone()){//on teste si tous les recrutement sont bon
-					sendProperty("allRecruitementDone", 0);
-					nextWesterosPhase();
-				}
-			}else if(model.getPhase()==ModelState.SUPPLY_TO_LOW){
-				playerChoices.blank2();
-			}else if(model.getPhase()==ModelState.CROW_CHOICE){
-				model.nextPhase();
-				sendProperty("nextPhase", 0);
-			}else{
-				sendProperty("cancelOrder",playerChoices.getRelatedTerr().getName());
-				playerChoices.getRelatedTerr().rmOrder();
-				model.nextPlayer();
-				playerChoices.blank();
-			}
-			break;
-		case PlayersChoices.ORDER_CHANGED:
-			int[] order =playerChoices.getRelatedTerr().getOrder().getOrderInt();
-			sendProperty(playerChoices.getRelatedTerr().getName(),order[0],order[1]);
-			model.nextPhase();
-			sendProperty("nextPhase", 0);
-			break;
-		case PlayersChoices.SEND_SHIP :
-			model.troopSend(1,0,0,0);
-			sendProperty("troopSend", 0);playerChoices.checkPlayerChoices();
-			break;
-		case PlayersChoices.SEND_FOOT :
-			model.troopSend(0,1,0,0);
-			sendProperty("troopSend", 1);playerChoices.checkPlayerChoices();
-			break;
-		case PlayersChoices.SEND_KNIGHT:
-			model.troopSend(0,0,1,0);
-			sendProperty("troopSend", 2);playerChoices.checkPlayerChoices();
-			break;
-		case PlayersChoices.SEND_SEIGE:
-			model.troopSend(0,0,0,1);
-			sendProperty("troopSend", 3);playerChoices.checkPlayerChoices();
-			break;
-		case PlayersChoices.ATT_PREPARATION_ENDED:
-				model.attPrepEnd();
-				sendProperty("attPreparationEnded", 0);
-				playerChoices.blank2();
-			break;
-		case PlayersChoices.SEND_SHIP_FOR_ATT :
-			model.troopSend(1,0,0,0);
-			sendProperty("troopSend", 0);
-			break;
-		case PlayersChoices.SEND_FOOT_FOR_ATT :
-			model.troopSend(0,1,0,0);
-			sendProperty("troopSend", 1);
-			break;
-		case PlayersChoices.SEND_KNIGHT_FOR_ATT:
-			model.troopSend(0,0,1,0);
-			sendProperty("troopSend", 2);
-			break;
-		case PlayersChoices.SEND_SEIGE_FOR_ATT:
-			model.troopSend(0,0,0,1);
-			sendProperty("troopSend", 3);
-			break;
-		case PlayersChoices.SUPPORT_ATT :
-			model.getBattle().addAttSupport(playerChoices.getRelatedTerr());
-			sendProperty("attSupport",playerChoices.getRelatedTerr().getName());
-			break;
-		case PlayersChoices.SUPPORT_DEF :
-			model.getBattle().addDefSupport(playerChoices.getRelatedTerr());
-			sendProperty("defSupport",playerChoices.getRelatedTerr().getName());
-			break;
-		case PlayersChoices.SUPPORT_NONE:
-			playerChoices.getRelatedTerr().getOrder().setUse(true);
-			sendProperty("noSupport",playerChoices.getRelatedTerr().getName());
-			break;
-		case PlayersChoices.HOUSE_CARD_CHOSEN:
-			if(model.getBattle().getAttFamily().getPlayer()==this.getSeatNum() && playerChoices.getIndexCard()!=-1){
-				sendProperty("attCardPlayed",playerChoices.getIndexCard());
-			}else if (playerChoices.getIndexCard()!=-1){
-				sendProperty("defCardPlayed",playerChoices.getIndexCard());
-			}
-			break;
-		case PlayersChoices.VALYRIAN_SWORD_USE: 
-			model.getBattle().useSword();
-			sendProperty("useSword", 0);
-			break;
-		case PlayersChoices.VALYRIAN_SWORD_NOT_USE :
-			model.getBattle().dontUseSword();
-			sendProperty("dontUseSword", 0);
-			break;
-		case PlayersChoices.CONSOLID :
-			sendProperty("consolidation", playerChoices.getRelatedTerr().getName());
-			model.getFamily(getSeatNum()).addInflu(playerChoices.getRelatedTerr().consolidation());
-			model.updateLabel();
-			playerChoices.getRelatedTerr().rmOrder();
-			model.nextPlayer();
-			break;
-		case PlayersChoices.RECRUIT_FOOT :
-			if(model.checkSupplyLimits(getSeatNum(), playerChoices.getRelatedTerr())){
-				playerChoices.getRelatedTerr().recruit(1);
-				sendProperty("recruitFoot", playerChoices.getRelatedTerr().getName());
-				if(model.getPhase()==ModelState.MUSTERING && model.allRecruitementDone()){
-					sendProperty("allRecruitementDone", 0);
-					nextWesterosPhase();
-				}else if(model.getPhase()!=ModelState.MUSTERING && playerChoices.getRelatedTerr().getOrder()==null ){
-					model.nextPlayer();
-					sendProperty("nextPlayer", 0);
-				}
-			}
-			break;
-		case PlayersChoices.RECRUIT_KNIGHT :
-			if(model.checkRecrutment(getSeatNum(), playerChoices.getRelatedTerr())){
-			playerChoices.getRelatedTerr().recruit(2);
-			sendProperty("recruitKnight", playerChoices.getRelatedTerr().getName());
-			if(model.getPhase()==ModelState.MUSTERING && model.allRecruitementDone()){
-				sendProperty("allRecruitementDone", 0);
-				nextWesterosPhase();
-			}else if(model.getPhase()!=ModelState.MUSTERING && playerChoices.getRelatedTerr().getOrder()==null){
-				model.nextPlayer();
-				sendProperty("nextPlayer", 0);
-			}}
-			break;
-		case PlayersChoices.RECRUIT_SEIGE :
-			if(model.checkRecrutment(getSeatNum(), playerChoices.getRelatedTerr())){
-			playerChoices.getRelatedTerr().recruit(3);
-			sendProperty("recruitTower", playerChoices.getRelatedTerr().getName());
-			if(model.getPhase()==ModelState.MUSTERING && model.allRecruitementDone()){
-				sendProperty("allRecruitementDone", 0);
-				nextWesterosPhase();
-			}else if(model.getPhase()!=ModelState.MUSTERING && playerChoices.getRelatedTerr().getOrder()==null){
-				model.nextPlayer();
-				sendProperty("nextPlayer", 0);
-			}}
-			break;
-		case PlayersChoices.WESTEROS_CARD_SAW: 
-			this.westerosCardSaw();
-			break;
-		case PlayersChoices.BID_CHOSED :
-			model.getFamily(getSeatNum()).setBid(playerChoices.getBid());
-			sendProperty("bidSet", getSeatNum(),playerChoices.getBid());
-			playerChoices.blank();
-			break;
-		case PlayersChoices.LETTER_A_CHOSE :
-				model.westerosCardChoice(true);
-				sendProperty("westerosCardChoiceSelected", 1);
-				if(model.getWesterosPhase()==2){
-					playerChoices.bidding();
-					sendProperty("ClashOfKings", 0);
-				}else if (model.getPhase()!=ModelState.SUPPLY_TO_LOW){
-					nextWesterosPhase();
-				}
-				break;
-		case PlayersChoices.LETTER_B_CHOSE :
-				sendProperty("westerosCardChoiceSelected", 0);
-				model.westerosCardChoice(false);
-				if(model.getWesterosPhase()!=1){
-					nextWesterosPhase();
-				}
-			break;
-		case PlayersChoices.LETTER_C_CHOSE :
-				if(model.getWesterosPhase()!=3){
-					model.wildingsGrow();
-					sendProperty("wildingsGrow", 0);
-				}
-					nextWesterosPhase();
-			break;
-		case PlayersChoices.TRACK_SORTED:
-			//on envoi l'ordre des joueurs
-			for(Family fam : model.getBidding().getTrack()){
-				sendProperty("bid track", fam.getPlayer());
-			}
-			sendProperty("bid resolution", 0);
-			if(model.getBidding() instanceof BiddingAgainstWild){
-				wilidingBattleResolution();
-			}else{
-				if( model.biddingResolution()<3){
-					playerChoices.bidding();
-				}else{
-					nextWesterosPhase();
-				}
-			}
-			break;
-		case PlayersChoices.WILDINGS_CARD_SAW:
-			model.getFamily(getSeatNum()).carteVu(); 
-			sendProperty("cardSaw", getSeatNum()); 
-			playerChoices.blank2();
-			//verifie si tout le monde a executé
-			if(model.westerosCardcheck()){
-				sendProperty("wilidingBattle", 0);
-				if(model.biddingSort() ){
-					wilidingBattleResolution();
-				}else if( model.haveThrone(getSeatNum())){
-					playerChoices.biddingEgality(model.getBidding());
-				}
-			}
-			break;
-		case PlayersChoices.REMOVE_SHIP:
-			playerChoices.getRelatedTerr().removeTroop(0);
-			sendProperty("remove_ship", playerChoices.getRelatedTerr().getName());
-			break;
-		case PlayersChoices.REMOVE_FOOT:
-			playerChoices.getRelatedTerr().removeTroop(1);
-			sendProperty("remove_foot", playerChoices.getRelatedTerr().getName());
-			break;
-		case PlayersChoices.REMOVE_KNIGHT:
-			playerChoices.getRelatedTerr().removeTroop(2);
-			sendProperty("remove_knight", playerChoices.getRelatedTerr().getName());
-			break;
-		case PlayersChoices.REMOVE_SIEGE:
-			playerChoices.getRelatedTerr().removeTroop(3);
-			sendProperty("remove_siege", playerChoices.getRelatedTerr().getName());
-			break;
-		case PlayersChoices.USE_INF_TOKEN:
-			this.useInfluToken(playerChoices.getRelatedTerr());
-			sendProperty("use_inf_token", playerChoices.getRelatedTerr().getName());
-			playerChoices.blank();
-			break;
-		case PlayersChoices.DONT_USE_INF_TOKEN:
-			this.dontUseInfluToken(playerChoices.getRelatedTerr());
-			sendProperty("dont_use_inf_token", playerChoices.getRelatedTerr().getName());
-			playerChoices.blank();
-			break;
-		case PlayersChoices.PUT_CARD_BOTTOM:
-			sendProperty("SendWildingsDeck",0);
-			for (String card : model.putCardOnBottom(playerChoices.getWildingsCard())){
-				sendProperty("AddWildingsCard", card);
-			}
-			model.goToExecutionPhase();
-			sendProperty("goToExecutionPhase",0);
-			break;
-		case PlayersChoices.PUT_CARD_TOP:
-			sendProperty("SendWildingsDeck",0);
-			for (String card : model.putCardOnTop(playerChoices.getWildingsCard())){
-				sendProperty("AddWildingsCard", card);
-			}
-			model.goToExecutionPhase();
-			sendProperty("goToExecutionPhase",0);
-			break;
-		}
-		if(model.getPhase()==ModelState.MUSTERING){
-			//we do nothing
-		}else if (model.getPhase()==ModelState.SUPPLY_TO_LOW){
-			this.checkSupplyLimit();
-		}else if(model.checkNewTurn() && model.getWesterosPhase()==0){
-			nextWesterosPhase();
-		}else if(model.getBidding()!=null && playerChoices.getPanel()!=16 && model.getBidding().allBidsDone() && playerChoices.getWildingsCard()==null){
-			if(model.getBidding() instanceof BiddingAgainstWild ){
-				String card = model.choseWildingCard();
-				playerChoices.wilidingsCard(card);
-				sendProperty("WildingsCard",card);
-			}else{
-				sendProperty("bid done",0);	
-				if(model.biddingSort() ){//egality and player can chose
-					if( model.biddingResolution()<3){
-						playerChoices.bidding();
-					}else {
-						nextWesterosPhase();
-					}
-				}else if( model.haveThrone(getSeatNum())){
-					playerChoices.biddingEgality(model.getBidding());
-				}
-			}
-		}else{
-			//le playerChoice verifie si il doit afficher quelque chose de nouveau
-			switch(model.informations(getSeatNum())){
-			case Battle.BATTLE_CHOOSE_CARD:
-				if(model.getBattle().canPlayCard(model.getFamily(getSeatNum()))){playerChoices.showHouseCards(model.getBattle());}
-				sendProperty("FamilyCards", 0);
-				break;
-			case Battle.BATTLE_PLAY_SWORD:
-				playerChoices.swordPlay(model.getFamily(getSeatNum()));
-				sendProperty("Sword", 0);
-				break;
-			case Battle.BATTLE_WITHDRAWAL:
-				playerChoices.withdrawal(model.getFamily(getSeatNum()), model.getBattle());
-				sendProperty("withdraw", 0);
-				break;
-			case Battle.BATTLE_END:
-				model.battleEnd();
-				sendProperty("BattleEnd", 0);// VRAIMENT Necessaire ?!!
-				break;
-			}
-		}
-    	
+    	if(model.getPhase()==ModelState.WILDLINGSRESOLUTION){
+    		int choice = playerChoices.RigthClick(e.getX(),e.getY(),model.getFamily(getSeatNum()));
+    		sendProperty("wildlings_PChoice", choice, getSeatNum());
+    		wildingsActionPChoice(choice,getSeatNum());
+    		if(model.getWildingsResolution().getEnded()) {
+    			playerChoices.blank();
+    			nextWesterosPhase();
+    		}
+    	}else{
+    		// quand on click sur le playerChoice on reccupère un message de ce qui s'est passe 
+    		switch (playerChoices.RigthClick(e.getX(),e.getY(),model.getFamily(getSeatNum()))){
+    		case PlayersChoices.END_PROGRAMATION_PHASE :
+    			//Quand un joueur a donnée tous ses ordres (durant la phase1) on les envois et on l'indique au autres
+    			Family family=model.getFamily(getSeatNum());
+    			for(Territory territory : family.getTerritories() )
+    			{	
+    				if(territory.getOrder()!=null){ // condition in case territory don't have any orders, like territory without troops but with influence token
+    					int[] order =territory.getOrder().getOrderInt();
+    					sendProperty(territory.getName(),order[0],order[1]);
+    				}
+    			}
+    			family.ordersGiven();
+    			sendProperty ("endProg",getSeatNum());
+    			model.endProg();
+    			if(model.getPhase()==ModelState.CROW_CHOICE) playerChoices.crowChoice();
+    			break;
+    		case PlayersChoices.CANCEL : 
+    			if(model.getPhase()==ModelState.MUSTERING){
+    				playerChoices.getRelatedTerr().recruitmentDone();
+    				sendProperty("recruitmentDone", playerChoices.getRelatedTerr().getName());
+    				if(model.allRecruitementDone()){//on teste si tous les recrutement sont bon
+    					sendProperty("allRecruitementDone", 0);
+    					nextWesterosPhase();
+    				}
+    			}else if(model.getPhase()==ModelState.SUPPLY_TO_LOW){
+    				playerChoices.blank2();
+    			}else if(model.getPhase()==ModelState.CROW_CHOICE){
+    				model.nextPhase();
+    				sendProperty("nextPhase", 0);
+    			}else{
+    				sendProperty("cancelOrder",playerChoices.getRelatedTerr().getName());
+    				playerChoices.getRelatedTerr().rmOrder();
+    				model.nextPlayer();
+    				playerChoices.blank();
+    			}
+    			break;
+    		case PlayersChoices.ORDER_CHANGED:
+    			int[] order =playerChoices.getRelatedTerr().getOrder().getOrderInt();
+    			sendProperty(playerChoices.getRelatedTerr().getName(),order[0],order[1]);
+    			model.nextPhase();
+    			sendProperty("nextPhase", 0);
+    			break;
+    		case PlayersChoices.SEND_SHIP :
+    			model.troopSend(1,0,0,0);
+    			sendProperty("troopSend", 0);playerChoices.checkPlayerChoices();
+    			break;
+    		case PlayersChoices.SEND_FOOT :
+    			model.troopSend(0,1,0,0);
+    			sendProperty("troopSend", 1);playerChoices.checkPlayerChoices();
+    			break;
+    		case PlayersChoices.SEND_KNIGHT:
+    			model.troopSend(0,0,1,0);
+    			sendProperty("troopSend", 2);playerChoices.checkPlayerChoices();
+    			break;
+    		case PlayersChoices.SEND_SEIGE:
+    			model.troopSend(0,0,0,1);
+    			sendProperty("troopSend", 3);playerChoices.checkPlayerChoices();
+    			break;
+    		case PlayersChoices.ATT_PREPARATION_ENDED:
+    			model.attPrepEnd();
+    			sendProperty("attPreparationEnded", 0);
+    			playerChoices.blank2();
+    			break;
+    		case PlayersChoices.SEND_SHIP_FOR_ATT :
+    			model.troopSend(1,0,0,0);
+    			sendProperty("troopSend", 0);
+    			break;
+    		case PlayersChoices.SEND_FOOT_FOR_ATT :
+    			model.troopSend(0,1,0,0);
+    			sendProperty("troopSend", 1);
+    			break;
+    		case PlayersChoices.SEND_KNIGHT_FOR_ATT:
+    			model.troopSend(0,0,1,0);
+    			sendProperty("troopSend", 2);
+    			break;
+    		case PlayersChoices.SEND_SEIGE_FOR_ATT:
+    			model.troopSend(0,0,0,1);
+    			sendProperty("troopSend", 3);
+    			break;
+    		case PlayersChoices.SUPPORT_ATT :
+    			model.getBattle().addAttSupport(playerChoices.getRelatedTerr());
+    			sendProperty("attSupport",playerChoices.getRelatedTerr().getName());
+    			break;
+    		case PlayersChoices.SUPPORT_DEF :
+    			model.getBattle().addDefSupport(playerChoices.getRelatedTerr());
+    			sendProperty("defSupport",playerChoices.getRelatedTerr().getName());
+    			break;
+    		case PlayersChoices.SUPPORT_NONE:
+    			playerChoices.getRelatedTerr().getOrder().setUse(true);
+    			sendProperty("noSupport",playerChoices.getRelatedTerr().getName());
+    			break;
+    		case PlayersChoices.HOUSE_CARD_CHOSEN:
+    			if(model.getBattle().getAttFamily().getPlayer()==this.getSeatNum() && playerChoices.getIndexCard()!=-1){
+    				sendProperty("attCardPlayed",playerChoices.getIndexCard());
+    			}else if (playerChoices.getIndexCard()!=-1){
+    				sendProperty("defCardPlayed",playerChoices.getIndexCard());
+    			}
+    			break;
+    		case PlayersChoices.VALYRIAN_SWORD_USE: 
+    			model.getBattle().useSword();
+    			sendProperty("useSword", 0);
+    			break;
+    		case PlayersChoices.VALYRIAN_SWORD_NOT_USE :
+    			model.getBattle().dontUseSword();
+    			sendProperty("dontUseSword", 0);
+    			break;
+    		case PlayersChoices.CONSOLID :
+    			sendProperty("consolidation", playerChoices.getRelatedTerr().getName());
+    			model.getFamily(getSeatNum()).addInflu(playerChoices.getRelatedTerr().consolidation());
+    			model.updateLabel();
+    			playerChoices.getRelatedTerr().rmOrder();
+    			model.nextPlayer();
+    			break;
+    		case PlayersChoices.RECRUIT_FOOT :
+    			if(model.checkSupplyLimits(getSeatNum(), playerChoices.getRelatedTerr())){
+    				playerChoices.getRelatedTerr().recruit(1);
+    				sendProperty("recruitFoot", playerChoices.getRelatedTerr().getName());
+    				if(model.getPhase()==ModelState.MUSTERING && model.allRecruitementDone()){
+    					sendProperty("allRecruitementDone", 0);
+    					nextWesterosPhase();
+    				}else if(model.getPhase()!=ModelState.MUSTERING && playerChoices.getRelatedTerr().getOrder()==null ){
+    					model.nextPlayer();
+    					sendProperty("nextPlayer", 0);
+    				}
+    			}
+    			break;
+    		case PlayersChoices.RECRUIT_KNIGHT :
+    			if(model.checkRecrutment(getSeatNum(), playerChoices.getRelatedTerr())){
+    				playerChoices.getRelatedTerr().recruit(2);
+    				sendProperty("recruitKnight", playerChoices.getRelatedTerr().getName());
+    				if(model.getPhase()==ModelState.MUSTERING && model.allRecruitementDone()){
+    					sendProperty("allRecruitementDone", 0);
+    					nextWesterosPhase();
+    				}else if(model.getPhase()!=ModelState.MUSTERING && playerChoices.getRelatedTerr().getOrder()==null){
+    					model.nextPlayer();
+    					sendProperty("nextPlayer", 0);
+    				}}
+    			break;
+    		case PlayersChoices.RECRUIT_SEIGE :
+    			if(model.checkRecrutment(getSeatNum(), playerChoices.getRelatedTerr())){
+    				playerChoices.getRelatedTerr().recruit(3);
+    				sendProperty("recruitTower", playerChoices.getRelatedTerr().getName());
+    				if(model.getPhase()==ModelState.MUSTERING && model.allRecruitementDone()){
+    					sendProperty("allRecruitementDone", 0);
+    					nextWesterosPhase();
+    				}else if(model.getPhase()!=ModelState.MUSTERING && playerChoices.getRelatedTerr().getOrder()==null){
+    					model.nextPlayer();
+    					sendProperty("nextPlayer", 0);
+    				}}
+    			break;
+    		case PlayersChoices.WESTEROS_CARD_SAW: 
+    			this.westerosCardSaw();
+    			break;
+    		case PlayersChoices.BID_CHOSED :
+    			model.getFamily(getSeatNum()).setBid(playerChoices.getBid());
+    			sendProperty("bidSet", getSeatNum(),playerChoices.getBid());
+    			playerChoices.blank();
+    			break;
+    		case PlayersChoices.LETTER_A_CHOSE :
+    			model.westerosCardChoice(true);
+    			sendProperty("westerosCardChoiceSelected", 1);
+    			if(model.getWesterosPhase()==2){
+    				playerChoices.bidding();
+    				sendProperty("ClashOfKings", 0);
+    			}else if (model.getPhase()!=ModelState.SUPPLY_TO_LOW){
+    				nextWesterosPhase();
+    			}
+    			break;
+    		case PlayersChoices.LETTER_B_CHOSE :
+    			sendProperty("westerosCardChoiceSelected", 0);
+    			model.westerosCardChoice(false);
+    			if(model.getWesterosPhase()!=1){
+    				nextWesterosPhase();
+    			}
+    			break;
+    		case PlayersChoices.LETTER_C_CHOSE :
+    			if(model.getWesterosPhase()!=3){
+    				model.wildingsGrow();
+    				sendProperty("wildingsGrow", 0);
+    			}
+    			nextWesterosPhase();
+    			break;
+    		case PlayersChoices.TRACK_SORTED:
+    			//on envoi l'ordre des joueurs
+    			for(Family fam : model.getBidding().getTrack()){
+    				sendProperty("bid track", fam.getPlayer());
+    			}
+    			sendProperty("bid resolution", 0);
+    			if(model.getBidding() instanceof BiddingAgainstWild){
+    				wilidingBattleResolution();
+    			}else{
+    				if( model.biddingResolution()<3){
+    					playerChoices.bidding();
+    				}else{
+    					nextWesterosPhase();
+    				}
+    			}
+    			break;
+    		case PlayersChoices.WILDINGS_CARD_SAW:
+    			model.getFamily(getSeatNum()).carteVu(); 
+    			sendProperty("cardSaw", getSeatNum()); 
+    			playerChoices.blank2();
+    			//verifie si tout le monde a executé
+    			if(model.westerosCardcheck()){
+    				sendProperty("wilidingBattle", 0);
+    				if(model.biddingSort() ){
+    					wilidingBattleResolution();
+    				}else if( model.haveThrone(getSeatNum())){
+    					playerChoices.biddingEgality(model.getBidding());
+    				}
+    			}
+    			break;
+    		case PlayersChoices.REMOVE_SHIP:
+    			playerChoices.getRelatedTerr().removeTroop(0);
+    			sendProperty("remove_ship", playerChoices.getRelatedTerr().getName());
+    			break;
+    		case PlayersChoices.REMOVE_FOOT:
+    			playerChoices.getRelatedTerr().removeTroop(1);
+    			sendProperty("remove_foot", playerChoices.getRelatedTerr().getName());
+    			break;
+    		case PlayersChoices.REMOVE_KNIGHT:
+    			playerChoices.getRelatedTerr().removeTroop(2);
+    			sendProperty("remove_knight", playerChoices.getRelatedTerr().getName());
+    			break;
+    		case PlayersChoices.REMOVE_SIEGE:
+    			playerChoices.getRelatedTerr().removeTroop(3);
+    			sendProperty("remove_siege", playerChoices.getRelatedTerr().getName());
+    			break;
+    		case PlayersChoices.USE_INF_TOKEN:
+    			this.useInfluToken(playerChoices.getRelatedTerr());
+    			sendProperty("use_inf_token", playerChoices.getRelatedTerr().getName());
+    			playerChoices.blank();
+    			break;
+    		case PlayersChoices.DONT_USE_INF_TOKEN:
+    			this.dontUseInfluToken(playerChoices.getRelatedTerr());
+    			sendProperty("dont_use_inf_token", playerChoices.getRelatedTerr().getName());
+    			playerChoices.blank();
+    			break;
+    		case PlayersChoices.PUT_CARD_BOTTOM:
+    			sendProperty("SendWildingsDeck",0);
+    			for (String card : model.putCardOnBottom(playerChoices.getWildingsCard())){
+    				sendProperty("AddWildingsCard", card);
+    			}
+    			model.goToExecutionPhase();
+    			sendProperty("goToExecutionPhase",0);
+    			break;
+    		case PlayersChoices.PUT_CARD_TOP:
+    			sendProperty("SendWildingsDeck",0);
+    			for (String card : model.putCardOnTop(playerChoices.getWildingsCard())){
+    				sendProperty("AddWildingsCard", card);
+    			}
+    			model.goToExecutionPhase();
+    			sendProperty("goToExecutionPhase",0);
+    			break;
+    		}
+    		if(model.getPhase()==ModelState.MUSTERING){
+    			//we do nothing
+    		}else if (model.getPhase()==ModelState.SUPPLY_TO_LOW){
+    			this.checkSupplyLimit();
+    		}else if(model.checkNewTurn() && model.getWesterosPhase()==0){
+    			nextWesterosPhase();
+    		}else if(model.getBidding()!=null && playerChoices.getPanel()!=16 && model.getBidding().allBidsDone() && playerChoices.getWildingsCard()==null){
+    			if(model.getBidding() instanceof BiddingAgainstWild ){
+    				String card = model.choseWildingCard();
+    				playerChoices.wilidingsCard(card);
+    				sendProperty("WildingsCard",card);
+    			}else{
+    				sendProperty("bid done",0);	
+    				if(model.biddingSort() ){//egality and player can chose
+    					if( model.biddingResolution()<3){
+    						playerChoices.bidding();
+    					}else {
+    						nextWesterosPhase();
+    					}
+    				}else if( model.haveThrone(getSeatNum())){
+    					playerChoices.biddingEgality(model.getBidding());
+    				}
+    			}
+    		}else{
+    			//le playerChoice verifie si il doit afficher quelque chose de nouveau
+    			switch(model.informations(getSeatNum())){
+    			case Battle.BATTLE_CHOOSE_CARD:
+    				if(model.getBattle().canPlayCard(model.getFamily(getSeatNum()))){playerChoices.showHouseCards(model.getBattle());}
+    				sendProperty("FamilyCards", 0);
+    				break;
+    			case Battle.BATTLE_PLAY_SWORD:
+    				playerChoices.swordPlay(model.getFamily(getSeatNum()));
+    				sendProperty("Sword", 0);
+    				break;
+    			case Battle.BATTLE_WITHDRAWAL:
+    				playerChoices.withdrawal(model.getFamily(getSeatNum()), model.getBattle());
+    				sendProperty("withdraw", 0);
+    				break;
+    			case Battle.BATTLE_END:
+    				model.battleEnd();
+    				sendProperty("BattleEnd", 0);// VRAIMENT Necessaire ?!!
+    				break;
+    			}
+    		}
+    	}
     }
     
-    private void westerosCardSaw(){
+   
+
+	private void westerosCardSaw(){
     	if(model.getCurrentCard().equals("Summer")){
 			model.wildingsGrow();
 		}else if(model.getCurrentCard().equals("Supply")){
@@ -715,6 +728,8 @@ public class GameOfThronesController extends JogreController {
     public void receiveProperty(String key, int type, int bonus) {
     	if(key.equals("bidSet")){
     		model.getFamily(type).setBid(bonus);
+    	}else if (key.equals("wildlings_PChoice")){
+    		wildingsActionPChoice(type, bonus);
     	}else{// peut-etre mettre cette methode dans Order
     		boolean star = (bonus==1);
     		switch (type) {
@@ -817,7 +832,7 @@ public class GameOfThronesController extends JogreController {
     		model.endProg();
     		if(model.getPhase()==ModelState.CROW_CHOICE) playerChoices.crowChoice();
         }else{ // Wildlings card resolution
-        	wildlingsAction(model.getBoardModel().getTerritory(key), value);
+        	callWildlingsAction(model.getBoardModel().getTerritory(key), value);
         }
     	gameOfThronesComponent.repaint(); 
     	playerChoices.repaint();  
@@ -906,16 +921,27 @@ public class GameOfThronesController extends JogreController {
 			if(model.getPhase()==ModelState.PHASE_WESTEROS){
 				nextWesterosPhase();
 			}
-			//AUTRES CAS OU ON MET A JOUR LE ravitaillement ??
+			//AUTRES CAS OU ON MET A JOUR LE ravitaillement ?? (carte wildlings !!!)
 		}
     }
     
     /*This method is call when a player click on a territory during a wildlings resolution phase*/
     private void wildlingsAction(Territory territory, int player){
-    	model.getWildingsResolution().action(territory, player);
+    	int res =model.getWildingsResolution().actionOnBoard(territory, player);
+    	playerChoices.setPanel(res,model.getWildingsResolution());
+    	model.updateLabel();
+    }
+    /*This method is call when reciving a property after a player click on a territory during a wildlings resolution phase*/
+    private void callWildlingsAction(Territory territory, int player){
+    	model.getWildingsResolution().actionOnBoard(territory, player);
+    	model.updateLabel();
     }
     
-    
+    /*This method is call when a player click on a territory during a wildlings resolution phase*/
+    private void wildingsActionPChoice(int choice, int player) {
+    	model.getWildingsResolution().actionOnPChoice(choice, player);
+		model.updateLabel();
+	}
     
  // Check to see if the game is over or not.
     private void checkGameOver () {

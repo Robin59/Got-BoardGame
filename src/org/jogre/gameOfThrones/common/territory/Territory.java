@@ -78,6 +78,10 @@ public abstract class Territory {
 		}else{owner=null;} // verifier que ça ne pose pas de problemes
 	}
 	
+	/**
+	 * Tell if there is a castle on this land, and if it's a simple castle or a stronghold
+	 * @return 0 if there is no castle/stronghold, 1 for castle, 2 for stronghold 
+	 */
 	public int getCastle(){
 		return castle;
 	}

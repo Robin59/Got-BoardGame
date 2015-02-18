@@ -59,6 +59,24 @@ public abstract class WildlingsResolution {
 	 * This method is call when a player click on the board to resolve the wildlings attack effects
 	 * @param territory the territory that was clicked 
 	 * @param player the player who clicked
+	 * @return the state of player choice after the call of the method
 	 */
-	public abstract void action(Territory territory, int player);
+	public abstract int actionOnBoard(Territory territory, int player);
+	/**
+	 * This method is call when a player click on his playerChoice to resolve the wildlings attack effects
+	 * @param choice the choice made by the player on his playerChoice object
+	 * @param player the player who clicked
+	 * @return the state of player choice after the call of the method
+	 */
+	public abstract void actionOnPChoice(int choice, int player);
+	
+	/**
+	 * This method return a territory to the playerChoice, 
+	 * when this class need to show information relative to a specific territory 
+	 * @param family the family of the player related to a playerChoice 
+	 * @return
+	 */
+	public Territory getTerritory(Family family){
+		return null;
+	}
 }

@@ -53,6 +53,7 @@ public class Deck {
 			deck.add("SkinchangerScout");
 			deck.add("SilenceAtTheWall");
 			deck.add("CrowKillers");
+			deck.add("HordeDescends");
 			//deck.add("RattleshirtRaiders");
 			break;
 		}

@@ -45,6 +45,7 @@ import org.jogre.gameOfThrones.common.territory.Water;
 import state.*;
 import sun.org.mozilla.javascript.ObjToIntMap.Iterator;
 import wildlingsResolution.CrowKillers;
+import wildlingsResolution.HordeDescends;
 import wildlingsResolution.WildlingsResolution;
 
 /**
@@ -1211,6 +1212,9 @@ public class GameOfThronesModel extends JogreModel {
 			}else if(card.equals("CrowKillers")) {
 				setPhase(ModelState.WILDLINGSRESOLUTION);
 				wildResolution = new CrowKillers(true, familiesBidOrder[0], this);
+			}else if(card.equals("HordeDescends")) {
+				setPhase(ModelState.WILDLINGSRESOLUTION);
+				wildResolution = new HordeDescends(true, familiesBidOrder[0], this);
 			}
 			wildings=0;
 		}else{
@@ -1224,6 +1228,9 @@ public class GameOfThronesModel extends JogreModel {
 			}else if(card.equals("CrowKillers")) {
 				setPhase(ModelState.WILDLINGSRESOLUTION);
 				wildResolution = new CrowKillers(false, familiesBidOrder[numberPlayers-1], this);
+			}else if(card.equals("HordeDescends")) {
+				setPhase(ModelState.WILDLINGSRESOLUTION);
+				wildResolution = new HordeDescends(false, familiesBidOrder[numberPlayers-1], this);
 			}
 			/*if(card.equals("Massing on the Milkwater")){
 				
