@@ -21,7 +21,6 @@ package org.jogre.gameOfThrones.common;
 
 import graphisme.PlayersChoices;
 
-import java.awt.Image;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -49,6 +48,7 @@ import sun.org.mozilla.javascript.ObjToIntMap.Iterator;
 import wildlingsResolution.CrowKillers;
 import wildlingsResolution.HordeDescends;
 import wildlingsResolution.MammothRiders;
+import wildlingsResolution.PreemptiveRaid;
 import wildlingsResolution.WildlingsResolution;
 
 /**
@@ -1221,7 +1221,9 @@ public class GameOfThronesModel extends JogreModel {
 			}else if(card.equals("MammothRiders")) {
 				setPhase(ModelState.WILDLINGSRESOLUTION);
 				wildResolution = new MammothRiders(true, familiesBidOrder[0], this, plChoice);
-			}
+			}/*else if(card.equals("PreemptiveRaid")){
+			
+			}*/
 			wildings=0;
 		}else{
 			System.out.println("Victoire sauvages");
@@ -1240,6 +1242,9 @@ public class GameOfThronesModel extends JogreModel {
 			}else if(card.equals("MammothRiders")) {
 				setPhase(ModelState.WILDLINGSRESOLUTION);
 				wildResolution = new MammothRiders(false, familiesBidOrder[numberPlayers-1], this,plChoice);
+			}else if(card.equals("PreemptiveRaid")) {
+				setPhase(ModelState.WILDLINGSRESOLUTION);
+				wildResolution = new PreemptiveRaid(false, familiesBidOrder[numberPlayers-1], this,plChoice);
 			}
 			/*if(card.equals("Massing on the Milkwater")){
 				
@@ -1261,5 +1266,19 @@ public class GameOfThronesModel extends JogreModel {
 	 */
 	public WildlingsResolution getWildingsResolution(){
 		return wildResolution;
+	}
+	
+	/**
+	 * Return the tab with throne position
+	 * @return the tab with throne position
+	 */
+	public int[] getThrone(){
+		return throne;
+	}
+	public int[] getCourt(){
+		return court;
+	}
+	public int[] getFiefdoms(){
+		return fiefdoms;
 	}
 }

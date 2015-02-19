@@ -288,6 +288,15 @@ public class PlayersChoices extends JogreComponent {
 				return LETTER_C_CHOSE;
 			}
 			break;
+		case DISPLAY_LETTERS_AB :
+			if(x>100 && x<170){
+				blank();
+				return LETTER_A_CHOSE;
+			}else if(x>190 && x<260){
+				blank();
+				return LETTER_B_CHOSE;
+			}
+			break;
 		case DISPLAY_BID_SORT:
 			if(x>170 && x<230 && y>180){
 				selectedBid=-1;
@@ -419,6 +428,10 @@ public class PlayersChoices extends JogreComponent {
 			g.drawImage(letters[0],100,100,null);
 			g.drawImage(letters[1],190,100,null);
 			g.drawImage(letters[2],280,100,null);
+			break;
+		case DISPLAY_LETTERS_AB:
+			g.drawImage(letters[0],100,100,null);
+			g.drawImage(letters[1],190,100,null);
 			break;
 		case DISPLAY_BID_SORT:
 			drawBiddingTable(g);
@@ -891,6 +904,7 @@ public class PlayersChoices extends JogreComponent {
 	private static final int DISPLAY_CHANGE_ORDER=21;
 	private static final int DISPLAY_RAVEN_SEE_WILDINGS=22;
 	public static final int DISPLAY_DISCARD_HOUSE_CARDS=23;
+	public static final int DISPLAY_LETTERS_AB=24;
 }
 
 
