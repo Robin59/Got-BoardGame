@@ -812,8 +812,10 @@ public class GameOfThronesController extends JogreController {
 			}else if( model.biddingResolution()<3){
 				playerChoices.bidding();
 			}
-		}else if (key.equals("WesterosCardChoice") && model.canChose(getSeatNum())){
-			playerChoices.westerosCardChoice();
+		}else if (key.equals("WesterosCardChoice")){
+			if( model.canChose(getSeatNum())){
+				playerChoices.westerosCardChoice();
+			}
 		}else if (key.equals("westerosCardChoiceSelected")){
 			model.westerosCardChoice(value==1);
 		}else if(key.equals("wildingsGrow")){
@@ -854,7 +856,7 @@ public class GameOfThronesController extends JogreController {
     
     /** this method is call for the resolution of the wilding attack, after the bid, it applies the effects of the card and go to next proper phase (picking a new westeros card or going to the execution's phase) */
 	private void wilidingBattleResolution() {
-		model.wildingsResolution(playerChoices.getWildingsCard());
+		model.wildingsResolution(playerChoices.getWildingsCard(), playerChoices);
 		
 		if(model.getPhase()!=ModelState.WILDLINGSRESOLUTION){//case when the wildings resolution is directly solve
 			playerChoices.blank();

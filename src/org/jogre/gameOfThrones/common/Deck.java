@@ -54,6 +54,7 @@ public class Deck {
 			deck.add("SilenceAtTheWall");
 			deck.add("CrowKillers");
 			deck.add("HordeDescends");
+			deck.add("MammothRiders");
 			//deck.add("RattleshirtRaiders");
 			break;
 		}

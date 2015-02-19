@@ -77,6 +77,7 @@ public abstract class WildlingsResolution {
 	 * @return
 	 */
 	public Territory getTerritory(Family family){
+		System.out.println("Be carreful, you're using getTerritory but you didn't surchage the method, getTerritory return null");
 		return null;
 	}
 }

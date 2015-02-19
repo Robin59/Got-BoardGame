@@ -336,6 +336,18 @@ public class PlayersChoices extends JogreComponent {
 				return PUT_CARD_BOTTOM;
 			}
 			break;
+		case DISPLAY_DISCARD_HOUSE_CARDS:
+			if(x<60 && indexHouseCard>0){
+				indexHouseCard--;
+				repaint();
+			}else if(x>510 && indexHouseCard<family.getCombatantCards().size()-1){
+				indexHouseCard++;
+				repaint();
+			}else if (x>60 && x<510){
+				choseDisplayCard(x, family);
+				return HOUSE_CARD_CHOSEN;
+			}
+			break;
 		}
 		return 0;
 	}
@@ -434,6 +446,10 @@ public class PlayersChoices extends JogreComponent {
 			g.drawImage(images.getTopImage(), 50, 125,null);
 			g.drawImage(images.getBottomImage(), 450, 125,null);
 			break;
+		case DISPLAY_DISCARD_HOUSE_CARDS :
+			label.setText("");
+			drawDiscardHouseCards(g);
+			break;
 		}
 	}
 
@@ -491,6 +507,22 @@ public class PlayersChoices extends JogreComponent {
 			i++;
 		}
 	}
+	/**
+	 * Draw the discard house cards of the player, plus two arrow to navigate between them
+	 * @param g
+	 */
+	private void drawDiscardHouseCards(Graphics g){
+		g.drawImage(leftArrowImage, 1,100, null);
+		g.drawImage(rigthArrowImage, 510,100, null);
+		int i=0;
+		List<CombatantCard> cards =family.getDiscardCombatantCards();
+		for (CombatantCard card : cards){
+			if(i>=indexHouseCard && i<=indexHouseCard+2){
+				g.drawImage(images.getCardImage(card.getName()), (60+(i-indexHouseCard)*150),0, null);
+			}
+			i++;
+		}
+	}
 	
 	/**Draw for the player with the throne, the different bid if there is an equality*/
 	private void drawBiddingTable(Graphics g){
@@ -525,6 +557,18 @@ public class PlayersChoices extends JogreComponent {
 			selectedHouseCard =((x-60)/150)+indexHouseCard;
 			CombatantCard card =family.getCombatantCards().get(selectedHouseCard);
 			battle.playCard(card, family);
+			panel=DISPLAY_BLANK;
+			this.repaint();
+		}
+	}
+	/**
+	 * This method is call when a player chose a display House card
+	 * @param x the x coordinate of the mouse 
+	 * @param family the family that have chose a House card
+	 */
+	private void choseDisplayCard(int x, Family family){
+		if (((x-60)/150)+indexHouseCard<family.getDiscardCombatantCards().size()){
+			selectedHouseCard =((x-60)/150)+indexHouseCard;
 			panel=DISPLAY_BLANK;
 			this.repaint();
 		}
@@ -814,6 +858,14 @@ public class PlayersChoices extends JogreComponent {
 		shipRecrutement=shipSelected;
 	}
 	
+	/**
+	 * Return the family play by the player who use this playerChoice
+	 * @return the family play by the player who use this playerChoice
+	 */
+	public Family getFamily(){
+		return this.family;
+	}
+	
 	// This constant are use to know the state of this component 
 	private static final int DISPLAY_BLANK = 0;
 	private static final int DISPLAY_ORDERS = 1;
@@ -838,6 +890,7 @@ public class PlayersChoices extends JogreComponent {
 	private static final int DISPLAY_CROW_CHOICE=20;
 	private static final int DISPLAY_CHANGE_ORDER=21;
 	private static final int DISPLAY_RAVEN_SEE_WILDINGS=22;
+	public static final int DISPLAY_DISCARD_HOUSE_CARDS=23;
 }
 
 

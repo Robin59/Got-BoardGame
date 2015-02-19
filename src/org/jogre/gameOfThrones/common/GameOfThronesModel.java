@@ -19,6 +19,8 @@
  */
 package org.jogre.gameOfThrones.common;
 
+import graphisme.PlayersChoices;
+
 import java.awt.Image;
 import java.util.List;
 import java.util.ListIterator;
@@ -46,6 +48,7 @@ import state.*;
 import sun.org.mozilla.javascript.ObjToIntMap.Iterator;
 import wildlingsResolution.CrowKillers;
 import wildlingsResolution.HordeDescends;
+import wildlingsResolution.MammothRiders;
 import wildlingsResolution.WildlingsResolution;
 
 /**
@@ -1200,7 +1203,7 @@ public class GameOfThronesModel extends JogreModel {
 	 * This method must be call for resolve a wildings attack after all the players did their bids and the owner of the throne sort them
 	 * @param card the name of the wildings card
 	 */
-	public void wildingsResolution(String card){
+	public void wildingsResolution(String card, PlayersChoices plChoice){
 		Family[] familiesBidOrder=getBidding().getTrack();
 		
 
@@ -1215,6 +1218,9 @@ public class GameOfThronesModel extends JogreModel {
 			}else if(card.equals("HordeDescends")) {
 				setPhase(ModelState.WILDLINGSRESOLUTION);
 				wildResolution = new HordeDescends(true, familiesBidOrder[0], this);
+			}else if(card.equals("MammothRiders")) {
+				setPhase(ModelState.WILDLINGSRESOLUTION);
+				wildResolution = new MammothRiders(true, familiesBidOrder[0], this, plChoice);
 			}
 			wildings=0;
 		}else{
@@ -1231,6 +1237,9 @@ public class GameOfThronesModel extends JogreModel {
 			}else if(card.equals("HordeDescends")) {
 				setPhase(ModelState.WILDLINGSRESOLUTION);
 				wildResolution = new HordeDescends(false, familiesBidOrder[numberPlayers-1], this);
+			}else if(card.equals("MammothRiders")) {
+				setPhase(ModelState.WILDLINGSRESOLUTION);
+				wildResolution = new MammothRiders(false, familiesBidOrder[numberPlayers-1], this,plChoice);
 			}
 			/*if(card.equals("Massing on the Milkwater")){
 				

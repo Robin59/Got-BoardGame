@@ -228,11 +228,22 @@ public class Family {
 		}
 		combatantsUse=new LinkedList<CombatantCard>();
 	}
-
+	/**
+	 * Return the combatant cards(house card) available  
+	 * @return the combatant cards available
+	 */
 	public List<CombatantCard> getCombatantCards() {
 		return combatantsAvailable;
 	}
 
+	/**
+	 * Return the discard combatant cards 
+	 * @return the discard combatant cards 
+	 */
+	public List<CombatantCard> getDiscardCombatantCards() {
+		return combatantsUse;
+	}
+	
 	public boolean canUseSword() {
 		return fiefdomsTrack==1 && !swordUsed;
 	}
