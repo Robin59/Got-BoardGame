@@ -152,6 +152,7 @@ public class  ImageSelector{
 		wildingsCards.put("WildingsBack", GameImages.getImage(209));
 		wildingsCards.put("SilenceAtTheWall", GameImages.getImage(188));
 		wildingsCards.put("SkinchangerScout", GameImages.getImage(189));
+		wildingsCards.put("PreemptiveRaid", GameImages.getImage(191));
 		wildingsCards.put("MammothRiders", GameImages.getImage(193));
 		wildingsCards.put("HordeDescends", GameImages.getImage(195));
 		wildingsCards.put("CrowKillers", GameImages.getImage(196));
