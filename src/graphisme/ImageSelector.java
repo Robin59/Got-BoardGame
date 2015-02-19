@@ -152,6 +152,7 @@ public class  ImageSelector{
 		wildingsCards.put("WildingsBack", GameImages.getImage(209));
 		wildingsCards.put("SilenceAtTheWall", GameImages.getImage(188));
 		wildingsCards.put("SkinchangerScout", GameImages.getImage(189));
+		wildingsCards.put("MammothRiders", GameImages.getImage(193));
 		wildingsCards.put("HordeDescends", GameImages.getImage(195));
 		wildingsCards.put("CrowKillers", GameImages.getImage(196));
 		
@@ -243,7 +244,13 @@ public class  ImageSelector{
 	 * @return
 	 */
 	public Image getNumber(int i){
-		return numberImages[i];
+		try {
+			return numberImages[i];
+			}
+		catch (IndexOutOfBoundsException e) {
+			System.out.println(e.getCause());
+			return numberImages[0];
+		}
 	}
 	/**
 	 * give a small image of the given number
