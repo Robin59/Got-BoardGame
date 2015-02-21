@@ -1,5 +1,7 @@
 package wildlingsResolution;
 
+import java.awt.Choice;
+
 import graphisme.PlayersChoices;
 
 import org.jogre.gameOfThrones.common.Family;
@@ -8,13 +10,16 @@ import org.jogre.gameOfThrones.common.territory.Territory;
 
 public class PreemptiveRaid extends WildlingsResolution {
 	/*Tell the choice made by the looser player*/
-	private char choice;
-	private int value;
+	private boolean chooseA;
+	private int unitsToRemove;
+	PlayersChoices plChoice;
+	private Territory territory;
 	
 	public PreemptiveRaid(boolean victory, Family family,GameOfThronesModel model,PlayersChoices playerChoices) {
 		super(victory, family, model);
 			//in case the players loose
-			choice='0';
+			plChoice=playerChoices;
+			chooseA=false;
 			if(playerChoices.getFamily()==family){
 				playerChoices.setPanel(PlayersChoices.DISPLAY_LETTERS_AB, this);
 			}
@@ -28,7 +33,10 @@ public class PreemptiveRaid extends WildlingsResolution {
 
 	@Override
 	public int actionOnBoard(Territory territory, int player) {
-		//if(choice=='a'&&){}
+		if(chooseA && territory.getTroup()!=null && territory.getFamily()==family){
+			this.territory=territory;
+			return PlayersChoices.DISPLAY_TROOP_DESTRUCTION;
+		}
 		return 0;
 	}
 
@@ -36,16 +44,45 @@ public class PreemptiveRaid extends WildlingsResolution {
 	public void actionOnPChoice(int choice, int player) {
 		switch(choice){
 		case PlayersChoices.LETTER_A_CHOSE :
+			chooseA=true;
+			unitsToRemove=2;
+			plChoice.blank();
 			break;
 		case PlayersChoices.LETTER_B_CHOSE :
 			reduceHighestTrack();
+			plChoice.blank();
+			end();
+			break;
+		case PlayersChoices.REMOVE_SHIP :
+			territory.getTroup().rmToop(1, 0, 0, 0);
+			unitsToRemove--;
+			break;
+		case PlayersChoices.REMOVE_FOOT :
+			territory.getTroup().rmToop(0, 1, 0, 0);
+			unitsToRemove--;
+			break;
+		case PlayersChoices.REMOVE_KNIGHT :
+			territory.getTroup().rmToop(0, 0, 1, 0);
+			unitsToRemove--;
+			break;
+		case PlayersChoices.REMOVE_SIEGE :
+			territory.getTroup().rmToop(0, 0, 0, 1);
+			unitsToRemove--;
 			break;
 		}
+		checkFinish();
 	}
 	
 	/*Check if the players still have to do some actions for the resolution*/
 	private void checkFinish(){
-		if(choice!='0') end();
+		if(chooseA && unitsToRemove<1){
+			end();
+		}
+	}
+	
+	@Override
+	public Territory getTerritory(Family family){
+		return territory;
 	}
 	
 	/*reduce the loosing player from two positions on is highest track*/
@@ -70,7 +107,6 @@ public class PreemptiveRaid extends WildlingsResolution {
 				highTrack[position+2]=family.getPlayer();
 			}else highTrack[position+1]=family.getPlayer();
 		}
-		end();
 	}
 
 }
