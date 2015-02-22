@@ -856,19 +856,25 @@ public class GameOfThronesController extends JogreController {
     
     /** this method is call for the resolution of the wilding attack, after the bid, it applies the effects of the card and go to next proper phase (picking a new westeros card or going to the execution's phase) */
 	private void wilidingBattleResolution() {
-		model.wildingsResolution(playerChoices.getWildingsCard(), playerChoices);
-		
-		if(model.getPhase()!=ModelState.WILDLINGSRESOLUTION){//case when the wildings resolution is directly solve
-			playerChoices.blank();
-			if(model.getWesterosPhase()==3){
-				model.nextPhase();
-			}else if(getSeatNum()==0){ /*case when the wildings where attacking beacause of the 12 power*/
-				String card = model.choseCard();
-				playerChoices.westerosCard(card);
-				sendProperty("WesterosCard",card);
+		if(playerChoices.getWildingsCard().equals("PreemptiveRaid") && ((BiddingAgainstWild)model.getBidding()).victory()){
+			Family winFamily=model.getBidding().getTrack()[0];
+			model.preemptiveRaid(winFamily);
+			if(getSeatNum()!=winFamily.getPlayer()){
+				playerChoices.bidding();
+			}
+		}else{
+			model.wildingsResolution(playerChoices.getWildingsCard(), playerChoices);
+			if(model.getPhase()!=ModelState.WILDLINGSRESOLUTION){//case when the wildings resolution is directly solve
+				playerChoices.blank();
+				if(model.getWesterosPhase()==3){
+					model.nextPhase();
+				}else if(getSeatNum()==0){ /*case when the wildings where attacking beacause of the 12 power*/
+					String card = model.choseCard();
+					playerChoices.westerosCard(card);
+					sendProperty("WesterosCard",card);
+				}
 			}
 		}
-		
 	}		
 	
 	/** This method is use to put a new ship on the board 

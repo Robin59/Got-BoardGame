@@ -875,7 +875,27 @@ public class GameOfThronesModel extends JogreModel {
 		bidding=new BiddingAgainstWild(families, wildings);
 		updateLabel();
 	}
-	
+	/**
+	 * This method is call after victory against a preemptive raid 
+	 * @param family the family who don't have to do the bidding again because it win in the last
+	 */
+	public void preemptiveRaid(Family family){
+		wildings = 6;
+		int i=0;
+		Family[] famTab=new Family[families.length-1];
+		for(Family fam: families){
+			fam.resetBid();
+			if(fam!=family){
+				famTab[i]=fam;
+				i++;
+			}
+		}
+		bidding=new BiddingAgainstWild(famTab, wildings);
+		updateLabel();
+	}
+	public void preemptiveRaid(){
+		this.preemptiveRaid(bidding.getTrack()[0]);
+	}
 	/**
 	 * Be carreful this method have sides effects
 	 * @return A CHANGER !!!
@@ -1220,10 +1240,8 @@ public class GameOfThronesModel extends JogreModel {
 				wildResolution = new HordeDescends(true, familiesBidOrder[0], this);
 			}else if(card.equals("MammothRiders")) {
 				setPhase(ModelState.WILDLINGSRESOLUTION);
-				wildResolution = new MammothRiders(true, familiesBidOrder[0], this, plChoice);
-			}/*else if(card.equals("PreemptiveRaid")){
-			
-			}*/
+				wildResolution = new MammothRiders(true, familiesBidOrder[0],this,familiesBidOrder, plChoice);
+			}/*else */
 			wildings=0;
 		}else{
 			System.out.println("Victoire sauvages");
@@ -1241,7 +1259,7 @@ public class GameOfThronesModel extends JogreModel {
 				wildResolution = new HordeDescends(false, familiesBidOrder[numberPlayers-1], this);
 			}else if(card.equals("MammothRiders")) {
 				setPhase(ModelState.WILDLINGSRESOLUTION);
-				wildResolution = new MammothRiders(false, familiesBidOrder[numberPlayers-1], this,plChoice);
+				wildResolution = new MammothRiders(false, familiesBidOrder[numberPlayers-1], this,familiesBidOrder,plChoice);
 			}else if(card.equals("PreemptiveRaid")) {
 				setPhase(ModelState.WILDLINGSRESOLUTION);
 				wildResolution = new PreemptiveRaid(false, familiesBidOrder[numberPlayers-1], this,plChoice);
