@@ -251,8 +251,16 @@ public class Family {
 		swordUsed=true;
 	}
 
+	/**
+	 * Set the supply track of this family, the value of supply will always be between 0 and 6, 
+	 * if it's under 0 the value will automatically be raise to 0,
+	 * and if it's above 6 the value will be brink back to 6  
+	 * @param supply the new value of the supply (a value between 0 and 6)
+	 */
 	public void setSupply(int supply) {
-		this.supply=supply;
+		if(supply>=0 && supply<7) this.supply=supply;
+		else if(supply<0)this.supply=0;
+		else this.supply=6;
 	}
 	public int getSupply(){
 		return supply;
