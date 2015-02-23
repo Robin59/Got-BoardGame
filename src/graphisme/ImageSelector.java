@@ -46,6 +46,10 @@ public class  ImageSelector{
 	private Image bottomImage;
 	private Image topImage;
 	private Image selectShip;
+	public Image raven;
+	public Image throne;
+	public Image swordImage;
+	
 	
 	private ImageSelector (){
 		//images des troupes
@@ -154,6 +158,7 @@ public class  ImageSelector{
 		wildingsCards.put("SkinchangerScout", GameImages.getImage(189));
 		wildingsCards.put("PreemptiveRaid", GameImages.getImage(191));
 		wildingsCards.put("MammothRiders", GameImages.getImage(193));
+		wildingsCards.put("KingBeyondWall", GameImages.getImage(194));
 		wildingsCards.put("HordeDescends", GameImages.getImage(195));
 		wildingsCards.put("CrowKillers", GameImages.getImage(196));
 		
@@ -176,6 +181,9 @@ public class  ImageSelector{
 		//other
 		bottomImage=GameImages.getImage(210);
 		topImage=GameImages.getImage(211);
+		throne=GameImages.getImage(213);
+		raven=GameImages.getImage(214);
+		swordImage =GameImages.getImage(108);
 	}
 	
 	/**

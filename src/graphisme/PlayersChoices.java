@@ -50,7 +50,6 @@ public class PlayersChoices extends JogreComponent {
 	/*Said the index of the first house card show on the left during the battle*/
 	private int indexHouseCard;
 	private Family family;
-	private Image swordImage;
 	private Image swordFlipImage;
 	private Image recruitImage;
 	private Image consoImage;
@@ -109,6 +108,9 @@ public class PlayersChoices extends JogreComponent {
 	public static final int ORDER_CHANGED=36;
 	public static final int PUT_CARD_TOP=39;
 	public static final int PUT_CARD_BOTTOM=38;
+	public static final int CHOOSE_THRONE=39;
+	public static final int CHOOSE_BLADE=40;
+	public static final int CHOOSE_RAVEN=41;
 	
 	public PlayersChoices (JLabel label, GameOfThronesModel model){
 		this.label=label;
@@ -130,7 +132,6 @@ public class PlayersChoices extends JogreComponent {
 		rigthArrowImage=GameImages.getImage(135);		
 		noOneImage= GameImages.getImage(7);
 		images= ImageSelector.IMAGESELECTOR;
-		swordImage =GameImages.getImage(108);
 		swordFlipImage =GameImages.getImage(109);
 		recruitImage= GameImages.getImage(110);
 		consoImage= GameImages.getImage(3);
@@ -357,6 +358,15 @@ public class PlayersChoices extends JogreComponent {
 				return HOUSE_CARD_CHOSEN;
 			}
 			break;
+		case DISPLAY_TRACKS:
+			if(x<220){
+				return CHOOSE_THRONE;
+			}else if(x>220 && x<380){
+				return CHOOSE_BLADE;
+			}else if(x>380){
+				return CHOOSE_RAVEN; 
+			}
+			break;
 		}
 		return 0;
 	}
@@ -405,7 +415,7 @@ public class PlayersChoices extends JogreComponent {
 			drawHouseCards(g);
 			break;
 		case DISPLAY_VALYRIAN_SWORD:
-			g.drawImage(swordImage, 50, 5, null);
+			g.drawImage(images.swordImage, 50, 5, null);
 			g.drawImage(swordFlipImage, 200, 5, null);
 			break;
 		case DISPLAY_RECRUIT_OR_CONSOLID:
@@ -462,6 +472,11 @@ public class PlayersChoices extends JogreComponent {
 		case DISPLAY_DISCARD_HOUSE_CARDS :
 			label.setText("");
 			drawDiscardHouseCards(g);
+			break;
+		case DISPLAY_TRACKS:
+			g.drawImage(images.throne, 10, 10,null);
+			g.drawImage(images.swordImage, 220, 10,null);
+			g.drawImage(images.raven, 380, 10,null);
 			break;
 		}
 	}
@@ -905,6 +920,7 @@ public class PlayersChoices extends JogreComponent {
 	private static final int DISPLAY_RAVEN_SEE_WILDINGS=22;
 	public static final int DISPLAY_DISCARD_HOUSE_CARDS=23;
 	public static final int DISPLAY_LETTERS_AB=24;
+	public static final int DISPLAY_TRACKS=25;
 }
 
 
