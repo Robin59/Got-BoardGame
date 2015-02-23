@@ -8,18 +8,18 @@ import org.jogre.gameOfThrones.common.territory.Territory;
 public class CrowKillers extends WildlingsResolution {
 	/*The number of knight players have to transform on the board, ex: numberKnight[0]=1 means that the baratheon have to transform 1 knight*/
 	private int[] numberKnight;
-	
-	public CrowKillers(boolean victory, Family family,GameOfThronesModel model) {
+	private Family[] track;
+	public CrowKillers(boolean victory, Family family,GameOfThronesModel model,Family[] track) {
 		super(victory, family, model);
-		numberKnight= new int[model.getNumberPlayers()];
+		this.track=track;
+		numberKnight= new int[track.length];
 		if(victory){
-			if(family.knightAvailable())  numberKnight[family.getPlayer()]=2;
+			if(family.knightAvailable())  numberKnight[0]=2;
 		}else{ 
-			for(int i=0;  i< model.getNumberPlayers(); i++){
-				if(haveKnightOnBoard(model.getFamily(i))) numberKnight[i]=2;
+			for(int i=0;  i< track.length-1; i++){
+				if(haveKnightOnBoard(track[i])) numberKnight[i]=2;
 			}
 			this.changeAllKnight();
-			numberKnight[family.getPlayer()]=0;
 		}
 		// now we check if there is something to do for the resolution
 		checkFinish();
@@ -31,26 +31,39 @@ public class CrowKillers extends WildlingsResolution {
 			if(territory.getFamily()==model.getFamily(player) && territory.getTroup()!=null && territory.getTroup().getTroops()[1]>0){
 				territory.getTroup().addToop(0, 0, 1, 0);
 				territory.getTroup().rmToop(0, 1, 0, 0);
-				numberKnight[player]--;
-				if(!family.knightAvailable())  numberKnight[player]=0;
+				numberKnight[0]--;
+				if(!family.knightAvailable())  numberKnight[0]=0;
 			}
 		}else{
 			if(territory.getFamily()==model.getFamily(player) && territory.getTroup()!=null && territory.getTroup().getTroops()[2]>0){
 				territory.getTroup().addToop(0, 1, 0, 0);
 				territory.getTroup().rmToop(0, 0, 1, 0);
-				numberKnight[player]--;
-				if(!haveKnightOnBoard(model.getFamily(player))) numberKnight[player]=0;
+				numberKnight[getPlaceOnTrack(player)]--;
+				if(!haveKnightOnBoard(model.getFamily(player))) numberKnight[getPlaceOnTrack(player)]=0;
 			}
 		}
 		checkFinish();
 		return 0;
 	}
 	
-
+	/**
+	 * Convert the player seat number on is place on the bidding track
+	 * @param seatPlace the player seat number (also = to Family.getPlayer() )
+	 * @return the player position on the bid track (-1 if the player is not in the track) 
+	 */
+	private int getPlaceOnTrack(int seatPlace){
+		for(int res=0; res< track.length; res++ ){
+			if(track[res].getPlayer()==seatPlace){
+				return res;
+			}
+		}
+		return -1;
+	}
+	
 	@Override
 	public String Description() {
 		if(victory){
-			return " can change "+numberKnight[family.getPlayer()]+" footman in knight";
+			return " can change "+numberKnight[0]+" footman in knight";
 		}else{
 			return " have all this knight change in footman";
 		}

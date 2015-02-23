@@ -15,12 +15,12 @@ public class MammothRiders extends WildlingsResolution {
 	private Territory[] territories;
 	private boolean regainCard;
 	private PlayersChoices plChoice;
-	
+	private Family[] track;
 	public MammothRiders(boolean victory, Family family,
-			GameOfThronesModel model, PlayersChoices playerChoices) {
+			GameOfThronesModel model,Family[] track, PlayersChoices playerChoices) {
 		super(victory, family, model);
-		territories= new Territory[model.getNumberPlayers()];
-		units= new int[model.getNumberPlayers()];
+		territories= new Territory[track.length];
+		units= new int[track.length];
 		plChoice=playerChoices;
 		if(victory && !family.getDiscardCombatantCards().isEmpty()){
 			if(playerChoices.getFamily()==family){
@@ -29,10 +29,10 @@ public class MammothRiders extends WildlingsResolution {
 			}
 		}else if(!victory){
 			regainCard=true;
-			for(int i=0;  i< model.getNumberPlayers(); i++){
+			for(int i=0;  i< track.length; i++){
 				units[i]=2;
 			}
-			units[family.getPlayer()]++;
+			units[track.length-1]++;
 		}else end();
 	}
 
@@ -42,8 +42,8 @@ public class MammothRiders extends WildlingsResolution {
 			return family.getName()+" can take back a fammily card";
 		}else{
 			String string="";
-			for(int i=0;  i< model.getNumberPlayers(); i++){
-				string+=", "+model.getFamily(i).getName()+" have to remove "+units[i]+" troops";
+			for(int i=0;  i< track.length; i++){
+				string+=", "+track[i].getName()+" have to remove "+units[i]+" troops";
 			}
 			return string;
 		}
@@ -52,7 +52,7 @@ public class MammothRiders extends WildlingsResolution {
 	@Override
 	public int actionOnBoard(Territory territory, int player) {
 		if(!victory && territory.getTroup()!=null){
-				territories[player]=territory;
+				territories[getPlaceOnTrack(player)]=territory;
 				return PlayersChoices.DISPLAY_TROOP_DESTRUCTION;
 		}
 		return 0;
@@ -62,20 +62,20 @@ public class MammothRiders extends WildlingsResolution {
 	public void actionOnPChoice(int choice, int player) {
 		switch(choice){
 		case PlayersChoices.REMOVE_SHIP :
-			territories[player].getTroup().rmToop(1, 0, 0, 0);
-			units[player]--;
+			territories[getPlaceOnTrack(player)].getTroup().rmToop(1, 0, 0, 0);
+			units[getPlaceOnTrack(player)]--;
 			break;
 		case PlayersChoices.REMOVE_FOOT :
-			territories[player].getTroup().rmToop(0, 1, 0, 0);
-			units[player]--;
+			territories[getPlaceOnTrack(player)].getTroup().rmToop(0, 1, 0, 0);
+			units[getPlaceOnTrack(player)]--;
 			break;
 		case PlayersChoices.REMOVE_KNIGHT :
-			territories[player].getTroup().rmToop(0, 0, 1, 0);
-			units[player]--;
+			territories[getPlaceOnTrack(player)].getTroup().rmToop(0, 0, 1, 0);
+			units[getPlaceOnTrack(player)]--;
 			break;
 		case PlayersChoices.REMOVE_SIEGE :
-			territories[player].getTroup().rmToop(0, 0, 0, 1);
-			units[player]--;
+			territories[getPlaceOnTrack(player)].getTroup().rmToop(0, 0, 0, 1);
+			units[getPlaceOnTrack(player)]--;
 			break;
 		case PlayersChoices.HOUSE_CARD_CHOSEN :
 			family.regainCard(family.getDiscardCombatantCards().get(plChoice.getIndexCard()));
@@ -97,6 +97,20 @@ public class MammothRiders extends WildlingsResolution {
 	
 	@Override
 	public Territory getTerritory(Family family){
-		return territories[family.getPlayer()];
+		return territories[getPlaceOnTrack(family.getPlayer())];
+	}
+	
+	/**
+	 * Convert the player seat number on is place on the bidding track
+	 * @param seatPlace the player seat number (also = to Family.getPlayer() )
+	 * @return the player position on the bid track (-1 if the player is not in the track) 
+	 */
+	private int getPlaceOnTrack(int seatPlace){
+		for(int res=0; res< track.length; res++ ){
+			if(track[res].getPlayer()==seatPlace){
+				return res;
+			}
+		}
+		return -1;
 	}
 }

@@ -1234,10 +1234,10 @@ public class GameOfThronesModel extends JogreModel {
 				familiesBidOrder[0].regainCombatantCards();
 			}else if(card.equals("CrowKillers")) {
 				setPhase(ModelState.WILDLINGSRESOLUTION);
-				wildResolution = new CrowKillers(true, familiesBidOrder[0], this);
+				wildResolution = new CrowKillers(true, familiesBidOrder[0], this,familiesBidOrder);
 			}else if(card.equals("HordeDescends")) {
 				setPhase(ModelState.WILDLINGSRESOLUTION);
-				wildResolution = new HordeDescends(true, familiesBidOrder[0], this);
+				wildResolution = new HordeDescends(true, familiesBidOrder[0], this,familiesBidOrder);
 			}else if(card.equals("MammothRiders")) {
 				setPhase(ModelState.WILDLINGSRESOLUTION);
 				wildResolution = new MammothRiders(true, familiesBidOrder[0],this,familiesBidOrder, plChoice);
@@ -1253,16 +1253,16 @@ public class GameOfThronesModel extends JogreModel {
 				familiesBidOrder[i].addInflu(familiesBidOrder[i].getBid()-familiesBidOrder[i].getInflu());
 			}else if(card.equals("CrowKillers")) {
 				setPhase(ModelState.WILDLINGSRESOLUTION);
-				wildResolution = new CrowKillers(false, familiesBidOrder[numberPlayers-1], this);
+				wildResolution = new CrowKillers(false, familiesBidOrder[familiesBidOrder.length-1], this,familiesBidOrder);
 			}else if(card.equals("HordeDescends")) {
 				setPhase(ModelState.WILDLINGSRESOLUTION);
-				wildResolution = new HordeDescends(false, familiesBidOrder[numberPlayers-1], this);
+				wildResolution = new HordeDescends(false, familiesBidOrder[familiesBidOrder.length-1], this,familiesBidOrder);
 			}else if(card.equals("MammothRiders")) {
 				setPhase(ModelState.WILDLINGSRESOLUTION);
-				wildResolution = new MammothRiders(false, familiesBidOrder[numberPlayers-1], this,familiesBidOrder,plChoice);
+				wildResolution = new MammothRiders(false, familiesBidOrder[familiesBidOrder.length-1], this,familiesBidOrder,plChoice);
 			}else if(card.equals("PreemptiveRaid")) {
 				setPhase(ModelState.WILDLINGSRESOLUTION);
-				wildResolution = new PreemptiveRaid(false, familiesBidOrder[numberPlayers-1], this,plChoice);
+				wildResolution = new PreemptiveRaid(false, familiesBidOrder[familiesBidOrder.length-1], this,plChoice);
 			}
 			/*if(card.equals("Massing on the Milkwater")){
 				

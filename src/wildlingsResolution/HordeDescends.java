@@ -12,19 +12,21 @@ public class HordeDescends extends WildlingsResolution {
 	 *ex: numberKnight[0]=1 means that the baratheon have to remove 1 unit*/
 	private int[] units;
 	private Territory[] territories;
+	private Family[] track;
 	
-	public HordeDescends(boolean victory, Family family,GameOfThronesModel model) {
+	public HordeDescends(boolean victory, Family family,GameOfThronesModel model,Family[] track) {
 		super(victory, family, model);
-		territories= new Territory[model.getNumberPlayers()];
-		units= new int[model.getNumberPlayers()];
+		this.track=track;
+		territories= new Territory[track.length];
+		units= new int[track.length];
 		if(victory){
-			if(haveACastle()) units[family.getPlayer()]=32;// a random value >2
+			if(haveACastle()) units[0]=32;// a random value >2
 			else end();
 		}else{
-			for(int i=0;  i< model.getNumberPlayers(); i++){
+			for(int i=0;  i< track.length; i++){
 				units[i]=1;
 			}
-			units[family.getPlayer()]++;
+			units[track.length-1]++;
 		}
 		
 	}
@@ -35,8 +37,8 @@ public class HordeDescends extends WildlingsResolution {
 			return family.getName()+"can muster in one castle or stronghold";
 		}else{
 			String string="";
-			for(int i=0;  i< model.getNumberPlayers(); i++){
-				string+=", "+model.getFamily(i).getName()+" have to remove "+units[i]+" troops";
+			for(int i=0;  i< track.length; i++){
+				string+=", "+track[i].getName()+" have to remove "+units[i]+" troops";
 			}
 			return string;
 		}
@@ -48,23 +50,23 @@ public class HordeDescends extends WildlingsResolution {
 			if(player==family.getPlayer() && territory instanceof Land && territory.getTroup()!=null){
 				if(AbleDestroyAtCastle()){
 					if(territory.getCastle()>0){
-						territories[player]=territory;
+						territories[getPlaceOnTrack(player)]=territory;
 						return PlayersChoices.DISPLAY_TROOP_DESTRUCTION;
 					}
 				}else{
-					territories[player]=territory;
+					territories[getPlaceOnTrack(player)]=territory;
 					return PlayersChoices.DISPLAY_TROOP_DESTRUCTION;
 				}
 			}else if(territory.getFamily().getPlayer()==player && territory instanceof Land && territory.getTroup()!=null){
-				territories[player]=territory;
+				territories[getPlaceOnTrack(player)]=territory;
 				return PlayersChoices.DISPLAY_TROOP_DESTRUCTION;
 			}
 		}else{
 			if(player==family.getPlayer() && territory.getCastle()>0 &&
-				model.checkSupplyLimits(player, territory)	&& units[player]>2){
-				territories[player]=territory;
+				model.checkSupplyLimits(player, territory)	&& units[0]>2){
+				territories[0]=territory;
 				territory.resetRecruit();
-				units[player]=territory.getRecruit();
+				units[0]=territory.getRecruit();
 				return PlayersChoices.DISPLAY_RECRUITEMENT;
 			}
 		}
@@ -95,34 +97,34 @@ public class HordeDescends extends WildlingsResolution {
 	}
 	@Override
 	public Territory getTerritory(Family family){
-		return territories[family.getPlayer()];
+		return territories[getPlaceOnTrack(family.getPlayer())];
 	}
 
 	@Override
 	public void actionOnPChoice(int choice, int player) {
 		switch(choice){
 			case PlayersChoices.REMOVE_FOOT :
-				territories[player].getTroup().rmToop(0, 1, 0, 0);
-				units[player]--;
+				territories[getPlaceOnTrack(player)].getTroup().rmToop(0, 1, 0, 0);
+				units[getPlaceOnTrack(player)]--;
 				break;
 			case PlayersChoices.REMOVE_KNIGHT :
-				territories[player].getTroup().rmToop(0, 0, 1, 0);
-				units[player]--;
+				territories[getPlaceOnTrack(player)].getTroup().rmToop(0, 0, 1, 0);
+				units[getPlaceOnTrack(player)]--;
 				break;
 			case PlayersChoices.REMOVE_SIEGE :
-				territories[player].getTroup().rmToop(0, 0, 0, 1);
-				units[player]--;
+				territories[getPlaceOnTrack(player)].getTroup().rmToop(0, 0, 0, 1);
+				units[getPlaceOnTrack(player)]--;
 				break;
 			case PlayersChoices.RECRUIT_FOOT :
-				territories[player].recruit(1);
-				units[player]=territories[player].getRecruit();
+				territories[0].recruit(1);
+				units[0]=territories[0].getRecruit();
 				break;
 			case PlayersChoices.RECRUIT_KNIGHT :
-				territories[player].recruit(2);
-				units[player]=territories[player].getRecruit();
+				territories[0].recruit(2);
+				units[0]=territories[0].getRecruit();
 			case PlayersChoices.RECRUIT_SEIGE :
-				territories[player].recruit(2);
-				units[player]=territories[player].getRecruit();
+				territories[0].recruit(2);
+				units[0]=territories[0].getRecruit();
 				break;
 		}
 		
@@ -137,5 +139,19 @@ public class HordeDescends extends WildlingsResolution {
 			if (i>0) finish=false;
 		}
 		if(finish) this.end();
+	}
+	
+	/**
+	 * Convert the player seat number on is place on the bidding track
+	 * @param seatPlace the player seat number (also = to Family.getPlayer() )
+	 * @return the player position on the bid track (-1 if the player is not in the track) 
+	 */
+	private int getPlaceOnTrack(int seatPlace){
+		for(int res=0; res< track.length; res++ ){
+			if(track[res].getPlayer()==seatPlace){
+				return res;
+			}
+		}
+		return -1;
 	}
 }
