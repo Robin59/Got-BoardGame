@@ -14,14 +14,12 @@ public class MammothRiders extends WildlingsResolution {
 	private int[] units;
 	private Territory[] territories;
 	private boolean regainCard;
-	private PlayersChoices plChoice;
-	private Family[] track;
+	
 	public MammothRiders(boolean victory, Family family,
 			GameOfThronesModel model,Family[] track, PlayersChoices playerChoices) {
-		super(victory, family, model);
+		super(victory, family, model,playerChoices,track);
 		territories= new Territory[track.length];
 		units= new int[track.length];
-		plChoice=playerChoices;
 		if(victory && !family.getDiscardCombatantCards().isEmpty()){
 			if(playerChoices.getFamily()==family){
 				regainCard=false;

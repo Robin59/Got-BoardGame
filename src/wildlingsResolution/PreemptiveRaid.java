@@ -12,13 +12,11 @@ public class PreemptiveRaid extends WildlingsResolution {
 	/*Tell the choice made by the looser player*/
 	private boolean chooseA;
 	private int unitsToRemove;
-	PlayersChoices plChoice;
 	private Territory territory;
 	
-	public PreemptiveRaid(boolean victory, Family family,GameOfThronesModel model,PlayersChoices playerChoices) {
-		super(victory, family, model);
+	public PreemptiveRaid(boolean victory, Family family,GameOfThronesModel model,PlayersChoices playerChoices,Family[]  track) {
+		super(victory, family, model,playerChoices,track);
 			//in case the players loose
-			plChoice=playerChoices;
 			chooseA=false;
 			if(playerChoices.getFamily()==family){
 				playerChoices.setPanel(PlayersChoices.DISPLAY_LETTERS_AB, this);

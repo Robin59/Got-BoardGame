@@ -1,5 +1,7 @@
 package wildlingsResolution;
 
+import graphisme.PlayersChoices;
+
 import org.jogre.gameOfThrones.common.Family;
 import org.jogre.gameOfThrones.common.GameOfThronesModel;
 import org.jogre.gameOfThrones.common.territory.Territory;
@@ -8,10 +10,8 @@ import org.jogre.gameOfThrones.common.territory.Territory;
 public class CrowKillers extends WildlingsResolution {
 	/*The number of knight players have to transform on the board, ex: numberKnight[0]=1 means that the baratheon have to transform 1 knight*/
 	private int[] numberKnight;
-	private Family[] track;
-	public CrowKillers(boolean victory, Family family,GameOfThronesModel model,Family[] track) {
-		super(victory, family, model);
-		this.track=track;
+	public CrowKillers(boolean victory, Family family,GameOfThronesModel model,PlayersChoices plChoice,Family[] track) {
+		super(victory, family, model,plChoice,track);
 		numberKnight= new int[track.length];
 		if(victory){
 			if(family.knightAvailable())  numberKnight[0]=2;

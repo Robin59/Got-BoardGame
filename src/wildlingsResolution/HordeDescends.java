@@ -12,11 +12,9 @@ public class HordeDescends extends WildlingsResolution {
 	 *ex: numberKnight[0]=1 means that the baratheon have to remove 1 unit*/
 	private int[] units;
 	private Territory[] territories;
-	private Family[] track;
 	
-	public HordeDescends(boolean victory, Family family,GameOfThronesModel model,Family[] track) {
-		super(victory, family, model);
-		this.track=track;
+	public HordeDescends(boolean victory, Family family,GameOfThronesModel model,PlayersChoices plChoice,Family[] track) {
+		super(victory, family, model,plChoice,track);
 		territories= new Territory[track.length];
 		units= new int[track.length];
 		if(victory){

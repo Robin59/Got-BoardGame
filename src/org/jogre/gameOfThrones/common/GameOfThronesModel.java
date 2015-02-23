@@ -47,6 +47,7 @@ import state.*;
 import sun.org.mozilla.javascript.ObjToIntMap.Iterator;
 import wildlingsResolution.CrowKillers;
 import wildlingsResolution.HordeDescends;
+import wildlingsResolution.KingBeyondWall;
 import wildlingsResolution.MammothRiders;
 import wildlingsResolution.PreemptiveRaid;
 import wildlingsResolution.WildlingsResolution;
@@ -1234,13 +1235,16 @@ public class GameOfThronesModel extends JogreModel {
 				familiesBidOrder[0].regainCombatantCards();
 			}else if(card.equals("CrowKillers")) {
 				setPhase(ModelState.WILDLINGSRESOLUTION);
-				wildResolution = new CrowKillers(true, familiesBidOrder[0], this,familiesBidOrder);
+				wildResolution = new CrowKillers(true, familiesBidOrder[0], this,plChoice,familiesBidOrder);
 			}else if(card.equals("HordeDescends")) {
 				setPhase(ModelState.WILDLINGSRESOLUTION);
-				wildResolution = new HordeDescends(true, familiesBidOrder[0], this,familiesBidOrder);
+				wildResolution = new HordeDescends(true, familiesBidOrder[0], this,plChoice,familiesBidOrder);
 			}else if(card.equals("MammothRiders")) {
 				setPhase(ModelState.WILDLINGSRESOLUTION);
 				wildResolution = new MammothRiders(true, familiesBidOrder[0],this,familiesBidOrder, plChoice);
+			}else if(card.equals("KingBeyondWall")) {
+				setPhase(ModelState.WILDLINGSRESOLUTION);
+				wildResolution = new KingBeyondWall(true, familiesBidOrder[0], this,plChoice,familiesBidOrder);
 			}/*else */
 			wildings=0;
 		}else{
@@ -1253,16 +1257,19 @@ public class GameOfThronesModel extends JogreModel {
 				familiesBidOrder[i].addInflu(familiesBidOrder[i].getBid()-familiesBidOrder[i].getInflu());
 			}else if(card.equals("CrowKillers")) {
 				setPhase(ModelState.WILDLINGSRESOLUTION);
-				wildResolution = new CrowKillers(false, familiesBidOrder[familiesBidOrder.length-1], this,familiesBidOrder);
+				wildResolution = new CrowKillers(false, familiesBidOrder[familiesBidOrder.length-1], this,plChoice,familiesBidOrder);
 			}else if(card.equals("HordeDescends")) {
 				setPhase(ModelState.WILDLINGSRESOLUTION);
-				wildResolution = new HordeDescends(false, familiesBidOrder[familiesBidOrder.length-1], this,familiesBidOrder);
+				wildResolution = new HordeDescends(false, familiesBidOrder[familiesBidOrder.length-1],this,plChoice,familiesBidOrder);
 			}else if(card.equals("MammothRiders")) {
 				setPhase(ModelState.WILDLINGSRESOLUTION);
 				wildResolution = new MammothRiders(false, familiesBidOrder[familiesBidOrder.length-1], this,familiesBidOrder,plChoice);
 			}else if(card.equals("PreemptiveRaid")) {
 				setPhase(ModelState.WILDLINGSRESOLUTION);
-				wildResolution = new PreemptiveRaid(false, familiesBidOrder[familiesBidOrder.length-1], this,plChoice);
+				wildResolution = new PreemptiveRaid(false, familiesBidOrder[familiesBidOrder.length-1], this,plChoice,familiesBidOrder);
+			}else if(card.equals("KingBeyondWall")) {
+				setPhase(ModelState.WILDLINGSRESOLUTION);
+				wildResolution = new KingBeyondWall(false, familiesBidOrder[familiesBidOrder.length-1], this,plChoice,familiesBidOrder);
 			}
 			/*if(card.equals("Massing on the Milkwater")){
 				

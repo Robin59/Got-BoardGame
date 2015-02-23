@@ -1,5 +1,7 @@
 package wildlingsResolution;
 
+import graphisme.PlayersChoices;
+
 import org.jogre.gameOfThrones.common.Family;
 import org.jogre.gameOfThrones.common.GameOfThronesModel;
 import org.jogre.gameOfThrones.common.territory.Territory;
@@ -17,15 +19,19 @@ public abstract class WildlingsResolution {
 	protected boolean victory;
 	protected Family family;
 	protected GameOfThronesModel model;
+	protected Family[] track;
+	protected PlayersChoices plChoice;
 	/**
 	 * @param victory true if the players wins against the wildlings, false in the other case
 	 * @param family if victory is true, family is the biggest bid family, if it's false it's the family with the smallest bid
 	 */
-	public WildlingsResolution (boolean victory,Family family, GameOfThronesModel model ){
+	public WildlingsResolution (boolean victory,Family family, GameOfThronesModel model,PlayersChoices plChoice,Family[] track ){
 		this.victory=victory;
 		this.family=family;
 		this.model= model;
+		this.track=track;
 		this.ended=false;
+		this.plChoice=plChoice;
 	}
 	
 
