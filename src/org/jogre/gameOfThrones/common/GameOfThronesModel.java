@@ -167,6 +167,7 @@ public class GameOfThronesModel extends JogreModel {
     	state=ModelState.values()[phase];
     	internPhase=0;
     	currentPlayer=0;
+    	checkOrder();
     	updateLabel();
     }
     public void nextPhase(){
