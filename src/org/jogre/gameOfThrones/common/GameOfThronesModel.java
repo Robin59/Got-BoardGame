@@ -400,10 +400,13 @@ public class GameOfThronesModel extends JogreModel {
     	boardModel.getTerritory("Kingswood").setTroup(new GroundForce(families[0],1,0,0));
     	boardModel.getTerritory("Shipbreaker Bay").setTroup(new NavalTroup(families[0],2));
     	//Baratheon's cards
+    	families[0].addCard(new CombatantCard("PatchFace",0, 0, 0));
     	families[0].addCard(new CombatantCard("Mellissandre",1, 1, 0));
     	families[0].addCard(new CombatantCard("Salladhor",1, 0, 0));
     	families[0].addCard(new CombatantCard("Davos",2, 0, 0));
     	families[0].addCard(new CombatantCard("Brienne",2, 1, 1));
+    	families[0].addCard(new CombatantCard("Renly",3, 0, 0));
+    	families[0].addCard(new CombatantCard("Stannis",4, 0, 0));
     	// House Starks
     	families[2]=new Family(2,this);
     	throne[2]=2;

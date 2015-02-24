@@ -95,11 +95,13 @@ public class  ImageSelector{
 		}
 		// les cartes de famille
 		playerCards = new HashMap<String, Image>();
-		
+		playerCards.put("PatchFace", GameImages.getImage(66));
 		playerCards.put("Mellissandre", GameImages.getImage(67));
 		playerCards.put("Salladhor", GameImages.getImage(68));
 		playerCards.put("Davos", GameImages.getImage(69));
 		playerCards.put("Brienne", GameImages.getImage(70));
+		playerCards.put("Renly", GameImages.getImage(71));
+		playerCards.put("Stannis", GameImages.getImage(72));
 		playerCards.put("Cersei", GameImages.getImage(73));
 		playerCards.put("Kevan", GameImages.getImage(74));
 		playerCards.put("Tyrion", GameImages.getImage(75));
