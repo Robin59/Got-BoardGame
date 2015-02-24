@@ -1245,7 +1245,9 @@ public class GameOfThronesModel extends JogreModel {
 			}else if(card.equals("KingBeyondWall")) {
 				setPhase(ModelState.WILDLINGSRESOLUTION);
 				wildResolution = new KingBeyondWall(true, familiesBidOrder[0], this,plChoice,familiesBidOrder);
-			}/*else */
+			}else if(card.equals("RattleshirtRaiders")){
+				familiesBidOrder[0].setSupply(familiesBidOrder[0].getSupply()+1);
+			}
 			wildings=0;
 		}else{
 			System.out.println("Victoire sauvages");
@@ -1270,6 +1272,15 @@ public class GameOfThronesModel extends JogreModel {
 			}else if(card.equals("KingBeyondWall")) {
 				setPhase(ModelState.WILDLINGSRESOLUTION);
 				wildResolution = new KingBeyondWall(false, familiesBidOrder[familiesBidOrder.length-1], this,plChoice,familiesBidOrder);
+			}else if(card.equals("RattleshirtRaiders")){
+				int i;
+				for(i=0;i<familiesBidOrder.length-1;i++){
+					familiesBidOrder[i].setSupply(familiesBidOrder[i].getSupply()-1);
+				}	
+				familiesBidOrder[i].setSupply(familiesBidOrder[i].getSupply()-2);
+				if(!this.checkSupplyLimits()){
+					state=(ModelState.SUPPLY_TO_LOW);
+				}
 			}
 			/*if(card.equals("Massing on the Milkwater")){
 				

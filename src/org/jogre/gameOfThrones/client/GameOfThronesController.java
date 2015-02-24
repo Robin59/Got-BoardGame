@@ -864,7 +864,7 @@ public class GameOfThronesController extends JogreController {
 			}
 		}else{
 			model.wildingsResolution(playerChoices.getWildingsCard(), playerChoices);
-			if(model.getPhase()!=ModelState.WILDLINGSRESOLUTION){//case when the wildings resolution is directly solve
+			if(model.getPhase()!=ModelState.WILDLINGSRESOLUTION && model.getPhase()!=ModelState.SUPPLY_TO_LOW){//case when the wildings resolution is directly solve
 				playerChoices.blank();
 				if(model.getWesterosPhase()==3){
 					model.nextPhase();
@@ -926,10 +926,7 @@ public class GameOfThronesController extends JogreController {
     private void checkSupplyLimit(){
     	if(model.checkSupplyLimits()){
 			playerChoices.blank2();
-			if(model.getPhase()==ModelState.PHASE_WESTEROS){
-				nextWesterosPhase();
-			}
-			//AUTRES CAS OU ON MET A JOUR LE ravitaillement ?? (carte wildlings !!!)
+			nextWesterosPhase();
 		}
     }
     

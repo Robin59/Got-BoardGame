@@ -57,7 +57,7 @@ public class Deck {
 			deck.add("HordeDescends");
 			deck.add("MammothRiders");
 			deck.add("PreemptiveRaid");
-			//deck.add("RattleshirtRaiders");
+			deck.add("RattleshirtRaiders");
 			break;
 		}
 		Collections.shuffle(deck);
