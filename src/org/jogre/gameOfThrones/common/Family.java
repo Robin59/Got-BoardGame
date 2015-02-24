@@ -86,6 +86,9 @@ public class Family {
 		combatantsUse.add(card);
 		combatantsAvailable.remove(card);
 	}
+	public void removeCard(int indexCard){
+		regainCard(combatantsAvailable.get(indexCard));
+	}
 	public void addCard(CombatantCard card){
 		combatantsAvailable.add(card);
 	}

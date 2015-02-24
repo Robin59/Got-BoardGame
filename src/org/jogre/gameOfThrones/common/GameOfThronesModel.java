@@ -49,6 +49,7 @@ import wildlingsResolution.CrowKillers;
 import wildlingsResolution.HordeDescends;
 import wildlingsResolution.KingBeyondWall;
 import wildlingsResolution.MammothRiders;
+import wildlingsResolution.MassingMilkwater;
 import wildlingsResolution.PreemptiveRaid;
 import wildlingsResolution.WildlingsResolution;
 
@@ -1248,6 +1249,8 @@ public class GameOfThronesModel extends JogreModel {
 				wildResolution = new KingBeyondWall(true, familiesBidOrder[0], this,plChoice,familiesBidOrder);
 			}else if(card.equals("RattleshirtRaiders")){
 				familiesBidOrder[0].setSupply(familiesBidOrder[0].getSupply()+1);
+			}else if(card.equals("MassingMilkwater")){
+				familiesBidOrder[0].regainCombatantCards();
 			}
 			wildings=0;
 		}else{
@@ -1282,10 +1285,11 @@ public class GameOfThronesModel extends JogreModel {
 				if(!this.checkSupplyLimits()){
 					state=(ModelState.SUPPLY_TO_LOW);
 				}
+			}else if(card.equals("MassingMilkwater")){
+				setPhase(ModelState.WILDLINGSRESOLUTION);
+				wildResolution = new MassingMilkwater(false, familiesBidOrder[familiesBidOrder.length-1], this,plChoice,familiesBidOrder);
 			}
-			/*if(card.equals("Massing on the Milkwater")){
-				
-			}*/
+			
 			setWildings(wildings-4);
 		}
 		//bid go back to 0

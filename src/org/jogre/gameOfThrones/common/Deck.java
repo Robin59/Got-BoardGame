@@ -50,6 +50,7 @@ public class Deck {
 			deck.add("PutToTheSword");
 			break;
 		default:
+			deck.add("MassingMilkwater");
 			deck.add("KingBeyondWall");
 			deck.add("SkinchangerScout");
 			deck.add("SilenceAtTheWall");

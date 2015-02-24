@@ -111,6 +111,11 @@ public class PlayersChoices extends JogreComponent {
 	public static final int CHOOSE_THRONE=39;
 	public static final int CHOOSE_BLADE=40;
 	public static final int CHOOSE_RAVEN=41;
+	public static final int CHOOSE_CARD0=42; //the chooseCard value must stay together (always CHOOSE_CARD1==CHOOSE_CARD0+1) 
+	public static final int CHOOSE_CARD1=43;
+	//...
+	public static final int CHOOSE_CARD7=49;
+	
 	
 	public PlayersChoices (JLabel label, GameOfThronesModel model){
 		this.label=label;
@@ -226,8 +231,12 @@ public class PlayersChoices extends JogreComponent {
 				indexHouseCard++;
 				repaint();
 			}else if (x>60 && x<510){
-				choseCard(x, family);
-				return HOUSE_CARD_CHOSEN;
+				if(battle!=null){
+					choseCard(x, family);
+					return HOUSE_CARD_CHOSEN;
+				}else{
+					return indexChoseCard(x, family);
+				}
 			}
 			break;
 		case DISPLAY_VALYRIAN_SWORD :
@@ -371,6 +380,7 @@ public class PlayersChoices extends JogreComponent {
 		return 0;
 	}
 	
+
 	public void paintComponent (Graphics g) { 
 		switch(panel){
 		case DISPLAY_BLANK:
@@ -600,6 +610,22 @@ public class PlayersChoices extends JogreComponent {
 			panel=DISPLAY_BLANK;
 			this.repaint();
 		}
+	}
+
+	/**
+	 * This method is call when a player chose a House card for a battle
+	 * @param x the x coordinate of the mouse 
+	 * @param family the family that have chose a House card
+	 * @return the a constant value related to the index card (
+	 */
+	private int indexChoseCard(int x, Family family) {
+		if (((x-60)/150)+indexHouseCard<family.getCombatantCards().size()){
+			selectedHouseCard =((x-60)/150)+indexHouseCard;
+			panel=DISPLAY_BLANK;
+			this.repaint();
+			return CHOOSE_CARD0+selectedHouseCard;
+		}
+		return 0;
 	}
 	/**
 	 * This method is call when a player want to give orders to a territory during the programations phase
@@ -904,7 +930,7 @@ public class PlayersChoices extends JogreComponent {
 	private static final int DISPLAY_WATER_ATT = 6;
 	private static final int DISPLAY_LAND_ATT = 7;
 	private static final int DISPLAY_SUPPORT_CHOICE=8;
-	private static final int DISPLAY_HOUSE_CARDS=9;
+	public static final int DISPLAY_HOUSE_CARDS=9;
 	private static final int DISPLAY_VALYRIAN_SWORD=10;
 	private static final int DISPLAY_RECRUIT_OR_CONSOLID = 11;
 	public static final int DISPLAY_RECRUITEMENT = 12;
