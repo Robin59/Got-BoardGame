@@ -146,7 +146,8 @@ public class BattlePvP extends Battle{
 					attTerritory.setTroup(new GroundForce(attFamily, attTroops[1],attTroops[2],0));
 				}
 			}
-			System.out.println("befor state 4");
+			attFamily.removeCard(attCard);
+			defFamily.removeCard(defCard);
 			state=BATTLE_END;	
 		}
 	}
