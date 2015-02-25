@@ -313,6 +313,9 @@ public class BattlePvP extends Battle{
 		if(attCard.getName().equals("Stannis") || defCard.getName().equals("Stannis")){
 			stannisEffect();
 		}
+		if(defCard.getName().equals("Catelyn")){
+			def+=defTerritory.getOrder().getDefBonus();
+		}
 		if(attCard.getName().equals("Kevan")){
 			kevanEffect();
 		}
