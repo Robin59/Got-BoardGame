@@ -172,6 +172,7 @@ public abstract class Battle {
 	public static final int BATTLE_PLAY_SWORD=2;
 	public static final int BATTLE_WITHDRAWAL=3;
 	public static final int BATTLE_END=4;
+	public static final int BATTLE_SHOW_CARDS=5;//when players can see both cards played during the battle
 
 	public void withdraw(Territory territory) {
 		// TODO Auto-generated method stub

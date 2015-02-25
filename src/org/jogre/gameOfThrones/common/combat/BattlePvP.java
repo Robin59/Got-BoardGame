@@ -192,12 +192,20 @@ public class BattlePvP extends Battle{
 			defCard=card;
 		}
 		if(cardsPlayed()){
-			//on test Tyrion 
-			if(attCard.getName().equals("Tyrion")&& attCardEffect==null){
-				attCardEffect=new TyrionEffect(this, false);
-			}else if(defCard.getName().equals("Tyrion")&& defCardEffect==null) {
-				defCardEffect=new TyrionEffect(this, true);
-			}else if ((attCardEffect==null || attCardEffect.getFinish())&&(defCardEffect==null || defCardEffect.getFinish())){
+			state=BATTLE_SHOW_CARDS;
+			attFamily.carteNonVu();
+			defFamily.carteNonVu();
+		}
+	}
+	
+	
+	public void afterCardsSaw(){
+		//on test Tyrion 
+		if(attCard.getName().equals("Tyrion")&& attCardEffect==null){
+			attCardEffect=new TyrionEffect(this, false);
+		}else if(defCard.getName().equals("Tyrion")&& defCardEffect==null) {
+			defCardEffect=new TyrionEffect(this, true);
+		}else if ((attCardEffect==null || attCardEffect.getFinish())&&(defCardEffect==null || defCardEffect.getFinish())){
 			attSwords=attCard.getSword();
 			attTowers=attCard.getTower();
 			defSwords=defCard.getSword();
@@ -218,9 +226,9 @@ public class BattlePvP extends Battle{
 				//on passe directement à la resolution
 				battleResolution();
 			}
-			}
 		}
 	}
+	
 	/**
 	 */
 	public void useSword(){

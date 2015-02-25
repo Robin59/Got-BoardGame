@@ -435,6 +435,7 @@ public class GameOfThronesModel extends JogreModel {
     	families[1].addCard(new CombatantCard("Jaime",2, 1, 0));
     	families[1].addCard(new CombatantCard("Gregor",3, 3, 0));
     	families[1].addCard(new CombatantCard("Tywin",4, 0, 0));
+
     	if(numberPlayers>3){
     		//House Greyjoy
     		families[3]=new Family(3,this);

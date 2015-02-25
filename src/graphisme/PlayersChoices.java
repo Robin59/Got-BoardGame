@@ -115,6 +115,7 @@ public class PlayersChoices extends JogreComponent {
 	public static final int CHOOSE_CARD1=43;
 	//...
 	public static final int CHOOSE_CARD7=49;
+	public static final int HOUSE_CARDS_SAW=50;
 	
 	
 	public PlayersChoices (JLabel label, GameOfThronesModel model){
@@ -239,6 +240,11 @@ public class PlayersChoices extends JogreComponent {
 				}
 			}
 			break;
+		case DISPLAY_BOTH_CARDS:
+			family.carteVu();
+			System.out.println("carte vu par "+family.getName());
+			blank2();
+			return HOUSE_CARDS_SAW;
 		case DISPLAY_VALYRIAN_SWORD :
 			if (x>50 && x<140){
 				blank2();
@@ -423,6 +429,12 @@ public class PlayersChoices extends JogreComponent {
 		case DISPLAY_HOUSE_CARDS:
 			g.clearRect(0, 0, 600, 250);
 			drawHouseCards(g);
+			break;
+		case DISPLAY_BOTH_CARDS:
+			if(!family.carteDejaVu()){
+				g.drawImage(images.getCardImage(((BattlePvP)battle).getAttCard().getName()),100,20,null);
+				g.drawImage(images.getCardImage(((BattlePvP)battle).getDefCard().getName()),300,20,null);
+			}
 			break;
 		case DISPLAY_VALYRIAN_SWORD:
 			g.drawImage(images.swordImage, 50, 5, null);
@@ -779,6 +791,12 @@ public class PlayersChoices extends JogreComponent {
 		repaint();
 	}
 	
+	public void ShowBothBattleCards(Battle battle) {
+		this.battle=battle;
+		label.setText("Attacker strength without card: "+battle.attPower()+", defencer strength without card: "+battle.defPower());
+		panel=DISPLAY_BOTH_CARDS;
+		repaint();
+	}
 	/**
 	 * Return the index of the selected house card, -1 if none
 	 * @return the index of the selected house card, -1 if none
@@ -947,6 +965,7 @@ public class PlayersChoices extends JogreComponent {
 	public static final int DISPLAY_DISCARD_HOUSE_CARDS=23;
 	public static final int DISPLAY_LETTERS_AB=24;
 	public static final int DISPLAY_TRACKS=25;
+	private static final int DISPLAY_BOTH_CARDS=26;
 }
 
 

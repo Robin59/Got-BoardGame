@@ -337,6 +337,13 @@ public class GameOfThronesController extends JogreController {
     				sendProperty("defCardPlayed",playerChoices.getIndexCard());
     			}
     			break;
+    		case PlayersChoices.HOUSE_CARDS_SAW:
+    			BattlePvP battle=((BattlePvP)model.getBattle());
+    			sendProperty("HouseCardsSaw",getSeatNum());
+    			if(battle.getAttFamily().carteDejaVu() && battle.getDefFamily().carteDejaVu() && battle.playerPartisipate(getSeatNum())){
+    				battle.afterCardsSaw();
+    			}
+    			break;
     		case PlayersChoices.VALYRIAN_SWORD_USE: 
     			model.getBattle().useSword();
     			sendProperty("useSword", 0);
@@ -496,6 +503,10 @@ public class GameOfThronesController extends JogreController {
     		}
     		if(model.getBattle()!=null){
     			switch(model.informations(getSeatNum())){
+    			case Battle.BATTLE_SHOW_CARDS:
+    				playerChoices.ShowBothBattleCards(model.getBattle());
+    				sendProperty("BattleShowBothCards",0);
+    				break;
     			case Battle.BATTLE_CHOOSE_CARD:
     				if(model.getBattle().canPlayCard(model.getFamily(getSeatNum()))){playerChoices.showHouseCards(model.getBattle());}
     				sendProperty("FamilyCards", 0);
@@ -758,6 +769,10 @@ public class GameOfThronesController extends JogreController {
      public void receiveProperty (String key, int value) { 
     	 if(key.equals("SendWildingsDeck")){
     		 model.reinitializeDeck();
+    	 }else if(key.equals("HouseCardsSaw")){
+    		 model.getFamily(value).carteVu();
+    	 }else if(key.equals("BattleShowBothCards")){
+    		 playerChoices.ShowBothBattleCards(model.getBattle());
     	 }else if(key.equals("goToExecutionPhase")){
     		 model.goToExecutionPhase();
     	 }else if (key.equals("nextPlayer")){
