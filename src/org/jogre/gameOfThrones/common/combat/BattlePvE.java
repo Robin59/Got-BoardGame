@@ -2,14 +2,15 @@ package org.jogre.gameOfThrones.common.combat;
 
 import org.jogre.gameOfThrones.common.Family;
 import org.jogre.gameOfThrones.common.GameOfThronesModel;
+import org.jogre.gameOfThrones.common.orders.Order;
 import org.jogre.gameOfThrones.common.orders.OrderType;
 import org.jogre.gameOfThrones.common.territory.Territory;
 import org.jogre.gameOfThrones.common.territory.Water;
 
 public class BattlePvE extends Battle{
 	
-	public BattlePvE(Territory attTerritory, Territory defTerritory,GameOfThronesModel model) {
-		super(attTerritory, defTerritory,model);
+	public BattlePvE(Territory attTerritory, Territory defTerritory,GameOfThronesModel model,Order attOrder) {
+		super(attTerritory, defTerritory,model,attOrder);
 	}
 
 	
@@ -26,7 +27,6 @@ public class BattlePvE extends Battle{
 
 	@Override
 	public void startBattle() {
-		attTerritory.getOrder().setUse(true);
 		if(attPower()<defPower()){
 			if(attTerritory.getTroup()!=null){
 				attTroops[3]=0;
@@ -72,7 +72,7 @@ public class BattlePvE extends Battle{
 	}
 	
 	private boolean victory(){
-		int res=attTerritory.getOrder().getOthBonus();
+		int res=attOrder.getOthBonus();
 		res+=(attTroops[2])*2+attTroops[1]+attTroops[3]*4*groundType;
 		//support
 		for(Territory territory : defTerritory.getNeighbors()){

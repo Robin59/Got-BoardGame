@@ -317,21 +317,15 @@ public class GameOfThronesModel extends JogreModel {
 		territory1=fromTerritory;
 		territory2=toTerritory;
 		if(toTerritory.getNeutralForce()>0){
-			battle= new BattlePvE(fromTerritory, toTerritory,this);
+			battle= new BattlePvE(fromTerritory, toTerritory,this,fromTerritory.getOrder());
 		}else{
-			battle = new BattlePvP(fromTerritory, toTerritory,this);
+			battle = new BattlePvP(fromTerritory, toTerritory,this,fromTerritory.getOrder());
 		}
 		
 	}
 	public void battleInitiated(Territory territory) {
 		territory2=territory;
-		if(territory2.getNeutralForce()>0){
-			battle = new BattlePvE(territory1, territory2,this);
-		}else{
-			battle = new BattlePvP(territory1, territory2,this);
-		}
-
-		
+		this.battle(territory1,territory2);
 	}
 
 	
@@ -578,9 +572,9 @@ public class GameOfThronesModel extends JogreModel {
 	/**end a battle and remove it
 	 */
 	public void battleEnd(){
-		//battle.end();
 		battle=null;
 		System.out.println("fin battaille");
+		checkOrder();
 	}
 
 	/**when a battle is started ask if this territory can support one of the protagoniste*/
@@ -593,7 +587,6 @@ public class GameOfThronesModel extends JogreModel {
 	}
 
 	public void attPrepEnd(){
-		territory1.getOrder().setUse(true);
 		if(battle.checkSupport()){
 			System.out.println("battle check=true");
 			battle.startBattle();

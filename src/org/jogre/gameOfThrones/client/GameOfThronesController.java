@@ -494,6 +494,26 @@ public class GameOfThronesController extends JogreController {
     			sendProperty("goToExecutionPhase",0);
     			break;
     		}
+    		if(model.getBattle()!=null){
+    			switch(model.informations(getSeatNum())){
+    			case Battle.BATTLE_CHOOSE_CARD:
+    				if(model.getBattle().canPlayCard(model.getFamily(getSeatNum()))){playerChoices.showHouseCards(model.getBattle());}
+    				sendProperty("FamilyCards", 0);
+    				break;
+    			case Battle.BATTLE_PLAY_SWORD:
+    				playerChoices.swordPlay(model.getFamily(getSeatNum()));
+    				sendProperty("Sword", 0);
+    				break;
+    			case Battle.BATTLE_WITHDRAWAL:
+    				playerChoices.withdrawal(model.getFamily(getSeatNum()), model.getBattle());
+    				sendProperty("withdraw", 0);
+    				break;
+    			case Battle.BATTLE_END:
+    				model.battleEnd();
+    				sendProperty("BattleEnd", 0);// VRAIMENT Necessaire ?!!
+    				break;
+    			}
+    		}
     		if(model.getPhase()==ModelState.MUSTERING){
     			//we do nothing
     		}else if (model.getPhase()==ModelState.SUPPLY_TO_LOW){
@@ -516,26 +536,6 @@ public class GameOfThronesController extends JogreController {
     				}else if( model.haveThrone(getSeatNum())){
     					playerChoices.biddingEgality(model.getBidding());
     				}
-    			}
-    		}else{
-    			//le playerChoice verifie si il doit afficher quelque chose de nouveau
-    			switch(model.informations(getSeatNum())){
-    			case Battle.BATTLE_CHOOSE_CARD:
-    				if(model.getBattle().canPlayCard(model.getFamily(getSeatNum()))){playerChoices.showHouseCards(model.getBattle());}
-    				sendProperty("FamilyCards", 0);
-    				break;
-    			case Battle.BATTLE_PLAY_SWORD:
-    				playerChoices.swordPlay(model.getFamily(getSeatNum()));
-    				sendProperty("Sword", 0);
-    				break;
-    			case Battle.BATTLE_WITHDRAWAL:
-    				playerChoices.withdrawal(model.getFamily(getSeatNum()), model.getBattle());
-    				sendProperty("withdraw", 0);
-    				break;
-    			case Battle.BATTLE_END:
-    				model.battleEnd();
-    				sendProperty("BattleEnd", 0);// VRAIMENT Necessaire ?!!
-    				break;
     			}
     		}
     	}

@@ -26,8 +26,8 @@ public class BattlePvP extends Battle{
 	private HouseCardEffect defCardEffect;
 	private HouseCardEffect attCardEffect;
 	
-	public BattlePvP(Territory attTerritory, Territory defTerritory,GameOfThronesModel model){
-		super(attTerritory, defTerritory,model);
+	public BattlePvP(Territory attTerritory, Territory defTerritory,GameOfThronesModel model,Order order){
+		super(attTerritory, defTerritory,model,order);
 		def=0;
 		att=0;
 		defFamily=defTerritory.getFamily();
@@ -63,7 +63,7 @@ public class BattlePvP extends Battle{
 	}
 	
 	public void startBattle() {
-		attTerritory.getOrder().setUse(true);
+		attOrder.setUse(true);
 		state=BATTLE_CHOOSE_CARD;
 	}
 	
@@ -115,8 +115,7 @@ public class BattlePvP extends Battle{
 			defTerritory.rmOrder();
 			defTerritory.setInfluenceToken(false);
 			if(attCard.getName().equals("Loras")){
-				defTerritory.setOrder(new Order(attTerritory.getOrder().getStar(),0,attTerritory.getOrder().getOthBonus(), OrderType.ATT));
-				attTerritory.rmOrder();
+				defTerritory.setOrder(new Order(attOrder.getStar(),0,attOrder.getOthBonus(), OrderType.ATT));
 			}
 			System.out.println("victoire");
 		}else{

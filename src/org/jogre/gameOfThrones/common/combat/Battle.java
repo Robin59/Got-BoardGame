@@ -6,6 +6,7 @@ import java.util.List;
 import org.jogre.gameOfThrones.common.CombatantCard;
 import org.jogre.gameOfThrones.common.Family;
 import org.jogre.gameOfThrones.common.GameOfThronesModel;
+import org.jogre.gameOfThrones.common.orders.Order;
 import org.jogre.gameOfThrones.common.orders.OrderType;
 import org.jogre.gameOfThrones.common.territory.Territory;
 import org.jogre.gameOfThrones.common.territory.Water;
@@ -22,11 +23,13 @@ public abstract class Battle {
 	protected int state; 
 	protected Family attFamily;
 	protected GameOfThronesModel model;
+	protected Order attOrder;
 	
-	public Battle(Territory attTerritory, Territory defTerritory,GameOfThronesModel model) {
+	public Battle(Territory attTerritory, Territory defTerritory,GameOfThronesModel model,Order attOrder) {
 		this.model=model;
 		this.attTerritory=attTerritory;
 		this.defTerritory=defTerritory;
+		this.attOrder=attOrder;
 		attFamily=attTerritory.getFamily();
 		attTroops=new int[4];
 		attSupport= new LinkedList<Territory>();
@@ -92,7 +95,8 @@ public abstract class Battle {
 				return false;
 			}
 		}
-		return attTerritory.getOrder().getUse();
+		attTerritory.rmOrder();
+		return true;
 	}
 
 	/**
@@ -113,7 +117,7 @@ public abstract class Battle {
 	 * @return the force of the attacker army
 	 * */
 	public int attPower(){
-		int res=attTerritory.getOrder().getOthBonus();
+		int res=attOrder.getOthBonus();
 		if(groundType==2){
 			res+= attTroops[0];
 		}else{
