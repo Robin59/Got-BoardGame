@@ -1,15 +1,12 @@
 package org.jogre.gameOfThrones.common.combat;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import org.jogre.gameOfThrones.common.CombatantCard;
 import org.jogre.gameOfThrones.common.Family;
 import org.jogre.gameOfThrones.common.GameOfThronesModel;
 import org.jogre.gameOfThrones.common.orders.Order;
 import org.jogre.gameOfThrones.common.orders.OrderType;
 import org.jogre.gameOfThrones.common.territory.Territory;
-import org.jogre.gameOfThrones.common.territory.Water;
+
 
 public class BattlePvP extends Battle{
 
@@ -25,6 +22,9 @@ public class BattlePvP extends Battle{
 	CombatantCard defCard;
 	private int attCardPower;
 	private int defCardPower;
+	//these objects are for solving house card's effects
+	private HouseCardEffect defCardEffect;
+	private HouseCardEffect attCardEffect;
 	
 	public BattlePvP(Territory attTerritory, Territory defTerritory,GameOfThronesModel model){
 		super(attTerritory, defTerritory,model);
@@ -33,6 +33,8 @@ public class BattlePvP extends Battle{
 		defFamily=defTerritory.getFamily();
 		attCard=null;
 		defCard=null;
+		attCardEffect=null;
+		defCardEffect=null;
 		attSwords=0;
 		attTowers=0;
 		defSwords=0;
@@ -187,21 +189,16 @@ public class BattlePvP extends Battle{
 	public void playCard(CombatantCard card, Family family) {
 		if(family==attFamily){
 			attCard=card;
-			System.out.println("carte att "+attCard.getName());
 		}else{
 			defCard=card;
-			System.out.println("carte def "+defCard.getName());
 		}
 		if(cardsPlayed()){
 			//on test Tyrion 
-			/*if(attCard.getName().equals("Tyrion")){
-				System.out.println("Tyrion has been played");
-				defCard=null;
-			}else if(defCard.getName().equals("Tyrion")) {
-				System.out.println("Tyrion has been played");
-				attCard=null;
-			}else{*/
-			
+			if(attCard.getName().equals("Tyrion")&& attCardEffect==null){
+				attCardEffect=new TyrionEffect(this, false);
+			}else if(defCard.getName().equals("Tyrion")&& defCardEffect==null) {
+				defCardEffect=new TyrionEffect(this, true);
+			}else if ((attCardEffect==null || attCardEffect.getFinish())&&(defCardEffect==null || defCardEffect.getFinish())){
 			attSwords=attCard.getSword();
 			attTowers=attCard.getTower();
 			defSwords=defCard.getSword();
@@ -222,7 +219,7 @@ public class BattlePvP extends Battle{
 				//on passe directement à la resolution
 				battleResolution();
 			}
-			//}
+			}
 		}
 	}
 	/**
@@ -241,13 +238,15 @@ public class BattlePvP extends Battle{
 	public void dontUseSword(){
 		battleResolution();
 	}
-	/*public CombatantCard getAttCard(){
-		return attCard;
-	}
-
+	public void setAttCard(CombatantCard card){
+		attCard=card;}
+	public void setDefCard(CombatantCard card){
+		defCard=card;}
+	public CombatantCard getAttCard(){
+		return attCard;}
 	public CombatantCard getDefCard(){
-		return defCard;
-	}*/
+		return defCard;}
+	
 	public Family getDefFamily() {
 		return defTerritory.getFamily();
 	}
@@ -433,5 +432,6 @@ public class BattlePvP extends Battle{
 		}else{
 			attCardPower=0;}
 	}
+	
 	
 }
