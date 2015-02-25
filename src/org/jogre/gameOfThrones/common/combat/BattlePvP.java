@@ -23,6 +23,8 @@ public class BattlePvP extends Battle{
 	private Family defFamily;
 	CombatantCard attCard;
 	CombatantCard defCard;
+	private int attCardPower;
+	private int defCardPower;
 	
 	public BattlePvP(Territory attTerritory, Territory defTerritory,GameOfThronesModel model){
 		super(attTerritory, defTerritory,model);
@@ -35,6 +37,8 @@ public class BattlePvP extends Battle{
 		attTowers=0;
 		defSwords=0;
 		defTowers=0;
+		attCardPower=0;
+		defCardPower=0;
 	}
 
 
@@ -201,18 +205,22 @@ public class BattlePvP extends Battle{
 			attTowers=attCard.getTower();
 			defSwords=defCard.getSword();
 			defTowers=defCard.getTower();
-			att=this.attPower()+attCard.getPower();
-			def=this.defPower()+defCard.getPower();
-				//la reines des epines, Faire un etat particulié qui permet de clicker sur la carte pour les cartes 
-				//les autres (vict,etc)
-				befforSwordCardEffect();
-				//on regarde si un des deux joueurs a l'épée
-				if(attFamily.canUseSword()||defFamily.canUseSword()){
-					this.state=BATTLE_PLAY_SWORD;
-				}else{
-					//on passe directement à la resolution
-					battleResolution();
-				}
+			attCardPower=attCard.getPower();
+			defCardPower=defCard.getPower();
+			att=this.attPower();
+			def=this.defPower();
+			//la reines des epines, Faire un etat particulié qui permet de clicker sur la carte pour les cartes 
+			//les autres (vict,etc)
+			befforSwordCardEffect();
+			att+=attCardPower;
+			def+=defCardPower;
+			//on regarde si un des deux joueurs a l'épée
+			if(attFamily.canUseSword()||defFamily.canUseSword()){
+				this.state=BATTLE_PLAY_SWORD;
+			}else{
+				//on passe directement à la resolution
+				battleResolution();
+			}
 			//}
 		}
 	}
@@ -310,6 +318,9 @@ public class BattlePvP extends Battle{
 	
 	/*card's effect that are use before the battle resolutions*/ 
 	private void befforSwordCardEffect(){
+		if(attCard.getName().equals("Balon")||defCard.getName().equals("Balon")){
+			balonEffect();//the effect is just on the printed strength, do not influ on the effect (for stannis and davos) 
+		}
 		if(attCard.getName().equals("Stannis") || defCard.getName().equals("Stannis")){
 			stannisEffect();
 		}
@@ -373,11 +384,11 @@ public class BattlePvP extends Battle{
 		}
 	}
 	
-	private void stannisEffect(){//don't work with BALON EFFECT !!!
+	private void stannisEffect(){
 		if(attCard.getName().equals("Stannis")){
-			if(attFirstThrone()) att++;
+			if(!attFirstThrone()) attCardPower++;
 		}else{
-			if(!attFirstThrone()) att++;
+			if(attFirstThrone()) defCardPower++;
 		}
 	}
 	//tell if the attacker is higher on the throne track
@@ -390,12 +401,12 @@ public class BattlePvP extends Battle{
 		}
 		return false;
 	}
-	private void davosEffect(){//don't work with BALON EFFECT !!!
+	private void davosEffect(){
 		if(attCard.getName().equals("Davos")&&davosAttBoolean()){
-			att++;
+			attCardPower++;
 			attSwords++;
 		}else if(davosDefBoolean()){
-			def++;
+			defCardPower++;
 			defSwords++;
 		}
 	}
@@ -415,6 +426,11 @@ public class BattlePvP extends Battle{
 		}
 		return true;
 	}
-	
+	private void balonEffect(){
+		if(attCard.getName().equals("Balon")){
+			defCardPower=0;
+		}else{
+			attCardPower=0;}
+	}
 	
 }
