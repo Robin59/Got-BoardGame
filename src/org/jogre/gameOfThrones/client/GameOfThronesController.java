@@ -771,6 +771,10 @@ public class GameOfThronesController extends JogreController {
     		 model.reinitializeDeck();
     	 }else if(key.equals("HouseCardsSaw")){
     		 model.getFamily(value).carteVu();
+    		 BattlePvP battle=((BattlePvP)model.getBattle());
+    		 if(battle.getAttFamily().carteDejaVu() && battle.getDefFamily().carteDejaVu()){
+ 				battle.afterCardsSaw();
+ 			}
     	 }else if(key.equals("BattleShowBothCards")){
     		 playerChoices.ShowBothBattleCards(model.getBattle());
     	 }else if(key.equals("goToExecutionPhase")){
