@@ -8,8 +8,8 @@ import org.jogre.gameOfThrones.common.territory.Water;
 
 public class BattlePvE extends Battle{
 	
-	public BattlePvE(Territory attTerritory, Territory defTerritory) {
-		super(attTerritory, defTerritory);
+	public BattlePvE(Territory attTerritory, Territory defTerritory,GameOfThronesModel model) {
+		super(attTerritory, defTerritory,model);
 	}
 
 	

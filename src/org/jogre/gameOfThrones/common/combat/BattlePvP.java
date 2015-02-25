@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.jogre.gameOfThrones.common.CombatantCard;
 import org.jogre.gameOfThrones.common.Family;
+import org.jogre.gameOfThrones.common.GameOfThronesModel;
 import org.jogre.gameOfThrones.common.orders.Order;
 import org.jogre.gameOfThrones.common.orders.OrderType;
 import org.jogre.gameOfThrones.common.territory.Territory;
@@ -23,8 +24,8 @@ public class BattlePvP extends Battle{
 	CombatantCard attCard;
 	CombatantCard defCard;
 	
-	public BattlePvP(Territory attTerritory, Territory defTerritory){
-		super(attTerritory, defTerritory);
+	public BattlePvP(Territory attTerritory, Territory defTerritory,GameOfThronesModel model){
+		super(attTerritory, defTerritory,model);
 		def=0;
 		att=0;
 		defFamily=defTerritory.getFamily();
@@ -309,6 +310,9 @@ public class BattlePvP extends Battle{
 	
 	/*card's effect that are use before the battle resolutions*/ 
 	private void befforSwordCardEffect(){
+		if(attCard.getName().equals("Stannis") || defCard.getName().equals("Stannis")){
+			stannisEffect();
+		}
 		if(attCard.getName().equals("Kevan")){
 			kevanEffect();
 		}
@@ -333,6 +337,7 @@ public class BattlePvP extends Battle{
 			attTroops[1]--;
 		}
 	}
+	
 	
 	private void kevanEffect(){
 		att+=attTroops[1];
@@ -363,6 +368,24 @@ public class BattlePvP extends Battle{
 				}
 			}
 		}
+	}
+	
+	private void stannisEffect(){//don't work with BALON EFFECT !!!
+		if(attCard.getName().equals("Stannis")){
+			if(attFirstThrone()) att++;
+		}else{
+			if(!attFirstThrone()) att++;
+		}
+	}
+	//tell if the attacker is higher on the throne track
+	private boolean attFirstThrone(){
+		for(int player : model.getThrone()){
+			if(player==attFamily.getPlayer()){
+				return true;}
+			else if(player==defFamily.getPlayer()){
+				return false;}
+		}
+		return false;
 	}
 	private void davosEffect(){//don't work with BALON EFFECT !!!
 		if(attCard.getName().equals("Davos")&&davosAttBoolean()){

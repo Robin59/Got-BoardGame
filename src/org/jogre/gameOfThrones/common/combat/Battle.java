@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.jogre.gameOfThrones.common.CombatantCard;
 import org.jogre.gameOfThrones.common.Family;
+import org.jogre.gameOfThrones.common.GameOfThronesModel;
 import org.jogre.gameOfThrones.common.orders.OrderType;
 import org.jogre.gameOfThrones.common.territory.Territory;
 import org.jogre.gameOfThrones.common.territory.Water;
@@ -20,8 +21,10 @@ public abstract class Battle {
 	protected int groundType;
 	protected int state; 
 	protected Family attFamily;
+	protected GameOfThronesModel model;
 	
-	public Battle(Territory attTerritory, Territory defTerritory) {
+	public Battle(Territory attTerritory, Territory defTerritory,GameOfThronesModel model) {
+		this.model=model;
 		this.attTerritory=attTerritory;
 		this.defTerritory=defTerritory;
 		attFamily=attTerritory.getFamily();

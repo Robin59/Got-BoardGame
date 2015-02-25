@@ -317,18 +317,18 @@ public class GameOfThronesModel extends JogreModel {
 		territory1=fromTerritory;
 		territory2=toTerritory;
 		if(toTerritory.getNeutralForce()>0){
-			battle= new BattlePvE(fromTerritory, toTerritory);
+			battle= new BattlePvE(fromTerritory, toTerritory,this);
 		}else{
-			battle = new BattlePvP(fromTerritory, toTerritory);
+			battle = new BattlePvP(fromTerritory, toTerritory,this);
 		}
 		
 	}
 	public void battleInitiated(Territory territory) {
 		territory2=territory;
 		if(territory2.getNeutralForce()>0){
-			battle = new BattlePvE(territory1, territory2);
+			battle = new BattlePvE(territory1, territory2,this);
 		}else{
-			battle = new BattlePvP(territory1, territory2);
+			battle = new BattlePvP(territory1, territory2,this);
 		}
 
 		
