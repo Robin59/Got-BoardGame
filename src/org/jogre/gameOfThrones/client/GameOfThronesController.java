@@ -156,44 +156,42 @@ public class GameOfThronesController extends JogreController {
     			}
     			break;
     		case PHASE_EXECUTION:
-    			if(model.getBattle()!=null){//On verifie si il y a combat
-    				if(model.getBattle().getState()==Battle.BATTLE_WITHDRAWAL && model.canWithdraw(gameOfThronesComponent.getTerritory(e.getX(),e.getY()),getSeatNum())){
-    					//System.out.println("can withdraw here");
+    			if(model.getBattle()!=null){
+    				if(model.getBattle().getState()==Battle.BATTLE_WITHDRAWAL && 
+    						model.canWithdraw(gameOfThronesComponent.getTerritory(e.getX(),e.getY()),getSeatNum())){
     					model.getBattle().withdraw(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
     					model.battleEnd();
     					gameOfThronesComponent.repaint();
     					sendProperty("withdraw", gameOfThronesComponent.getTerritory(e.getX(),e.getY()).getName());
-    				}// on peut clicker pour supporter
-    				else if(model.canSupport(gameOfThronesComponent.getTerritory(e.getX(),e.getY()),getSeatNum())){
+    				}// when a player can support and click on his territory
+    				else if(model.getBattle().getState()==Battle.BATTLE_SUPPORT_PHASE &&
+    						model.canSupport(gameOfThronesComponent.getTerritory(e.getX(),e.getY()),getSeatNum())){
     					playerChoices.support(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
-    				}else if(gameOfThronesComponent.getTerritory(e.getX(),e.getY())==model.getTerritory1()){
-    					playerChoices.attackTo(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
     				}
     				// on regarde si un ordre est deja selectioné, qu'il peut etre utilisé dans le territoir voulu et qu'on peut l'utiliser
     			}else if(playerChoices.getRelatedTerr()!=null && playerChoices.getRelatedTerr().canUseOrderOn(gameOfThronesComponent.getTerritory(e.getX(),e.getY()))){
     				//On execute l'ordre
     				int orderEx =playerChoices.getRelatedTerr().useOrderOn(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
     				switch(orderEx){
-    				case 0:
-    					// on envoi le territoir qui donne l'ordre et celui qui execute
+    				case 0: //raid the territory
     					sendProperty(playerChoices.getRelatedTerr().getName(), gameOfThronesComponent.getTerritory(e.getX(),e.getY()).getName());
     					playerChoices.blank();
-    					model.nextPlayer(); //model.checkRaid(); // peut-etre tout mettre en 1
+    					model.nextPlayer();
     					break;
-    				case 1:
+    				case 1:// movement
     					playerChoices.moveTo(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
     					model.mvInitiated(playerChoices.getRelatedTerr(),gameOfThronesComponent.getTerritory(e.getX(),e.getY()));// on indique au model qu'un mouvement est commencé on ne peut plus changer d'ordre
     					//ICI IL faut indiquer les info aux autres joueurs
     					sendProperty("mvInitiated", playerChoices.getRelatedTerr().getName());
     					sendProperty("mvInitiated2", gameOfThronesComponent.getTerritory(e.getX(),e.getY()).getName());
     					break;
-    				case 2:
+    				case 2://click on an opponent territory for beginning a battle
     					playerChoices.attackTo(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
     					model.battle(playerChoices.getRelatedTerr(),gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
     					sendProperty("mvInitiated", playerChoices.getRelatedTerr().getName());
     					sendProperty("battleInitiated", gameOfThronesComponent.getTerritory(e.getX(),e.getY()).getName());
     					break;
-    				case 3://on a clicke sur le territoire de départ, on revient sur la croix
+    				case 3:// Click back on the territory (for canceling order for example)
     					playerChoices.orderSelected(playerChoices.getRelatedTerr());
     					break;
     				}

@@ -586,11 +586,15 @@ public class GameOfThronesModel extends JogreModel {
 		return territory1;
 	}
 
+	/**
+	 * This method must be call after the attacker decide to validate the troops he seend 
+	 */
 	public void attPrepEnd(){
-		if(battle.checkSupport()){
-			System.out.println("battle check=true");
+		battle.setState(Battle.BATTLE_SUPPORT_PHASE);
+		if(battle.checkSupport()){//in case there is no support available, start the battle directly
 			battle.startBattle();
 		}
+		updateLabel();
 	}
 	
 	/**

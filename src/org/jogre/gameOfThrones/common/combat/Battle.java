@@ -34,7 +34,7 @@ public abstract class Battle {
 		attTroops=new int[4];
 		attSupport= new LinkedList<Territory>();
 		defSupport= new LinkedList<Territory>();
-		state=BATTLE_SUPPORT_PHASE;
+		state=BATTLE_BEGIN;
 		if(defTerritory instanceof Water){
 			groundType=2;
 		}else if(defTerritory.getCastle()>0){
@@ -160,7 +160,14 @@ public abstract class Battle {
 	public int getState(){
 		return state;
 	}
+	public void setState(int state){
+		this.state=state;
+	}
 	
+	
+	public void withdraw(Territory territory) {
+		System.out.println("you've call a mock method");
+	}
 	/**
 	 * 
 	 */
@@ -173,17 +180,15 @@ public abstract class Battle {
 		state=BATTLE_END;
 	}
 	
+	public static final int BATTLE_BEGIN=5;
 	public static final int BATTLE_SUPPORT_PHASE=0;
 	public static final int BATTLE_CHOOSE_CARD=1;
 	public static final int BATTLE_PLAY_SWORD=2;
 	public static final int BATTLE_WITHDRAWAL=3;
 	public static final int BATTLE_END=4;
-	public static final int BATTLE_SHOW_CARDS=5;//when players can see both cards played during the battle
+	public static final int BATTLE_SHOW_CARDS=6;//when players can see both cards played during the battle
 
-	public void withdraw(Territory territory) {
-		// TODO Auto-generated method stub
-		
-	}
+	
 
 	
 }
