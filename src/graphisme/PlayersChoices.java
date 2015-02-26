@@ -242,7 +242,6 @@ public class PlayersChoices extends JogreComponent {
 			break;
 		case DISPLAY_BOTH_CARDS:
 			family.carteVu();
-			System.out.println("carte vu par "+family.getName());
 			blank2();
 			return HOUSE_CARDS_SAW;
 		case DISPLAY_VALYRIAN_SWORD :

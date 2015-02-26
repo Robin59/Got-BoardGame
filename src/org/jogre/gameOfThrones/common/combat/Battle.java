@@ -40,6 +40,7 @@ public abstract class Battle {
 		}else if(defTerritory.getCastle()>0){
 			groundType=1;
 		}else{groundType=0;}
+		model.updateLabel();
 	}
 	
 	/**
@@ -136,7 +137,12 @@ public abstract class Battle {
 	 */
 	public abstract int defPower();
 	
-	
+	public Territory getAttTerritory(){
+		return attTerritory;
+	}
+	public Territory getDefTerritory(){
+		return defTerritory;
+	}
 	/***/
 	public abstract void startBattle();
 	public abstract Family getDefFamily();

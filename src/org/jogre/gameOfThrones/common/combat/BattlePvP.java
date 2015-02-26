@@ -63,8 +63,8 @@ public class BattlePvP extends Battle{
 	}
 	
 	public void startBattle() {
-		attOrder.setUse(true);
 		state=BATTLE_CHOOSE_CARD;
+		model.updateLabel();
 	}
 	
 	/**
@@ -151,6 +151,7 @@ public class BattlePvP extends Battle{
 			defFamily.removeCard(defCard);
 			state=BATTLE_END;	
 		}
+		model.updateLabel();
 	}
 
 	/**return true if the attacker win, false if it's the defender*/
@@ -222,6 +223,7 @@ public class BattlePvP extends Battle{
 			//on regarde si un des deux joueurs a l'épée
 			if(attFamily.canUseSword()||defFamily.canUseSword()){
 				this.state=BATTLE_PLAY_SWORD;
+				model.updateLabel();
 			}else{
 				//on passe directement à la resolution
 				battleResolution();
