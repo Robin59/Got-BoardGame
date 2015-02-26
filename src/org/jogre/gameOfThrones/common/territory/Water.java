@@ -1,5 +1,8 @@
 package org.jogre.gameOfThrones.common.territory;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.jogre.gameOfThrones.common.Family;
 import org.jogre.gameOfThrones.common.combat.NavalTroup;
 import org.jogre.gameOfThrones.common.orders.OrderType;
@@ -20,9 +23,28 @@ public class Water extends Territory {
 	}
 
 	public boolean canWithdraw(Territory territory){
-		return (territory instanceof Water)&& (territory.getFamily()==null || territory.getFamily()==this.getFamily());
+		if(territory instanceof Water)return (this.getFamily()==null || territory.getFamily()==this.getFamily());
+		else if(this.getFamily()!=null && territory.getFamily()==this.getFamily()) {
+			List<Territory> alreadyCheak= new LinkedList<Territory>();
+			alreadyCheak.add(this);
+			return navalRetreat(alreadyCheak);
+		}else return false;
 	}
-
+	//recursive method that return true if there is a place to retreat for ground forces with a naval brige
+	private boolean navalRetreat(List<Territory> alreadyCheck){
+		alreadyCheck.add(this);
+		for (Territory territory: neighbors){
+			if(!alreadyCheck.contains(territory)){
+				if(territory instanceof Land &&  (territory.getFamily()==null ||territory.getFamily()==this.getFamily())){
+					return true;}
+				if(territory instanceof Water && this.getFamily()!=null && territory.getFamily()==this.getFamily() && ((Water) territory).navalRetreat(alreadyCheck)){
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
 	@Override
 	public int consolidation() {
 		return 0;
