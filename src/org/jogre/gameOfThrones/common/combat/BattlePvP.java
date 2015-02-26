@@ -274,9 +274,9 @@ public class BattlePvP extends Battle{
 	 */
 	public void withdraw (Territory territory){
 		defTerritory.mouveTroops(territory);
+		defFamily.removeTerritory(defTerritory);
 		state=BATTLE_END;
-		System.out.println("retraite");
-		// on met les nouvelles troupes sur le territoire
+		// put the victorious troops on the territory
 		if(groundType==2){
 			defTerritory.setTroup(new NavalTroup(attFamily, attTroops[0]));
 		}else{
