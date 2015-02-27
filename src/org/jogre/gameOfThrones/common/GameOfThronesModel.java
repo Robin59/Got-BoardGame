@@ -573,6 +573,7 @@ public class GameOfThronesModel extends JogreModel {
 	 */
 	public void battleEnd(){
 		battle=null;
+		state=ModelState.PHASE_EXECUTION;
 		System.out.println("fin battaille");
 		checkOrder();
 	}
@@ -594,6 +595,7 @@ public class GameOfThronesModel extends JogreModel {
 		if(battle.checkSupport()){//in case there is no support available, start the battle directly
 			battle.startBattle();
 		}
+		state=ModelState.BATTLE;
 		updateLabel();
 	}
 	
@@ -603,7 +605,7 @@ public class GameOfThronesModel extends JogreModel {
 	 * @return 0 if there is no battle or if the player don't participate to the battle, else return the battle state 
 	 */
 	public int informations(int seatNum) {
-		if(battle!=null && battle.playerPartisipate(seatNum)){
+		if(state==ModelState.BATTLE && battle.playerPartisipate(seatNum)){
 				return battle.getState(); 
 		}
 		return 0;
@@ -623,14 +625,39 @@ public class GameOfThronesModel extends JogreModel {
 	 */
 	public void updateLabel(){
 		String text= new String("<html>Turn: "+turn+"        Wildings: "+wildings+"  ");
-		if(battle!=null){
+		switch(state){
+		case PHASE_WESTEROS:
+			text+=" Westeros phase";
+			if(bidding!=null && bidding instanceof BiddingAgainstWild) text+=" Wildings attack";
+			break;
+		case PHASE_PROGRAMATION:
+			text+=" Programation's phase";
+			break;
+		case CROW_CHOICE:
+			text+="Crow action";
+			break;
+		case PHASE_EXECUTION:
+			text+=" Exection's phase  :  "+families[throne[currentPlayer]].getName()+"'s turn";
+			break;
+		case SUPPLY_TO_LOW :
+			text+=" The supply of some players is too low, they have too destruct troops";
+			break;
+		case MUSTERING :
+			text+=" Mustering";// add explenetion on which player can muster 
+			break;
+		case WILDLINGSRESOLUTION:
+			text+=wildResolution.toString();
+			break;
+		case BATTLE :
 			text+="Battle : "+battle.getAttTerritory().getName()+" attack "+battle.getDefTerritory().getName()+"<br>";
 			switch(battle.getState()){
 			case Battle.BATTLE_SUPPORT_PHASE : 
-				text+="Players can choose who they want to support";
+				text+="Players can choose who they want to support :";
+				text+="<br> attacker have an initial force of "+battle.attPower()+" defender have an initial force of "+battle.defPower()+"<br>";
 				break;
 			case Battle.BATTLE_CHOOSE_CARD :
 				text+="Players must choose the house cards";
+				text+="<br> attacker have an initial force of "+battle.attPower()+" defender have an initial force of "+battle.defPower()+"<br>";
 				break;
 			case Battle.BATTLE_PLAY_SWORD : 
 				text+=getFamily(fiefdoms[0]).getName()+" can use the valyrian sword";
@@ -639,31 +666,7 @@ public class GameOfThronesModel extends JogreModel {
 				text+="The defender must withdraw";
 				break;
 			}
-		}else{
-			switch(state){
-			case PHASE_WESTEROS:
-				text+=" Westeros phase";
-				if(bidding!=null && bidding instanceof BiddingAgainstWild) text+=" Wildings attack";
-				break;
-			case PHASE_PROGRAMATION:
-				text+=" Programation's phase";
-				break;
-			case CROW_CHOICE:
-				text+="Crow action";
-				break;
-			case PHASE_EXECUTION:
-				text+=" Exection's phase  :  "+families[throne[currentPlayer]].getName()+"'s turn";
-				break;
-			case SUPPLY_TO_LOW :
-				text+=" The supply of some players is too low, they have too destruct troops";
-				break;
-			case MUSTERING :
-				text+=" Mustering";// add explenetion on which player can muster 
-				break;
-			case WILDLINGSRESOLUTION:
-				text+=wildResolution.toString();
-				break;
-			}
+			break;
 		}
 		text+="<br>Throne track : ";
 		for(int i :throne){

@@ -155,21 +155,24 @@ public class GameOfThronesController extends JogreController {
     				playerChoices.blank();
     			}
     			break;
+    		case BATTLE :
+    			//case when a player want to withdraw
+    			if(model.getBattle().getState()==Battle.BATTLE_WITHDRAWAL && 
+    			model.canWithdraw(gameOfThronesComponent.getTerritory(e.getX(),e.getY()),getSeatNum())){
+    				model.getBattle().withdraw(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
+    				model.battleEnd();
+    				gameOfThronesComponent.repaint();
+    				sendProperty("withdraw", gameOfThronesComponent.getTerritory(e.getX(),e.getY()).getName());
+    			}
+    			//case when a player can support and click on his territory
+    			else if(model.getBattle().getState()==Battle.BATTLE_SUPPORT_PHASE &&
+    					model.canSupport(gameOfThronesComponent.getTerritory(e.getX(),e.getY()),getSeatNum())){
+    				playerChoices.support(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
+    			}
+    			break;
     		case PHASE_EXECUTION:
-    			if(model.getBattle()!=null){
-    				if(model.getBattle().getState()==Battle.BATTLE_WITHDRAWAL && 
-    						model.canWithdraw(gameOfThronesComponent.getTerritory(e.getX(),e.getY()),getSeatNum())){
-    					model.getBattle().withdraw(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
-    					model.battleEnd();
-    					gameOfThronesComponent.repaint();
-    					sendProperty("withdraw", gameOfThronesComponent.getTerritory(e.getX(),e.getY()).getName());
-    				}// when a player can support and click on his territory
-    				else if(model.getBattle().getState()==Battle.BATTLE_SUPPORT_PHASE &&
-    						model.canSupport(gameOfThronesComponent.getTerritory(e.getX(),e.getY()),getSeatNum())){
-    					playerChoices.support(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
-    				}
-    				// on regarde si un ordre est deja selectioné, qu'il peut etre utilisé dans le territoir voulu et qu'on peut l'utiliser
-    			}else if(playerChoices.getRelatedTerr()!=null && playerChoices.getRelatedTerr().canUseOrderOn(gameOfThronesComponent.getTerritory(e.getX(),e.getY()))){
+    			// on regarde si un ordre est deja selectioné, qu'il peut etre utilisé dans le territoir voulu et qu'on peut l'utiliser
+    			if(playerChoices.getRelatedTerr()!=null && playerChoices.getRelatedTerr().canUseOrderOn(gameOfThronesComponent.getTerritory(e.getX(),e.getY()))){
     				//On execute l'ordre
     				int orderEx =playerChoices.getRelatedTerr().useOrderOn(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
     				switch(orderEx){

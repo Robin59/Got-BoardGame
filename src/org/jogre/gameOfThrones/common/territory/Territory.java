@@ -183,16 +183,15 @@ public abstract class Territory {
 	 */
 	public boolean canWithdraw(){
 		for(Territory territory :neighbors){
-			if(canWithdraw(this))return true;
+			if(territory.canWithdraw(this))return true;
 		}
 		return false;
 	}
 	
 	/**
 	 * When there is a battle and the defender lose, said if he can withdraw from the given territory
-	 * @param territory
-	 * @param seatNum
-	 * @return
+	 * @param territory the territory from where troops want to withdraw 
+	 * @return 
 	 */
 	public abstract boolean canWithdraw(Territory territory);
 	public abstract int consolidation();
