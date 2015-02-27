@@ -511,8 +511,45 @@ public class PlayersChoices extends JogreComponent {
 	/*This method draw all the force taking part of the war*/
 	private void drawBattleResolution(Graphics g) {
 		// TODO Auto-generated method stub
-		//draw troops, order, card, sword, support, calculate the forces
-		label.setText("Battle Resolution");
+		//label.setText("Battle Resolution");
+		if(!family.isInfoCheck()){
+			//value of the battle
+			int a=0;//this index are use to now where must be display the next thing 
+			int d=0;//a is for the attacker and b the defender
+			Family defFamily =((BattlePvP)battle).getDefFamily();
+			Family attFamily =battle.getAttFamily();
+			int[] defTroops = ((BattlePvP)battle).getDefTerritory().getTroup().getTroops();
+			int[] attTroops = battle.getAttTroops();
+			Order defOrder=((BattlePvP)battle).getDefTerritory().getOrder();
+			Order attOrder=battle.getAttOrder();
+			int[] attSupport=battle.getAttSupport();
+			int[] defSupport=battle.getDefSupport();
+			
+			//draw troops
+			for(int i=0; i<4; i++){
+				if(defTroops[i]>0){
+					g.drawImage(images.getSmallTroopsImage(defFamily)[i],d*45+420,20,null);
+					g.drawImage(images.getSmallNumber(defTroops[i]),d*45+430,35,null);
+					d++;}
+				if(attTroops[i]>0){
+					g.drawImage(images.getSmallTroopsImage(attFamily)[i],a*45,35,null);
+					g.drawImage(images.getSmallNumber(attTroops[i]),a*45+10,35,null);
+					a++;}
+			}
+			//order
+			g.drawImage(images.getOrderImage(defOrder),450,80,null);
+			g.drawImage(images.getOrderImage(attOrder),30,80,null);
+			//support
+			for(int i=0; i<model.getNumberPlayers(); i++){
+				//gonna change
+				System.out.println(model.getFamily(i).getName()+"add "+attSupport[i]+" to att support");
+				System.out.println(model.getFamily(i).getName()+"add "+defSupport[i]+" to def support");
+			}
+			//sword, , calculate the forces
+			//draw card
+			g.drawImage(images.getCardImage(((BattlePvP)battle).getAttCard().getName()),120,20,null);
+			g.drawImage(images.getCardImage(((BattlePvP)battle).getDefCard().getName()),270,20,null);
+		}
 	}
 	/*this method is use to show orders available*/
 	private void showOrders(Graphics g){

@@ -62,7 +62,6 @@ public abstract class Battle {
 	 * @param territory the territory that is add to the defender 
 	 */
 	public void addDefSupport(Territory territory) {
-		System.out.println("defSupport");
 		defSupport.add(territory);
 		territory.getOrder().setUse(true);
 		//on verifie si on peut commencer la bataille
@@ -76,7 +75,6 @@ public abstract class Battle {
 	 * @param territory the territory that is add to the attacker 
 	 */
 	public void addAttSupport(Territory territory){
-		System.out.println("AttSupport"+territory.getName());
 		attSupport.add(territory);
 		territory.getOrder().setUse(true); 
 		//on verifie si on peut commencer la bataille
@@ -163,7 +161,37 @@ public abstract class Battle {
 	public void setState(int state){
 		this.state=state;
 	}
-	
+	/**Return the order of the attacker
+	 * @return the order of the attacker */
+	public Order getAttOrder(){
+		return attOrder;
+	}
+	public int[] getAttTroops(){return attTroops;}
+	/** Return a table that contain the support give by of each family 
+	 * (ex: getAttSupport()[0]==2 means that the baratheon add 2 to the battle by support for attacker)  
+	 * @return a table that contain the support give by of each family 
+	 */
+	public int[] getAttSupport(){
+		int[] res = new int[model.getNumberPlayers()]; 
+		for(Territory territory : attSupport){
+			int[] troops =territory.getTroup().getTroops();
+			res[territory.getFamily().getPlayer()]+=territory.getOrder().getOthBonus()+troops[0]+troops[1]+troops[2]*2+troops[3]*4*groundType;
+		}
+		return res;
+	}
+	/** Return a table that contain the support give by of each family 
+	 * (ex: getDefSupport()[0]==2 means that the baratheon add 2 to the battle by support for defender)  
+	 * @return a table that contain the support give by of each family 
+	 */
+	public int[] getDefSupport(){
+		int[] res = new int[model.getNumberPlayers()]; 
+		for(Territory territory : defSupport){
+			int[] troops =territory.getTroup().getTroops();
+			res[territory.getFamily().getPlayer()]+=territory.getOrder().getOthBonus()+troops[0]+troops[1]+troops[2]*2;
+		}
+		return res;
+	}
+	/** This method is use to go to the next intern phase of the battle*/
 	public abstract void nextPhase(); 
 	
 	public void withdraw(Territory territory) {

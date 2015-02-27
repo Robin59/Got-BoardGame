@@ -782,7 +782,7 @@ public class GameOfThronesController extends JogreController {
      public void receiveProperty (String key, int value) { 
     	 if(key.equals("SendWildingsDeck")){
     		 model.reinitializeDeck();
-    	 }else if(key.equals("HouseCardsSaw")){
+    	 }else if(key.equals("InformationCheck")){
     		 model.getFamily(value).infoCheck();
     		 BattlePvP battle=((BattlePvP)model.getBattle());
     		 if(battle.getAttFamily().isInfoCheck() && battle.getDefFamily().isInfoCheck() && battle.playerPartisipate(getSeatNum())){
