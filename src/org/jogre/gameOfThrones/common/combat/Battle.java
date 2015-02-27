@@ -164,6 +164,7 @@ public abstract class Battle {
 		this.state=state;
 	}
 	
+	public abstract void nextPhase(); 
 	
 	public void withdraw(Territory territory) {
 		System.out.println("you've call a mock method");
@@ -185,8 +186,9 @@ public abstract class Battle {
 	public static final int BATTLE_CHOOSE_CARD=1;
 	public static final int BATTLE_PLAY_SWORD=2;
 	public static final int BATTLE_WITHDRAWAL=3;
-	public static final int BATTLE_END=4;
 	public static final int BATTLE_SHOW_CARDS=6;//when players can see both cards played during the battle
+	public static final int BATTLE_SHOW_RESOLUTION=4;
+	public static final int BATTLE_END=7;
 
 	
 

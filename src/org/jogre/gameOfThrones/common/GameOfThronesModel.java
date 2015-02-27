@@ -788,13 +788,13 @@ public class GameOfThronesModel extends JogreModel {
 	
 	 private void westerosCardNotSaw() {
 		 for(Family family : families){
-			family.carteNonVu(); 
+			family.infoNotCheck(); 
 		 }
 		}
 
 	public boolean westerosCardcheck() {
 		for(Family family : families){
-			if(!family.carteDejaVu()){
+			if(!family.isInfoCheck()){
 				return false;
 			}
 		}

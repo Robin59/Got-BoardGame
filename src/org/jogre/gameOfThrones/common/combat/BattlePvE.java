@@ -13,6 +13,12 @@ public class BattlePvE extends Battle{
 		super(attTerritory, defTerritory,model,attOrder);
 	}
 
+
+	@Override
+	public void nextPhase() {
+		// TODO Auto-generated method stub		
+	}
+
 	
 	@Override
 	public int defPower(){
@@ -83,6 +89,7 @@ public class BattlePvE extends Battle{
 		}
 		return res>=defTerritory.getNeutralForce();
 	}
+
 
 
 

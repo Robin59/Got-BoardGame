@@ -338,11 +338,11 @@ public class GameOfThronesController extends JogreController {
     				sendProperty("defCardPlayed",playerChoices.getIndexCard());
     			}
     			break;
-    		case PlayersChoices.HOUSE_CARDS_SAW:
+    		case PlayersChoices.INFORMATION_CHECK:
     			BattlePvP battle=((BattlePvP)model.getBattle());
-    			sendProperty("HouseCardsSaw",getSeatNum());
-    			if(battle.getAttFamily().carteDejaVu() && battle.getDefFamily().carteDejaVu() && battle.playerPartisipate(getSeatNum())){
-    				battle.afterCardsSaw();
+    			sendProperty("InformationCheck",getSeatNum());
+    			if(battle.getAttFamily().isInfoCheck() && battle.getDefFamily().isInfoCheck() && battle.playerPartisipate(getSeatNum())){
+    				battle.nextPhase();
     			}
     			break;
     		case PlayersChoices.VALYRIAN_SWORD_USE: 
@@ -446,7 +446,7 @@ public class GameOfThronesController extends JogreController {
     			}
     			break;
     		case PlayersChoices.WILDINGS_CARD_SAW:
-    			model.getFamily(getSeatNum()).carteVu(); 
+    			model.getFamily(getSeatNum()).infoCheck(); 
     			sendProperty("cardSaw", getSeatNum()); 
     			playerChoices.blank2();
     			//verifie si tout le monde a executé
@@ -507,6 +507,10 @@ public class GameOfThronesController extends JogreController {
     			case Battle.BATTLE_SHOW_CARDS:
     				playerChoices.ShowBothBattleCards(model.getBattle());
     				sendProperty("BattleShowBothCards",0);
+    				break;
+    			case Battle.BATTLE_SHOW_RESOLUTION:
+    				playerChoices.setPanel(PlayersChoices.DISPLAY_BATTLE_RESOLUTION);
+    				sendProperty("BattleShowResolution",0);
     				break;
     			case Battle.BATTLE_CHOOSE_CARD:
     				if(model.getBattle().canPlayCard(model.getFamily(getSeatNum()))){playerChoices.showHouseCards(model.getBattle());}
@@ -573,7 +577,7 @@ public class GameOfThronesController extends JogreController {
 		}else if(model.getCurrentCard().equals("WebOfLies")){
 			model.westerosCardWebOfLies();
 		}
-		model.getFamily(getSeatNum()).carteVu();
+		model.getFamily(getSeatNum()).infoCheck();
 		sendProperty("cardSaw", getSeatNum());
 		playerChoices.blank();
 		//verifie si tout le monde a executé et qu'on est tjs dans un la phase westeros (cad aucun effet d'autre carte n'a pertubé le cours normal)
@@ -779,11 +783,13 @@ public class GameOfThronesController extends JogreController {
     	 if(key.equals("SendWildingsDeck")){
     		 model.reinitializeDeck();
     	 }else if(key.equals("HouseCardsSaw")){
-    		 model.getFamily(value).carteVu();
+    		 model.getFamily(value).infoCheck();
     		 BattlePvP battle=((BattlePvP)model.getBattle());
-    		 if(battle.getAttFamily().carteDejaVu() && battle.getDefFamily().carteDejaVu()){
- 				battle.afterCardsSaw();
- 			}
+    		 if(battle.getAttFamily().isInfoCheck() && battle.getDefFamily().isInfoCheck() && battle.playerPartisipate(getSeatNum())){
+    			 battle.nextPhase();
+    		 }
+    	 }else if (key.equals("BattleShowResolution")){
+    		 playerChoices.setPanel(PlayersChoices.DISPLAY_BATTLE_RESOLUTION);
     	 }else if(key.equals("BattleShowBothCards")){
     		 playerChoices.ShowBothBattleCards(model.getBattle());
     	 }else if(key.equals("goToExecutionPhase")){
@@ -816,7 +822,7 @@ public class GameOfThronesController extends JogreController {
     	}else if (key.equals("withdraw")){
     		playerChoices.withdrawal(model.getFamily(getSeatNum()), model.getBattle());
     	}else if (key.equals("cardSaw")){
-    		model.getFamily(value).carteVu();
+    		model.getFamily(value).infoCheck();
     	}else if(key.equals("ClashOfKings")){
     		model.westerosCardClashOfKings();
 			playerChoices.bidding();

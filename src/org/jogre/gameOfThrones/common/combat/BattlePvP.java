@@ -44,6 +44,19 @@ public class BattlePvP extends Battle{
 	}
 
 
+
+	@Override
+	public void nextPhase() {
+		switch(state){
+		case BATTLE_SHOW_CARDS :
+			afterCardsSaw();
+			break;
+		case BATTLE_SHOW_RESOLUTION :
+			battleResolution();
+			break;
+		}
+	}
+	
 	
 	@Override
 	public int defPower(){
@@ -90,7 +103,7 @@ public class BattlePvP extends Battle{
 		}
 	}
 	
-	public void battleResolution(){
+	private void battleResolution(){
 		if(this.battleWinner()){
 			//on applique les effets des cartes
 			afterResolutionCardEffect(true);
@@ -194,13 +207,13 @@ public class BattlePvP extends Battle{
 		}
 		if(cardsPlayed()){
 			state=BATTLE_SHOW_CARDS;
-			attFamily.carteNonVu();
-			defFamily.carteNonVu();
+			attFamily.infoNotCheck();
+			defFamily.infoNotCheck();
 		}
 	}
 	
 	
-	public void afterCardsSaw(){
+	private void afterCardsSaw(){
 		//on test Tyrion 
 		if(attCard.getName().equals("Tyrion")&& attCardEffect==null){
 			attCardEffect=new TyrionEffect(this, false);
@@ -223,11 +236,12 @@ public class BattlePvP extends Battle{
 			//on regarde si un des deux joueurs a l'épée
 			if(attFamily.canUseSword()||defFamily.canUseSword()){
 				this.state=BATTLE_PLAY_SWORD;
-				model.updateLabel();
 			}else{
-				//on passe directement à la resolution
-				battleResolution();
+				state=BATTLE_SHOW_RESOLUTION;
+				attFamily.infoNotCheck();
+				defFamily.infoNotCheck();
 			}
+			model.updateLabel();
 		}
 	}
 	
@@ -241,11 +255,15 @@ public class BattlePvP extends Battle{
 			def++;
 			defFamily.swordUse();
 		}
-		battleResolution();
+		state=BATTLE_SHOW_RESOLUTION;
+		attFamily.infoNotCheck();
+		defFamily.infoNotCheck();
 		
 	}
 	public void dontUseSword(){
-		battleResolution();
+		state=BATTLE_SHOW_RESOLUTION;
+		attFamily.infoNotCheck();
+		defFamily.infoNotCheck();
 	}
 	public void setAttCard(CombatantCard card){
 		attCard=card;}

@@ -20,7 +20,7 @@ public class Family {
 	private boolean ordersGiven;
 	// current value of the supply 
 	private int supply; // influence the max troop
-	private boolean cardSaw;
+	private boolean infoCheck;
 	/* The number of influence point is always between 0 and 20 */ 
 	private int inflPoint;
 	private int bid;
@@ -269,15 +269,15 @@ public class Family {
 		return supply;
 	}
 
-	public void carteNonVu(){
-		cardSaw=false;
+	public void infoNotCheck(){
+		infoCheck=false;
 	}
-	public void carteVu() {
-		cardSaw=true;
+	public void infoCheck() {
+		infoCheck=true;
 	}
 	
-	public boolean carteDejaVu(){
-		return cardSaw;
+	public boolean isInfoCheck(){
+		return infoCheck;
 	}
 	
 	/**said if this family can recruit a new troop in this territory*/

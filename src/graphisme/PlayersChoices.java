@@ -115,7 +115,7 @@ public class PlayersChoices extends JogreComponent {
 	public static final int CHOOSE_CARD1=43;
 	//...
 	public static final int CHOOSE_CARD7=49;
-	public static final int HOUSE_CARDS_SAW=50;
+	public static final int INFORMATION_CHECK=50;
 	
 	
 	public PlayersChoices (JLabel label, GameOfThronesModel model){
@@ -241,9 +241,9 @@ public class PlayersChoices extends JogreComponent {
 			}
 			break;
 		case DISPLAY_BOTH_CARDS:
-			family.carteVu();
+			family.infoCheck();
 			blank2();
-			return HOUSE_CARDS_SAW;
+			return INFORMATION_CHECK;
 		case DISPLAY_VALYRIAN_SWORD :
 			if (x>50 && x<140){
 				blank2();
@@ -381,6 +381,9 @@ public class PlayersChoices extends JogreComponent {
 				return CHOOSE_RAVEN; 
 			}
 			break;
+		case DISPLAY_BATTLE_RESOLUTION:
+			family.infoCheck();
+			return INFORMATION_CHECK;
 		}
 		return 0;
 	}
@@ -430,7 +433,7 @@ public class PlayersChoices extends JogreComponent {
 			drawHouseCards(g);
 			break;
 		case DISPLAY_BOTH_CARDS:
-			if(!family.carteDejaVu()){
+			if(!family.isInfoCheck()){
 				g.drawImage(images.getCardImage(((BattlePvP)battle).getAttCard().getName()),100,20,null);
 				g.drawImage(images.getCardImage(((BattlePvP)battle).getDefCard().getName()),300,20,null);
 			}
@@ -499,9 +502,18 @@ public class PlayersChoices extends JogreComponent {
 			g.drawImage(images.swordImage, 220, 10,null);
 			g.drawImage(images.raven, 380, 10,null);
 			break;
+		case DISPLAY_BATTLE_RESOLUTION:
+			drawBattleResolution(g);
+			break;
 		}
 	}
 
+	/*This method draw all the force taking part of the war*/
+	private void drawBattleResolution(Graphics g) {
+		// TODO Auto-generated method stub
+		//draw troops, order, card, sword, support, calculate the forces
+		label.setText("Battle Resolution");
+	}
 	/*this method is use to show orders available*/
 	private void showOrders(Graphics g){
 		int x =0;
@@ -864,6 +876,11 @@ public class PlayersChoices extends JogreComponent {
 	public int getPanel(){
 		return panel;
 	}
+	
+	public void setPanel(int panel){
+		this.panel=panel;
+		repaint();
+	}
 
 	public void setPanel(int panel, WildlingsResolution wildlingsResolution){
 		this.wildlingsResolution=wildlingsResolution;
@@ -928,7 +945,6 @@ public class PlayersChoices extends JogreComponent {
 	public void setShipSelected(boolean shipSelected){
 		shipRecrutement=shipSelected;
 	}
-	
 	/**
 	 * Return the family play by the player who use this playerChoice
 	 * @return the family play by the player who use this playerChoice
@@ -965,6 +981,8 @@ public class PlayersChoices extends JogreComponent {
 	public static final int DISPLAY_LETTERS_AB=24;
 	public static final int DISPLAY_TRACKS=25;
 	private static final int DISPLAY_BOTH_CARDS=26;
+	public static final int DISPLAY_BATTLE_RESOLUTION=27;
+
 }
 
 
