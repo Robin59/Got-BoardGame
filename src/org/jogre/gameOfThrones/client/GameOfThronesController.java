@@ -301,7 +301,7 @@ public class GameOfThronesController extends JogreController {
     		case PlayersChoices.ATT_PREPARATION_ENDED:
     			model.attPrepEnd();
     			sendProperty("attPreparationEnded", 0);
-    			playerChoices.blank2();
+    			playerChoices.checkPlayerChoices();
     			break;
     		case PlayersChoices.SEND_SHIP_FOR_ATT :
     			model.troopSend(1,0,0,0);
@@ -723,8 +723,12 @@ public class GameOfThronesController extends JogreController {
     private void useInfluToken(Territory territory){
     	((Land) territory).setInfluenceToken(true);
 		territory.getFamily().addInflu(-1);
-		model.setPhase(ModelState.PHASE_EXECUTION);
-		model.nextPlayer();	
+		if(model.getBattle()==null){
+			model.setPhase(ModelState.PHASE_EXECUTION);
+			model.nextPlayer();	
+		}else{
+			model.setPhase(ModelState.BATTLE);
+		}
     }
     
     /**
@@ -733,8 +737,12 @@ public class GameOfThronesController extends JogreController {
      */
     private void dontUseInfluToken(Territory territory){
 		territory.removeOwner();
-		model.setPhase(ModelState.PHASE_EXECUTION);
-		model.nextPlayer();	
+		if(model.getBattle()==null){
+			model.setPhase(ModelState.PHASE_EXECUTION);
+			model.nextPlayer();
+		}else{
+			model.setPhase(ModelState.BATTLE);
+		}
     }
     //
     public void receiveProperty(String key, int type, int bonus) {

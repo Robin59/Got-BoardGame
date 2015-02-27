@@ -592,10 +592,15 @@ public class GameOfThronesModel extends JogreModel {
 	 */
 	public void attPrepEnd(){
 		battle.setState(Battle.BATTLE_SUPPORT_PHASE);
-		if(battle.checkSupport()){//in case there is no support available, start the battle directly
-			battle.startBattle();
+		//we check if the player can add an influence token
+		if (territory1.getTroup().getEffectif()>0 || territory1.getInfluenceToken() || (territory1 instanceof HomeLand && ((HomeLand) territory1).originalOwner(territory1.getFamily()))){
+			if(battle.checkSupport()){//in case there is no support available, start the battle directly
+				battle.startBattle();
+			}
+			state=ModelState.BATTLE;	
+		}else{//the player have the possiblity to use a influence befor the begin of the battle
+			state=ModelState.USE_INF_TOKEN;
 		}
-		state=ModelState.BATTLE;
 		updateLabel();
 	}
 	
