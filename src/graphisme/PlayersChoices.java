@@ -529,26 +529,34 @@ public class PlayersChoices extends JogreComponent {
 			for(int i=0; i<4; i++){
 				if(defTroops[i]>0){
 					g.drawImage(images.getSmallTroopsImage(defFamily)[i],d*45+420,20,null);
-					g.drawImage(images.getSmallNumber(defTroops[i]),d*45+430,35,null);
+					g.drawImage(images.getSmallNumber(defTroops[i]),d*45+430,32,null);
 					d++;}
 				if(attTroops[i]>0){
-					g.drawImage(images.getSmallTroopsImage(attFamily)[i],a*45,35,null);
-					g.drawImage(images.getSmallNumber(attTroops[i]),a*45+10,35,null);
+					g.drawImage(images.getSmallTroopsImage(attFamily)[i],a*45,20,null);
+					g.drawImage(images.getSmallNumber(attTroops[i]),a*45+10,32,null);
 					a++;}
 			}
 			//order
-			g.drawImage(images.getOrderImage(defOrder),450,80,null);
-			g.drawImage(images.getOrderImage(attOrder),30,80,null);
+			g.drawImage(images.getOrderImage(defOrder),440,160,null);
+			g.drawImage(images.getOrderImage(attOrder),15,160,null);
 			//support
+			a=0;d=0;
 			for(int i=0; i<model.getNumberPlayers(); i++){
-				//gonna change
-				System.out.println(model.getFamily(i).getName()+"add "+attSupport[i]+" to att support");
-				System.out.println(model.getFamily(i).getName()+"add "+defSupport[i]+" to def support");
+				if(attSupport[i]>0){
+					g.drawImage(images.getSmallInfluenceToken(model.getFamily(i)),a*40+5,80,null);
+					g.drawImage(images.getSmallNumber(attSupport[i]),a*40+10,90,null);
+					a++;
+				}
+				if(defSupport[i]>0){
+					g.drawImage(images.getSmallInfluenceToken(model.getFamily(i)),d*40+430,80,null);
+					g.drawImage(images.getSmallNumber(defSupport[i]),d*40+440,85,null);
+					d++;
+				}
 			}
 			//sword, , calculate the forces
 			//draw card
-			g.drawImage(images.getCardImage(((BattlePvP)battle).getAttCard().getName()),120,20,null);
-			g.drawImage(images.getCardImage(((BattlePvP)battle).getDefCard().getName()),270,20,null);
+			g.drawImage(images.getCardImage(((BattlePvP)battle).getAttCard().getName()),100,20,null);
+			g.drawImage(images.getCardImage(((BattlePvP)battle).getDefCard().getName()),250,20,null);
 		}
 	}
 	/*this method is use to show orders available*/
