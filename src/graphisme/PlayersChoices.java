@@ -203,7 +203,8 @@ public class PlayersChoices extends JogreComponent {
 			}
 			break;
 		case DISPLAY_LAND_ATT :
-			if (x>150 && x<200 && y>150 && y<200){ 
+			if (x>150 && x<200 && y>150 && y<200){
+				blank2();
 				return ATT_PREPARATION_ENDED;
 			}else if (x>50 && x<100 && y>50 && y<100 && relatedTerr.getTroup().getTroops()[1]!=0){
 				return SEND_FOOT_FOR_ATT;
@@ -248,7 +249,7 @@ public class PlayersChoices extends JogreComponent {
 			if (x>50 && x<140){
 				blank2();
 				this.repaint();
-				return VALYRIAN_SWORD_NOT_USE;
+				return VALYRIAN_SWORD_USE;
 			}else if(x>200 && x<300){
 				blank2();
 				this.repaint();
@@ -510,8 +511,6 @@ public class PlayersChoices extends JogreComponent {
 
 	/*This method draw all the force taking part of the war*/
 	private void drawBattleResolution(Graphics g) {
-		// TODO Auto-generated method stub
-		//label.setText("Battle Resolution");
 		if(!family.isInfoCheck()){
 			//value of the battle
 			int a=0;//this index are use to now where must be display the next thing 
@@ -553,7 +552,12 @@ public class PlayersChoices extends JogreComponent {
 					d++;
 				}
 			}
-			//sword, , calculate the forces
+			//sword
+			if(((BattlePvP)battle).getAttUseSword()){
+				g.drawImage(images.smallSordImage,5,250,null);
+			}else if(((BattlePvP)battle).getDefUseSword()){
+				g.drawImage(images.smallSordImage,405,250,null);}
+			//calculate the forces
 			//draw card
 			g.drawImage(images.getCardImage(((BattlePvP)battle).getAttCard().getName()),100,20,null);
 			g.drawImage(images.getCardImage(((BattlePvP)battle).getDefCard().getName()),250,20,null);

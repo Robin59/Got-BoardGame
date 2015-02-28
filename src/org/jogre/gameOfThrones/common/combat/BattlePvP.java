@@ -25,6 +25,9 @@ public class BattlePvP extends Battle{
 	//these objects are for solving house card's effects
 	private HouseCardEffect defCardEffect;
 	private HouseCardEffect attCardEffect;
+	//
+	private boolean attUseSword;
+	private boolean defUseSword;
 	
 	public BattlePvP(Territory attTerritory, Territory defTerritory,GameOfThronesModel model,Order order){
 		super(attTerritory, defTerritory,model,order);
@@ -35,6 +38,8 @@ public class BattlePvP extends Battle{
 		defCard=null;
 		attCardEffect=null;
 		defCardEffect=null;
+		attUseSword=false;
+		defUseSword=false;
 		attSwords=0;
 		attTowers=0;
 		defSwords=0;
@@ -246,13 +251,16 @@ public class BattlePvP extends Battle{
 	}
 	
 	/**
+	 * This method is call when a player use the sword to boost his strength 
 	 */
 	public void useSword(){
 		if(attFamily.canUseSword()){
 			att++;
+			attUseSword=true;
 			attFamily.swordUse();
 		}else{
 			def++;
+			defUseSword=false;
 			defFamily.swordUse();
 		}
 		state=BATTLE_SHOW_RESOLUTION;
@@ -265,6 +273,11 @@ public class BattlePvP extends Battle{
 		attFamily.infoNotCheck();
 		defFamily.infoNotCheck();
 	}
+	public boolean getDefUseSword(){
+		return defUseSword;}
+	public boolean getAttUseSword(){
+		return attUseSword;}
+	
 	public void setAttCard(CombatantCard card){
 		attCard=card;}
 	public void setDefCard(CombatantCard card){

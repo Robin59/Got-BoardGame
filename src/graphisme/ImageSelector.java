@@ -49,7 +49,7 @@ public class  ImageSelector{
 	public Image raven;
 	public Image throne;
 	public Image swordImage;
-	
+	public Image smallSordImage;
 	
 	private ImageSelector (){
 		//images des troupes
@@ -188,6 +188,7 @@ public class  ImageSelector{
 		throne=GameImages.getImage(213);
 		raven=GameImages.getImage(214);
 		swordImage =GameImages.getImage(108);
+		smallSordImage=GameImages.getImage(215);
 	}
 	
 	/**
