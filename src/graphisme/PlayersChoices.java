@@ -536,7 +536,8 @@ public class PlayersChoices extends JogreComponent {
 					a++;}
 			}
 			//order
-			g.drawImage(images.getSmallOrderImage(defOrder),(d%2)*45+420,(d/2)*45+3,null); d++;
+			if(defOrder!=null){
+			g.drawImage(images.getSmallOrderImage(defOrder),(d%2)*45+420,(d/2)*45+3,null); d++;}
 			g.drawImage(images.getSmallOrderImage(attOrder),(a%2)*45,(a/2)*45+3,null); a++;
 			//support
 			for(int i=0; i<model.getNumberPlayers(); i++){
