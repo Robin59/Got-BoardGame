@@ -527,37 +527,38 @@ public class PlayersChoices extends JogreComponent {
 			//draw troops
 			for(int i=0; i<4; i++){
 				if(defTroops[i]>0){
-					g.drawImage(images.getSmallTroopsImage(defFamily)[i],d*45+420,20,null);
-					g.drawImage(images.getSmallNumber(defTroops[i]),d*45+430,32,null);
+					g.drawImage(images.getSmallTroopsImage(defFamily)[i],(d%2)*45+420,(d/2)*45,null);
+					g.drawImage(images.getSmallNumber(defTroops[i]),(d%2)*45+430,(d/2)*45+12,null);
 					d++;}
 				if(attTroops[i]>0){
-					g.drawImage(images.getSmallTroopsImage(attFamily)[i],a*45,20,null);
-					g.drawImage(images.getSmallNumber(attTroops[i]),a*45+10,32,null);
+					g.drawImage(images.getSmallTroopsImage(attFamily)[i],(a%2)*45,(a/2)*45,null);
+					g.drawImage(images.getSmallNumber(attTroops[i]),(a%2)*45+10,(a/2)*45+12,null);
 					a++;}
 			}
 			//order
-			g.drawImage(images.getOrderImage(defOrder),440,160,null);
-			g.drawImage(images.getOrderImage(attOrder),15,160,null);
+			g.drawImage(images.getSmallOrderImage(defOrder),(d%2)*45+420,(d/2)*45+3,null); d++;
+			g.drawImage(images.getSmallOrderImage(attOrder),(a%2)*45,(a/2)*45+3,null); a++;
 			//support
-			a=0;d=0;
 			for(int i=0; i<model.getNumberPlayers(); i++){
 				if(attSupport[i]>0){
-					g.drawImage(images.getSmallInfluenceToken(model.getFamily(i)),a*40+5,80,null);
-					g.drawImage(images.getSmallNumber(attSupport[i]),a*40+10,90,null);
+					g.drawImage(images.getSmallInfluenceToken(model.getFamily(i)),(a%2)*45,(a/2)*45,null);
+					g.drawImage(images.getSmallNumber(attSupport[i]),(a%2)*45+10,(a/2)*45+10,null);
 					a++;
 				}
 				if(defSupport[i]>0){
-					g.drawImage(images.getSmallInfluenceToken(model.getFamily(i)),d*40+430,80,null);
-					g.drawImage(images.getSmallNumber(defSupport[i]),d*40+440,85,null);
+					g.drawImage(images.getSmallInfluenceToken(model.getFamily(i)),(d%2)*45+420,(d/2)*45,null);
+					g.drawImage(images.getSmallNumber(defSupport[i]),(d%2)*45+430,(d/2)*45+10,null);
 					d++;
 				}
 			}
 			//sword
 			if(((BattlePvP)battle).getAttUseSword()){
-				g.drawImage(images.smallSordImage,5,250,null);
+				g.drawImage(images.smallSordImage,5,160,null);
 			}else if(((BattlePvP)battle).getDefUseSword()){
-				g.drawImage(images.smallSordImage,405,250,null);}
+				g.drawImage(images.smallSordImage,405,160,null);}
 			//calculate the forces
+			g.drawImage(images.getNumber(((BattlePvP) battle).getAtt()),30,210,null);
+			g.drawImage(images.getNumber(((BattlePvP) battle).getDef()),430,210,null);
 			//draw card
 			g.drawImage(images.getCardImage(((BattlePvP)battle).getAttCard().getName()),100,20,null);
 			g.drawImage(images.getCardImage(((BattlePvP)battle).getDefCard().getName()),250,20,null);
