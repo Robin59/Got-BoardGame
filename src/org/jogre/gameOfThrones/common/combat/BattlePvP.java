@@ -59,6 +59,9 @@ public class BattlePvP extends Battle{
 		case BATTLE_SHOW_RESOLUTION :
 			battleResolution();
 			break;
+		case BATTLE_CARD_EFFECT_END_BATTLE :
+			//battleResolution();
+			break;
 		}
 	}
 	
@@ -109,9 +112,13 @@ public class BattlePvP extends Battle{
 	}
 	
 	private void battleResolution(){
-		if(this.battleWinner()){
-			//on applique les effets des cartes
-			afterResolutionCardEffect(true);
+		//
+		boolean attWin = this.battleWinner();
+		state=BATTLE_END;// this is change if there is still actions to do for solving the battle
+		//application of the card's effect
+		afterResolutionCardEffect(attWin);
+		//
+		if(attWin){
 			//destruction of the garrison if there's one
 			defTerritory.destructGarrison();
 			//on detruit les troups du defenceur 
@@ -120,7 +127,6 @@ public class BattlePvP extends Battle{
 				System.out.println("retraite");
 				state=BATTLE_WITHDRAWAL;
 			}else{
-				state=BATTLE_END; 
 				// on met les nouvelles troupes sur le territoire
 				if(groundType==2){
 					defTerritory.setTroup(new NavalTroup(attFamily, attTroops[0]));
@@ -137,8 +143,6 @@ public class BattlePvP extends Battle{
 			}
 			System.out.println("victoire");
 		}else{
-			//on applique les effets des cartes
-			afterResolutionCardEffect(false);
 			//on detruit les troups de l'attaquant
 			System.out.println("defailt");
 			// faire les destructions des troupes ici!!
@@ -155,7 +159,7 @@ public class BattlePvP extends Battle{
 					}
 				}
 			}
-			//retraites des troupes
+			//Attacker's troops withdraw (if there is still some) 
 			if(attTroops[0]+attTroops[1]+attTroops[2]>=0){
 				if(attTerritory.getTroup()!=null){
 					attTerritory.getTroup().addTroop(attTroops);
@@ -165,13 +169,26 @@ public class BattlePvP extends Battle{
 					attTerritory.setTroup(new GroundForce(attFamily, attTroops[1],attTroops[2],0));
 				}
 			}
-			attFamily.removeCard(attCard);
-			defFamily.removeCard(defCard);
-			state=BATTLE_END;	
 		}
+		end();
 		model.updateLabel();
 	}
 
+	/**
+	 * This method is call when a battle end 
+	 */
+	public void end(){
+		attFamily.removeCard(attCard);
+		defFamily.removeCard(defCard);//THIS IS NOT WORKING WITH ROOSE BOLTON EFFECT
+		//if a player have no more cards in his hand, he regain them  
+		if (attFamily.getCombatantCards().isEmpty()){
+			attFamily.regainCombatantCards(attCard);
+		}
+		if (defFamily.getCombatantCards().isEmpty()){
+			defFamily.regainCombatantCards(defCard);
+		}
+	}
+	
 	/**return true if the attacker win, false if it's the defender*/
 	private boolean battleWinner() {
 		if(att==def){
@@ -312,18 +329,6 @@ public class BattlePvP extends Battle{
 			defTerritory.setTroup(new NavalTroup(attFamily, attTroops[0]));
 		}else{
 			defTerritory.setTroup(new GroundForce(attFamily, attTroops[1],attTroops[2],attTroops[3]));
-		}
-	}
-	/**
-	 * This method is call when a battle end 
-	 */
-	public void end(){
-		// on regarde si un joueur n'a plus de cartes, au quel cas on lui rend
-		if (attFamily.getCombatantCards().isEmpty()){
-			attFamily.regainCombatantCards(attCard);
-		}
-		if (defFamily.getCombatantCards().isEmpty()){
-			defFamily.regainCombatantCards(defCard);
 		}
 	}
 	
