@@ -11,6 +11,8 @@ import org.jogre.gameOfThrones.common.orders.OrderType;
 import org.jogre.gameOfThrones.common.territory.Territory;
 import org.jogre.gameOfThrones.common.territory.Water;
 
+import state.ModelState;
+
 public abstract class Battle {
 	
 	protected Territory attTerritory;
@@ -152,7 +154,18 @@ public abstract class Battle {
 	public void playCard(CombatantCard card, Family family) {}
 	
 	/**
-	 * 
+	 * Give some information about the state of the battle (for the playerChoice)
+	 * @param seatNum 
+	 * @return 0 if there nothing to see for the player, else return the battle state 
+	 */
+	public int mustDisplay(int player){
+		//chercher les execptions
+		if(playerPartisipate(player)|| state==BATTLE_SHOW_RESOLUTION || state==BATTLE_SHOW_CARDS){
+			return state;
+		}
+		return 0;
+	}
+	/**
 	 * @return
 	 */
 	public int getState(){
@@ -216,7 +229,8 @@ public abstract class Battle {
 	public static final int BATTLE_WITHDRAWAL=3;
 	public static final int BATTLE_SHOW_CARDS=6;//when players can see both cards played during the battle
 	public static final int BATTLE_SHOW_RESOLUTION=4;
-	public static final int BATTLE_END=7;
+	public static final int BATTLE_CARD_EFFECT_END_BATTLE=7; //for card's effect at that occur at the end of the battle 
+	public static final int BATTLE_END=8;
 
 	
 

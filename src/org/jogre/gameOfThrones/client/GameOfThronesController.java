@@ -503,7 +503,7 @@ public class GameOfThronesController extends JogreController {
     			break;
     		}
     		if(model.getBattle()!=null){
-    			switch(model.informations(getSeatNum())){
+    			switch(model.getBattle().mustDisplay((getSeatNum()))){
     			case Battle.BATTLE_SHOW_CARDS:
     				playerChoices.ShowBothBattleCards(model.getBattle());
     				sendProperty("BattleShowBothCards",0);
@@ -513,7 +513,8 @@ public class GameOfThronesController extends JogreController {
     				sendProperty("BattleShowResolution",0);
     				break;
     			case Battle.BATTLE_CHOOSE_CARD:
-    				if(model.getBattle().canPlayCard(model.getFamily(getSeatNum()))){playerChoices.showHouseCards(model.getBattle());}
+    				if(model.getBattle().canPlayCard(model.getFamily(getSeatNum()))){
+    					playerChoices.showHouseCards(model.getBattle());}
     				sendProperty("FamilyCards", 0);
     				break;
     			case Battle.BATTLE_PLAY_SWORD:

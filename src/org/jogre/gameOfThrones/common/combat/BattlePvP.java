@@ -114,7 +114,7 @@ public class BattlePvP extends Battle{
 	private void battleResolution(){
 		//
 		boolean attWin = this.battleWinner();
-		state=BATTLE_END;// this is change if there is still actions to do for solving the battle
+		state=BATTLE_END;// this is changed if there is still actions to do for solving the battle
 		//application of the card's effect
 		afterResolutionCardEffect(attWin);
 		//
@@ -354,6 +354,9 @@ public class BattlePvP extends Battle{
 			if(attCard.getName().equals("BlackFish")){
 				defSwords=0;
 			}
+		}
+		if(attCard.getName().equals("PatchFace")||(defCard.getName().equals("PatchFace"))){
+			//patchFace effect
 		}
 	}
 	

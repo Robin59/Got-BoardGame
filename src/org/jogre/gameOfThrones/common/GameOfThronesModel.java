@@ -604,17 +604,7 @@ public class GameOfThronesModel extends JogreModel {
 		updateLabel();
 	}
 	
-	/**
-	 * Give some information about the state of the battle (for the playerChoice)
-	 * @param seatNum 
-	 * @return 0 if there is no battle or if the player don't participate to the battle, else return the battle state 
-	 */
-	public int informations(int seatNum) {
-		if(state==ModelState.BATTLE && battle.playerPartisipate(seatNum)){
-				return battle.getState(); 
-		}
-		return 0;
-	}
+	
 	/**
 	 * When there is a battle and the defencer lose, said if he can withdraw to the given territory
 	 * @param territory

@@ -18,4 +18,9 @@ public abstract class HouseCardEffect {
 		}
 		
 		public abstract void execute();
+		
+		// Indique si un joueur doit afficher quelque chose de nouveau dans son player choice
+		public int display(boolean attacker){
+			
+		}
 }
