@@ -156,8 +156,7 @@ public abstract class Battle {
 	/**
 	 * Give some information about the state of the battle (for the playerChoice)
 	 * @param seatNum 
-	 * @return 0 if there nothing to see for the player, else return the battle state 
-	 */
+	 * @return 0 if there nothing to see for the player, else return the battle state*/
 	public int mustDisplay(int player){
 		//chercher les execptions
 		if(playerPartisipate(player)|| state==BATTLE_SHOW_RESOLUTION || state==BATTLE_SHOW_CARDS){
