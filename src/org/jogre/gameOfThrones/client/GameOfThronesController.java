@@ -246,7 +246,7 @@ public class GameOfThronesController extends JogreController {
     			if(model.getPhase()==ModelState.BATTLE){
     				if(model.getBattle().getState()==Battle.BATTLE_CARD_EFFECT_END_BATTLE){
     					((BattlePvP) model.getBattle()).afterEffectBattle(choice-PlayersChoices.CHOOSE_CARD0);
-    					//sendProperty(key, value);
+    					sendProperty("Battle end card effect", choice-PlayersChoices.CHOOSE_CARD0);
     				}
     			}
     		}else{
@@ -806,6 +806,8 @@ public class GameOfThronesController extends JogreController {
     		 if(battle.getAttFamily().isInfoCheck() && battle.getDefFamily().isInfoCheck()){
     			 battle.nextPhase();
     		 }
+    	 }else if (key.equals("Battle end card effect")){
+    		 ((BattlePvP) model.getBattle()).afterEffectBattle(value);
     	 }else if(key.equals("DisplayCardEffect")){
     		 playerChoices.setPanel(model.getBattle().mustDisplay((getSeatNum())));
     	 }else if (key.equals("BattleShowResolution")){

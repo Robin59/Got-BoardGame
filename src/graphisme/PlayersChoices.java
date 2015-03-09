@@ -396,8 +396,7 @@ public class PlayersChoices extends JogreComponent {
 				indexHouseCard++;
 				repaint();
 			}else if (x>60 && x<510){
-				choseDisplayCard(x, oppFamily);
-				return HOUSE_CARD_CHOSEN;
+				return indexChoseCard(x, oppFamily);
 			}
 			break;
 		}

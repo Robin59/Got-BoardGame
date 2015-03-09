@@ -362,6 +362,9 @@ public class BattlePvP extends Battle{
 		}else if(defCardEffect!=null && !defCardEffect.getFinish()){
 			defCardEffect.execute(value);
 		}
+		if((attCardEffect==null || attCardEffect.getFinish())&&(defCardEffect==null || defCardEffect.getFinish())){
+			nextPhase();
+		}
 	}
 	/*
 	 * card's effect that are use after the battle resolutions 
