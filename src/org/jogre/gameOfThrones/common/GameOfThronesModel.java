@@ -435,7 +435,7 @@ public class GameOfThronesModel extends JogreModel {
     	families[1].addCard(new CombatantCard("Jaime",2, 1, 0));
     	families[1].addCard(new CombatantCard("Gregor",3, 3, 0));
     	families[1].addCard(new CombatantCard("Tywin",4, 0, 0));
-    	boardModel.getTerritory("Moat Cailin").setTroup(new GroundForce(families[1],1,0,0));
+    	boardModel.getTerritory("Moat Cailin").setTroup(new GroundForce(families[0],1,0,0));
     	//boardModel.getTerritory("Seaguard").setTroup(new GroundForce(families[0],0,1,0));
     	if(numberPlayers>3){
     		//House Greyjoy

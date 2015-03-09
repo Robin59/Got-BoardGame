@@ -49,8 +49,15 @@ public class TyrionEffect extends HouseCardEffect {
 	}
 	
 	@Override
-	public void execute() {
+	public void execute(int value) {
 		// TODO Auto-generated method stub
+	}
+
+
+	@Override
+	public int display(int player) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 	
 }

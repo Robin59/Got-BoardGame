@@ -57,10 +57,10 @@ public class BattlePvP extends Battle{
 			afterCardsSaw();
 			break;
 		case BATTLE_SHOW_RESOLUTION :
-			battleResolution();
+			cardEffectEndBattle();
 			break;
-		case BATTLE_CARD_EFFECT_END_BATTLE :
-			//battleResolution();
+		case BATTLE_CARD_EFFECT_END_BATTLE:
+			battleResolution();
 			break;
 		}
 	}
@@ -111,14 +111,21 @@ public class BattlePvP extends Battle{
 		}
 	}
 	
-	private void battleResolution(){
-		//
-		boolean attWin = this.battleWinner();
+	/*Check if there is some card effect to apply before */
+	private void cardEffectEndBattle(){
 		state=BATTLE_END;// this is changed if there is still actions to do for solving the battle
 		//application of the card's effect
-		afterResolutionCardEffect(attWin);
+		afterResolutionCardEffect(battleWinner());
+		retournCards();
+		// if there is no effect (so state still equals BATTLE_END) we continue to the resolution 
+		if(state==BATTLE_END) battleResolution();
+		model.updateLabel();
+	}
+	
+	private void battleResolution(){
+		state=BATTLE_END;// this is changed if there is still actions to do for solving the battle
 		//
-		if(attWin){
+		if(battleWinner()){
 			//destruction of the garrison if there's one
 			defTerritory.destructGarrison();
 			//on detruit les troups du defenceur 
@@ -170,16 +177,16 @@ public class BattlePvP extends Battle{
 				}
 			}
 		}
-		end();
-		model.updateLabel();
+		System.out.println("sate "+state);
 	}
 
 	/**
-	 * This method is call when a battle end 
+	 * This method is call when a battle end, it remove the card players played and check if they still have some,
+	 * if not they regain their cards execpt the one they just played 
 	 */
-	public void end(){
+	public void retournCards(){
 		attFamily.removeCard(attCard);
-		defFamily.removeCard(defCard);//THIS IS NOT WORKING WITH ROOSE BOLTON EFFECT
+		defFamily.removeCard(defCard);
 		//if a player have no more cards in his hand, he regain them  
 		if (attFamily.getCombatantCards().isEmpty()){
 			attFamily.regainCombatantCards(attCard);
@@ -332,9 +339,30 @@ public class BattlePvP extends Battle{
 		}
 	}
 	
+	@Override
+	public int mustDisplay(int player){
+		if(state==BATTLE_CARD_EFFECT_END_BATTLE){
+			if(defCardEffect!=null){
+				return defCardEffect.display(player);
+			}else{
+				return attCardEffect.display(player);
+			}
+		}else{
+			return super.mustDisplay(player);
+		}
+			
+	}
+	
+	
 	// on bellow is the different card effects 
 	
-	
+	public void afterEffectBattle(int value){
+		if(attCardEffect!=null && !attCardEffect.getFinish()){
+			attCardEffect.execute(value);
+		}else if(defCardEffect!=null && !defCardEffect.getFinish()){
+			defCardEffect.execute(value);
+		}
+	}
 	/*
 	 * card's effect that are use after the battle resolutions 
 	 * @param attackerWin true if the attacker win  
@@ -355,8 +383,10 @@ public class BattlePvP extends Battle{
 				defSwords=0;
 			}
 		}
-		if(attCard.getName().equals("PatchFace")||(defCard.getName().equals("PatchFace"))){
-			//patchFace effect
+		if(attCard.getName().equals("PatchFace")){
+			attCardEffect=new PatchfaceEffect(this, false);
+		}else if(defCard.getName().equals("PatchFace")){
+			defCardEffect=new PatchfaceEffect(this, true);
 		}
 	}
 	

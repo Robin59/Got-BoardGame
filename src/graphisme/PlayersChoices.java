@@ -385,6 +385,21 @@ public class PlayersChoices extends JogreComponent {
 		case DISPLAY_BATTLE_RESOLUTION:
 			family.infoCheck();
 			return INFORMATION_CHECK;
+		case DISPLAY_OPONANT_CARDS:
+			Family oppFamily;
+			if(battle.getAttFamily()==family) oppFamily = battle.getDefFamily();
+			else oppFamily = battle.getAttFamily();
+			if(x<60 && indexHouseCard>0){
+				indexHouseCard--;
+				repaint();
+			}else if(x>510 && indexHouseCard<oppFamily.getCombatantCards().size()-1){
+				indexHouseCard++;
+				repaint();
+			}else if (x>60 && x<510){
+				choseDisplayCard(x, oppFamily);
+				return HOUSE_CARD_CHOSEN;
+			}
+			break;
 		}
 		return 0;
 	}
@@ -431,7 +446,7 @@ public class PlayersChoices extends JogreComponent {
 			break;
 		case DISPLAY_HOUSE_CARDS:
 			g.clearRect(0, 0, 600, 250);
-			drawHouseCards(g);
+			drawHouseCards(g, family);
 			break;
 		case DISPLAY_BOTH_CARDS:
 			if(!family.isInfoCheck()){
@@ -506,6 +521,10 @@ public class PlayersChoices extends JogreComponent {
 		case DISPLAY_BATTLE_RESOLUTION:
 			drawBattleResolution(g);
 			break;
+		case DISPLAY_OPONANT_CARDS:
+			if(battle.getAttFamily()==family) drawHouseCards(g, battle.getDefFamily());
+			else drawHouseCards(g, battle.getAttFamily());
+			break;
 		}
 	}
 
@@ -565,6 +584,8 @@ public class PlayersChoices extends JogreComponent {
 			g.drawImage(images.getCardImage(((BattlePvP)battle).getDefCard().getName()),250,20,null);
 		}
 	}
+	
+
 	/*this method is use to show orders available*/
 	private void showOrders(Graphics g){
 		int x =0;
@@ -606,8 +627,9 @@ public class PlayersChoices extends JogreComponent {
 	/**
 	 * Draw the house cards of the player, plus two arrow to navigate between them
 	 * @param g
+	 * @param family the family from which we draw the house cards 
 	 */
-	private void drawHouseCards(Graphics g){
+	private void drawHouseCards(Graphics g, Family family){
 		g.drawImage(leftArrowImage, 1,100, null);
 		g.drawImage(rigthArrowImage, 510,100, null);
 		int i=0;
@@ -1033,6 +1055,8 @@ public class PlayersChoices extends JogreComponent {
 	public static final int DISPLAY_TRACKS=25;
 	private static final int DISPLAY_BOTH_CARDS=26;
 	public static final int DISPLAY_BATTLE_RESOLUTION=27;
+	public static final int DISPLAY_OPONANT_CARDS=28;
+	
 
 }
 

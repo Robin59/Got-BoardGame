@@ -17,10 +17,12 @@ public abstract class HouseCardEffect {
 			return finish;
 		}
 		
-		public abstract void execute();
+		public abstract void execute(int value);
 		
-		// Indique si un joueur doit afficher quelque chose de nouveau dans son player choice
-		public int display(boolean attacker){
-			
-		}
+		/**
+		 * tell if a player must display something new to resolve the card
+		 * @param player the number of the player who is checking this method 
+		 * @return a PlayerChoice Display state
+		 */
+		public abstract int display(int player);
 }

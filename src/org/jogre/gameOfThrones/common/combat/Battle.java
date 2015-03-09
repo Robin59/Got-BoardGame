@@ -158,8 +158,7 @@ public abstract class Battle {
 	 * @param seatNum 
 	 * @return 0 if there nothing to see for the player, else return the battle state*/
 	public int mustDisplay(int player){
-		//chercher les execptions
-		if(playerPartisipate(player)|| state==BATTLE_SHOW_RESOLUTION || state==BATTLE_SHOW_CARDS){
+		if(playerPartisipate(player)|| state==BATTLE_SHOW_RESOLUTION || state==BATTLE_SHOW_CARDS||state==BATTLE_END){
 			return state;
 		}
 		return 0;
@@ -228,7 +227,7 @@ public abstract class Battle {
 	public static final int BATTLE_WITHDRAWAL=3;
 	public static final int BATTLE_SHOW_CARDS=6;//when players can see both cards played during the battle
 	public static final int BATTLE_SHOW_RESOLUTION=4;
-	public static final int BATTLE_CARD_EFFECT_END_BATTLE=7; //for card's effect at that occur at the end of the battle 
+	public static final int BATTLE_CARD_EFFECT_END_BATTLE=7; //for card's effect at that occur at the end of the battle  
 	public static final int BATTLE_END=8;
 
 	
