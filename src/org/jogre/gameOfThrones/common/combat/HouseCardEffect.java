@@ -17,8 +17,10 @@ public abstract class HouseCardEffect {
 			return finish;
 		}
 		
+		/**this method is for effects execution that need a player's decision*/
 		public abstract void execute(int value);
-		
+		/**this method is for automatic effects execution, that doesn't need the player to do anything*/
+		public abstract void autoExecute(); 
 		/**
 		 * tell if a player must display something new to resolve the card
 		 * @param player the number of the player who is checking this method 

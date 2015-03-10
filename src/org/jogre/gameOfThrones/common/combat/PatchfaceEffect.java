@@ -1,7 +1,5 @@
 package org.jogre.gameOfThrones.common.combat;
 
-import org.jogre.gameOfThrones.common.CombatantCard;
-
 import graphisme.PlayersChoices;
 
 public class PatchfaceEffect extends HouseCardEffect {
@@ -28,6 +26,11 @@ public class PatchfaceEffect extends HouseCardEffect {
 			return PlayersChoices.DISPLAY_OPONANT_CARDS;
 		}else
 			return 0;
+	}
+
+	@Override
+	public void autoExecute() {
+		// no need
 	}
 
 }

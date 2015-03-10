@@ -114,9 +114,12 @@ public class BattlePvP extends Battle{
 	/*Check if there is some card effect to apply before */
 	private void cardEffectEndBattle(){
 		state=BATTLE_END;// this is changed if there is still actions to do for solving the battle
-		//application of the card's effect
+		//creation of the card's effect
 		afterResolutionCardEffect(battleWinner());
 		retournCards();
+		//resolution of the automatics card's effect
+		if(attCardEffect!=null)attCardEffect.autoExecute();
+		if(defCardEffect!=null)defCardEffect.autoExecute();
 		// if there is no effect (so state still equals BATTLE_END) we continue to the resolution 
 		if(state==BATTLE_END) battleResolution();
 		model.updateLabel();
@@ -182,7 +185,7 @@ public class BattlePvP extends Battle{
 
 	/**
 	 * This method is call when a battle end, it remove the card players played and check if they still have some,
-	 * if not they regain their cards execpt the one they just played 
+	 * if not they regain their cards except the one they just played 
 	 */
 	public void retournCards(){
 		attFamily.removeCard(attCard);
@@ -377,6 +380,8 @@ public class BattlePvP extends Battle{
 			}
 			if(defCard.getName().equals("BlackFish")){
 				attSwords=0;
+			}else if(defCard.getName().equals("Roose")){
+				defCardEffect= new RooseEffect(this,true);
 			}
 		}else{
 			if(defCard.getName().equals("Tywin")){
@@ -384,6 +389,8 @@ public class BattlePvP extends Battle{
 			}
 			if(attCard.getName().equals("BlackFish")){
 				defSwords=0;
+			}else if(attCard.getName().equals("Roose")){
+				attCardEffect= new RooseEffect(this,false);
 			}
 		}
 		if(attCard.getName().equals("PatchFace")){

@@ -56,8 +56,15 @@ public class TyrionEffect extends HouseCardEffect {
 
 	@Override
 	public int display(int player) {
-		// TODO Auto-generated method stub
+		// This method must be implented
 		return 0;
+	}
+
+
+	@Override
+	public void autoExecute() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }
