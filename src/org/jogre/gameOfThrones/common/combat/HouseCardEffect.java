@@ -1,5 +1,7 @@
 package org.jogre.gameOfThrones.common.combat;
 
+import org.jogre.gameOfThrones.common.territory.Territory;
+
 public abstract class HouseCardEffect {
 
 		protected boolean finish;//true when the effect off the card has been resolved
@@ -17,7 +19,10 @@ public abstract class HouseCardEffect {
 			return finish;
 		}
 		
-		/**this method is for effects execution that need a player's decision*/
+
+		/**this method is call when a player on a board for resolving this effect*/
+		public abstract void execute(Territory territory);
+		/**this method is call when a player on his playerChoice for resolving this effect*/
 		public abstract void execute(int value);
 		/**this method is for automatic effects execution, that doesn't need the player to do anything*/
 		public abstract void autoExecute(); 

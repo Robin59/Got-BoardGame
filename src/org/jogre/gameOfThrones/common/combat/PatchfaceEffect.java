@@ -1,5 +1,7 @@
 package org.jogre.gameOfThrones.common.combat;
 
+import org.jogre.gameOfThrones.common.territory.Territory;
+
 import graphisme.PlayersChoices;
 
 public class PatchfaceEffect extends HouseCardEffect {
@@ -32,5 +34,8 @@ public class PatchfaceEffect extends HouseCardEffect {
 	public void autoExecute() {
 		// no need
 	}
+
+	@Override
+	public void execute(Territory territory) {}
 
 }

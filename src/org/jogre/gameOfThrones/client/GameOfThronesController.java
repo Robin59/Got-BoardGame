@@ -163,12 +163,14 @@ public class GameOfThronesController extends JogreController {
     				model.battleEnd();
     				gameOfThronesComponent.repaint();
     				sendProperty("withdraw", gameOfThronesComponent.getTerritory(e.getX(),e.getY()).getName());
-    			}
-    			//case when a player can support and click on his territory
+    			}//case when a player can support and click on his territory
     			else if(model.getBattle().getState()==Battle.BATTLE_SUPPORT_PHASE &&
     					model.canSupport(gameOfThronesComponent.getTerritory(e.getX(),e.getY()),getSeatNum())){
     				playerChoices.support(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
-    			}
+    			}else if(model.getBattle().getState()==Battle.BATTLE_CARD_EFFECT_END_BATTLE){
+					((BattlePvP) model.getBattle()).afterEffectBattle(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
+					sendProperty("Battle end card effect", gameOfThronesComponent.getTerritory(e.getX(),e.getY()).getName());
+				}
     			break;
     		case PHASE_EXECUTION:
     			// on regarde si un ordre est deja selectioné, qu'il peut etre utilisé dans le territoir voulu et qu'on peut l'utiliser
@@ -730,6 +732,8 @@ public class GameOfThronesController extends JogreController {
     		this.useInfluToken(model.getBoardModel().getTerritory(value));
     	}else if(key.equals("dont_use_inf_token")){
     		this.dontUseInfluToken(model.getBoardModel().getTerritory(value));
+    	}else if(key.equals("Battle end card effect")){
+    		((BattlePvP) model.getBattle()).afterEffectBattle(model.getBoardModel().getTerritory(value));
     	}else{
     		model.getBoardModel().getTerritory(key).useOrderOn(model.getBoardModel().getTerritory(value));
     		model.nextPlayer();

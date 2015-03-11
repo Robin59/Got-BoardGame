@@ -1,6 +1,7 @@
 package org.jogre.gameOfThrones.common.combat;
 
 import org.jogre.gameOfThrones.common.CombatantCard;
+import org.jogre.gameOfThrones.common.territory.Territory;
 
 
 public class TyrionEffect extends HouseCardEffect {
@@ -63,6 +64,13 @@ public class TyrionEffect extends HouseCardEffect {
 
 	@Override
 	public void autoExecute() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void execute(Territory territory) {
 		// TODO Auto-generated method stub
 		
 	}

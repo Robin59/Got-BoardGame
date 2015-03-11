@@ -359,11 +359,29 @@ public class BattlePvP extends Battle{
 	
 	// on bellow is the different card effects 
 	
+	/**
+	 * This method is call when a player click on his playerChoice for solving a card effect  
+	 * @param value the value send by the player choice
+	 */
 	public void afterEffectBattle(int value){
 		if(attCardEffect!=null && !attCardEffect.getFinish()){
 			attCardEffect.execute(value);
 		}else if(defCardEffect!=null && !defCardEffect.getFinish()){
 			defCardEffect.execute(value);
+		}
+		if((attCardEffect==null || attCardEffect.getFinish())&&(defCardEffect==null || defCardEffect.getFinish())){
+			nextPhase();
+		}
+	}
+	/**
+	 * This method is call when a player click on the board for solving a card effect  
+	 * @param the territory on which the player click 
+	 */
+	public void afterEffectBattle(Territory territory){
+		if(attCardEffect!=null && !attCardEffect.getFinish()){
+			attCardEffect.execute(territory);
+		}else if(defCardEffect!=null && !defCardEffect.getFinish()){
+			defCardEffect.execute(territory);
 		}
 		if((attCardEffect==null || attCardEffect.getFinish())&&(defCardEffect==null || defCardEffect.getFinish())){
 			nextPhase();
@@ -377,6 +395,8 @@ public class BattlePvP extends Battle{
 		if(attackerWin){
 			if(attCard.getName().equals("Tywin")){
 				attFamily.addInflu(2);
+			}else if(attCard.getName().equals("Cersei")){
+				attCardEffect= new CerseiEffect(this, false);
 			}
 			if(defCard.getName().equals("BlackFish")){
 				attSwords=0;
@@ -386,6 +406,8 @@ public class BattlePvP extends Battle{
 		}else{
 			if(defCard.getName().equals("Tywin")){
 				defFamily.addInflu(2);
+			}else if(defCard.getName().equals("Cersei")){
+				defCardEffect= new CerseiEffect(this, true);
 			}
 			if(attCard.getName().equals("BlackFish")){
 				defSwords=0;

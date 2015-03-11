@@ -1,24 +1,11 @@
 package org.jogre.gameOfThrones.common.combat;
 
-import org.jogre.gameOfThrones.common.CombatantCard;
+import org.jogre.gameOfThrones.common.territory.Territory;
 
 public class RooseEffect extends HouseCardEffect {
 
 	public RooseEffect(BattlePvP battle, boolean defender) {
 		super(battle, defender);
-		// TODO Auto-generated constructor stub
-	}
-
-	@Override
-	public void execute(int value) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public int display(int player) {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 
 	@Override
@@ -30,5 +17,21 @@ public class RooseEffect extends HouseCardEffect {
 		}
 		this.finish=true;
 	}
+
+	@Override
+	public void execute(Territory territory) {
+		// unused 
+	}
+	@Override
+	public void execute(int value) {
+		// unused 
+	}
+	@Override
+	public int display(int player) {
+		//not use
+		return 0;
+	}
+
+
 
 }
