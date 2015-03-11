@@ -514,69 +514,72 @@ public class GameOfThronesController extends JogreController {
     				sendProperty("goToExecutionPhase",0);
     				break;
     			}
-    			if(model.getBattle()!=null){
-    				if(model.getBattle().getState()==Battle.BATTLE_CARD_EFFECT_END_BATTLE){
-    					playerChoices.setPanel(model.getBattle().mustDisplay((getSeatNum())));
-    					sendProperty("DisplayCardEffect", 0);
-    				}else{
-    					switch(model.getBattle().mustDisplay((getSeatNum()))){
-    					case Battle.BATTLE_SHOW_CARDS:
-    						playerChoices.ShowBothBattleCards(model.getBattle());
-    						sendProperty("BattleShowBothCards",0);
-    						break;
-    					case Battle.BATTLE_SHOW_RESOLUTION:
-    						playerChoices.setPanel(PlayersChoices.DISPLAY_BATTLE_RESOLUTION);
-    						sendProperty("BattleShowResolution",0);
-    						break;
-    					case Battle.BATTLE_CHOOSE_CARD:
-    						if(model.getBattle().canPlayCard(model.getFamily(getSeatNum()))){
-    							playerChoices.showHouseCards(model.getBattle());}
-    						sendProperty("FamilyCards", 0);
-    						break;
-    					case Battle.BATTLE_PLAY_SWORD:
-    						playerChoices.swordPlay(model.getFamily(getSeatNum()));
-    						sendProperty("Sword", 0);
-    						break;
-    					case Battle.BATTLE_WITHDRAWAL:
-    						playerChoices.withdrawal(model.getFamily(getSeatNum()), model.getBattle());
-    						sendProperty("withdraw", 0);
-    						break;
-    					case Battle.BATTLE_END:
-    						model.battleEnd();
-    						sendProperty("BattleEnd", 0);// VRAIMENT Necessaire ?!!
-    						break;
-    					}
-    				}
+    		}
+    	}
+    }
+    /*This method check the situation of the game,
+     *if some events have been resolved, or some new events occur
+     *and if the game must go to an other situation*/
+    private void checkNext(){
+    	if(model.getBattle()!=null){
+    		if(model.getBattle().getState()==Battle.BATTLE_CARD_EFFECT_END_BATTLE){
+    			playerChoices.setPanel(model.getBattle().mustDisplay((getSeatNum())));
+    			sendProperty("DisplayCardEffect", 0);
+    		}else{
+    			switch(model.getBattle().mustDisplay((getSeatNum()))){
+    			case Battle.BATTLE_SHOW_CARDS:
+    				playerChoices.ShowBothBattleCards(model.getBattle());
+    				sendProperty("BattleShowBothCards",0);
+    				break;
+    			case Battle.BATTLE_SHOW_RESOLUTION:
+    				playerChoices.setPanel(PlayersChoices.DISPLAY_BATTLE_RESOLUTION);
+    				sendProperty("BattleShowResolution",0);
+    				break;
+    			case Battle.BATTLE_CHOOSE_CARD:
+    				if(model.getBattle().canPlayCard(model.getFamily(getSeatNum()))){
+    					playerChoices.showHouseCards(model.getBattle());}
+    				sendProperty("FamilyCards", 0);
+    				break;
+    			case Battle.BATTLE_PLAY_SWORD:
+    				playerChoices.swordPlay(model.getFamily(getSeatNum()));
+    				sendProperty("Sword", 0);
+    				break;
+    			case Battle.BATTLE_WITHDRAWAL:
+    				playerChoices.withdrawal(model.getFamily(getSeatNum()), model.getBattle());
+    				sendProperty("withdraw", 0);
+    				break;
+    			case Battle.BATTLE_END:
+    				model.battleEnd();
+    				sendProperty("BattleEnd", 0);// VRAIMENT Necessaire ?!!
+    				break;
     			}
     		}
-    		if(model.getPhase()==ModelState.MUSTERING){
-    			//we do nothing
-    		}else if (model.getPhase()==ModelState.SUPPLY_TO_LOW){
-    			this.checkSupplyLimit();
-    		}else if(model.checkNewTurn() && model.getWesterosPhase()==0){
-    			nextWesterosPhase();
-    		}else if(model.getBidding()!=null && playerChoices.getPanel()!=16 && model.getBidding().allBidsDone() && playerChoices.getWildingsCard()==null){
-    			if(model.getBidding() instanceof BiddingAgainstWild ){
-    				String card = model.choseWildingCard();
-    				playerChoices.wilidingsCard(card);
-    				sendProperty("WildingsCard",card);
-    			}else{
-    				sendProperty("bid done",0);	
-    				if(model.biddingSort() ){//egality and player can chose
-    					if( model.biddingResolution()<3){
-    						playerChoices.bidding();
-    					}else {
-    						nextWesterosPhase();
-    					}
-    				}else if( model.haveThrone(getSeatNum())){
-    					playerChoices.biddingEgality(model.getBidding());
+    	}
+    	if(model.getPhase()==ModelState.MUSTERING){
+    		//we do nothing
+    	}else if (model.getPhase()==ModelState.SUPPLY_TO_LOW){
+    		this.checkSupplyLimit();
+    	}else if(model.checkNewTurn() && model.getWesterosPhase()==0){
+    		nextWesterosPhase();
+    	}else if(model.getBidding()!=null && playerChoices.getPanel()!=16 && model.getBidding().allBidsDone() && playerChoices.getWildingsCard()==null){
+    		if(model.getBidding() instanceof BiddingAgainstWild ){
+    			String card = model.choseWildingCard();
+    			playerChoices.wilidingsCard(card);
+    			sendProperty("WildingsCard",card);
+    		}else{
+    			sendProperty("bid done",0);	
+    			if(model.biddingSort() ){//egality and player can chose
+    				if( model.biddingResolution()<3){
+    					playerChoices.bidding();
+    				}else {
+    					nextWesterosPhase();
     				}
+    			}else if( model.haveThrone(getSeatNum())){
+    				playerChoices.biddingEgality(model.getBidding());
     			}
     		}
     	}
     }
-    
-   
 
 	private void westerosCardSaw(){
     	if(model.getCurrentCard().equals("Summer")){
@@ -639,6 +642,7 @@ public class GameOfThronesController extends JogreController {
     		}else if (e.getComponent()==playerChoices){
     			mouseClickOnPlayerChoices (e);	
     		}
+    		checkNext();
     		gameOfThronesComponent.repaint(); 
 			playerChoices.repaint(); 
 			model.updateLabel();
