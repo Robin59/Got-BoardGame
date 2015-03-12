@@ -1029,7 +1029,7 @@ public class PlayersChoices extends JogreComponent {
 	private static final int DISPLAY_BLANK = 0;
 	private static final int DISPLAY_ORDERS = 1;
 	private static final int DISPLAY_END_PROGRAMATION = 2;
-	private static final int DISPLAY_CANCEL=3;
+	public static final int DISPLAY_CANCEL=3;
 	private static final int DISPLAY_WATER_MOV = 4;
 	private static final int DISPLAY_LAND_MOV = 5;
 	private static final int DISPLAY_WATER_ATT = 6;

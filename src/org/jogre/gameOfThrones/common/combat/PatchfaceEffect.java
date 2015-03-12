@@ -13,8 +13,10 @@ public class PatchfaceEffect extends HouseCardEffect {
 
 	@Override
 	public void execute(int indexCard) {
-		oppFamily.removeCard(indexCard);
-		finish=true;
+		if (indexCard>=PlayersChoices.CHOOSE_CARD0){
+			oppFamily.removeCard(indexCard-PlayersChoices.CHOOSE_CARD0);
+			finish=true;
+		}
 	}
 
 	@Override

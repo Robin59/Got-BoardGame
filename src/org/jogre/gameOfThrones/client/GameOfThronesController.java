@@ -243,14 +243,9 @@ public class GameOfThronesController extends JogreController {
     	}else{
     		// quand on click sur le playerChoice on reccupère un message de ce qui s'est passe 
     		int choice =playerChoices.RigthClick(e.getX(),e.getY(),model.getFamily(getSeatNum()));
-    		if (choice>= PlayersChoices.CHOOSE_CARD0 && choice<= PlayersChoices.CHOOSE_CARD7){
-    			//Pacthface case
-    			if(model.getPhase()==ModelState.BATTLE){
-    				if(model.getBattle().getState()==Battle.BATTLE_CARD_EFFECT_END_BATTLE){
-    					((BattlePvP) model.getBattle()).afterEffectBattle(choice-PlayersChoices.CHOOSE_CARD0);
-    					sendProperty("Battle end card effect", choice-PlayersChoices.CHOOSE_CARD0);
-    				}
-    			}
+    		if(model.getPhase()==ModelState.BATTLE && model.getBattle().getState()==Battle.BATTLE_CARD_EFFECT_END_BATTLE){
+    			((BattlePvP) model.getBattle()).afterEffectBattle(choice);
+    			sendProperty("Battle end card effect", choice);
     		}else{
     			switch (choice){
     			case PlayersChoices.END_PROGRAMATION_PHASE :

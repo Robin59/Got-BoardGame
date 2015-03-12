@@ -397,6 +397,8 @@ public class BattlePvP extends Battle{
 				attFamily.addInflu(2);
 			}else if(attCard.getName().equals("Cersei")){
 				attCardEffect= new CerseiEffect(this, false);
+			}else if(attCard.getName().equals("Renly")){
+				attCardEffect= new RenlyEffect(this, false);
 			}
 			if(defCard.getName().equals("BlackFish")){
 				attSwords=0;
@@ -408,6 +410,8 @@ public class BattlePvP extends Battle{
 				defFamily.addInflu(2);
 			}else if(defCard.getName().equals("Cersei")){
 				defCardEffect= new CerseiEffect(this, true);
+			}else if(defCard.getName().equals("Renly")){
+				defCardEffect= new RenlyEffect(this, true);
 			}
 			if(attCard.getName().equals("BlackFish")){
 				defSwords=0;
