@@ -10,11 +10,7 @@ public class RooseEffect extends HouseCardEffect {
 
 	@Override
 	public void autoExecute() {
-		if(defender){
-			battle.getDefFamily().regainCombatantCards();
-		}else{
-			battle.getAttFamily().regainCombatantCards();
-		}
+		playerFamily.regainCombatantCards();
 		this.finish=true;
 	}
 

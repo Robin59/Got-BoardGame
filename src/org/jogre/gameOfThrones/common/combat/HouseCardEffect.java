@@ -1,5 +1,6 @@
 package org.jogre.gameOfThrones.common.combat;
 
+import org.jogre.gameOfThrones.common.Family;
 import org.jogre.gameOfThrones.common.territory.Territory;
 
 public abstract class HouseCardEffect {
@@ -7,11 +8,20 @@ public abstract class HouseCardEffect {
 		protected boolean finish;//true when the effect off the card has been resolved
 		protected boolean defender;//true if this card has been played by the defender
 		protected BattlePvP battle;
+		protected Family playerFamily;//the family who played the card
+		protected Family oppFamily;// his opponent in the battle
 		
 		public HouseCardEffect(BattlePvP battle, boolean defender){
 			this.defender=defender;
 			this.battle=battle;
 			finish=false;
+			if(defender){
+				playerFamily=battle.getDefFamily();
+				oppFamily=battle.getAttFamily();
+			}else{
+				playerFamily=battle.getAttFamily();
+				oppFamily=battle.getDefFamily();
+			}
 		}
 		
 		

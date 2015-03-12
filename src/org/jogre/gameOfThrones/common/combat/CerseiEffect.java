@@ -6,15 +6,14 @@ public class CerseiEffect extends HouseCardEffect {
 
 	public CerseiEffect(BattlePvP battle, boolean defender) {
 		super(battle, defender);
-		if((defender && battle.getAttFamily().haveOrderOnBoard())||(!defender && battle.getDefFamily().haveOrderOnBoard())){
-			battle.setState(Battle.BATTLE_CARD_EFFECT_END_BATTLE);}
-		else finish=true;
+		if(oppFamily.haveOrderOnBoard()){
+			battle.setState(Battle.BATTLE_CARD_EFFECT_END_BATTLE);
+		}else finish=true;
 	}
 
 	@Override
 	public void execute(Territory territory) {
-		if(territory.getOrder()!=null &&
-				((defender && territory.getFamily()==battle.getAttFamily())||(!defender && territory.getFamily()==battle.getDefFamily()))){
+		if(territory.getOrder()!=null && territory.getFamily()==oppFamily){
 			territory.rmOrder();
 			finish=true;
 		}

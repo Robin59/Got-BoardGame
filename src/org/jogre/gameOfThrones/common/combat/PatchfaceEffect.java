@@ -13,18 +13,13 @@ public class PatchfaceEffect extends HouseCardEffect {
 
 	@Override
 	public void execute(int indexCard) {
-		if(defender){
-			battle.getAttFamily().removeCard(indexCard);
-		}else{
-			battle.getDefFamily().removeCard(indexCard);
-		}
+		oppFamily.removeCard(indexCard);
 		finish=true;
 	}
 
 	@Override
 	public int display(int player) {
-		if((defender && battle.getDefFamily().getPlayer()==player)
-				||(!defender && battle.getAttFamily().getPlayer()==player)){
+		if(playerFamily.getPlayer()==player){
 			return PlayersChoices.DISPLAY_OPONANT_CARDS;
 		}else
 			return 0;
