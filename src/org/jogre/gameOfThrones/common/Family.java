@@ -323,6 +323,15 @@ public class Family {
 	public boolean getOrdersGiven(){
 		return ordersGiven;
 	}
+	/**Return true if the family still have orders on the board
+	 * @return true if the family still have orders on the board
+	 */
+	public boolean haveOrderOnBoard(){
+		for(Territory territory : territories){
+			if(territory.getOrder()!=null) return true;
+		}
+		return false;
+	}
 	
 	/**
 	 * Tell if this family can add new ship on the board
