@@ -1,6 +1,7 @@
 package org.jogre.gameOfThrones.common.territory;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.jogre.gameOfThrones.common.Family;
@@ -183,15 +184,29 @@ public abstract class Territory {
 	 */
 	public boolean canWithdraw(){
 		for(Territory territory :neighbors){
-			if(territory.canWithdraw(this))return true;
+			if(canWithdraw(territory))return true;
+		}
+		return (this instanceof Land) && navalRetreat(new LinkedList<Territory>());  
+	}
+	
+	//recursive method that return true if there is a place to retreat for ground forces with a naval bridge
+	private boolean navalRetreat(List<Territory> alreadyCheck){
+		alreadyCheck.add(this);
+		for (Territory territory: neighbors){
+			if(!alreadyCheck.contains(territory)){
+				if(territory instanceof Land && (territory.getFamily()==null ||territory.getFamily()==this.getFamily())){
+					return true;}
+				if(territory instanceof Water && this.getFamily()!=null && territory.getFamily()==this.getFamily() && territory.navalRetreat(alreadyCheck)){
+					return true;
+				}
+			}
 		}
 		return false;
 	}
-	
 	/**
-	 * When there is a battle and the defender lose, said if he can withdraw from the given territory
-	 * @param territory the territory from where troops want to withdraw 
-	 * @return 
+	 * said if a player can withdraw from this territory to the given territory
+	 * @param territory the territory where troops want to withdraw 
+	 * @return true if troops from this territory can withdraw to the given territory
 	 */
 	public abstract boolean canWithdraw(Territory territory);
 	public abstract int consolidation();
@@ -231,6 +246,7 @@ public abstract class Territory {
 		}
 		return false;
 	}
+	
 	/**
 	 * Search for a port neighbors to this territory
 	 * @return null if no port is found

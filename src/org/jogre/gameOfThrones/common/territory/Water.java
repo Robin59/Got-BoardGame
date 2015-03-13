@@ -22,27 +22,9 @@ public class Water extends Territory {
 		return (super.canUseOrderOn(territory) && (territory instanceof Water || order.getType()==OrderType.RAI));
 	}
 
+	@Override
 	public boolean canWithdraw(Territory territory){
-		if(territory instanceof Water)return (this.getFamily()==null || territory.getFamily()==this.getFamily());
-		else if(this.getFamily()!=null && territory.getFamily()==this.getFamily()) {
-			List<Territory> alreadyCheak= new LinkedList<Territory>();
-			alreadyCheak.add(this);
-			return navalRetreat(alreadyCheak);
-		}else return false;
-	}
-	//recursive method that return true if there is a place to retreat for ground forces with a naval brige
-	private boolean navalRetreat(List<Territory> alreadyCheck){
-		alreadyCheck.add(this);
-		for (Territory territory: neighbors){
-			if(!alreadyCheck.contains(territory)){
-				if(territory instanceof Land &&  (territory.getFamily()==null ||territory.getFamily()==this.getFamily())){
-					return true;}
-				if(territory instanceof Water && this.getFamily()!=null && territory.getFamily()==this.getFamily() && ((Water) territory).navalRetreat(alreadyCheck)){
-					return true;
-				}
-			}
-		}
-		return false;
+		return (territory instanceof Water) && (this.getFamily()==null || territory.getFamily()==this.getFamily());
 	}
 	
 	@Override

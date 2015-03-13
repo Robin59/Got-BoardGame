@@ -391,7 +391,7 @@ public class BattlePvP extends Battle{
 	 * card's effect that are use after the battle resolutions 
 	 * @param attackerWin true if the attacker win  
 	 */
-	private void afterResolutionCardEffect(boolean attackerWin){
+	private void afterResolutionCardEffect(boolean attackerWin){// THE BEST WOULD BE TO ATTACH DIRECTLY EFFECTS TO CARD AND SUPPRESS THESES METHODS
 		if(attackerWin){
 			if(attCard.getName().equals("Tywin")){
 				attFamily.addInflu(2);
@@ -399,6 +399,8 @@ public class BattlePvP extends Battle{
 				attCardEffect= new CerseiEffect(this, false);
 			}else if(attCard.getName().equals("Renly")){
 				attCardEffect= new RenlyEffect(this, false);
+			}else if(attCard.getName().equals("Roob")){
+				attCardEffect= new RobbEffect(this, false);
 			}
 			if(defCard.getName().equals("BlackFish")){
 				attSwords=0;
@@ -412,6 +414,8 @@ public class BattlePvP extends Battle{
 				defCardEffect= new CerseiEffect(this, true);
 			}else if(defCard.getName().equals("Renly")){
 				defCardEffect= new RenlyEffect(this, true);
+			}else if(defCard.getName().equals("Roob")){
+				defCardEffect= new RobbEffect(this, true);
 			}
 			if(attCard.getName().equals("BlackFish")){
 				defSwords=0;

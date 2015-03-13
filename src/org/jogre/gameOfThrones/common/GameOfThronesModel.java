@@ -609,12 +609,11 @@ public class GameOfThronesModel extends JogreModel {
 	
 	/**
 	 * When there is a battle and the defencer lose, said if he can withdraw to the given territory
-	 * @param territory
-	 * @param seatNum
-	 * @return
+	 * @param territory the territory where the player want to withdraw
+	 * @return true if the defender can withdraw to the given territory
 	*/
-	public boolean canWithdraw(Territory territory, int seatNum) {
-		return territory.canWithdraw(territory2);
+	public boolean canWithdraw(Territory territory) {
+		return territory2.canWithdraw(territory);
 	}
 	
 	/**

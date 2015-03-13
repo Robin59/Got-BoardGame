@@ -40,7 +40,8 @@ public class Land extends Territory {
 
 	@Override
 	public boolean canWithdraw(Territory territory) {
-		return territory instanceof Land && (this.getFamily()==null || territory.getFamily()==this.getFamily());
+		return territory instanceof Land && (territory.getFamily()==null || territory.getFamily()==this.getFamily()) 
+				&& (neighbors.contains(territory)||navalTransport(territory));
 	}
 
 	@Override

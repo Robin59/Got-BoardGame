@@ -158,7 +158,7 @@ public class GameOfThronesController extends JogreController {
     		case BATTLE :
     			//case when a player want to withdraw
     			if(model.getBattle().getState()==Battle.BATTLE_WITHDRAWAL && 
-    			model.canWithdraw(gameOfThronesComponent.getTerritory(e.getX(),e.getY()),getSeatNum())){
+    			model.canWithdraw(gameOfThronesComponent.getTerritory(e.getX(),e.getY()))){
     				model.getBattle().withdraw(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
     				model.battleEnd();
     				gameOfThronesComponent.repaint();
