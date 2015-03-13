@@ -274,10 +274,12 @@ public class BoardModel {
 		FlintFinger.addTerritory(sunsetSea);
 		FlintFinger.addTerritory(IronmanBay);
 		FlintFinger.addTerritory(BayOfIce);
+		GreyWaterWatch.addTerritory(Seaguard);
 		GreyWaterWatch.addTerritory(moatCailin);
 		GreyWaterWatch.addTerritory(FlintFinger);
 		GreyWaterWatch.addTerritory(IronmanBay);
 		GreyWaterWatch.addTerritory(BayOfIce);
+		moatCailin.addTerritory(Twins);
 		moatCailin.addTerritory(WhiteHarbor);
 		moatCailin.addTerritory(Winterfell);
 		moatCailin.addTerritory(GreyWaterWatch);
