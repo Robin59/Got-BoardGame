@@ -158,7 +158,8 @@ public class GameOfThronesController extends JogreController {
     		case BATTLE :
     			//case when a player want to withdraw
     			if(model.getBattle().getState()==Battle.BATTLE_WITHDRAWAL && 
-    			model.canWithdraw(gameOfThronesComponent.getTerritory(e.getX(),e.getY()))){
+    			model.canWithdraw(gameOfThronesComponent.getTerritory(e.getX(),e.getY())) && 
+    			model.getBattle().getDefFamily().getPlayer()==getSeatNum()){
     				model.getBattle().withdraw(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
     				model.battleEnd();
     				gameOfThronesComponent.repaint();
@@ -168,8 +169,8 @@ public class GameOfThronesController extends JogreController {
     					model.canSupport(gameOfThronesComponent.getTerritory(e.getX(),e.getY()),getSeatNum())){
     				playerChoices.support(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
     			}else if(model.getBattle().getState()==Battle.BATTLE_CARD_EFFECT_END_BATTLE){
-					((BattlePvP) model.getBattle()).afterEffectBattle(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
-					sendProperty("Battle end card effect", gameOfThronesComponent.getTerritory(e.getX(),e.getY()).getName());
+    				((BattlePvP) model.getBattle()).afterEffectBattle(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
+    				sendProperty("Battle end card effect", gameOfThronesComponent.getTerritory(e.getX(),e.getY()).getName());
 				}
     			break;
     		case PHASE_EXECUTION:
