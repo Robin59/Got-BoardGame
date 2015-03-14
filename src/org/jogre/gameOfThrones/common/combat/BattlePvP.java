@@ -387,6 +387,25 @@ public class BattlePvP extends Battle{
 			nextPhase();
 		}
 	}
+	/**
+	 * This method is call when a player click on the board for solving a card effect,
+	 * this method do the same thing as afterEffectBattle(Territory territory) but check if the player who click was authorized to do so
+	 * @param territory the territory on which the player click
+	 * @param  player the player who click
+	 * @return true, if the player was authorized to did it
+	 */
+	public boolean afterEffectBattle(Territory territory, int player){
+		boolean res=false;
+		if(attCardEffect!=null && !attCardEffect.getFinish()){
+			res=attCardEffect.execute(territory,player);
+		}else if(defCardEffect!=null && !defCardEffect.getFinish()){
+			res=defCardEffect.execute(territory,player);
+		}
+		if((attCardEffect==null || attCardEffect.getFinish())&&(defCardEffect==null || defCardEffect.getFinish())){
+			nextPhase();
+		}
+		return res;
+	}
 	/*
 	 * card's effect that are use after the battle resolutions 
 	 * @param attackerWin true if the attacker win  
@@ -399,7 +418,7 @@ public class BattlePvP extends Battle{
 				attCardEffect= new CerseiEffect(this, false);
 			}else if(attCard.getName().equals("Renly")){
 				attCardEffect= new RenlyEffect(this, false);
-			}else if(attCard.getName().equals("Roob")){
+			}else if(attCard.getName().equals("Robb")){
 				attCardEffect= new RobbEffect(this, false);
 			}
 			if(defCard.getName().equals("BlackFish")){
@@ -414,7 +433,7 @@ public class BattlePvP extends Battle{
 				defCardEffect= new CerseiEffect(this, true);
 			}else if(defCard.getName().equals("Renly")){
 				defCardEffect= new RenlyEffect(this, true);
-			}else if(defCard.getName().equals("Roob")){
+			}else if(defCard.getName().equals("Robb")){
 				defCardEffect= new RobbEffect(this, true);
 			}
 			if(attCard.getName().equals("BlackFish")){

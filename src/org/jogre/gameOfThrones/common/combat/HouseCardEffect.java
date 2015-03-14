@@ -28,8 +28,19 @@ public abstract class HouseCardEffect {
 		public boolean getFinish(){
 			return finish;
 		}
-		
-
+		/**
+		 * this method is call when a player on a board for resolving this effect,
+		 * it check if the player was authorized to click, if it's the case the method execute(territory) is call and the method return true  
+		 * @param territory the territory which was clicked
+		 * @param player the player who click on the board
+		 * @return true if the player who click was authorized to did it
+		 */
+		public boolean execute(Territory territory,int player){
+			if(playerFamily.getPlayer()==player){
+				execute(territory);
+				return true;
+			}else return false;
+		}
 		/**this method is call when a player on a board for resolving this effect*/
 		public abstract void execute(Territory territory);
 		/**this method is call when a player on his playerChoice for resolving this effect*/

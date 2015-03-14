@@ -169,8 +169,8 @@ public class GameOfThronesController extends JogreController {
     					model.canSupport(gameOfThronesComponent.getTerritory(e.getX(),e.getY()),getSeatNum())){
     				playerChoices.support(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
     			}else if(model.getBattle().getState()==Battle.BATTLE_CARD_EFFECT_END_BATTLE){
-    				((BattlePvP) model.getBattle()).afterEffectBattle(gameOfThronesComponent.getTerritory(e.getX(),e.getY()));
-    				sendProperty("Battle end card effect", gameOfThronesComponent.getTerritory(e.getX(),e.getY()).getName());
+    				if(((BattlePvP) model.getBattle()).afterEffectBattle(gameOfThronesComponent.getTerritory(e.getX(),e.getY()),getSeatNum())){
+    					sendProperty("Battle end card effect", gameOfThronesComponent.getTerritory(e.getX(),e.getY()).getName());}
 				}
     			break;
     		case PHASE_EXECUTION:
