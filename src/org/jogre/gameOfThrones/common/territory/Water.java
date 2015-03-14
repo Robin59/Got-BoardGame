@@ -24,7 +24,7 @@ public class Water extends Territory {
 
 	@Override
 	public boolean canWithdraw(Territory territory){
-		return (territory instanceof Water) && (this.getFamily()==null || territory.getFamily()==this.getFamily());
+		return (territory instanceof Water) && (territory.getFamily()==null || territory.getFamily()==this.getFamily());
 	}
 	
 	@Override
