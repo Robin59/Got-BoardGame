@@ -353,7 +353,7 @@ public class PlayersChoices extends JogreComponent {
 			}
 			break;
 		case DISPLAY_RAVEN_SEE_WILDINGS:
-			if(x>50 && x<100){
+			if(x>5 && x<55){
 				blank2();
 				return PUT_CARD_TOP;
 			}else if(x>450 && x<500){
@@ -486,7 +486,7 @@ public class PlayersChoices extends JogreComponent {
 			drawBiddingTable(g);
 			break;
 		case DISPLAY_WILDINGS_CARD:
-			g.drawImage(images.getWildingCardImage(wilidingsCard),100,0,null);
+			g.drawImage(images.getWildingCardImage(wilidingsCard),80,0,null);
 			break;
 		case DISPLAY_TROOP_DESTRUCTION:
 			drawTroops(g);
@@ -504,8 +504,8 @@ public class PlayersChoices extends JogreComponent {
 			break;
 		case DISPLAY_RAVEN_SEE_WILDINGS:
 			label.setText("You can put the card on top or bottom of the deck");
-			g.drawImage(images.getWildingCardImage(wilidingsCard),180,5,null);
-			g.drawImage(images.getTopImage(), 50, 125,null);
+			g.drawImage(images.getWildingCardImage(wilidingsCard),80,5,null);
+			g.drawImage(images.getTopImage(), 5, 125,null);
 			g.drawImage(images.getBottomImage(), 450, 125,null);
 			break;
 		case DISPLAY_DISCARD_HOUSE_CARDS :
