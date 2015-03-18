@@ -930,6 +930,8 @@ public class GameOfThronesModel extends JogreModel {
 		case 1:
 			temp=fiefdoms;
 			bidding=new Bidding(families);
+			for(int i=0; i<numberPlayers; i++){
+				track[i].setFiefdomsTrack(i+1);}
 			break;
 		default :
 			temp=court;
