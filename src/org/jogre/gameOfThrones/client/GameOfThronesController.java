@@ -619,6 +619,7 @@ public class GameOfThronesController extends JogreController {
 				sendProperty("Mustering", 0);
 			}else if (model.getCurrentCard().equals("Winter")){
 				model.westerosCardWinter();
+				sendProperty("Winter", 0);
 				nextWesterosPhase();
 			}else {
 				nextWesterosPhase();
@@ -706,10 +707,6 @@ public class GameOfThronesController extends JogreController {
     	}else if (key.equals("WildingsCard")){
     		playerChoices.wilidingsCard(value);
     		model.removeWildingCard(value);
-    	}else if (key.equals("Winter")){
-    		model.westerosCardWinter();
-    		playerChoices.westerosCard(value);
-    		model.removeCard(value);
     	}else if(key.equals("recruitmentDone")){
     		model.getBoardModel().getTerritory(value).recruitmentDone();
     	}else if(key.equals("recruitShipFrom")){
@@ -804,7 +801,9 @@ public class GameOfThronesController extends JogreController {
      public void receiveProperty (String key, int value) { 
     	 if(key.equals("SendWildingsDeck")){
     		 model.reinitializeDeck();
-    	 }else if(key.equals("InformationCheck")){
+    	 }else if (key.equals("Winter")){
+     		model.westerosCardWinter();
+     	}else if(key.equals("InformationCheck")){
     		 model.getFamily(value).infoCheck();
     		 BattlePvP battle=((BattlePvP)model.getBattle());
     		 if(battle.getAttFamily().isInfoCheck() && battle.getDefFamily().isInfoCheck()){
