@@ -102,7 +102,7 @@ public abstract class Territory {
 	}
 	/**remove an order to this territory  and give it back to is owner*/
 	public void rmOrder() {
-		owner.regainOrder(order);
+		if(owner!=null)owner.regainOrder(order);
 		order=null;
 	}
 	

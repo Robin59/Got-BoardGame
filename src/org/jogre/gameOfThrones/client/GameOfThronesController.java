@@ -485,6 +485,7 @@ public class GameOfThronesController extends JogreController {
     				break;
     			case PlayersChoices.USE_INF_TOKEN:
     				this.useInfluToken(playerChoices.getRelatedTerr());
+    				if(model.getBattle()!=null) model.attPrepEnd(); 
     				sendProperty("use_inf_token", playerChoices.getRelatedTerr().getName());
     				playerChoices.blank();
     				break;
@@ -727,6 +728,7 @@ public class GameOfThronesController extends JogreController {
     		model.getBoardModel().getTerritory(value).removeTroop(3);
     	}else if(key.equals("use_inf_token")){
     		this.useInfluToken(model.getBoardModel().getTerritory(value));
+    		if(model.getBattle()!=null) model.attPrepEnd();
     	}else if(key.equals("dont_use_inf_token")){
     		this.dontUseInfluToken(model.getBoardModel().getTerritory(value));
     	}else if(key.equals("Battle end card effect")){
@@ -764,6 +766,8 @@ public class GameOfThronesController extends JogreController {
 			model.setPhase(ModelState.PHASE_EXECUTION);
 			model.nextPlayer();
 		}else{
+			if(model.getBattle().checkSupport())
+				model.getBattle().startBattle();
 			model.setPhase(ModelState.BATTLE);
 		}
     }
@@ -830,7 +834,6 @@ public class GameOfThronesController extends JogreController {
     	 }else if(key.equals("FamilyCards")){
     		 if(model.getBattle().canPlayCard(model.getFamily(getSeatNum()))){playerChoices.showHouseCards(model.getBattle());}
     	 }else if(key.equals("attPreparationEnded")){
-     		System.out.println("Inside controller send  attPrepEnd");
      		model.attPrepEnd();
      	}else if(key.equals("attCardPlayed")){
     		model.getBattle().playCard(model.getBattle().getAttFamily().getCombatantCards().get(value), model.getBattle().getAttFamily());

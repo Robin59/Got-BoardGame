@@ -249,7 +249,7 @@ public class Board {
 	/**display on the boards the orders that the player can see (is own during the programation's phase, all during the execution)*/
 	public void showOrders(Graphics g){
 		for (Territory territory : boardModel.board.values()){
-			if (territory.getOrder()!=null ){
+			if (territory.getOrder()!=null &&  territory.getFamily()!=null){
 				if(territory.getFamily().getPlayer()==player || gameModel.getPhase()==ModelState.PHASE_EXECUTION || gameModel.getPhase()==ModelState.USE_INF_TOKEN || gameModel.getPhase()==ModelState.CROW_CHOICE || gameModel.getPhase()==ModelState.RAVEN_SEE_WILDINGS ||gameModel.getPhase()==ModelState.BATTLE){
 					// on choisit la bonne image
 					Image orderImage= images.getSmallOrderImage(territory.getOrder());
