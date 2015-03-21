@@ -95,7 +95,6 @@ public class BattlePvP extends Battle{
 	 * @return false if all the troops are remove and the army doesn't exist anymore 
 	 */
 	private boolean destructTroops(Territory territory, int casualties){
-		territory.getTroup().getTroops()[3]=0;
 		if(casualties>=territory.getTroup().getEffectif()){
 			territory.setTroup(null);
 			return false;
@@ -132,6 +131,7 @@ public class BattlePvP extends Battle{
 			//destruction of the garrison if there's one
 			defTerritory.destructGarrison();
 			//on detruit les troups du defenceur 
+			defTerritory.getTroup().rmToop(0, 0, 0, defTerritory.getTroup().getTroops()[3]);
 			if (destructTroops(defTerritory, (attSwords-defTowers)) && defTerritory.canWithdraw()){
 				//il choisit une retraite car il reste des troupes
 				System.out.println("retraite");
