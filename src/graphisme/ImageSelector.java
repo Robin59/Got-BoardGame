@@ -42,6 +42,7 @@ public class  ImageSelector{
 	
 	// Images for the neutral forces
 	private Image[] neutralForceImages;
+	private Image[] mediumNumberImages;
 	//Images for PlayersChoices
 	private Image bottomImage;
 	private Image topImage;
@@ -50,6 +51,7 @@ public class  ImageSelector{
 	public Image throne;
 	public Image swordImage;
 	public Image smallSordImage;
+	
 	
 	private ImageSelector (){
 		//images des troupes
@@ -92,6 +94,10 @@ public class  ImageSelector{
 		smallNumberImages = new Image[4];
 		for (int i=0;i<4;i++){
 			smallNumberImages[i]=GameImages.getImage(160+i);
+		}
+		mediumNumberImages= new Image[5];
+		for (int i=0;i<5;i++){
+			mediumNumberImages[i]=GameImages.getImage(216+i);
 		}
 		// les cartes de famille
 		playerCards = new HashMap<String, Image>();
@@ -274,7 +280,9 @@ public class  ImageSelector{
 	public Image getSmallNumber(int i){
 		return smallNumberImages[i-1];
 	}
-	
+	public Image getMediumNumber(int i){
+		return mediumNumberImages[i];
+	}
 	/**
 	 * 
 	 * @param territory

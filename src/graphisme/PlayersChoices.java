@@ -433,8 +433,11 @@ public class PlayersChoices extends JogreComponent {
 			break;
 		case  DISPLAY_LAND_ATT:
 			g.drawImage(images.getTroopImages(family)[1],50,50, null);
+			g.drawImage(images.getMediumNumber(model.getBattle().getAttTroops()[1]),60,75, null);
 			g.drawImage(images.getTroopImages(family)[2],150,50, null);
+			g.drawImage(images.getMediumNumber(model.getBattle().getAttTroops()[2]),165,75, null);
 			g.drawImage(images.getTroopImages(family)[3],250,50, null);
+			g.drawImage(images.getMediumNumber(model.getBattle().getAttTroops()[3]),265,75, null);
 			g.drawImage(endTurnImage,150,150, null);
 			break;
 		case DISPLAY_SUPPORT_CHOICE:
