@@ -8,10 +8,12 @@ import org.jogre.gameOfThrones.common.territory.Territory;
 public class NavalTroup extends Troop {
 	
 	private int effectif;
+	private int routedTroops;
 	
 	public NavalTroup(Family family, int effectif) {
 		super(family/*, territory*/);
 		this.effectif=effectif;
+		routedTroops=0;
 	}
 
 	public int getEffectif(){
@@ -46,5 +48,25 @@ public class NavalTroup extends Troop {
 	}
 	public void rmToop(int ship,int foot,int knigth,int siege){
 		effectif-=ship;
+	}
+	
+	@Override
+	public int getDefPower(){
+		return effectif-routedTroops;
+	}
+	@Override
+	public void regroupRoutedTroops() {
+		routedTroops=0;
+	}
+
+	@Override
+	public void addRoutedTroops(int[] routedTroops) {
+		this.routedTroops=routedTroops[0];
+	}
+
+	@Override
+	public void destroyRoutedTroops() {
+		effectif-=routedTroops;
+		routedTroops=0;
 	}
 }

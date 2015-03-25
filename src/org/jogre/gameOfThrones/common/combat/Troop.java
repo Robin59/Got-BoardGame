@@ -48,4 +48,22 @@ public abstract class Troop {
 	
 	public abstract boolean canMoveTo(Territory territory);
 	
+	/**
+	 * This method is call at the beginning of a new turn, each routed troop come back to normal state
+	 */
+	public abstract void regroupRoutedTroops();
+	/**
+	 * Return the power when defending of this troop 
+	 * @return the power when defending of this troop
+	 */
+	public abstract int getDefPower();
+	/**
+	 * Transform some fresh troops to routed troops
+	 * @param routedTroops the troops that are now routed (example : routedTroops[2]=1 means that there is one more knight that is now routed) 
+	 */
+	public abstract void addRoutedTroops(int[]routedTroops);
+	/**
+	 * destroy the troops that are routed
+	 */
+	public abstract void destroyRoutedTroops();
 }

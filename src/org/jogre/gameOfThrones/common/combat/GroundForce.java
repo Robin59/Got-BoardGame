@@ -8,12 +8,14 @@ public class GroundForce extends Troop {
 	private int infentrie;
 	private int knight;
 	private int machine;
+	private int[]routedTroops;
 	
 	public GroundForce(Family family, int infenterie, int knight, int machine) {
 		super(family);
 		this.infentrie=infenterie;
 		this.knight=knight;
 		this.machine=machine;
+		routedTroops=new int[3]; 
 	}
 
 	@Override
@@ -60,5 +62,33 @@ public class GroundForce extends Troop {
 		infentrie-=foot;
 		this.knight-=knigth;
 		this.machine-=siege;
+	}
+
+	@Override
+	public void regroupRoutedTroops() {
+		for (int i=0;i<3;i++){
+			routedTroops[i]=0;
+		}
+	}
+
+	@Override
+	public int getDefPower() {
+		return (infentrie-routedTroops[0])+(knight-routedTroops[1])*2;
+	}
+
+	@Override
+	public void addRoutedTroops(int[] routedTroops) {
+		for(int i=0; i<3; i++){
+			this.routedTroops[i]=routedTroops[i+1];
+		}
+	}
+
+	@Override
+	public void destroyRoutedTroops() {
+		infentrie-=routedTroops[1];
+		knight-=routedTroops[2];
+		for(int i=0; i<3; i++){
+			this.routedTroops[i]=0;
+		}
 	}
 }

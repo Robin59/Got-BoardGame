@@ -147,6 +147,15 @@ public abstract class Territory {
 		
 	}
 	/**
+	 * Move the troop to the given territory, and make them routed
+	 * @param territory the territory where the troop withdraw
+	 */
+	public void withdrawTroops(Territory territory){
+		int[] routedTroops =this.troop.getTroops();
+		this.mouveTroops(territory);
+		territory.getTroup().addRoutedTroops(routedTroops);
+	}
+	/**
 	 * move all troops from this territory to the territory given in parameter
 	 * @param toTerritory
 	 */

@@ -71,14 +71,9 @@ public class BattlePvP extends Battle{
 		int res =0;
 		if (defTerritory.getOrder()!=null) res=defTerritory.getOrder().getDefBonus();
 		if (defTerritory.haveGarrison()) res+=2;
-		if(groundType==2){
-			res+= defTerritory.getTroup().getEffectif();
-		}else{
-			res+=defTerritory.getTroup().getTroops()[1]+defTerritory.getTroup().getTroops()[2]*2;
-		}
+		res+= defTerritory.getTroup().getDefPower();
 		for(Territory territory : defSupport){
-			int[] troops =territory.getTroup().getTroops();
-			res+=territory.getOrder().getOthBonus()+troops[0]+troops[1]+troops[2]*2;
+			res+=territory.getOrder().getOthBonus()+territory.getTroup().getDefPower();
 		}
 		return res;
 	}
@@ -131,6 +126,7 @@ public class BattlePvP extends Battle{
 			//destruction of the garrison if there's one
 			defTerritory.destructGarrison();
 			//on detruit les troups du defenceur 
+			defTerritory.getTroup().destroyRoutedTroops();
 			defTerritory.getTroup().rmToop(0, 0, 0, defTerritory.getTroup().getTroops()[3]);
 			if (destructTroops(defTerritory, (attSwords-defTowers)) && defTerritory.canWithdraw()){
 				//il choisit une retraite car il reste des troupes
@@ -178,6 +174,7 @@ public class BattlePvP extends Battle{
 				}else{
 					attTerritory.setTroup(new GroundForce(attFamily, attTroops[1],attTroops[2],0));
 				}
+				attTerritory.getTroup().addRoutedTroops(attTroops);
 			}
 		}
 		System.out.println("sate "+state);
@@ -331,7 +328,7 @@ public class BattlePvP extends Battle{
 	 * @param territory
 	 */
 	public void withdraw (Territory territory){
-		defTerritory.mouveTroops(territory);
+		defTerritory.withdrawTroops(territory);
 		defFamily.removeTerritory(defTerritory);
 		state=BATTLE_END;
 		// put the victorious troops on the territory

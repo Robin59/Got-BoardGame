@@ -1,6 +1,5 @@
 package org.jogre.gameOfThrones.common.combat;
 
-import java.util.List;
 
 import org.jogre.gameOfThrones.common.territory.Land;
 import org.jogre.gameOfThrones.common.territory.Territory;
@@ -19,7 +18,7 @@ public class RobbEffect extends HouseCardEffect {
 			}else finish=true;
 		}else{
 			//suppress the siege machines of the battle looser
-			battle.getDefTerritory().getTroup().getTroops()[3]=0;
+			battle.getDefTerritory().getTroup().rmToop(0,0,0,battle.getDefTerritory().getTroup().getTroops()[3]);
 			// if there is no place to withdraw or no more troops, don't do anything
 			if(battle.getDefTerritory().canWithdraw() || battle.getDefTerritory().getTroup().getEffectif()>0){
 				battle.setState(Battle.BATTLE_CARD_EFFECT_END_BATTLE);
@@ -41,12 +40,13 @@ public class RobbEffect extends HouseCardEffect {
 						territory.setTroup(new GroundForce(oppFamily, battle.getAttTroops()[1],battle.getAttTroops()[2],0));
 					}
 				}
+				territory.getTroup().addRoutedTroops(battle.attTroops);
 				for(int i=0;i<3;i++) battle.getAttTroops()[i]=0;
 				finish=true;
 			}
 		}else{
 			if(battle.defTerritory.canWithdraw(territory)){
-				battle.getDefTerritory().mouveTroops(territory);
+				battle.getDefTerritory().withdrawTroops(territory);
 				battle.getDefTerritory().setTroup(new NavalTroup(oppFamily, 0));
 				finish=true;
 			}
