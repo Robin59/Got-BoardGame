@@ -58,6 +58,12 @@ public abstract class Troop {
 	 */
 	public abstract int getDefPower();
 	/**
+	 * Return the power when supporting attacker with this troop
+	 * @param attCastle true if the territory attacked contain a castle 
+	 * @return the power when supporting attacker with this troop
+	 */
+	public abstract int getAttSuportPower(boolean attCastle);
+	/**
 	 * Transform some fresh troops to routed troops
 	 * @param routedTroops the troops that are now routed (example : routedTroops[2]=1 means that there is one more knight that is now routed) 
 	 */

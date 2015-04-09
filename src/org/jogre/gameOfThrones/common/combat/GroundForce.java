@@ -70,7 +70,12 @@ public class GroundForce extends Troop {
 			routedTroops[i]=0;
 		}
 	}
-
+	@Override
+	public int getAttSuportPower(boolean attCastle){
+		int res=(infentrie-routedTroops[0])+(knight-routedTroops[1])*2;
+		if(attCastle) res+=(machine-routedTroops[2])*4;
+		return res;
+	}
 	@Override
 	public int getDefPower() {
 		return (infentrie-routedTroops[0])+(knight-routedTroops[1])*2;

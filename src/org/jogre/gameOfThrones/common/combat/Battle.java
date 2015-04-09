@@ -125,8 +125,7 @@ public abstract class Battle {
 			res+=(attTroops[2])*2+attTroops[1]+attTroops[3]*4*groundType;
 		}
 		for(Territory territory : attSupport){
-			int[] troops =territory.getTroup().getTroops();
-			res+=territory.getOrder().getOthBonus()+troops[0]+troops[1]+troops[2]*2+troops[3]*4*groundType;
+			res+=territory.getOrder().getOthBonus()+territory.getTroup().getAttSuportPower(groundType>0);
 		}
 	return res;
 	}

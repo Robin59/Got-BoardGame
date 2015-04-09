@@ -51,6 +51,10 @@ public class NavalTroup extends Troop {
 	}
 	
 	@Override
+	public int getAttSuportPower(boolean attCastle){
+		return effectif-routedTroops;
+	}
+	@Override
 	public int getDefPower(){
 		return effectif-routedTroops;
 	}
