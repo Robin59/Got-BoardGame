@@ -226,20 +226,33 @@ public class Board {
 			g.drawImage(strength,coordinate[0]+x+15,coordinate[1]+y+13, null);
 		}else{
 			int[] troops= territory.getTroup().getTroops();
+			int[] routedTroops= territory.getTroup().getRoutedTroops();
 			int i=0;
 			if(troops[1]>0){
 				g.drawImage(troopsImage[1],coordinate[0]+x,coordinate[1]+y, null);
-				g.drawImage(images.getSmallNumber(troops[1]),coordinate[0]+x+10,coordinate[1]+y+15, null);
+				if(troops[1]-routedTroops[1]>0){
+					g.drawImage(images.getSmallNumber(troops[1]-routedTroops[1]),coordinate[0]+x+10,coordinate[1]+y+15, null);
+				}if(routedTroops[1]>0){
+					g.drawImage(images.getSmallNumber(routedTroops[1]),coordinate[0]+x+10,coordinate[1]+y+30, null);
+				}
 				i++;
 			}
 			if(troops[2]>0){
 				g.drawImage(troopsImage[2],coordinate[i*2]+x,coordinate[i*2+1]+y, null);
-				g.drawImage(images.getSmallNumber(troops[2]),coordinate[i*2]+x+10,coordinate[i*2+1]+y+15, null);
+				if(troops[2]-routedTroops[2]>0){
+					g.drawImage(images.getSmallNumber(troops[2]-routedTroops[2]),coordinate[i*2]+x+10,coordinate[i*2+1]+y+15, null);
+				}if(routedTroops[2]>0){
+					g.drawImage(images.getSmallNumber(routedTroops[2]),coordinate[i*2]+x+10,coordinate[i*2+1]+y+30, null);
+				}
 				i++;
 			}
 			if(troops[3]>0){
 				g.drawImage(troopsImage[3],coordinate[i*2]+x,coordinate[i*2+1]+y, null);
-				g.drawImage(images.getSmallNumber(troops[3]),coordinate[i*2]+x+10,coordinate[i*2+1]+y+15, null);
+				if(troops[3]-routedTroops[3]>0){
+					g.drawImage(images.getSmallNumber(troops[3]-routedTroops[3]),coordinate[i*2]+x+10,coordinate[i*2+1]+y+15, null);
+				}if(routedTroops[3]>0){
+					g.drawImage(images.getSmallNumber(routedTroops[3]),coordinate[i*2]+x+10,coordinate[i*2+1]+y+30, null);
+				}
 			}
 			
 		}

@@ -23,9 +23,13 @@ public abstract class Troop {
 	
 	/**add to this troop some new force*/
 	public abstract void addTroop(int[] troups);
-	/**get the  troop*/
+	/**get the total of troops (fresh + routed troops)*/
 	public abstract int[] getTroops();
-	
+	/**
+	 * Return the numbers of routed troops
+	 * @return the numbers of routed troops
+	 */
+	public abstract int[] getRoutedTroops();
 	public Family getFamily(){
 		return family;
 	}

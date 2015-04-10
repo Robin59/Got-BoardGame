@@ -50,7 +50,12 @@ public class GroundForce extends Troop {
 		int[]res={0,infentrie,knight,machine};
 		return res;
 	}
-
+	
+	@Override
+	public int[] getRoutedTroops(){
+		int[] res={0,routedTroops[0],routedTroops[1],routedTroops[2]};
+		return res;
+	}
 	@Override
 	public void addToop(int ship, int foot, int knigth, int siege) {
 		infentrie+=foot;

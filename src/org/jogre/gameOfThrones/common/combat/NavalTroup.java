@@ -40,6 +40,11 @@ public class NavalTroup extends Troop {
 		int[]res={effectif,0,0,0};
 		return res;
 	}
+	@Override
+	public int[] getRoutedTroops(){
+		int[] res={routedTroops,0,0,0};
+		return res;
+	}
 
 	@Override
 	public void addToop(int ship, int foot, int knigth, int siege) {
