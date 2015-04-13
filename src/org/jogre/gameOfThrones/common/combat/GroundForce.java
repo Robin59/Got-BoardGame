@@ -57,6 +57,10 @@ public class GroundForce extends Troop {
 		return res;
 	}
 	@Override
+	public void rallyingTroops(){
+		routedTroops= new int[3];
+	}
+	@Override
 	public void addToop(int ship, int foot, int knigth, int siege) {
 		infentrie+=foot;
 		this.knight+=knigth;

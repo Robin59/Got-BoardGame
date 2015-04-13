@@ -47,6 +47,11 @@ public class NavalTroup extends Troop {
 	}
 
 	@Override
+	public void rallyingTroops(){
+		routedTroops=0;
+	}
+	
+	@Override
 	public void addToop(int ship, int foot, int knigth, int siege) {
 		effectif+=ship;
 		

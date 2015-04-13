@@ -414,6 +414,15 @@ public class Family {
 		return result;
 	}
 	
+	/**
+	 * Change back the status of all the player's routed troops to normal
+	 */
+	public void rallyingTroops(){
+		for(Territory territory :territories){
+			if (territory.getTroup()!=null)territory.getTroup().rallyingTroops();
+		}
+	}
+	
 	/**remove the consolidation's orders from the ordersAivalable list*/
 	public void removeConsOrder(){
 		ordersAvailable= new LinkedList<Order>();

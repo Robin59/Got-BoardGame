@@ -30,6 +30,10 @@ public abstract class Troop {
 	 * @return the numbers of routed troops
 	 */
 	public abstract int[] getRoutedTroops();
+	/**
+	 * Change back the status of the routed troops to normal
+	 */
+	public abstract void rallyingTroops();
 	public Family getFamily(){
 		return family;
 	}

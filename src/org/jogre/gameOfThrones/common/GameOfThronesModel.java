@@ -185,6 +185,7 @@ public class GameOfThronesModel extends JogreModel {
     		//on retire tous les ordres des territoires et on les redonnes aux joueurs
     		for (Family family : families){
     			family.ordersBack();
+    			family.rallyingTroops();
     		}
     		turn++;//nouveau tour
     		westerosPhase=0;
