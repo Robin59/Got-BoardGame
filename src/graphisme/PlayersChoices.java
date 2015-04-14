@@ -200,17 +200,19 @@ public class PlayersChoices extends JogreComponent {
 		case DISPLAY_WATER_ATT :
 			if (x>150 && x<200 && y>150 && y<200){ 
 				return ATT_PREPARATION_ENDED;
+			}else if(x>150 && x<200 && y>50 && y<100 && relatedTerr.getTroup().getTroops()[0]-relatedTerr.getTroup().getRoutedTroops()[0]>0){
+				return SEND_SHIP_FOR_ATT;
 			}
 			break;
 		case DISPLAY_LAND_ATT :
 			if (x>150 && x<200 && y>150 && y<200){
 				blank2();
 				return ATT_PREPARATION_ENDED;
-			}else if (x>50 && x<100 && y>50 && y<100 && relatedTerr.getTroup().getTroops()[1]!=0){
+			}else if (x>50 && x<100 && y>50 && y<100 && relatedTerr.getTroup().getTroops()[1]-relatedTerr.getTroup().getRoutedTroops()[1]>0){
 				return SEND_FOOT_FOR_ATT;
-			}else if(x>150 && x<200 && y>50 && y<100 && relatedTerr.getTroup().getTroops()[2]!=0){
+			}else if(x>150 && x<200 && y>50 && y<100 && relatedTerr.getTroup().getTroops()[2]-relatedTerr.getTroup().getRoutedTroops()[2]>0){
 				return SEND_KNIGHT_FOR_ATT;
-			}else if(x>250 && x<300 && y>50 && y<100 && relatedTerr.getTroup().getTroops()[3]!=0){
+			}else if(x>250 && x<300 && y>50 && y<100 && relatedTerr.getTroup().getTroops()[3]-relatedTerr.getTroup().getRoutedTroops()[3]>0){
 				return SEND_SEIGE_FOR_ATT;
 			}
 			break;
