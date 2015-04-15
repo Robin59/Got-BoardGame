@@ -183,16 +183,16 @@ public class PlayersChoices extends JogreComponent {
 			break;
 		//les mouvements
 		case DISPLAY_WATER_MOV :
-			if (x>150 && x<200 && y>50 && y<100 ){ 
+			if (x>150 && x<200 && y>50 && y<100 && relatedTerr.getTroup().getTroops()[0]-relatedTerr.getTroup().getRoutedTroops()[0]>0){ 
 				return SEND_SHIP;
 			}
 			break;
 		case DISPLAY_LAND_MOV :
-			if (y<170 && x>150 && x<200 && relatedTerr.getTroup().getTroops()[1]!=0 ){
+			if (y<170 && x>150 && x<200 && relatedTerr.getTroup().getTroops()[1]-relatedTerr.getTroup().getRoutedTroops()[1]>0 ){
 				return SEND_FOOT;
-			}else if (y<170 && x>250 && x<300 && relatedTerr.getTroup().getTroops()[2]!=0){
+			}else if (y<170 && x>250 && x<300 && relatedTerr.getTroup().getTroops()[2]-relatedTerr.getTroup().getRoutedTroops()[2]>0){
 				return SEND_KNIGHT;
-			}else if (y<170 && x>350 && x<400 && relatedTerr.getTroup().getTroops()[3]!=0){
+			}else if (y<170 && x>350 && x<400 && relatedTerr.getTroup().getTroops()[3]-relatedTerr.getTroup().getRoutedTroops()[3]>0){
 				return SEND_SEIGE;
 			}
 			break;
