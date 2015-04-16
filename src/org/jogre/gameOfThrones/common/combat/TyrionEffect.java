@@ -12,9 +12,11 @@ public class TyrionEffect extends HouseCardEffect {
 		if(defender){
 			bannedCard=battle.getAttCard();
 			battle.setAttCard(null);
+			battle.setState(Battle.BATTLE_CHOOSE_CARD);
 		}else{
 			bannedCard=battle.getDefCard();
 			battle.setDefCard(null);
+			battle.setState(Battle.BATTLE_CHOOSE_CARD);
 		}
 		if(!opponentHaveCard()){
 			finish=true;
